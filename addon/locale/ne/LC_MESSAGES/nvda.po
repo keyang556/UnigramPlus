@@ -756,28 +756,18 @@ msgstr "नयाँ सन्देशहरूको स्वचालित 
 #~ msgid "Announce some progress bars"
 #~ msgstr "Озвучувати деякі індикатори виконання"
 
-#, fuzzy
-#~| msgid "Croatian"
 #~ msgid "Croata"
 #~ msgstr "Хорватська"
 
-#, fuzzy
-#~| msgid "Italian"
 #~ msgid "Italiano"
 #~ msgstr "Італійська"
 
-#, fuzzy
-#~| msgid "Portuguese"
 #~ msgid "Portugués"
 #~ msgstr "Португальська"
 
-#, fuzzy
-#~| msgid "Ukrainian"
 #~ msgid "Ucraniano"
 #~ msgstr "Українська"
 
-#, fuzzy
-#~| msgid "Accept call"
 #~ msgid "&Aceptar"
 #~ msgstr "Відповісти на дзвінок"
 

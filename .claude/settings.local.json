@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls 'C:/Users/chang/Downloads/Unigram-12.7.1/')",
+      "Bash(.venv/Scripts/python.exe -m SCons)",
+      "Bash(where msgfmt *)",
+      "Bash(where gettext *)",
+      "Bash(ls 'C:/Program Files/Git/mingw64/bin/' | grep -i msg)",
+      "Read(//c/Program Files/Git/**)",
+      "Bash(find '/c/Program Files \\(x86\\)' -name 'msgfmt.exe' 2>/dev/null | head -5; find '/c/Users' -name 'msgfmt.exe' 2>/dev/null | head -5; find '/c/tools' -name 'msgfmt.exe' 2>/dev/null | head -5)",
+      "Bash(choco list *)",
+      "Bash(winget list *)",
+      "Bash(grep -v ':$')",
+      "Bash(python3 -)"
+    ]
+  }
+}

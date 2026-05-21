@@ -248,6 +248,9 @@ class UnigramPlusSettings(SettingsPanel):
 		# Fix toggle buttons for some users
 		self.isFixedToggleButton = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Check this box if the voice message recording function or the voice message playback speed change function does not work properly")))
 		self.isFixedToggleButton.SetValue(conf.get("isFixedToggleButton"))
+		# Play looped Typing.wav while the other side is typing/recording in the open chat
+		self.play_typing_sound = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Play a sound while the other side is typing in the open chat")))
+		self.play_typing_sound.SetValue(conf.get("play_typing_sound"))
 		# Checking for Updates on NVDA Startup
 		self.is_automatically_check_for_updates = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Check for UnigramPlus updates on NVDA startup")))
 		self.is_automatically_check_for_updates.SetValue(conf.get("is_automatically_check_for_updates"))
@@ -278,4 +281,15 @@ class UnigramPlusSettings(SettingsPanel):
 		# conf.set("report premium accounts", self.report_premium_accounts.IsChecked())
 		conf.set("voice_the_presence_of_a_reaction", self.voice_the_presence_of_a_reaction.IsChecked())
 		conf.set("isFixedToggleButton", self.isFixedToggleButton.IsChecked())
+		conf.set("play_typing_sound", self.play_typing_sound.IsChecked())
 		conf.set("is_automatically_check_for_updates", self.is_automatically_check_for_updates.IsChecked())
+		# Sync the typing-sound tracker with the new setting
+		try:
+			from appModules.unigram import Typing_sound_tracking
+			if self.play_typing_sound.IsChecked():
+				# Will resume on the next focus event in Unigram; nothing to do here.
+				Typing_sound_tracking.pouse = True
+			else:
+				Typing_sound_tracking.active = False
+				Typing_sound_tracking.stop_sound()
+		except Exception: pass

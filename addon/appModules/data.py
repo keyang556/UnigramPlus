@@ -65,6 +65,49 @@ labels_in_buttons = {
 	"\ue711": _("Close"),
 }
 
+# Keywords used to detect "typing..."-style chat actions shown in the chat title.
+# When any of these appears in the chat-title status text, the addon treats it as
+# an active typing/recording/uploading state and starts the Typing.wav loop.
+typing_keywords = (
+	"typing",			# en
+	"輸入",			# zh (Traditional & Simplified)
+	"输入",
+	"печат",			# ru: печатает / печатают
+	"набира",		# ru: набирает
+	"пише",			# uk
+	"schreibt",		# de
+	"écrit",			# fr
+	"escribiend",		# es
+	"scriv",			# it: sta scrivendo
+	"digitando",		# pt
+	"pisze",			# pl
+	"يكتب",			# ar
+	"píše",			# cs
+	"yazıyor",		# tr
+	"kirjoittaa",		# fi
+	"skriver",		# nb
+	"입력",			# ko
+	"入力",			# ja
+	"пиша",			# be / sr
+	"kuca",			# sr-Latn / hr / bs
+	"tipkati",		# hr
+	"scrie",			# ro
+	# Other chat actions that should also play the indicator sound
+	"recording",
+	"sending",
+	"uploading",
+	"录制",
+	"錄製",
+	"上傳",
+	"上传",
+	"запис",
+	"відправ",
+	"отправ",
+	"пересил",
+	"загруж",
+)
+
+
 phrase_administrator_in_message = {
 	"uk": ("Адміністратор", "Власник"),
 	"fr": ("Administrateur", "Propriétaire"),

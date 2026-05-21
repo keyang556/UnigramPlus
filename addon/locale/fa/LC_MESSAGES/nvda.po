@@ -836,8 +836,6 @@ msgstr ""
 #~ msgid "Chat activity tracking enabled"
 #~ msgstr "دنبال کردن فعالیتها در گفت و گوها روشن است."
 
-#, fuzzy
-#~| msgid "Answer options"
 #~ msgid "Answer"
 #~ msgstr "گزینه‌های جواب."
 
@@ -850,8 +848,6 @@ msgstr ""
 #~ msgid "Automatic announcement of new messages is disabled"
 #~ msgstr "اعلام خودکار پیامهای جدید غیر فعال شد."
 
-#, fuzzy
-#~| msgid "This message does not contain text"
 #~ msgid "This message is not playing"
 #~ msgstr "این پیام دارای متن نیست."
 

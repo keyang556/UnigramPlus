@@ -238,6 +238,77 @@ class Title_change_tracking:
 		Timer(cls.interval, cls.tick).start()
 
 
+class Typing_sound_tracking:
+	# Polls the chat-title status and loops Typing.wav while the other side is typing/recording/etc.
+	active = False
+	pouse = False
+	interval = .3
+	saved_items = False
+	is_playing = False
+	last_status = ""
+	@classmethod
+	def _is_typing(cls, status_text):
+		if not status_text: return False
+		text = status_text.lower()
+		for kw in typing_keywords:
+			if kw.lower() in text: return True
+		return False
+	@classmethod
+	def start_sound(cls):
+		if cls.is_playing: return
+		cls.is_playing = True
+		try: winsound.PlaySound(baseDir+"Typing.wav", winsound.SND_ASYNC | winsound.SND_LOOP)
+		except: cls.is_playing = False
+	@classmethod
+	def stop_sound(cls):
+		if not cls.is_playing: return
+		cls.is_playing = False
+		try: winsound.PlaySound(None, 0)
+		except: pass
+	@classmethod
+	def tick(cls):
+		if not cls.active or cls.pouse:
+			cls.stop_sound()
+			return
+		title = cls.saved_items.get("profile name") if cls.saved_items else None
+		if not title or not title.isInForeground:
+			cls.pouse = True
+			cls.stop_sound()
+			return False
+		try:
+			status_text = title.lastChild.name if title.childCount > 1 else ""
+		except: status_text = ""
+		# Reset state when the user switches chats (chat-name part changed).
+		try: first_name = title.firstChild.name
+		except: first_name = ""
+		if cls.last_status != (first_name, status_text):
+			cls.last_status = (first_name, status_text)
+			if cls._is_typing(status_text): cls.start_sound()
+			else: cls.stop_sound()
+		Timer(cls.interval, cls.tick).start()
+	@classmethod
+	def toggle(cls, saved_items=False):
+		if not conf.get("play_typing_sound") or not saved_items:
+			cls.saved_items = saved_items
+			cls.active = True
+			cls.pouse = False
+			conf.set("play_typing_sound", True)
+			Timer(cls.interval, cls.tick).start()
+			return True
+		else:
+			cls.active = False
+			cls.stop_sound()
+			conf.set("play_typing_sound", False)
+			return False
+	@classmethod
+	def restore(cls, saved_items=False):
+		cls.pouse = False
+		cls.active = True
+		cls.saved_items = saved_items
+		cls.last_status = ""
+		Timer(cls.interval, cls.tick).start()
+
+
 class Chat_update:
 	active = False
 	pouse = False
@@ -321,6 +392,7 @@ class AppModule(appModuleHandler.AppModule):
 		self.saved_items = Saved_items()
 		if conf.get("automatically announce new messages") and not Chat_update.active: Chat_update.restore(self)
 		if conf.get("automatically announce activity in chats") and not Title_change_tracking.active: Title_change_tracking.restore(self.saved_items)
+		if conf.get("play_typing_sound") and not Typing_sound_tracking.active: Typing_sound_tracking.restore(self.saved_items)
 		self.app_version = self.productVersion
 		# assign hotkeys for the function of reading messages by numbering
 		for i in range(10): self.bindGesture("kb:NVDA+control+%d" % i, "reviewRecentMessage")
@@ -562,10 +634,85 @@ class AppModule(appModuleHandler.AppModule):
 			else: message(_("Chat folder list not found"))
 
 
+	def _find_descendant(self, root, role=None, automation_id=None, max_depth=6):
+		# Breadth-first walk for a descendant matching role and/or UIA automation id.
+		queue_list = [(root, 0)]
+		while queue_list:
+			obj, depth = queue_list.pop(0)
+			if depth > max_depth: continue
+			try:
+				if (role is None or obj.role == role) and (automation_id is None or obj.UIAAutomationId == automation_id):
+					return obj
+			except: pass
+			try:
+				child = obj.firstChild
+				while child:
+					queue_list.append((child, depth + 1))
+					child = child.next
+			except: pass
+		return False
+
+	def _looks_like_topic_item(self, obj):
+		# A ForumTopicCell exposes child TextBlocks named TitleLabel + TimeLabel
+		# (and BriefText/UnreadBadge). Detecting two of these is enough to be safe.
+		try:
+			ids = set()
+			child = obj.firstChild
+			depth = 0
+			while child and depth < 30:
+				try: ids.add(child.UIAAutomationId)
+				except: pass
+				child = child.next
+				depth += 1
+			return "TitleLabel" in ids and "TimeLabel" in ids
+		except: return False
+
 	def get_branch_list(self):
+		# Older Unigram exposed the forum-topic list directly with UIAAutomationId == "TopicList".
 		branch_list = next((item for item in self.getElements() if item.role == Role.LIST and item.UIAAutomationId == "TopicList"), False)
 		if branch_list: return branch_list
-		else: return False
+		# Unigram 12.x renamed it: the ForumView is "TopicListPresenter" and the inner ListView is "ScrollingHost".
+		presenter = next((item for item in self.getElements() if item.UIAAutomationId == "TopicListPresenter"), False)
+		if presenter:
+			branch_list = self._find_descendant(presenter, Role.LIST, "ScrollingHost")
+			if branch_list and branch_list.firstChild: return branch_list
+		# Forum group opened from the chat list shows ForumTopicCell items in a normal ListView.
+		# Walk every top-level list and pick the first one whose first child looks like a topic cell.
+		for item in self.getElements():
+			try:
+				if item.role == Role.LIST and item.firstChild:
+					first = item.firstChild
+					# Skip the chats list itself.
+					if item.UIAAutomationId == "ChatsList": continue
+					if first.name and first.name.startswith("forumTopic {"): return item
+					if first.role == Role.LISTITEM and self._looks_like_topic_item(first): return item
+			except: pass
+		# Last resort: BFS through everything reachable to find a topic-cell list.
+		try: root = api.getForegroundObject().lastChild.previous
+		except: root = None
+		if root:
+			candidate = self._find_topic_list_recursive(root, max_depth=10)
+			if candidate: return candidate
+		return False
+
+	def _find_topic_list_recursive(self, root, max_depth=10):
+		queue_list = [(root, 0)]
+		while queue_list:
+			obj, depth = queue_list.pop(0)
+			if depth > max_depth: continue
+			try:
+				if obj.role == Role.LIST and obj.UIAAutomationId != "ChatsList" and obj.firstChild:
+					first = obj.firstChild
+					if first.role == Role.LISTITEM and self._looks_like_topic_item(first):
+						return obj
+			except: pass
+			try:
+				child = obj.firstChild
+				while child:
+					queue_list.append((child, depth + 1))
+					child = child.next
+			except: pass
+		return False
 
 	@script(description=_("Move focus to the list of group threads"), gesture="kb:ALT+6")
 	def script_move_focus_to_list_threads(self, gesture):
@@ -1059,6 +1206,8 @@ class AppModule(appModuleHandler.AppModule):
 		if conf.get("automatically announce activity in chats") and Title_change_tracking.pouse:
 			# Since the timer is suspended when the program window is minimized, it needs to be restored as soon as the focus is set on some element in the window
 			Title_change_tracking.restore(self.saved_items)
+		if conf.get("play_typing_sound") and Typing_sound_tracking.pouse:
+			Typing_sound_tracking.restore(self.saved_items)
 		if self.isSkipName:
 			speech.cancelSpeech()
 			self.isSkipName -= 1
@@ -1093,7 +1242,10 @@ class AppModule(appModuleHandler.AppModule):
 				self.saved_items.save("last focused chat", obj)
 				obj.name = self.actionChatElementInFocus(obj)
 			elif obj.parent.UIAAutomationId == "ScrollingHost":
-				if obj.name == "" and obj.childCount != 0:
+				if obj.name.startswith("forumTopic {\n  info = forumTopicInfo {"):
+					labels = [label.name for label in obj.children if label.UIAAutomationId in ("TitleLabel", "BriefInfo", "TimeLabel") ]
+					if len(labels) >= 3: obj.name = ". ".join((labels[0], labels[2], labels[1]))
+				elif obj.name == "" and obj.childCount != 0:
 					for item in obj.children: obj.name+=item.name
 				elif obj.name.startswith("inlineQueryResult"):
 					# Processing inline results
@@ -1171,6 +1323,7 @@ class AppModule(appModuleHandler.AppModule):
 					clsList.insert(0, SettingsPanelListItem)
 					return True
 				elif parent.UIAAutomationId in ("ChatsList", "TopicList"): return
+				elif obj.name.startswith("forumTopic {"): return
 				# We check whether the element contains phrases that will help us identify it as a message
 				keywords = keywordsInMessages.get(conf.get("lang"), keywordsInMessages["en"])
 				name = obj.name[-200:]

@@ -909,28 +909,18 @@ msgstr ""
 #~ msgid "Announce some progress bars"
 #~ msgstr "Bazı  Aşama çubuklarını seslendir"
 
-#, fuzzy
-#~| msgid "Croatian"
 #~ msgid "Croata"
 #~ msgstr "Hırvatça"
 
-#, fuzzy
-#~| msgid "Italian"
 #~ msgid "Italiano"
 #~ msgstr "İtalyanca"
 
-#, fuzzy
-#~| msgid "Portuguese"
 #~ msgid "Portugués"
 #~ msgstr "Portekizce"
 
-#, fuzzy
-#~| msgid "Ukrainian"
 #~ msgid "Ucraniano"
 #~ msgstr "Ukraynaca"
 
-#, fuzzy
-#~| msgid "Accept call"
 #~ msgid "&Aceptar"
 #~ msgstr "Aramayı Cevapla"
 
