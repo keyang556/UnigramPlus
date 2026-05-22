@@ -78,6 +78,33 @@ Si vous appréciez vraiment cette extension et que vous avez l'envie,  mais surt
 * Le fait que la fonction qui focalise le curseur sur l'étiquette "message non lu" puisse parfois réagir avec un certain retard est un problème connu. Cela peut dépendre du nombre de messages en attente à ce moment-là.
 
 ##Liste des changements :
+
+### Version 5.5.2
+
+* Mise à jour du fichier readme et des traductions.
+* Modification du son de l'indicateur de frappe.
+
+### Version 5.5.1
+
+* Correction du raccourci pour naviguer dans la liste des sujets de groupe (ALT+6). Il détecte désormais correctement la liste des sujets lors de l'ouverture d'un groupe de forum depuis la liste des conversations.
+* Ajout d'un son indiquant que l'interlocuteur est en train d'écrire : un son est joué en boucle pendant que l'autre personne écrit dans la conversation et s'arrête lorsqu'elle a terminé. Cette fonctionnalité s'inspire de celle équivalente dans le script Unigram pour JAWS.
+
+### Version 5.5.0
+
+* Compatibilité avec NVDA 2026.1 ajoutée.
+
+### Version 5.4.2
+
+* Compatibilité avec NVDA 2025.3.3 ajoutée.
+
+### Version 5.4.1
+
+* Compatibilité avec NVDA 2025.1.2 ajoutée.
+
+### Version 5.4
+
+* Correction d'un problème avec la liste des conversations.
+
 ### Version 4.6.0
 
 * Ajout d'un raccourci clavier pour déplacer le focus sur la liste des conversations de groupe. Par défaut, cette fonction est attribuée à la combinaison ALT+6. Veuillez noter que souvent, lorsque l'on appuie sur la touche Entrée sur le groupe que l'on veut ouvrir, la liste des conversations peut ne pas s'afficher et il est alors nécessaire de mettre à nouveau le focus sur ce groupe et d'appuyer sur la touche Entrée. En règle générale, après la deuxième pression, une liste de conversations est affichée, et après cela nous pouvons appuyer sur une combinaison de touches qui déplacera le focus sur cette liste.

@@ -75,6 +75,32 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 
 ##Lista de cambios:
 
+### Versión 5.5.2
+
+* Se actualizaron el readme y las traducciones.
+* Se cambió el sonido del indicador de escritura.
+
+### Versión 5.5.1
+
+* Se corrigió el atajo para navegar por la lista de temas del grupo (ALT+6). Ahora detecta correctamente la lista de temas al abrir un grupo de foro desde la lista de chats.
+* Se añadió un sonido indicador de escritura: se reproduce un sonido en bucle mientras el otro lado está escribiendo en el chat y se detiene cuando termina. Esta función está inspirada en la característica equivalente del script de Unigram para JAWS.
+
+### Versión 5.5.0
+
+* Se añadió compatibilidad con NVDA 2026.1.
+
+### Versión 5.4.2
+
+* Se añadió compatibilidad con NVDA 2025.3.3.
+
+### Versión 5.4.1
+
+* Se añadió compatibilidad con NVDA 2025.1.2.
+
+### Versión 5.4
+
+* Se corrigió un problema con la lista de chats.
+
 ### versiónn 5.1.0
 
 * Se agregaron atajos para navegar al siguiente y anterior resultado de búsqueda. Por defecto, estas funciones se asignan a las combinaciones de teclas ALT+j y ALT+k.

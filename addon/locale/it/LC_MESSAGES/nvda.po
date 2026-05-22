@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: UnigramPlus\n"
@@ -13,9 +14,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.4.1\n"
 "X-Poedit-Basepath: ../../..\n"
-"X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: appModules\n"
 "X-Poedit-SearchPath-1: GlobalPlugins\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 
 #: addon\appModules\cnf.py:12
 msgid "Arabic"
@@ -333,8 +334,8 @@ msgstr "Videochiamata non disponibile"
 #: addon\appModules\unigram.py:625
 msgid "Press \"Instant view\" button, if it is included in the current message"
 msgstr ""
-"Premi il pulsante \"Visualizzazione istantanea\", se è incluso nel messaggio "
-"corrente"
+"Premi il pulsante \"Visualizzazione istantanea\", se è incluso nel messaggio"
+" corrente"
 
 #: addon\appModules\unigram.py:636 addon\appModules\unigram.py:760
 #: addon\appModules\unigram.py:767 addon\appModules\unigram.py:775
@@ -367,11 +368,12 @@ msgstr ""
 msgid "Link copied"
 msgstr "Link copiato"
 
-#. Move the focus to the message input field. If the focus is already in this field, then move it to the last element that had focus before this field
+#. Move the focus to the message input field. If the focus is already in this
+#. field, then move it to the last element that had focus before this field
 #: addon\appModules\unigram.py:736
 msgid ""
-"Move the focus to the edit field. If the focus is already in the edit field, "
-"then after pressing the hotkey, it will move to where it was before"
+"Move the focus to the edit field. If the focus is already in the edit field,"
+" then after pressing the hotkey, it will move to where it was before"
 msgstr ""
 "Sposta il focus sul campo di modifica. Se è già in detta posizione, dopo "
 "aver premuto il tasto di scelta rapida, si sposterà dov'era prima"
@@ -408,10 +410,11 @@ msgstr "Apri il profilo della chat corrente"
 
 #: addon\appModules\unigram.py:817
 msgid ""
-"Recording a voice message will not be available until the edit field is empty"
+"Recording a voice message will not be available until the edit field is "
+"empty"
 msgstr ""
-"La registrazione di un messaggio vocale non sarà disponibile finché il campo "
-"di modifica non sarà vuoto"
+"La registrazione di un messaggio vocale non sarà disponibile finché il campo"
+" di modifica non sarà vuoto"
 
 #: addon\appModules\unigram.py:824
 msgid "Record sent"
@@ -700,8 +703,8 @@ msgid ""
 "button if a call is in progress or leave voice chat if it is active."
 msgstr ""
 "Preme il pulsante \"Rifiuta chiamata\" se c'è una chiamata in arrivo, il "
-"pulsante \"Termina chiamata\" se è in corso una chiamata o abbandona la chat "
-"vocale se è attiva."
+"pulsante \"Termina chiamata\" se è in corso una chiamata o abbandona la chat"
+" vocale se è attiva."
 
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:168
 msgid "Before chat name"
@@ -759,7 +762,9 @@ msgid "Move focus to the last message in a chat"
 msgstr "Posiziona il focus sull'ultimo messaggio di una chat aperta"
 
 #. Selecting an interface language
-#. self.lang = settingsSizerHelper.addLabeledControl(_("Interface language in Unigram:"), wx.Choice, choices=[listLanguages[item] for item in listLanguages])
+#. self.lang = settingsSizerHelper.addLabeledControl(_("Interface language in
+#. Unigram:"), wx.Choice, choices=[listLanguages[item] for item in
+#. listLanguages])
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:198
 msgid "Interface language in Unigram:"
 msgstr "Lingua dell''interfaccia di Unigram"
@@ -831,10 +836,13 @@ msgid "Read full video description in YouTube URLs"
 msgstr "Leggi la descrizione completa del video negli URL di YouTube"
 
 #. Report if the group has replies for you
-#. self.isAnnouncesAnswers = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Announce if there is a reply in the group")))
+#. self.isAnnouncesAnswers = settingsSizerHelper.addItem(wx.CheckBox(self,
+#. label=_("Announce if there is a reply in the group")))
 #. self.isAnnouncesAnswers.SetValue(conf.get("isAnnouncesAnswers"))
 #. Report information about premium and verified accounts
-#. self.report_premium_accounts = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Announce premium and confirmed accounts")))
+#. self.report_premium_accounts =
+#. settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Announce premium and
+#. confirmed accounts")))
 #. self.report_premium_accounts.SetValue(conf.get("report premium accounts"))
 #. Report if the message contains a reaction
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:246
@@ -863,29 +871,36 @@ msgstr "C&ontrolla gli aggiornamenti"
 
 #. Add-on summary, usually the user visible name of the addon.
 #. Translators: Summary for this add-on
-#. to be shown on installation and add-on information found in Add-ons Manager.
+#. to be shown on installation and add-on information found in Add-ons
+#. Manager.
 #: buildVars.py:23
 msgid "UnigramPlus"
 msgstr "UnigramPlus"
 
 #. Add-on description
-#. Translators: Long description to be shown for this add-on on add-on information from add-ons manager
+#. Translators: Long description to be shown for this add-on on add-on
+#. information from add-ons manager
 #: buildVars.py:26
 #, fuzzy
 #| msgid ""
 #| "This add-on adds a lot of hotkeys for quick navigation through the main "
-#| "elements of the window, easy interaction with Chat messages, and also "
-#| "adds many minor improvements that make working in Unigram much easier"
+#| "elements of the window, easy interaction with Chat messages, and also adds "
+#| "many minor improvements that make working in Unigram much easier"
 msgid ""
 "This add-on adds a lot of hotkeys for quick navigation through the main "
 "elements of the Unigram application, convenient interaction with Chat "
-"messages, and also adds many small improvements that make working in Unigram "
-"much easier"
+"messages, and also adds many small improvements that make working in Unigram"
+" much easier"
 msgstr ""
 "Questo componente aggiuntivo aggiunge molti tasti di scelta rapida per una "
 "più veloce navigazione attraverso gli elementi principali della finestra, "
 "una comoda interazione con i messaggi e aggiunge anche molti piccoli "
 "miglioramenti che rendono molto più semplice l'utilizzo di Unigram."
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:252
+msgid "Play a sound while the other side is typing in the open chat"
+msgstr ""
+"Riproduci un suono mentre l'altra parte sta scrivendo nella chat aperta"
 
 #~ msgid "Message copied"
 #~ msgstr "Messaggio copiato"
@@ -980,8 +995,8 @@ msgstr ""
 #~ msgstr "WhatsAppPlus"
 
 #~ msgid ""
-#~ "Make a voice call to a group or contact, or join an ongoing voice call in "
-#~ "a group"
+#~ "Make a voice call to a group or contact, or join an ongoing voice call in a "
+#~ "group"
 #~ msgstr "Здійснити голосовий дзвінок"
 
 #~ msgid "Croata"
@@ -999,14 +1014,12 @@ msgstr ""
 #~ msgid "&Aceptar"
 #~ msgstr "Відповісти на дзвінок"
 
-#~ msgid ""
-#~ "Press \"More Options\" button in an open chat, voice chat, or call window"
+#~ msgid "Press \"More Options\" button in an open chat, voice chat, or call window"
 #~ msgstr ""
-#~ "Натиснути кнопку \"Більше опцій\" у відкритому чаті, голосовому чаті, або "
-#~ "у вікні дзвінка"
+#~ "Натиснути кнопку \"Більше опцій\" у відкритому чаті, голосовому чаті, або у "
+#~ "вікні дзвінка"
 
-#~ msgid ""
-#~ "Announce all progress bars except voice message playback progress bar"
+#~ msgid "Announce all progress bars except voice message playback progress bar"
 #~ msgstr ""
 #~ "Озвучувати усі індикатори виконання, крім прогресу відтворення голосових "
 #~ "повідомлень"

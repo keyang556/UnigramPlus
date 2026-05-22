@@ -53,6 +53,32 @@ o facto de que o recurso que coloca o cursor na marca de mensagens não lidas à
 
 ## Lista de alterações:
 
+### Versão 5.5.2
+
+* Atualização do readme e das traduções.
+* Alterado o som do indicador de digitação.
+
+### Versão 5.5.1
+
+* Corrigido o atalho para navegar pela lista de tópicos do grupo (ALT+6). Agora detecta corretamente a lista de tópicos ao abrir um grupo de fórum a partir da lista de conversas.
+* Adicionado som indicador de digitação: um som é reproduzido em loop enquanto o outro lado está digitando na conversa e para quando ele termina. Esta funcionalidade é inspirada na funcionalidade equivalente do script Unigram para JAWS.
+
+### Versão 5.5.0
+
+* Adicionada compatibilidade com o NVDA 2026.1.
+
+### Versão 5.4.2
+
+* Adicionada compatibilidade com o NVDA 2025.3.3.
+
+### Versão 5.4.1
+
+* Adicionada compatibilidade com o NVDA 2025.1.2.
+
+### Versão 5.4
+
+* Corrigido um problema na lista de conversas.
+
 ### Versão 1.9.0
 * Adicionada uma combinação que alterna o nível de prompts auditivos entre valores como: "anunciar todas as barras de progresso", "anunciar todas as barras de progresso, exceto para reprodução de mensagem de voz" e "não anunciar barras de progresso". Para aqueles utilizadores que têm o carregamento automático de mídia desactivado no Unigram, o valor pode ser definido como "anunciar todas as barras de progresso, exceto aquelas para reprodução de mensagens de voz", e para aqueles que o têm activado, é preferível deixá-lo em "sem anúncio de barras de progresso".
 * Adicionadas traduções para espanhol, croata e persa

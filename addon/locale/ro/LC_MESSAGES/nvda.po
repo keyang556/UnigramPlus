@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: UnigramPlus\n"
@@ -10,13 +11,12 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n==0 || (n!=1 && n%100>=1 && "
-"n%100<=19) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n==0 || (n!=1 && n%100>=1 && n%100<=19) ? 1 : 2);\n"
 "X-Generator: Poedit 3.2.2\n"
 "X-Poedit-Basepath: ../../..\n"
-"X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: appModules\n"
 "X-Poedit-SearchPath-1: GlobalPlugins\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 
 #: addon\appModules\cnf.py:12
 msgid "Arabic"
@@ -365,11 +365,12 @@ msgstr "Afișează textul mesajului într-o fereastră popup"
 msgid "message text"
 msgstr "text mesaj"
 
-#. Move the focus to the message input field. If the focus is already in this field, then move it to the last element that had focus before this field
+#. Move the focus to the message input field. If the focus is already in this
+#. field, then move it to the last element that had focus before this field
 #: addon\appModules\unigram.py:688
 msgid ""
-"Move the focus to the edit field. If the focus is already in the edit field, "
-"then after pressing the hotkey, it will move to where it was before"
+"Move the focus to the edit field. If the focus is already in the edit field,"
+" then after pressing the hotkey, it will move to where it was before"
 msgstr ""
 "Focalizează-te în câmpul de editare. Dacă deja ești focalizat în câmpul de "
 "editare, atunci, după apăsarea acestei scurtături, te vei focaliza în locul "
@@ -414,10 +415,11 @@ msgstr "Deschide profilul de chat curent"
 
 #: addon\appModules\unigram.py:779
 msgid ""
-"Recording a voice message will not be available until the edit field is empty"
+"Recording a voice message will not be available until the edit field is "
+"empty"
 msgstr ""
-"Nu va fi posibilă înregistrarea unui mesaj vocal până când câmpul de editare "
-"nu este gol"
+"Nu va fi posibilă înregistrarea unui mesaj vocal până când câmpul de editare"
+" nu este gol"
 
 #: addon\appModules\unigram.py:786
 msgid "Record sent"
@@ -738,7 +740,9 @@ msgid "In all messages"
 msgstr "În toate mesajele"
 
 #. Selecting an interface language
-#. self.lang = settingsSizerHelper.addLabeledControl(_("Interface language in Unigram:"), wx.Choice, choices=[listLanguages[item] for item in listLanguages])
+#. self.lang = settingsSizerHelper.addLabeledControl(_("Interface language in
+#. Unigram:"), wx.Choice, choices=[listLanguages[item] for item in
+#. listLanguages])
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:184
 msgid "Interface language in Unigram:"
 msgstr "Limba interfeței în Unigram:"
@@ -801,10 +805,13 @@ msgid "Read full video description in YouTube URLs"
 msgstr "Citește descrierea completă a videoclipului în link-urile YouTube"
 
 #. Report if the group has replies for you
-#. self.isAnnouncesAnswers = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Announce if there is a reply in the group")))
+#. self.isAnnouncesAnswers = settingsSizerHelper.addItem(wx.CheckBox(self,
+#. label=_("Announce if there is a reply in the group")))
 #. self.isAnnouncesAnswers.SetValue(conf.get("isAnnouncesAnswers"))
 #. Report information about premium and verified accounts
-#. self.report_premium_accounts = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Announce premium and confirmed accounts")))
+#. self.report_premium_accounts =
+#. settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Announce premium and
+#. confirmed accounts")))
 #. self.report_premium_accounts.SetValue(conf.get("report premium accounts"))
 #. Report if the message contains a reaction
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:228
@@ -818,8 +825,8 @@ msgid ""
 "playback speed change function does not work properly"
 msgstr ""
 "Bifează această casetă dacă funcția de înregistrare a mesajelor vocale sau "
-"funcția de modificare a vitezei de redare a mesajelor vocale nu funcționează "
-"corect"
+"funcția de modificare a vitezei de redare a mesajelor vocale nu funcționează"
+" corect"
 
 #. Checking for Updates on NVDA Startup
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:234
@@ -833,13 +840,15 @@ msgstr "Verifică dacă există actualizări"
 
 #. Add-on summary, usually the user visible name of the addon.
 #. Translators: Summary for this add-on
-#. to be shown on installation and add-on information found in Add-ons Manager.
+#. to be shown on installation and add-on information found in Add-ons
+#. Manager.
 #: buildVars.py:23
 msgid "UnigramPlus"
 msgstr "UnigramPlus"
 
 #. Add-on description
-#. Translators: Long description to be shown for this add-on on add-on information from add-ons manager
+#. Translators: Long description to be shown for this add-on on add-on
+#. information from add-ons manager
 #: buildVars.py:26
 msgid ""
 "This add-on adds a lot of hotkeys for quick navigation through the main "
@@ -850,6 +859,11 @@ msgstr ""
 "elementele principale ale ferestrei, o interacțiune ușoară cu mesajele de "
 "chat și, de asemenea, adaugă multe îmbunătățiri minore care fac utilizarea "
 "Unigram mult mai ușoară"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:252
+msgid "Play a sound while the other side is typing in the open chat"
+msgstr ""
+"Reprodu un sunet în timp ce cealaltă parte tastează în conversația deschisă"
 
 #~ msgid "Premium"
 #~ msgstr "Premium"
@@ -884,14 +898,12 @@ msgstr ""
 #~ msgid "&Aceptar"
 #~ msgstr "Відповісти на дзвінок"
 
-#~ msgid ""
-#~ "Press \"More Options\" button in an open chat, voice chat, or call window"
+#~ msgid "Press \"More Options\" button in an open chat, voice chat, or call window"
 #~ msgstr ""
-#~ "Натиснути кнопку \"Більше опцій\" у відкритому чаті, голосовому чаті, або "
-#~ "у вікні дзвінка"
+#~ "Натиснути кнопку \"Більше опцій\" у відкритому чаті, голосовому чаті, або у "
+#~ "вікні дзвінка"
 
-#~ msgid ""
-#~ "Announce all progress bars except voice message playback progress bar"
+#~ msgid "Announce all progress bars except voice message playback progress bar"
 #~ msgstr ""
 #~ "Озвучувати усі індикатори виконання, крім прогресу відтворення голосових "
 #~ "повідомлень"

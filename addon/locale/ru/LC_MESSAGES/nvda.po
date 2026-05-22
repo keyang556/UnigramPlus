@@ -15,8 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Poedit 3.4.2\n"
 
 #: addon\appModules\cnf.py:12
@@ -343,8 +342,7 @@ msgstr "Видео звонок недоступен"
 #. Function to open instant view
 #: addon\appModules\unigram.py:645
 msgid "Press \"Instant view\" button, if it is included in the current message"
-msgstr ""
-"Нажать кнопку \"Мгновенный просмотр\" если она есть в текущем сообщении"
+msgstr "Нажать кнопку \"Мгновенный просмотр\" если она есть в текущем сообщении"
 
 #: addon\appModules\unigram.py:656 addon\appModules\unigram.py:780
 #: addon\appModules\unigram.py:787 addon\appModules\unigram.py:795
@@ -377,11 +375,12 @@ msgstr ""
 msgid "Link copied"
 msgstr "Ссылка скопирована"
 
-#. Move the focus to the message input field. If the focus is already in this field, then move it to the last element that had focus before this field
+#. Move the focus to the message input field. If the focus is already in this
+#. field, then move it to the last element that had focus before this field
 #: addon\appModules\unigram.py:756
 msgid ""
-"Move the focus to the edit field. If the focus is already in the edit field, "
-"then after pressing the hotkey, it will move to where it was before"
+"Move the focus to the edit field. If the focus is already in the edit field,"
+" then after pressing the hotkey, it will move to where it was before"
 msgstr ""
 "Переместить фокус в поле редактирования. Если фокус уже находится в поле "
 "редактирования, тогда, после нажатия горячей клавиши, фокус переместится "
@@ -417,7 +416,8 @@ msgstr "Открыть профиль текущего чата"
 
 #: addon\appModules\unigram.py:837
 msgid ""
-"Recording a voice message will not be available until the edit field is empty"
+"Recording a voice message will not be available until the edit field is "
+"empty"
 msgstr ""
 "Запись голосового сообщения будет недоступна до тех пор, пока поле ввода не "
 "будет очищено"
@@ -765,7 +765,9 @@ msgid "Move focus to the last message in a chat"
 msgstr "Переместить фокус к последнему сообщению в чате"
 
 #. Selecting an interface language
-#. self.lang = settingsSizerHelper.addLabeledControl(_("Interface language in Unigram:"), wx.Choice, choices=[listLanguages[item] for item in listLanguages])
+#. self.lang = settingsSizerHelper.addLabeledControl(_("Interface language in
+#. Unigram:"), wx.Choice, choices=[listLanguages[item] for item in
+#. listLanguages])
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:199
 msgid "Interface language in Unigram:"
 msgstr "Язык интерфейса Unigram:"
@@ -793,8 +795,7 @@ msgstr "Говорить \"Не Прочитано\" перед чтением �
 msgid ""
 "Announce the phrases \"Administrator\" and \"Owner\" on messages in "
 "communities"
-msgstr ""
-"Сообщать о фразах \"Администратор\" и \"Владелец\" в сообщениях в группах"
+msgstr "Сообщать о фразах \"Администратор\" и \"Владелец\" в сообщениях в группах"
 
 #. Speak active folder name when switching between them
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:220
@@ -832,10 +833,13 @@ msgid "Read full video description in YouTube URLs"
 msgstr "Читать полное описание видео в ссылках на YouTube"
 
 #. Report if the group has replies for you
-#. self.isAnnouncesAnswers = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Announce if there is a reply in the group")))
+#. self.isAnnouncesAnswers = settingsSizerHelper.addItem(wx.CheckBox(self,
+#. label=_("Announce if there is a reply in the group")))
 #. self.isAnnouncesAnswers.SetValue(conf.get("isAnnouncesAnswers"))
 #. Report information about premium and verified accounts
-#. self.report_premium_accounts = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Announce premium and confirmed accounts")))
+#. self.report_premium_accounts =
+#. settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Announce premium and
+#. confirmed accounts")))
 #. self.report_premium_accounts.SetValue(conf.get("report premium accounts"))
 #. Report if the message contains a reaction
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:247
@@ -848,9 +852,9 @@ msgid ""
 "Check this box if the voice message recording function or the voice message "
 "playback speed change function does not work properly"
 msgstr ""
-"Установите этот флажок, если функция записи голосового сообщения или функция "
-"изменения скорости воспроизведения голосового сообщения не работает должным "
-"образом"
+"Установите этот флажок, если функция записи голосового сообщения или функция"
+" изменения скорости воспроизведения голосового сообщения не работает должным"
+" образом"
 
 #. Checking for Updates on NVDA Startup
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:253
@@ -864,24 +868,30 @@ msgstr "Проверить наличие &обновлений"
 
 #. Add-on summary, usually the user visible name of the addon.
 #. Translators: Summary for this add-on
-#. to be shown on installation and add-on information found in Add-ons Manager.
+#. to be shown on installation and add-on information found in Add-ons
+#. Manager.
 #: buildVars.py:23
 msgid "UnigramPlus"
 msgstr "UnigramPlus"
 
 #. Add-on description
-#. Translators: Long description to be shown for this add-on on add-on information from add-ons manager
+#. Translators: Long description to be shown for this add-on on add-on
+#. information from add-ons manager
 #: buildVars.py:26
 msgid ""
 "This add-on adds a lot of hotkeys for quick navigation through the main "
 "elements of the Unigram application, convenient interaction with Chat "
-"messages, and also adds many small improvements that make working in Unigram "
-"much easier"
+"messages, and also adds many small improvements that make working in Unigram"
+" much easier"
 msgstr ""
 "Это дополнение добавляет множество горячих клавиш для быстрой навигации по "
-"основным элементам приложения Unigram, удобного взаимодействия с сообщениями "
-"чата, а также добавляет множество мелких улучшений, которые значительно "
+"основным элементам приложения Unigram, удобного взаимодействия с сообщениями"
+" чата, а также добавляет множество мелких улучшений, которые значительно "
 "упрощают работу в Unigram"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:252
+msgid "Play a sound while the other side is typing in the open chat"
+msgstr "Воспроизводить звук, пока собеседник набирает текст в открытом чате"
 
 #~ msgid "Message copied"
 #~ msgstr "Сообщение скопировано"

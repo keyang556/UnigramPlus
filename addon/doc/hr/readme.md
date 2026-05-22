@@ -83,6 +83,32 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 
 	##Popis promjena:
 
+### Verzija 5.5.2
+
+* Ažuriran readme i prijevodi.
+* Promijenjen zvuk indikatora tipkanja.
+
+### Verzija 5.5.1
+
+* Popravljen prečac za kretanje kroz popis tema grupe (ALT+6). Sada ispravno prepoznaje popis tema prilikom otvaranja forumske grupe iz popisa razgovora.
+* Dodan zvuk indikatora tipkanja: zvuk se reproducira u petlji dok druga strana tipka u razgovoru i prestaje kada prestane tipkati. Ova je značajka inspirirana odgovarajućom značajkom u Unigram JAWS skripti.
+
+### Verzija 5.5.0
+
+* Dodana kompatibilnost s NVDA 2026.1.
+
+### Verzija 5.4.2
+
+* Dodana kompatibilnost s NVDA 2025.3.3.
+
+### Verzija 5.4.1
+
+* Dodana kompatibilnost s NVDA 2025.1.2.
+
+### Verzija 5.4
+
+* Riješen problem s popisom razgovora.
+
 ### Verzija 5.2.0
 
 * Dodana je mogućnost odabira datoteka priloženih porukama strelicama lijevo i desno i otvaranja odabrane datoteke razmaknicom.

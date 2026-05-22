@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: UnigramPlus\n"
@@ -12,9 +13,9 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n>=2 && n<=4 ? 1 : 2);\n"
 "X-Generator: Poedit 3.1\n"
 "X-Poedit-Basepath: ../../..\n"
-"X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: appModules\n"
 "X-Poedit-SearchPath-1: GlobalPlugins\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 
 #: GlobalPlugins/UnigramPlus/__init__.py:21
 msgid "Arabic"
@@ -468,8 +469,8 @@ msgstr "text zprávy"
 
 #: appModules/unigram.py:400
 msgid ""
-"Move the focus to the edit field. If the focus is already in the edit field, "
-"then after pressing the hotkey, it will move to where it was before"
+"Move the focus to the edit field. If the focus is already in the edit field,"
+" then after pressing the hotkey, it will move to where it was before"
 msgstr ""
 "Přemístit fokus do editačního pole. Jestliže se fokus již v editačním poli "
 "nachází, po stisku této klávesové zkratky se vrátí na předchozí místo."
@@ -672,17 +673,19 @@ msgstr "Převinout zpět hlasovou zprávu"
 msgid "Right answer"
 msgstr "Správná odpověď"
 
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:252
+msgid "Play a sound while the other side is typing in the open chat"
+msgstr "Přehrávat zvuk, když druhá strana píše v otevřené konverzaci"
+
 #~ msgid "Selected"
 #~ msgstr "Vybráno"
 
-#~ msgid ""
-#~ "Press \"More Options\" button in an open chat, voice chat, or call window"
+#~ msgid "Press \"More Options\" button in an open chat, voice chat, or call window"
 #~ msgstr ""
 #~ "Stisknout tlačítko \"Více možností\" v otevřeném chatu, videohovoru nebo "
 #~ "okně volání"
 
-#~ msgid ""
-#~ "Announce all progress bars except voice message playback progress bar"
+#~ msgid "Announce all progress bars except voice message playback progress bar"
 #~ msgstr ""
 #~ "Oznamovat všechny indikátory průběhu kromě indikátoru průběhu přehrávané "
 #~ "hlasové zprávy"

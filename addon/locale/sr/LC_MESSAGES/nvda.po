@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: UnigramPlus\n"
@@ -10,13 +11,12 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Poedit 3.2.2\n"
 "X-Poedit-Basepath: ../../..\n"
-"X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: appModules\n"
 "X-Poedit-SearchPath-1: GlobalPlugins\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 
 #: addon\appModules\cnf.py:12
 msgid "Arabic"
@@ -368,11 +368,12 @@ msgstr ""
 msgid "Link copied"
 msgstr "Link je kopiran"
 
-#. Move the focus to the message input field. If the focus is already in this field, then move it to the last element that had focus before this field
+#. Move the focus to the message input field. If the focus is already in this
+#. field, then move it to the last element that had focus before this field
 #: addon\appModules\unigram.py:736
 msgid ""
-"Move the focus to the edit field. If the focus is already in the edit field, "
-"then after pressing the hotkey, it will move to where it was before"
+"Move the focus to the edit field. If the focus is already in the edit field,"
+" then after pressing the hotkey, it will move to where it was before"
 msgstr ""
 "Pomeri fokus u polje za uređivanje. Ako je fokus već u polju za uređivanje, "
 "nakon pritiska na interventne tastere on će biti pomeren tamo gde je bio "
@@ -412,7 +413,8 @@ msgstr "Otvori trenutni profil za ćaskanje"
 #| "It will not be possible to record a voice message until the edit field is "
 #| "empty"
 msgid ""
-"Recording a voice message will not be available until the edit field is empty"
+"Recording a voice message will not be available until the edit field is "
+"empty"
 msgstr "Snimanje poruke neće biti moguće dok polje za uređivanje nije prazno"
 
 #: addon\appModules\unigram.py:824
@@ -755,7 +757,9 @@ msgid "Move focus to the last message in a chat"
 msgstr "Pomeranje fokusa na poslednju poruku u ćaskanju"
 
 #. Selecting an interface language
-#. self.lang = settingsSizerHelper.addLabeledControl(_("Interface language in Unigram:"), wx.Choice, choices=[listLanguages[item] for item in listLanguages])
+#. self.lang = settingsSizerHelper.addLabeledControl(_("Interface language in
+#. Unigram:"), wx.Choice, choices=[listLanguages[item] for item in
+#. listLanguages])
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:198
 msgid "Interface language in Unigram:"
 msgstr "Jezik interfeisa u unigramu:"
@@ -821,10 +825,13 @@ msgid "Read full video description in YouTube URLs"
 msgstr "Pročitaj pun opis video URL-ova sa YouTube-a"
 
 #. Report if the group has replies for you
-#. self.isAnnouncesAnswers = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Announce if there is a reply in the group")))
+#. self.isAnnouncesAnswers = settingsSizerHelper.addItem(wx.CheckBox(self,
+#. label=_("Announce if there is a reply in the group")))
 #. self.isAnnouncesAnswers.SetValue(conf.get("isAnnouncesAnswers"))
 #. Report information about premium and verified accounts
-#. self.report_premium_accounts = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Announce premium and confirmed accounts")))
+#. self.report_premium_accounts =
+#. settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Announce premium and
+#. confirmed accounts")))
 #. self.report_premium_accounts.SetValue(conf.get("report premium accounts"))
 #. Report if the message contains a reaction
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:246
@@ -852,23 +859,29 @@ msgstr "Proveri da li postoje ažuriranja"
 
 #. Add-on summary, usually the user visible name of the addon.
 #. Translators: Summary for this add-on
-#. to be shown on installation and add-on information found in Add-ons Manager.
+#. to be shown on installation and add-on information found in Add-ons
+#. Manager.
 #: buildVars.py:23
 msgid "UnigramPlus"
 msgstr "UnigramPlus"
 
 #. Add-on description
-#. Translators: Long description to be shown for this add-on on add-on information from add-ons manager
+#. Translators: Long description to be shown for this add-on on add-on
+#. information from add-ons manager
 #: buildVars.py:26
 msgid ""
 "This add-on adds a lot of hotkeys for quick navigation through the main "
 "elements of the Unigram application, convenient interaction with Chat "
-"messages, and also adds many small improvements that make working in Unigram "
-"much easier"
+"messages, and also adds many small improvements that make working in Unigram"
+" much easier"
 msgstr ""
 "Ovaj dodatak dodaje mnogo interventnih tastera za brzu navigaciju kroz "
 "glavne elemente prozora, laku interakciju sa porukama ćaskanja, a takođe "
 "dodaje mnoga manja poboljšanja koja znatno olakšavaju rad u unigramu"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:252
+msgid "Play a sound while the other side is typing in the open chat"
+msgstr "Reprodukuj zvuk dok druga strana kuca u otvorenom ćaskanju"
 
 #~ msgid "Message copied"
 #~ msgstr "Poruka kopirana"
@@ -906,17 +919,15 @@ msgstr ""
 #~ msgid "Announce some progress bars"
 #~ msgstr "Najavljivanje nekih traka napredovanja"
 
-#~ msgid ""
-#~ "Press \"More Options\" button in an open chat, voice chat, or call window"
+#~ msgid "Press \"More Options\" button in an open chat, voice chat, or call window"
 #~ msgstr ""
 #~ "Pritisnite dugme više opcija u otvorenom prozoru za ćaskanje, glasovno "
 #~ "ćaskanje ili pozivu"
 
-#~ msgid ""
-#~ "Announce all progress bars except voice message playback progress bar"
+#~ msgid "Announce all progress bars except voice message playback progress bar"
 #~ msgstr ""
-#~ "Najavi sve trake napredovanja osim trake napredovanja reprodukcije "
-#~ "glasovne poruke"
+#~ "Najavi sve trake napredovanja osim trake napredovanja reprodukcije glasovne "
+#~ "poruke"
 
 #~ msgid "The broadcast window is not found"
 #~ msgstr "Lista ćaskanja nije pronađena"
@@ -931,18 +942,17 @@ msgstr ""
 #~ msgstr "Pritiskom na enter odgovara na poruku"
 
 #~ msgid ""
-#~ "Read profile name and status in a public chat. Press twice to switch "
-#~ "between \"Turn on tracking chat activity until closing of the app\", "
-#~ "\"Turn tracking chat activity on\" and \"Turn tracking chat activity off\""
+#~ "Read profile name and status in a public chat. Press twice to switch between"
+#~ " \"Turn on tracking chat activity until closing of the app\", \"Turn "
+#~ "tracking chat activity on\" and \"Turn tracking chat activity off\""
 #~ msgstr ""
 #~ "Pročitaj ime profila i statusa u javnom ćaskanju. Pritisnite dvaput da bi "
-#~ "ste se prebacili između \"Uključi praćenje aktivnosti ćaskanja do "
-#~ "zatvaranja aplikacije\", \"Uključi praćenje aktivnosti ćaskanja\" I "
-#~ "isključi praćenje aktivnosti ćaskanja\""
+#~ "ste se prebacili između \"Uključi praćenje aktivnosti ćaskanja do zatvaranja"
+#~ " aplikacije\", \"Uključi praćenje aktivnosti ćaskanja\" I isključi praćenje "
+#~ "aktivnosti ćaskanja\""
 
 #~ msgid "Chat activity tracking is on until closing of the app"
-#~ msgstr ""
-#~ "Praćenje aktivnosti za ćaskanje je uključeno do zatvaranja aplikacije"
+#~ msgstr "Praćenje aktivnosti za ćaskanje je uključeno do zatvaranja aplikacije"
 
 #~ msgid "Answer"
 #~ msgstr "Odgovor"

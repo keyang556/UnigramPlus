@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: UnigramPlus\n"
@@ -13,9 +14,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.4.1\n"
 "X-Poedit-Basepath: ../../..\n"
-"X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: appModules\n"
 "X-Poedit-SearchPath-1: GlobalPlugins\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 
 #: addon\appModules\cnf.py:12
 msgid "Arabic"
@@ -358,17 +359,19 @@ msgid ""
 "Copy the message if it contains text. If the focus is on a link, the link "
 "will be copied"
 msgstr ""
-"نسخ الرسالة إذا كانت تحتوي على نص. إذا كان التركيز على رابط، فسيتم نسخ الرابط"
+"نسخ الرسالة إذا كانت تحتوي على نص. إذا كان التركيز على رابط، فسيتم نسخ "
+"الرابط"
 
 #: addon\appModules\unigram.py:714
 msgid "Link copied"
 msgstr "تم نَسْخُ الرابط"
 
-#. Move the focus to the message input field. If the focus is already in this field, then move it to the last element that had focus before this field
+#. Move the focus to the message input field. If the focus is already in this
+#. field, then move it to the last element that had focus before this field
 #: addon\appModules\unigram.py:736
 msgid ""
-"Move the focus to the edit field. If the focus is already in the edit field, "
-"then after pressing the hotkey, it will move to where it was before"
+"Move the focus to the edit field. If the focus is already in the edit field,"
+" then after pressing the hotkey, it will move to where it was before"
 msgstr ""
 "نقل التركيز إلى حقل كتابة الرسائل. إذا كان التركيز موجودًا بالفعل في هذا "
 "الحقل، فبعد الضغط على مفاتيح الاختصار هذه سينتقل إلى حيث كان سابقًا"
@@ -403,9 +406,11 @@ msgstr "فتح ملف تعريف الدردشة الحالية"
 
 #: addon\appModules\unigram.py:817
 msgid ""
-"Recording a voice message will not be available until the edit field is empty"
+"Recording a voice message will not be available until the edit field is "
+"empty"
 msgstr ""
-"في حال كان مربع كتابة الرسالة يحتوي على محتوى, فإن زر تسجيل رسالة سيكون معطلا"
+"في حال كان مربع كتابة الرسالة يحتوي على محتوى, فإن زر تسجيل رسالة سيكون "
+"معطلا"
 
 #: addon\appModules\unigram.py:824
 msgid "Record sent"
@@ -745,7 +750,9 @@ msgid "Move focus to the last message in a chat"
 msgstr "نقل التركيز إلى الرسالة الأخيرة في الدردشة"
 
 #. Selecting an interface language
-#. self.lang = settingsSizerHelper.addLabeledControl(_("Interface language in Unigram:"), wx.Choice, choices=[listLanguages[item] for item in listLanguages])
+#. self.lang = settingsSizerHelper.addLabeledControl(_("Interface language in
+#. Unigram:"), wx.Choice, choices=[listLanguages[item] for item in
+#. listLanguages])
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:198
 msgid "Interface language in Unigram:"
 msgstr "لغة واجهة Unigram:"
@@ -813,10 +820,13 @@ msgid "Read full video description in YouTube URLs"
 msgstr "قِرَاءة الوصف الكامل لمقاطع الفيديو في روابط YouTube"
 
 #. Report if the group has replies for you
-#. self.isAnnouncesAnswers = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Announce if there is a reply in the group")))
+#. self.isAnnouncesAnswers = settingsSizerHelper.addItem(wx.CheckBox(self,
+#. label=_("Announce if there is a reply in the group")))
 #. self.isAnnouncesAnswers.SetValue(conf.get("isAnnouncesAnswers"))
 #. Report information about premium and verified accounts
-#. self.report_premium_accounts = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Announce premium and confirmed accounts")))
+#. self.report_premium_accounts =
+#. settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Announce premium and
+#. confirmed accounts")))
 #. self.report_premium_accounts.SetValue(conf.get("report premium accounts"))
 #. Report if the message contains a reaction
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:246
@@ -844,23 +854,29 @@ msgstr "التحقق من وجود &تحديثات"
 
 #. Add-on summary, usually the user visible name of the addon.
 #. Translators: Summary for this add-on
-#. to be shown on installation and add-on information found in Add-ons Manager.
+#. to be shown on installation and add-on information found in Add-ons
+#. Manager.
 #: buildVars.py:23
 msgid "UnigramPlus"
 msgstr "UnigramPlus"
 
 #. Add-on description
-#. Translators: Long description to be shown for this add-on on add-on information from add-ons manager
+#. Translators: Long description to be shown for this add-on on add-on
+#. information from add-ons manager
 #: buildVars.py:26
 msgid ""
 "This add-on adds a lot of hotkeys for quick navigation through the main "
 "elements of the Unigram application, convenient interaction with Chat "
-"messages, and also adds many small improvements that make working in Unigram "
-"much easier"
+"messages, and also adds many small improvements that make working in Unigram"
+" much easier"
 msgstr ""
 "تضيف هذه الإضافة الكثير من مفاتيح الاختصار للتنقل السريع عبر العناصر "
 "الرئيسية للنافذة ، والتفاعل السهل مع رسائل الدردشة ، وتضيف أيضًا العديد من "
 "التحسينات الطفيفة التي تجعل العمل في Unigram أسهل بكثير"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:252
+msgid "Play a sound while the other side is typing in the open chat"
+msgstr "تشغيل صوت أثناء كتابة الطرف الآخر في الدردشة المفتوحة"
 
 #~ msgid "Message copied"
 #~ msgstr "تم نَسْخُ الرسالة"
@@ -906,8 +922,7 @@ msgstr ""
 #~ msgid "Announce some progress bars"
 #~ msgstr "الإعلان  عن بعض أشرطة التقدم"
 
-#~ msgid ""
-#~ "Press \"More Options\" button in an open chat, voice chat, or call window"
+#~ msgid "Press \"More Options\" button in an open chat, voice chat, or call window"
 #~ msgstr ""
 #~ "اضغط على زر \"المزيد من الخيارات\" في نافذة الدردشة المفتوحة أو الدردشة "
 #~ "الصوتية أو المكالمة"
@@ -915,10 +930,8 @@ msgstr ""
 #~ msgid "Contains reaction"
 #~ msgstr "يحتوي على رد فعل"
 
-#~ msgid ""
-#~ "Announce all progress bars except voice message playback progress bar"
-#~ msgstr ""
-#~ "الإعلان عن جميع أشرطة التقدم باستثناء شريط تقدم تشغيل الرسائل الصوتية"
+#~ msgid "Announce all progress bars except voice message playback progress bar"
+#~ msgstr "الإعلان عن جميع أشرطة التقدم باستثناء شريط تقدم تشغيل الرسائل الصوتية"
 
 #~ msgid "The broadcast window is not found"
 #~ msgstr "لم يتم العثور على نافذة البث."
@@ -933,13 +946,13 @@ msgstr ""
 #~ msgstr "الرد على الرسائل بالضغط على Enter"
 
 #~ msgid ""
-#~ "Read profile name and status in a public chat. Press twice to switch "
-#~ "between \"Turn on tracking chat activity until closing of the app\", "
-#~ "\"Turn tracking chat activity on\" and \"Turn tracking chat activity off\""
+#~ "Read profile name and status in a public chat. Press twice to switch between"
+#~ " \"Turn on tracking chat activity until closing of the app\", \"Turn "
+#~ "tracking chat activity on\" and \"Turn tracking chat activity off\""
 #~ msgstr ""
-#~ "قراءة اسم ملف التعريف وحالته في محادثة عامة. اضغط مرتين للتبديل بين "
-#~ "\"تشغيل تتبع نشاط الدردشة حتى إغلاق التطبيق\" و \"تشغيل تتبع نشاط "
-#~ "الدردشة\" و \"إيقاف تتبع نشاط الدردشة\""
+#~ "قراءة اسم ملف التعريف وحالته في محادثة عامة. اضغط مرتين للتبديل بين \"تشغيل "
+#~ "تتبع نشاط الدردشة حتى إغلاق التطبيق\" و \"تشغيل تتبع نشاط الدردشة\" و "
+#~ "\"إيقاف تتبع نشاط الدردشة\""
 
 #~ msgid "Chat activity tracking is on until closing of the app"
 #~ msgstr "تتبع نشاط الدردشة قيد التشغيل حتى إغلاق التطبيق"

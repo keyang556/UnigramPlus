@@ -76,6 +76,32 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
+### Version 5.5.2
+
+* Updated the readme and translations.
+* Changed the typing indicator sound.
+
+### Version 5.5.1
+
+* Fixed the hotkey for navigating through the list of group topics (ALT+6). Now it correctly detects the topic list when a forum group is opened from the chat list.
+* Added a typing indicator sound: a sound plays in a loop while the other side is typing inside a chat and stops when they finish. This feature is inspired by the corresponding feature in the Unigram JAWS script.
+
+### Version 5.5.0
+
+* Added compatibility with NVDA 2026.1.
+
+### Version 5.4.2
+
+* Added compatibility with NVDA 2025.3.3.
+
+### Version 5.4.1
+
+* Added compatibility with NVDA 2025.1.2.
+
+### Version 5.4
+
+* Fixed an issue with the chat list.
+
 ### Version 5.3.0
 
 * Added a keyboard shortcut that announces the sending time or receiving time of a message and reactions in the message. This is useful when you want to hear the sending or receiving time of a message without re-listening to the full text of the message beforehand. By default, this is the ALT W key combination. Double-clicking toggles the mode of announcing this information.

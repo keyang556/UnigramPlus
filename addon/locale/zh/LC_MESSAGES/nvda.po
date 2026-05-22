@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: UnigramPlus\n"
@@ -13,9 +14,9 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 3.4.1\n"
 "X-Poedit-Basepath: ../../..\n"
-"X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: appModules\n"
 "X-Poedit-SearchPath-1: GlobalPlugins\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 
 #: addon\appModules\cnf.py:12
 msgid "Arabic"
@@ -362,11 +363,12 @@ msgstr "當訊息中含有文字時複製文字，當焦點在連結上則複製
 msgid "Link copied"
 msgstr "連結已複製到剪貼簿"
 
-#. Move the focus to the message input field. If the focus is already in this field, then move it to the last element that had focus before this field
+#. Move the focus to the message input field. If the focus is already in this
+#. field, then move it to the last element that had focus before this field
 #: addon\appModules\unigram.py:736
 msgid ""
-"Move the focus to the edit field. If the focus is already in the edit field, "
-"then after pressing the hotkey, it will move to where it was before"
+"Move the focus to the edit field. If the focus is already in the edit field,"
+" then after pressing the hotkey, it will move to where it was before"
 msgstr "移動焦點到編輯區"
 
 #: addon\appModules\unigram.py:753
@@ -399,7 +401,8 @@ msgstr "開啟目前聊天的資料頁"
 
 #: addon\appModules\unigram.py:817
 msgid ""
-"Recording a voice message will not be available until the edit field is empty"
+"Recording a voice message will not be available until the edit field is "
+"empty"
 msgstr "無法錄製語音訊息，除非輸入訊息的編輯區是空白的"
 
 #: addon\appModules\unigram.py:824
@@ -681,9 +684,7 @@ msgstr "接受通話"
 msgid ""
 "Press \"Decline call\" button  if there is an incoming call, \"End call\" "
 "button if a call is in progress or leave voice chat if it is active."
-msgstr ""
-"當有未接來電時按下拒絕接聽按鈕，通話中按下結束通話按鈕，當在群組通話中按下退"
-"出通話按鈕。"
+msgstr "當有未接來電時按下拒絕接聽按鈕，通話中按下結束通話按鈕，當在群組通話中按下退出通話按鈕。"
 
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:168
 msgid "Before chat name"
@@ -738,7 +739,9 @@ msgid "Move focus to the last message in a chat"
 msgstr "移動焦點到目前開啟聊天的最底部"
 
 #. Selecting an interface language
-#. self.lang = settingsSizerHelper.addLabeledControl(_("Interface language in Unigram:"), wx.Choice, choices=[listLanguages[item] for item in listLanguages])
+#. self.lang = settingsSizerHelper.addLabeledControl(_("Interface language in
+#. Unigram:"), wx.Choice, choices=[listLanguages[item] for item in
+#. listLanguages])
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:198
 msgid "Interface language in Unigram:"
 msgstr "Unigram 的介面語言"
@@ -804,10 +807,13 @@ msgid "Read full video description in YouTube URLs"
 msgstr "對YouTube的連結讀出完整影片說明"
 
 #. Report if the group has replies for you
-#. self.isAnnouncesAnswers = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Announce if there is a reply in the group")))
+#. self.isAnnouncesAnswers = settingsSizerHelper.addItem(wx.CheckBox(self,
+#. label=_("Announce if there is a reply in the group")))
 #. self.isAnnouncesAnswers.SetValue(conf.get("isAnnouncesAnswers"))
 #. Report information about premium and verified accounts
-#. self.report_premium_accounts = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Announce premium and confirmed accounts")))
+#. self.report_premium_accounts =
+#. settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Announce premium and
+#. confirmed accounts")))
 #. self.report_premium_accounts.SetValue(conf.get("report premium accounts"))
 #. Report if the message contains a reaction
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:246
@@ -833,22 +839,26 @@ msgstr "檢查更新"
 
 #. Add-on summary, usually the user visible name of the addon.
 #. Translators: Summary for this add-on
-#. to be shown on installation and add-on information found in Add-ons Manager.
+#. to be shown on installation and add-on information found in Add-ons
+#. Manager.
 #: buildVars.py:23
 msgid "UnigramPlus"
 msgstr "Unigram Plus"
 
 #. Add-on description
-#. Translators: Long description to be shown for this add-on on add-on information from add-ons manager
+#. Translators: Long description to be shown for this add-on on add-on
+#. information from add-ons manager
 #: buildVars.py:26
 msgid ""
 "This add-on adds a lot of hotkeys for quick navigation through the main "
 "elements of the Unigram application, convenient interaction with Chat "
-"messages, and also adds many small improvements that make working in Unigram "
-"much easier"
-msgstr ""
-"這個附加元件新增許多快速鍵用來瀏覽視窗的主要元素，簡化瀏覽聊天訊息，且增加許"
-"多小改進，讓Unigram更容易使用。"
+"messages, and also adds many small improvements that make working in Unigram"
+" much easier"
+msgstr "這個附加元件新增許多快速鍵用來瀏覽視窗的主要元素，簡化瀏覽聊天訊息，且增加許多小改進，讓Unigram更容易使用。"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:252
+msgid "Play a sound while the other side is typing in the open chat"
+msgstr "當對方在開啟的聊天中輸入時播放音效"
 
 #~ msgid "Message copied"
 #~ msgstr "訊息已複製到剪貼簿"
@@ -886,12 +896,10 @@ msgstr ""
 #~ msgid "Announce some progress bars"
 #~ msgstr "讀出一些進度列"
 
-#~ msgid ""
-#~ "Press \"More Options\" button in an open chat, voice chat, or call window"
+#~ msgid "Press \"More Options\" button in an open chat, voice chat, or call window"
 #~ msgstr "在公開聊天、群組聊天或通話視窗按下更多選項的按鈕"
 
-#~ msgid ""
-#~ "Announce all progress bars except voice message playback progress bar"
+#~ msgid "Announce all progress bars except voice message playback progress bar"
 #~ msgstr "讀出除了語音訊息播放進度之外的所有進度列"
 
 #~ msgid "The broadcast window is not found"

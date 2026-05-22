@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: UnigramPlus\n"
@@ -9,13 +10,12 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 3.4.1\n"
 "X-Poedit-Basepath: ../../..\n"
-"X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: appModules\n"
 "X-Poedit-SearchPath-1: GlobalPlugins\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 
 #: GlobalPlugins/UnigramPlus/__init__.py:28
 msgid "No updates available"
@@ -374,7 +374,8 @@ msgstr "Показати текст повідомлення у спливаюч
 msgid "message text"
 msgstr "текст повідомлення"
 
-#: appModules/unigram.py:68 appModules/unigram.py:719 appModules/unigram.py:733
+#: appModules/unigram.py:68 appModules/unigram.py:719
+#: appModules/unigram.py:733
 msgid "This message does not contain text"
 msgstr "Дане повідомлення не містить тексту"
 
@@ -545,8 +546,8 @@ msgstr "Посилання скопійовано"
 
 #: appModules/unigram.py:736
 msgid ""
-"Move the focus to the edit field. If the focus is already in the edit field, "
-"then after pressing the hotkey, it will move to where it was before"
+"Move the focus to the edit field. If the focus is already in the edit field,"
+" then after pressing the hotkey, it will move to where it was before"
 msgstr ""
 "Перенести фокус в поле введення повідомлення. Якщо фокус вже знаходиться в "
 "цьому полі, при натисканні він повернеться на останній елемент який був у "
@@ -578,8 +579,10 @@ msgstr "Відкрити профіль поточного чату"
 
 #: appModules/unigram.py:817
 msgid ""
-"Recording a voice message will not be available until the edit field is empty"
-msgstr "Запис голосового повідомлення неможлива, поки поле вводу не є порожнім"
+"Recording a voice message will not be available until the edit field is "
+"empty"
+msgstr ""
+"Запис голосового повідомлення неможлива, поки поле вводу не є порожнім"
 
 #: appModules/unigram.py:824
 msgid "Record sent"
@@ -797,6 +800,10 @@ msgstr "Перейти до попереднього результату пош
 msgid "No previous search result"
 msgstr "Немає попереднього результату пошуку"
 
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:252
+msgid "Play a sound while the other side is typing in the open chat"
+msgstr "Відтворювати звук, поки співрозмовник набирає текст у відкритому чаті"
+
 #~ msgid "Message copied"
 #~ msgstr "Повідомлення скопійовано"
 
@@ -848,14 +855,12 @@ msgstr "Немає попереднього результату пошуку"
 #~ msgid "&Aceptar"
 #~ msgstr "Відповісти на дзвінок"
 
-#~ msgid ""
-#~ "Press \"More Options\" button in an open chat, voice chat, or call window"
+#~ msgid "Press \"More Options\" button in an open chat, voice chat, or call window"
 #~ msgstr ""
-#~ "Натиснути кнопку \"Більше опцій\" у відкритому чаті, голосовому чаті, або "
-#~ "у вікні дзвінка"
+#~ "Натиснути кнопку \"Більше опцій\" у відкритому чаті, голосовому чаті, або у "
+#~ "вікні дзвінка"
 
-#~ msgid ""
-#~ "Announce all progress bars except voice message playback progress bar"
+#~ msgid "Announce all progress bars except voice message playback progress bar"
 #~ msgstr ""
 #~ "Озвучувати усі індикатори виконання, крім прогресу відтворення голосових "
 #~ "повідомлень"

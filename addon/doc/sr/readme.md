@@ -81,6 +81,32 @@ NVDA+alt+U - Otvara prozor sa podešavanjima UnigramPlus-a.
 
 ## Lista promena:
 
+###Verzija 5.5.2
+
+* Ažurirani su readme i prevodi.
+* Promenjen je zvuk indikatora kucanja.
+
+###Verzija 5.5.1
+
+* Ispravljena je prečica za kretanje kroz listu tema grupe (ALT+6). Sada se ispravno prepoznaje lista tema prilikom otvaranja forumske grupe iz liste ćaskanja.
+* Dodat je zvuk indikatora kucanja: zvuk se reprodukuje u petlji dok druga strana kuca u ćaskanju i prestaje kada ona završi. Ova funkcija je inspirisana odgovarajućom funkcijom u Unigram JAWS skripti.
+
+###Verzija 5.5.0
+
+* Dodata je kompatibilnost sa NVDA 2026.1.
+
+###Verzija 5.4.2
+
+* Dodata je kompatibilnost sa NVDA 2025.3.3.
+
+###Verzija 5.4.1
+
+* Dodata je kompatibilnost sa NVDA 2025.1.2.
+
+###Verzija 5.4
+
+* Rešen je problem sa listom ćaskanja.
+
 ###Verzija 5.3.0
 *Dodata je prečica na tastaturi koja najavljuje vreme slanja ili primanja poruke i reakcije u poruci. Ovo je korisno kada želite da čujete vreme slanja ili prijema poruke bez prethodnog preslušavanja celog teksta poruke. Podrazumevano, ovo je kombinacija tastera ALT+W. Dvostruki klik uključuje način objavljivanja ove informacije.
 * Popravljeni su svi problemi koji su se nedavno nakupili kao rezultat promena u unigram interfejsu.

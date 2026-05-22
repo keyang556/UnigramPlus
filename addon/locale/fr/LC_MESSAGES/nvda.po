@@ -1,3 +1,4 @@
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: UnigramPlus\n"
@@ -13,9 +14,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 3.2.2\n"
 "X-Poedit-Basepath: ../../..\n"
-"X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: appModules\n"
 "X-Poedit-SearchPath-1: GlobalPlugins\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 
 #: addon\appModules\cnf.py:12
 msgid "Arabic"
@@ -365,11 +366,12 @@ msgstr "Montrer le message dans une fenêtre virtuelle"
 msgid "message text"
 msgstr "Texte du message"
 
-#. Move the focus to the message input field. If the focus is already in this field, then move it to the last element that had focus before this field
+#. Move the focus to the message input field. If the focus is already in this
+#. field, then move it to the last element that had focus before this field
 #: addon\appModules\unigram.py:610
 msgid ""
-"Move the focus to the edit field. If the focus is already in the edit field, "
-"then after pressing the hotkey, it will move to where it was before"
+"Move the focus to the edit field. If the focus is already in the edit field,"
+" then after pressing the hotkey, it will move to where it was before"
 msgstr ""
 "Déplacer le focus au champ d'édition. Si le focus y est déjà, il reviendra "
 "où il était auparavant"
@@ -417,7 +419,8 @@ msgstr "Ouvrir le profil de l'échange en cours"
 #| "It will not be possible to record a voice message until the edit field is "
 #| "empty"
 msgid ""
-"Recording a voice message will not be available until the edit field is empty"
+"Recording a voice message will not be available until the edit field is "
+"empty"
 msgstr ""
 "Il ne sera pas possible d'enregistrer un message vocal tant que le champ "
 "d'édition n'est pas vide"
@@ -786,7 +789,8 @@ msgstr "Notifier avec un son de la suppression d'un message et d'un échange"
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:214
 msgid "Display confirmation dialog when deleting messages and chats"
 msgstr ""
-"Demander une confirmation lors de la suppression d'un message et d'un échange"
+"Demander une confirmation lors de la suppression d'un message et d'un "
+"échange"
 
 #. Type of notification when recording voice messages
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:217
@@ -845,7 +849,8 @@ msgstr "Vérifier les &mises à jour"
 
 #. Add-on summary, usually the user visible name of the addon.
 #. Translators: Summary for this add-on
-#. to be shown on installation and add-on information found in Add-ons Manager.
+#. to be shown on installation and add-on information found in Add-ons
+#. Manager.
 #: buildVars.py:23
 #, fuzzy
 #| msgid "UnigramPlus update"
@@ -853,7 +858,8 @@ msgid "UnigramPlus"
 msgstr "Mise à jour UnigramPlus"
 
 #. Add-on description
-#. Translators: Long description to be shown for this add-on on add-on information from add-ons manager
+#. Translators: Long description to be shown for this add-on on add-on
+#. information from add-ons manager
 #: buildVars.py:26
 msgid ""
 "This add-on adds a lot of hotkeys for quick navigation through the main "
@@ -862,8 +868,14 @@ msgid ""
 msgstr ""
 "Cette extension propose de nombreux raccourcis clavier pour une navigations "
 "rapide parmi les éléments principaux de la fenêtre, une interaction "
-"facilitée avec les messages, mais offre également des améliorations meneures "
-"permettant une utilisation d'Unigram plus facile."
+"facilitée avec les messages, mais offre également des améliorations meneures"
+" permettant une utilisation d'Unigram plus facile."
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:252
+msgid "Play a sound while the other side is typing in the open chat"
+msgstr ""
+"Jouer un son lorsque l'autre partie est en train d'écrire dans la "
+"conversation ouverte"
 
 #~ msgid "Announce some progress bars"
 #~ msgstr "Озвучувати деякі індикатори виконання"
@@ -883,14 +895,12 @@ msgstr ""
 #~ msgid "&Aceptar"
 #~ msgstr "Відповісти на дзвінок"
 
-#~ msgid ""
-#~ "Press \"More Options\" button in an open chat, voice chat, or call window"
+#~ msgid "Press \"More Options\" button in an open chat, voice chat, or call window"
 #~ msgstr ""
-#~ "Натиснути кнопку \"Більше опцій\" у відкритому чаті, голосовому чаті, або "
-#~ "у вікні дзвінка"
+#~ "Натиснути кнопку \"Більше опцій\" у відкритому чаті, голосовому чаті, або у "
+#~ "вікні дзвінка"
 
-#~ msgid ""
-#~ "Announce all progress bars except voice message playback progress bar"
+#~ msgid "Announce all progress bars except voice message playback progress bar"
 #~ msgstr ""
 #~ "Озвучувати усі індикатори виконання, крім прогресу відтворення голосових "
 #~ "повідомлень"

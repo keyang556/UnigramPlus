@@ -11,7 +11,24 @@
       "Bash(choco list *)",
       "Bash(winget list *)",
       "Bash(grep -v ':$')",
-      "Bash(python3 -)"
+      "Bash(python3 -)",
+      "Bash(Get-ChildItem -Path \"C:\\\\GitHub\\\\UnigramPlus\" -Recurse -Force)",
+      "Bash(Select-Object FullName)",
+      "Bash(git -C C:/GitHub/UnigramPlus log --oneline -40)",
+      "Bash(git -C C:/GitHub/UnigramPlus log --oneline readme.md)",
+      "Bash(git -C C:/GitHub/UnigramPlus log --oneline addon/doc/en/readme.md)",
+      "Bash(git -C C:/GitHub/UnigramPlus log --oneline addon/doc/zh/readme.md)",
+      "Bash(git -C C:/GitHub/UnigramPlus ls-files addon/doc/en/)",
+      "Bash(git -C C:/GitHub/UnigramPlus check-ignore -v addon/doc/en/readme.md)",
+      "Bash(C:/GitHub/UnigramPlus/.venv/Scripts/pip.exe install *)",
+      "Bash(C:/GitHub/UnigramPlus/.venv/Scripts/python.exe -m pip install polib)",
+      "Bash(where python *)",
+      "Read(//c/Program Files/Python313//**)",
+      "Bash(\"/c/Program Files/Python313/python.exe\" -c \"import polib; print\\(polib.__version__\\)\")",
+      "Bash(\"/c/Program Files/Python313/python.exe\" -m pip install --user polib)",
+      "Read(//tmp/**)",
+      "Bash(cp /tmp/all_strings.txt C:/Users/chang/Documents/all_strings.txt 2>&1; wc -l C:/Users/chang/Documents/all_strings.txt)",
+      "Bash(cat \"/c/Users/chang/AppData/Local/Temp/claude/C--GitHub-UnigramPlus/8fae1fbf-c446-4faa-8fb9-e71bc085d8c7/tasks/bipb0fxsp.output\" 2>&1)"
     ]
   }
 }

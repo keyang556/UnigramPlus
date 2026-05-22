@@ -79,6 +79,32 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 ##Lista de modificări:
 
+### Versiunea 5.5.2
+
+* Au fost actualizate fișierul readme și traducerile.
+* A fost schimbat sunetul indicatorului de tastare.
+
+### Versiunea 5.5.1
+
+* A fost rezolvată comanda rapidă pentru navigarea prin lista de subiecte ale grupului (ALT+6). Acum detectează corect lista de subiecte la deschiderea unui grup de tip forum din lista de conversații.
+* A fost adăugat un sunet de indicator de tastare: un sunet se reproduce în buclă în timp ce cealaltă parte tastează în conversație și se oprește când aceasta termină. Această funcție este inspirată din funcția similară din scriptul Unigram pentru JAWS.
+
+### Versiunea 5.5.0
+
+* A fost adăugată compatibilitatea cu NVDA 2026.1.
+
+### Versiunea 5.4.2
+
+* A fost adăugată compatibilitatea cu NVDA 2025.3.3.
+
+### Versiunea 5.4.1
+
+* A fost adăugată compatibilitatea cu NVDA 2025.1.2.
+
+### Versiunea 5.4
+
+* A fost rezolvată o problemă cu lista de conversații.
+
 ### Versiunea 5.2.0
 
 * A fost adăugată posibilitatea de a selecta fișiere atașate la mesaje cu ajutorul săgeților și de a deschide fișierul selectat cu ajutorul tastei spațiu.
