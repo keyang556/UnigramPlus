@@ -1,3 +1,8 @@
+# Private directory to save files that should not be tracked by Git, i.e. in testing phase and you don't want to commit the files.
+pre/**
+# Except README.md
+!pre/README.md
+
 addon/doc/*.css
 addon/doc/en/
 *_docHandler.py

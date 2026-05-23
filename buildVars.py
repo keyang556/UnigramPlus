@@ -19,10 +19,12 @@ addon_info = AddonInfo(
 		"""This add-on adds a lot of hotkeys for quick navigation through the main elements of the Unigram application, convenient interaction with Chat messages, and also adds many small improvements that make working in Unigram much easier""",
 	),
 	# version
-	addon_version="5.5.2",
+	addon_version="5.5.3",
 	# Brief changelog for this version
 	# Translators: what's new content for the add-on version to be shown in the add-on store.
-	addon_changelog=_("Updated readme and translations. Changed the typing indicator sound."),
+	addon_changelog=_(
+		"- Added Burmese localization."
+	),
 	# Author(s)
 	addon_author="Kostya Gladkiy<gladkiy.kostya@gmail.com>",
 	# URL for the add-on documentation support
