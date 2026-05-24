@@ -879,6 +879,10 @@ msgstr ""
 msgid "%d percent"
 msgstr "%d la sută"
 
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:250
+msgid "File transfer progress announcement interval (percent):"
+msgstr "Intervalul anun??rii progresului transferului de fi?iere (procent):"
+
 #~ msgid "Premium"
 #~ msgstr "Premium"
 

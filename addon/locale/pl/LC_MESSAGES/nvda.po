@@ -708,3 +708,7 @@ msgstr "Ogłaszaj paski postępu tylko podczas wysyłania i pobierania plików"
 #: addon\appModules\unigram.py:62
 msgid "%d percent"
 msgstr "%d procent"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:250
+msgid "File transfer progress announcement interval (percent):"
+msgstr "Interwa? og?aszania post?pu transferu pliku (procent):"

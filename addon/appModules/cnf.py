@@ -40,6 +40,7 @@ spec = (
 	"voiceFolderNames = boolean(default=True)",
 	"voiceMessageRecordingIndicator = string(default=audio)",
 	"voicingPerformanceIndicators = string(default=upload_download)",
+	"fileTransferProgressInterval = integer(default=1, min=1, max=100)",
 	# One-shot marker so we can migrate users who had the old default of "none" to
 	# the new "upload_download" mode the first time they launch 5.5.3.
 	"voicingPerformanceIndicators_migrated_5_5_3 = boolean(default=False)",

@@ -34,19 +34,19 @@ baseDir = os.path.join(os.path.dirname(__file__), "media\\")
 
 
 class File_transfer_progress_tracking:
-	# Polls the focused Unigram FileButton (download/upload button on a chat
-	# message) and announces the percentage as the transfer progresses. Unigram's
-	# FileButton exposes IValueProvider returning a string like "37%", but the
-	# AutomationPeer only raises ValueProperty change events when a UIA listener
-	# is registered specifically for that element, which NVDA does not always do
-	# for Button-role controls. A short polling timer is therefore the most
-	# reliable way to track the value while focus stays on the button.
+	# Unigram 12.7 exposes file transfer progress on FileButton's UIA Value
+	# pattern while the control type is Button, not ProgressBar. Handle value
+	# changes directly and keep a focused-message polling fallback for cases where
+	# Unigram does not raise a fresh event.
 	active = False
 	interval = .35
 	app = None
 	_step = 10
-	_last_value = None  # (key, percentage, fresh_val_str)
+	_last_value = {}  # key -> (percentage, fresh_val_str)
 	_last_logged_id = None
+	_candidate_automation_ids = ("Button", "Download", "Overlay")
+	_candidate_roles = (Role.LINK, Role.BUTTON)
+	_max_search_depth = 6
 
 	@classmethod
 	def _read_fresh_value(cls, obj):
@@ -67,50 +67,185 @@ class File_transfer_progress_tracking:
 		except Exception: return ""
 
 	@classmethod
+	def _parse_percentage(cls, val):
+		if val is None: return None
+		text = str(val).strip().replace("\0", "")
+		if not text: return None
+		match = re.search(r"[-+]?\d+(?:[\.,]\d+)?", text)
+		if not match: return None
+		try: percentage = int(float(match.group(0).replace(",", ".")))
+		except (TypeError, ValueError): return None
+		if percentage < 0 or percentage > 100: return None
+		return percentage
+
+	@classmethod
+	def _get_automation_id(cls, obj):
+		try: return getattr(obj, "UIAAutomationId", "") or ""
+		except Exception: return ""
+
+	@classmethod
+	def _is_transfer_button(cls, obj):
+		try: role = obj.role
+		except Exception: return False
+		return role in cls._candidate_roles and cls._get_automation_id(obj) in cls._candidate_automation_ids
+
+	@classmethod
+	def _is_visible(cls, obj):
+		try:
+			location = obj.location
+			return bool(location and location.width and location.height)
+		except Exception:
+			return True
+
+	@classmethod
+	def _get_key(cls, obj):
+		aid = cls._get_automation_id(obj)
+		context = cls._get_context_key(obj)
+		if context: return ("context", aid, context)
+		elem = getattr(obj, "UIAElement", None)
+		if elem is not None:
+			try: return ("runtime", tuple(elem.GetRuntimeId()), aid)
+			except Exception: pass
+		try:
+			location = obj.location
+			if location:
+				return ("location", getattr(obj, "windowHandle", 0), aid, location.left, location.top, location.width, location.height)
+		except Exception: pass
+		return ("object", getattr(obj, "windowHandle", 0), aid, id(obj))
+
+	@classmethod
+	def _clean_context_name(cls, name):
+		if not name: return ""
+		name = re.sub(r"\b\d+(?:[\.,]\d+)?\s*%", "", str(name))
+		name = re.sub(r"\s+", " ", name)
+		return name.strip(" ,.-")
+
+	@classmethod
+	def _get_context_key(cls, obj):
+		for root in cls._iter_candidate_roots(obj):
+			labels = []
+			for item in cls._walk(root):
+				aid = cls._get_automation_id(item)
+				if aid not in ("Title", "TitleTrim", "DocumentName"):
+					continue
+				try: name = item.name
+				except Exception: name = ""
+				name = cls._clean_context_name(name)
+				if name and name not in labels:
+					labels.append(name)
+			if labels:
+				return tuple(labels[:4])
+			try: role = root.role
+			except Exception: role = None
+			if role == Role.LISTITEM:
+				try: name = root.name
+				except Exception: name = ""
+				name = cls._clean_context_name(name)
+				if name:
+					return (name[:200],)
+		return None
+
+	@classmethod
+	def _walk(cls, root):
+		queue = [(root, 0)]
+		seen = set()
+		while queue:
+			obj, depth = queue.pop(0)
+			obj_id = id(obj)
+			if obj_id in seen: continue
+			seen.add(obj_id)
+			yield obj
+			if depth >= cls._max_search_depth: continue
+			try: children = obj.children
+			except Exception: continue
+			for child in children:
+				queue.append((child, depth + 1))
+
+	@classmethod
+	def _iter_candidate_roots(cls, obj):
+		root = obj
+		for _ in range(4):
+			if not root: break
+			yield root
+			try: parent = root.parent
+			except Exception: break
+			if not parent or parent is root: break
+			if cls._get_automation_id(parent) == "Messages": break
+			root = parent
+
+	@classmethod
+	def _find_transfer_button(cls, focus):
+		if not focus: return None
+		candidates = []
+		for root in cls._iter_candidate_roots(focus):
+			for obj in cls._walk(root):
+				if not cls._is_transfer_button(obj) or not cls._is_visible(obj): continue
+				percentage = cls._parse_percentage(cls._read_fresh_value(obj))
+				if percentage is None: continue
+				# Prefer a visible in-progress transfer when one message contains
+				# both a main play button and an overlay download button.
+				candidates.append((0 if 0 < percentage < 100 else 1, obj))
+		return min(candidates, key=lambda item: item[0])[1] if candidates else None
+
+	@classmethod
+	def _format_percentage(cls, percentage):
+		return _("%d percent") % percentage
+
+	@classmethod
+	def _get_step(cls):
+		try: step = int(conf.get("fileTransferProgressInterval"))
+		except (TypeError, ValueError): step = cls._step
+		return max(1, min(100, step))
+
+	@classmethod
+	def handle_progress(cls, obj, speak_first=False):
+		if conf.get("voicingPerformanceIndicators") == "none": return False
+		if not cls._is_transfer_button(obj): return False
+		val = cls._read_fresh_value(obj)
+		percentage = cls._parse_percentage(val)
+		if percentage is None: return False
+		key = cls._get_key(obj)
+		prev = cls._last_value.get(key)
+		last_pct = prev[0] if prev else None
+		should_speak = False
+		if last_pct is None:
+			should_speak = speak_first and percentage > 0
+		elif percentage != last_pct:
+			if percentage == 100 or last_pct == 0 or abs(percentage - last_pct) >= cls._get_step():
+				should_speak = True
+		cls._last_value[key] = (percentage, val)
+		if len(cls._last_value) > 128:
+			cls._last_value.pop(next(iter(cls._last_value)), None)
+		if should_speak:
+			try: log.info("File_transfer_progress_tracking: announcing %d%%" % percentage)
+			except: pass
+			queueHandler.queueFunction(queueHandler.eventQueue, speech.speakMessage, cls._format_percentage(percentage))
+		return True
+
+	@classmethod
 	def tick(cls):
 		if not cls.active: return
 		try:
 			obj = api.getFocusObject()
 			if obj is None:
 				Timer(cls.interval, cls.tick).start(); return
-			mode = conf.get("voicingPerformanceIndicators")
-			if mode == "none":
+			if conf.get("voicingPerformanceIndicators") == "none":
 				Timer(cls.interval, cls.tick).start(); return
-			# Identify candidate FileButton — role must be Button/Link and the
-			# automation id matches one of Unigram's FileButton names.
-			role = None
-			aid = ""
-			try: role = obj.role
-			except: pass
-			try: aid = getattr(obj, "UIAAutomationId", "") or ""
-			except: aid = ""
-			if role not in (Role.LINK, Role.BUTTON) or aid not in ("Button", "Download", "Overlay"):
+			# Search the focused message subtree for Unigram FileButton progress.
+			obj = cls._find_transfer_button(obj)
+			if not obj:
 				Timer(cls.interval, cls.tick).start(); return
-			# Found a candidate. Read the value freshly.
-			val = cls._read_fresh_value(obj)
 			# Log once per focused object so we can verify detection without spam.
 			obj_id = id(obj)
 			if cls._last_logged_id != obj_id:
 				cls._last_logged_id = obj_id
-				try: log.info("File_transfer_progress_tracking: tracking aid=%r role=%r value=%r" % (aid, role, val))
+				try:
+					log.info(
+						"File_transfer_progress_tracking: tracking aid=%r role=%r value=%r"
+						% (cls._get_automation_id(obj), obj.role, cls._read_fresh_value(obj))
+					)
 				except: pass
-			try: percentage = int(float(str(val).strip("% \0")))
-			except (AttributeError, ValueError, TypeError):
-				Timer(cls.interval, cls.tick).start(); return
-			key = (getattr(obj, "windowHandle", 0), aid)
-			prev = cls._last_value
-			last_pct = prev[1] if prev and prev[0] == key else None
-			should_speak = False
-			if last_pct is None:
-				should_speak = False  # first sighting on this button; just remember.
-			elif percentage != last_pct:
-				if percentage in (0, 100) or abs(percentage - last_pct) >= cls._step:
-					should_speak = True
-			cls._last_value = (key, percentage, val)
-			if should_speak:
-				try: log.info("File_transfer_progress_tracking: announcing %d%%" % percentage)
-				except: pass
-				queueHandler.queueFunction(queueHandler.eventQueue, speech.speakMessage, _("%d percent") % percentage)
+			cls.handle_progress(obj, speak_first=True)
 		except Exception as e:
 			try: log.debug("File_transfer_progress_tracking error: %r" % e)
 			except: pass
@@ -120,7 +255,7 @@ class File_transfer_progress_tracking:
 	def start(cls):
 		if cls.active: return
 		cls.active = True
-		cls._last_value = None
+		cls._last_value = {}
 		cls._last_logged_id = None
 		try: log.info("File_transfer_progress_tracking started (mode=%s)" % conf.get("voicingPerformanceIndicators"))
 		except Exception: pass
@@ -129,8 +264,17 @@ class File_transfer_progress_tracking:
 	@classmethod
 	def stop(cls):
 		cls.active = False
-		cls._last_value = None
+		cls._last_value = {}
 		cls._last_logged_id = None
+
+
+class File_transfer_progress_button:
+	def event_valueChange(self):
+		if conf.get("voicingPerformanceIndicators") == "none":
+			return
+		if File_transfer_progress_tracking.handle_progress(self, speak_first=True):
+			return
+		return super().event_valueChange()
 
 
 
@@ -1455,6 +1599,13 @@ class AppModule(appModuleHandler.AppModule):
 				# clsList.insert(0, ExplanationCorrectAnswerInQuiz)
 			elif obj.role == Role.SLIDER and obj.UIAAutomationId == "Slider":
 				self.saved_items.save("slider", obj)
+			elif (
+				File_transfer_progress_tracking._is_transfer_button(obj)
+				and File_transfer_progress_tracking._parse_percentage(
+					File_transfer_progress_tracking._read_fresh_value(obj)
+				) is not None
+			):
+				clsList.insert(0, File_transfer_progress_button)
 			elif conf.get("voicingPerformanceIndicators") in ("none", "upload_download") and obj.role == Role.PROGRESSBAR:
 				clsList.pop(0)
 		except Exception as e: pass

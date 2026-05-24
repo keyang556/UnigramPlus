@@ -872,6 +872,10 @@ msgstr "僅在檔案上傳與下載期間播報進度列"
 msgid "%d percent"
 msgstr "%d %%"
 
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:250
+msgid "File transfer progress announcement interval (percent):"
+msgstr "????????????????"
+
 #~ msgid "Message copied"
 #~ msgstr "訊息已複製到剪貼簿"
 
