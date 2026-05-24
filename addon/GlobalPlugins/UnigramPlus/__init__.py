@@ -12,6 +12,7 @@ import urllib.request
 import core
 import globalVars
 import os
+import re
 addonHandler.initTranslation()
 import languageHandler
 import queueHandler
@@ -31,8 +32,22 @@ def no_updates_dialog():
 
 def onCheckForUpdates(event = False, is_start = False):
 	import versionInfo
-	NVDAVersion = f"{versionInfo.version_year}.{versionInfo.version_major}.{versionInfo.version_minor}"
-	NVDAVersion = int(NVDAVersion.replace(".", ""))
+	# Newer NVDA snapshots renamed `version_year` to `version_major` and shifted the others down.
+	# Fall back to parsing versionInfo.version so we stay compatible across both layouts.
+	try:
+		year = getattr(versionInfo, "version_year", None)
+		if year is not None:
+			parts = (year, versionInfo.version_major, versionInfo.version_minor)
+		else:
+			# Layout used by alpha/2026+: version_major.version_minor.version_build
+			parts = (versionInfo.version_major, versionInfo.version_minor, getattr(versionInfo, "version_build", 0))
+	except Exception:
+		try:
+			pieces = str(versionInfo.version).split(".")[:3]
+			parts = tuple(int(re.sub(r"\D", "", p) or 0) for p in pieces)
+		except Exception:
+			parts = (0, 0, 0)
+	NVDAVersion = int("".join(str(p) for p in parts))
 	fp = os.path.join(globalVars.appArgs.configPath, "unigramplus.nvda-addon")
 	addon_version = addonHandler.getCodeAddon().manifest["version"]
 	addon_version = int(addon_version.replace(".", ""))
@@ -176,6 +191,7 @@ class UnigramPlusSettings(SettingsPanel):
 	}
 	listVoicingPerformanceIndicators = {
 		"all": _("Announce all progress bars"),
+		"upload_download": _("Only announce progress bars during file uploads and downloads"),
 		"none": _("Do not announce any progress bars"),
 		# "normal": _("Announce some progress bars")
 	}
@@ -292,4 +308,12 @@ class UnigramPlusSettings(SettingsPanel):
 			else:
 				Typing_sound_tracking.active = False
 				Typing_sound_tracking.stop_sound()
+		except Exception: pass
+		# Sync the file-transfer progress tracker with the new progress-bar setting
+		try:
+			from appModules.unigram import File_transfer_progress_tracking
+			if conf.get("voicingPerformanceIndicators") == "none":
+				File_transfer_progress_tracking.stop()
+			elif not File_transfer_progress_tracking.active:
+				File_transfer_progress_tracking.start()
 		except Exception: pass

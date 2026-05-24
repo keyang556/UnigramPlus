@@ -75,6 +75,11 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 
 ##Lista de cambios:
 
+### Versión 5.5.3
+
+* Se añadió el anuncio automático del progreso de subida y descarga de archivos. Se agregó una nueva opción "Solo durante la subida y descarga" al ajuste de anuncio de barras de progreso, que ahora es la opción predeterminada. La combinación ALT+U ahora alterna entre tres estados: desactivado, solo durante subida/descarga, y anunciar todas las barras de progreso.
+* Se actualizaron el readme y las traducciones.
+
 ### Versión 5.5.2
 
 * Se actualizaron el readme y las traducciones.
@@ -97,7 +102,7 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 
 * Se añadió compatibilidad con NVDA 2025.1.2.
 
-### Versión 5.4
+### Versión 5.4.0
 
 * Se corrigió un problema con la lista de chats.
 

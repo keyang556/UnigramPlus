@@ -79,6 +79,11 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 ##Lista de modificări:
 
+### Versiunea 5.5.3
+
+* A fost adăugată anunțarea automată a progresului încărcării și descărcării fișierelor. A fost adăugată o nouă opțiune „Doar în timpul încărcării și descărcării” în setarea de anunțare a barelor de progres, iar aceasta este acum opțiunea implicită. Comanda ALT+U comută acum între trei stări: oprit, doar în timpul încărcării/descărcării și anunță toate barele de progres.
+* Au fost actualizate fișierul readme și traducerile.
+
 ### Versiunea 5.5.2
 
 * Au fost actualizate fișierul readme și traducerile.
@@ -101,7 +106,7 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 * A fost adăugată compatibilitatea cu NVDA 2025.1.2.
 
-### Versiunea 5.4
+### Versiunea 5.4.0
 
 * A fost rezolvată o problemă cu lista de conversații.
 

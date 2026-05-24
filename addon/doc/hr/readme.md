@@ -83,6 +83,11 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 
 	##Popis promjena:
 
+### Verzija 5.5.3
+
+* Dodano automatsko najavljivanje napretka slanja i preuzimanja datoteka. Nova opcija "Samo tijekom slanja i preuzimanja" dodana je u postavke najave traka napretka i sada je zadana postavka. Tipka ALT+U sada izmjenjuje tri stanja: isključeno, samo tijekom slanja/preuzimanja i najavljuj sve trake napretka.
+* Ažuriran readme i prijevodi.
+
 ### Verzija 5.5.2
 
 * Ažuriran readme i prijevodi.
@@ -105,7 +110,7 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 
 * Dodana kompatibilnost s NVDA 2025.1.2.
 
-### Verzija 5.4
+### Verzija 5.4.0
 
 * Riješen problem s popisom razgovora.
 

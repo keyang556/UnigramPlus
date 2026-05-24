@@ -877,6 +877,22 @@ msgstr ""
 "Jouer un son lorsque l'autre partie est en train d'écrire dans la "
 "conversation ouverte"
 
+#: addon\appModules\unigram.py:1188
+msgid "Announce progress bars only during upload and download"
+msgstr ""
+"Annoncer les barres de progression uniquement pendant l'envoi et le "
+"téléchargement"
+
+#: addon\GlobalPlugins\UnigramPlus\__init__.py:180
+msgid "Only announce progress bars during file uploads and downloads"
+msgstr ""
+"Annoncer les barres de progression uniquement pendant l'envoi et le "
+"téléchargement de fichiers"
+
+#: addon\appModules\unigram.py:62
+msgid "%d percent"
+msgstr "%d pour cent"
+
 #~ msgid "Announce some progress bars"
 #~ msgstr "Озвучувати деякі індикатори виконання"
 
