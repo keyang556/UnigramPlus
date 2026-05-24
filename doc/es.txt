@@ -1,0 +1,10 @@
+* Se corrigieron anuncios no deseados, como los contadores de chats sin leer en carpetas, por ejemplo "Todos 535". El progreso de transferencia de archivos ahora se limita a los controles de subida y descarga de Unigram y se ignora fuera de las ventanas de Unigram.
+* Se corrigió la convivencia con el complemento de NVDA para Telegram Desktop activando UnigramPlus solo cuando la aplicación en ejecución se detecta como Unigram.
+* Se añadió un botón en las opciones de UnigramPlus para abrir la carpeta de sonidos incluida y facilitar el reemplazo de archivos WAV con el mismo nombre.
+* Se añadió una opción para la flecha arriba en el campo de edición de mensajes que mueve el foco al último mensaje enfocado.
+* Se reconstruyó el chino tradicional como zh_TW y se añadió chino simplificado como zh_CN.
+
+Si realmente te gusta este complemento y lo deseas, Y lo más importante, tienes la oportunidad de apoyar financieramente al desarrollador Y por ende motivarlo a seguir desarrollándolo, puedes hacerlo transfiriendo un pequeño monto usando los siguientes detalles bancarios:
+* PayPal: gladkiy.kostya@gmail.com.
+* Sistema de donación ucraniano: https://unigramplus.diaka.ua/donate.
+* Número de tarjeta: 5169360009004502 (Gladkiy Constantine).

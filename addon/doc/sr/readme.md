@@ -21,6 +21,9 @@ Koristite Unigram na ugodniji i produktivniji način. Ovaj dodatak nudi mnoge ta
 * Ako se medijske datoteke priložene uz poruku otvore pritiskom na razmak nakon zatvaranja, kursor se vraća na mesto na kojem je bio pre.
 * Moguće je onemogućiti zvuk svih indikatora performansi ili samo indikatora toka reprodukcije glasovnih poruka.
 
+## Prilagođeni zvukovi
+Zvukovi UnigramPlus nalaze se u fascikli `appModules\media` dodatka. Otvorite NVDA podešavanja > UnigramPlus i pritisnite **Otvori fasciklu zvukova UnigramPlus**. Da prilagodite zvuk, kopirajte zamensku WAV datoteku u tu fasciklu sa istim nazivom kao zvuk koji želite da zamenite, zatim ponovo pokrenite NVDA ili ponovo učitajte dodatke. Ažuriranja dodatka mogu vratiti ugrađene zvukove, zato sačuvajte kopiju svojih datoteka.
+
 ## Podaci o donacijama programeru:
 
 Ako Vam se ovaj dodatak zaista sviđa i imate želju, a što je najvažnije priliku, finansijski podržati razvojnog programera i time ga motivisati da nastavi razvijati ovaj dodatak, to možete učiniti prenosom male količine pomoću sledećih bankovnih podataka:
@@ -349,3 +352,12 @@ This update adds a combination that press "Instant View" button in the message, 
 
 Added Turkish localization
 
+
+
+### Verzija 5.5.4
+
+* Ispravljena su neželjena izgovaranja, kao što su brojači nepročitanih ćaskanja u fasciklama, na primer „Svi 535”. Napredak prenosa datoteka sada je ograničen na Unigram kontrole za otpremanje i preuzimanje i ignoriše se van Unigram prozora.
+* Ispravljeno je istovremeno korišćenje sa NVDA dodatkom za Telegram Desktop tako što se UnigramPlus aktivira samo kada je pokrenuta aplikacija prepoznata kao Unigram.
+* U podešavanja UnigramPlus dodat je taster za otvaranje fascikle ugrađenih zvukova, radi lakše zamene WAV datoteka datotekama istog naziva.
+* Dodata je opcija za strelicu nagore u polju za uređivanje poruke koja premešta fokus na poslednju fokusiranu poruku.
+* Tradicionalni kineski je obnovljen kao zh_TW, a dodat je pojednostavljeni kineski zh_CN.

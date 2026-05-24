@@ -21,6 +21,9 @@ Utilizează Unigram într-un mod mai confortabil și mai productiv. Acest addon 
 * Dacă mediile atașate mesajului sunt deschise cu ajutorul barei de spațiu, atunci, după închiderea lor, focalizarea se va întoarce la ultimul element care a fost în centrul atenției.
 * Acest add-on îți permite să dezactivezi complet anunțarea barelor de progres, precum și să dezactivați doar anunțarea barei de progres pentru redarea mesajelor vocale.
 
+## Sunete personalizate
+Sunetele UnigramPlus se află în folderul `appModules\media` al suplimentului. Deschideți Setări NVDA > UnigramPlus și apăsați **Deschide folderul de sunete UnigramPlus**. Pentru a personaliza un sunet, copiați în acel folder fișierul WAV de înlocuire cu același nume ca sunetul pe care doriți să îl schimbați, apoi reporniți NVDA sau reîncărcați suplimentele. Actualizările suplimentului pot restaura sunetele incluse, așa că păstrați o copie a fișierelor personalizate.
+
 ##Informații despre posibilitatea de a face donații către dezvoltator:
 Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai important, posibilitatea de a sprijini financiar dezvoltatorul și, astfel, de a-l motiva să dezvolte în continuare acest add-on, poți face acest lucru transferând o sumă mică la următoarele detalii bancare: [link de donații](https://unigramplus.diaka.ua/donate), sau numărul de card este 5169360009004502(Ucraina).
 
@@ -78,6 +81,14 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 * Faptul că funcția care focalizează cursorul pe eticheta "mesaj necitit" poate reacționa uneori cu întârziere este o problemă cunoscută. Acest lucru poate depinde de numărul de mesaje necitite în acel moment.
 
 ##Lista de modificări:
+
+### Versiunea 5.5.4
+
+* Au fost corectate anunțurile nedorite, cum ar fi contoarele de chat-uri necitite din foldere, de exemplu „Toate 535”. Progresul transferului de fișiere este acum limitat la controalele de încărcare și descărcare din Unigram și este ignorat în afara ferestrelor Unigram.
+* A fost corectată coexistența cu suplimentul NVDA pentru Telegram Desktop, activând UnigramPlus numai când aplicația rulată este detectată ca Unigram.
+* A fost adăugat un buton în setările UnigramPlus pentru deschiderea folderului de sunete incluse, ca fișierele WAV să poată fi înlocuite mai ușor cu fișiere având același nume.
+* A fost adăugată o opțiune pentru săgeata sus în câmpul de editare a mesajului, care mută focalizarea la ultimul mesaj focalizat.
+* Chineza tradițională a fost reconstruită ca zh_TW și a fost adăugată chineza simplificată ca zh_CN.
 
 ### Versiunea 5.5.3
 

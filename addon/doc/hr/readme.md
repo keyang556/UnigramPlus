@@ -20,6 +20,9 @@ Koristite Unigram na udobniji i produktivniji način. Ovaj dodatak nudi mnogo pr
 * Ako se medij priložen poruci otvori pomoću razmaknice, tada će se nakon zatvaranja fokus vratiti na zadnji element koji je bio u fokusu.
 * Dodatak vam omogućuje da potpuno onemogućite najavu trake napretka, kao i da onemogućite samo najavu trake napretka za reprodukciju glasovnih poruka.
 
+## Prilagođeni zvukovi
+Zvukovi UnigramPlus nalaze se u mapi `appModules\media` dodatka. Otvorite NVDA postavke > UnigramPlus i pritisnite **Otvori mapu zvukova UnigramPlus**. Za prilagodbu zvuka kopirajte zamjensku WAV datoteku u tu mapu s istim nazivom kao zvuk koji želite zamijeniti, zatim ponovno pokrenite NVDA ili ponovno učitajte dodatke. Ažuriranja dodatka mogu vratiti ugrađene zvukove, stoga sačuvajte kopiju svojih datoteka.
+
 ##Informacije o mogućnosti doniranja programeru:
 Ako vam se jako sviđa ovaj dodatak i imate želju, a što je najvažnije priliku, financijski podržati programera i time ga motivirati za daljnji razvoj ovog dodatka, to možete učiniti prijenosom manjeg iznosa na sljedeću bankovni račun:
 [Poveznica za donaciju](https://unigramplus.diaka.ua/donate)
@@ -82,6 +85,14 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 * Činjenica da funkcija koja fokusira pokazivač na oznaku "nepročitana poruka" ponekad može reagirati sa zakašnjenjem je poznati problem. To može ovisiti o broju poruka u trenutku.
 
 	##Popis promjena:
+
+### Verzija 5.5.4
+
+* Ispravljena su neželjena čitanja, poput broja nepročitanih chatova u mapama, primjerice „Svi 535”. Napredak prijenosa datoteka sada je ograničen na Unigram kontrole za slanje i preuzimanje te se zanemaruje izvan Unigram prozora.
+* Ispravljeno je supostojanje s NVDA dodatkom za Telegram Desktop tako da se UnigramPlus uključuje samo kada je pokrenuta aplikacija prepoznata kao Unigram.
+* U postavke UnigramPlus dodan je gumb za otvaranje mape ugrađenih zvukova, radi lakše zamjene WAV datoteka datotekama istog naziva.
+* Dodana je opcija za strelicu gore u polju za uređivanje poruke koja premješta fokus na zadnju fokusiranu poruku.
+* Tradicionalni kineski obnovljen je kao zh_TW, a dodan je pojednostavljeni kineski zh_CN.
 
 ### Verzija 5.5.3
 
