@@ -870,7 +870,7 @@ msgstr "僅在檔案上傳與下載期間播報進度列"
 
 #: addon\appModules\unigram.py:62
 msgid "%d percent"
-msgstr "%d %%"
+msgstr "百分之 %d"
 
 #: addon/GlobalPlugins/UnigramPlus/__init__.py:250
 msgid "File transfer progress announcement interval (percent):"
