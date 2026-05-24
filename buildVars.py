@@ -3,7 +3,7 @@
 
 from site_scons.site_tools.NVDATool.typings import AddonInfo, BrailleTables, SymbolDictionaries
 from site_scons.site_tools.NVDATool.utils import _
-
+import changelog
 
 # Add-on information variables
 addon_info = AddonInfo(
@@ -61,7 +61,7 @@ addon_info = AddonInfo(
 pythonSources: list[str] = ["addon/appModules/*.py", "addon/GlobalPlugins/UnigramPlus/*.py"]
 
 # Files that contain strings for translation. Usually your python sources
-i18nSources: list[str] = pythonSources + ["buildVars.py"]
+i18nSources: list[str] = pythonSources + ["buildVars.py", "changelog.py"]
 
 # Files that will be ignored when building the nvda-addon file
 # Paths are relative to the addon directory, not to the root directory of your addon sources.
