@@ -22,7 +22,9 @@ addon_info = AddonInfo(
 	addon_version="5.5.3",
 	# Brief changelog for this version
 	# Translators: what's new content for the add-on version to be shown in the add-on store.
-	addon_changelog=_("Added automatic announcement of file upload and download progress, with a new \"Only during upload and download\" option for the progress bar setting. Updated readme and translations."),
+	addon_changelog=_(
+		"- Added Burmese localization."
+	),
 	# Author(s)
 	addon_author="Kostya Gladkiy<gladkiy.kostya@gmail.com>",
 	# URL for the add-on documentation support

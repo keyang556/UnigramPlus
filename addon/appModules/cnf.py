@@ -11,6 +11,7 @@ lang = languageHandler.getLanguage().split("_")[0]
 listLanguages = {
 	"ar": _("Arabic"),
 	"be": _("Belarus"),
+	"my": _("Burmese"),
 	"cs": _("Czech"),
 	"en": _("English"),
 	"fr": _("French"),
@@ -78,12 +79,3 @@ except:
 	path = os.path.join(globalVars.appArgs.configPath, "UnigramPlus.ini")
 	os.remove(path)
 	conf = cnf()
-
-# One-shot migration: users upgrading from <=5.5.2 had the old default of "none"
-# written into their ini. Bump them to "upload_download" so the new automatic
-# download/upload announcement feature is actually active for them.
-try:
-	if not conf.get("voicingPerformanceIndicators_migrated_5_5_3") and conf.get("voicingPerformanceIndicators") == "none":
-		conf.set("voicingPerformanceIndicators", "upload_download")
-	conf.set("voicingPerformanceIndicators_migrated_5_5_3", True)
-except Exception: pass
