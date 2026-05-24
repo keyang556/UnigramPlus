@@ -38,7 +38,10 @@ spec = (
 	"unreadBeforeMessageContent = boolean(default=True)",
 	"voiceFolderNames = boolean(default=True)",
 	"voiceMessageRecordingIndicator = string(default=audio)",
-	"voicingPerformanceIndicators = string(default=none)",
+	"voicingPerformanceIndicators = string(default=upload_download)",
+	# One-shot marker so we can migrate users who had the old default of "none" to
+	# the new "upload_download" mode the first time they launch 5.5.3.
+	"voicingPerformanceIndicators_migrated_5_5_3 = boolean(default=False)",
 	"audioPlaybackWhenDeleted = boolean(default=False)",
 	"confirmation_at_deletion = boolean(default=False)",
 	"actionDescriptionForLinks = boolean(default=True)",
@@ -75,3 +78,12 @@ except:
 	path = os.path.join(globalVars.appArgs.configPath, "UnigramPlus.ini")
 	os.remove(path)
 	conf = cnf()
+
+# One-shot migration: users upgrading from <=5.5.2 had the old default of "none"
+# written into their ini. Bump them to "upload_download" so the new automatic
+# download/upload announcement feature is actually active for them.
+try:
+	if not conf.get("voicingPerformanceIndicators_migrated_5_5_3") and conf.get("voicingPerformanceIndicators") == "none":
+		conf.set("voicingPerformanceIndicators", "upload_download")
+	conf.set("voicingPerformanceIndicators_migrated_5_5_3", True)
+except Exception: pass

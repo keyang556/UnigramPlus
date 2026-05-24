@@ -33,6 +33,107 @@ from .cnf import conf, lang
 baseDir = os.path.join(os.path.dirname(__file__), "media\\")
 
 
+class File_transfer_progress_tracking:
+	# Polls the focused Unigram FileButton (download/upload button on a chat
+	# message) and announces the percentage as the transfer progresses. Unigram's
+	# FileButton exposes IValueProvider returning a string like "37%", but the
+	# AutomationPeer only raises ValueProperty change events when a UIA listener
+	# is registered specifically for that element, which NVDA does not always do
+	# for Button-role controls. A short polling timer is therefore the most
+	# reliable way to track the value while focus stays on the button.
+	active = False
+	interval = .35
+	app = None
+	_step = 10
+	_last_value = None  # (key, percentage, fresh_val_str)
+	_last_logged_id = None
+
+	@classmethod
+	def _read_fresh_value(cls, obj):
+		# Force a fresh value lookup. NVDAObjects.UIA caches Value property and
+		# only invalidates it when the focused element raises ValueProperty changes.
+		# Unigram's FileButton does not always raise those events, so we ask UIA
+		# for the current value directly to avoid getting a stale percentage.
+		try:
+			import UIAHandler  # local import: UIAHandler may be unavailable at module load time
+			elem = getattr(obj, "UIAElement", None)
+			if elem is not None:
+				try:
+					v = elem.GetCurrentPropertyValueEx(UIAHandler.UIA.UIA_ValueValuePropertyId, True)
+					if v is not None: return str(v)
+				except Exception: pass
+		except Exception: pass
+		try: return obj.value or ""
+		except Exception: return ""
+
+	@classmethod
+	def tick(cls):
+		if not cls.active: return
+		try:
+			obj = api.getFocusObject()
+			if obj is None:
+				Timer(cls.interval, cls.tick).start(); return
+			mode = conf.get("voicingPerformanceIndicators")
+			if mode == "none":
+				Timer(cls.interval, cls.tick).start(); return
+			# Identify candidate FileButton — role must be Button/Link and the
+			# automation id matches one of Unigram's FileButton names.
+			role = None
+			aid = ""
+			try: role = obj.role
+			except: pass
+			try: aid = getattr(obj, "UIAAutomationId", "") or ""
+			except: aid = ""
+			if role not in (Role.LINK, Role.BUTTON) or aid not in ("Button", "Download", "Overlay"):
+				Timer(cls.interval, cls.tick).start(); return
+			# Found a candidate. Read the value freshly.
+			val = cls._read_fresh_value(obj)
+			# Log once per focused object so we can verify detection without spam.
+			obj_id = id(obj)
+			if cls._last_logged_id != obj_id:
+				cls._last_logged_id = obj_id
+				try: log.info("File_transfer_progress_tracking: tracking aid=%r role=%r value=%r" % (aid, role, val))
+				except: pass
+			try: percentage = int(float(str(val).strip("% \0")))
+			except (AttributeError, ValueError, TypeError):
+				Timer(cls.interval, cls.tick).start(); return
+			key = (getattr(obj, "windowHandle", 0), aid)
+			prev = cls._last_value
+			last_pct = prev[1] if prev and prev[0] == key else None
+			should_speak = False
+			if last_pct is None:
+				should_speak = False  # first sighting on this button; just remember.
+			elif percentage != last_pct:
+				if percentage in (0, 100) or abs(percentage - last_pct) >= cls._step:
+					should_speak = True
+			cls._last_value = (key, percentage, val)
+			if should_speak:
+				try: log.info("File_transfer_progress_tracking: announcing %d%%" % percentage)
+				except: pass
+				queueHandler.queueFunction(queueHandler.eventQueue, speech.speakMessage, _("%d percent") % percentage)
+		except Exception as e:
+			try: log.debug("File_transfer_progress_tracking error: %r" % e)
+			except: pass
+		Timer(cls.interval, cls.tick).start()
+
+	@classmethod
+	def start(cls):
+		if cls.active: return
+		cls.active = True
+		cls._last_value = None
+		cls._last_logged_id = None
+		try: log.info("File_transfer_progress_tracking started (mode=%s)" % conf.get("voicingPerformanceIndicators"))
+		except Exception: pass
+		Timer(cls.interval, cls.tick).start()
+
+	@classmethod
+	def stop(cls):
+		cls.active = False
+		cls._last_value = None
+		cls._last_logged_id = None
+
+
+
 class Audio_and_video_button:
 	def script_enter(self, gesture):
 		gesture.send()
@@ -393,6 +494,11 @@ class AppModule(appModuleHandler.AppModule):
 		if conf.get("automatically announce new messages") and not Chat_update.active: Chat_update.restore(self)
 		if conf.get("automatically announce activity in chats") and not Title_change_tracking.active: Title_change_tracking.restore(self.saved_items)
 		if conf.get("play_typing_sound") and not Typing_sound_tracking.active: Typing_sound_tracking.restore(self.saved_items)
+		# Always start the file-transfer progress tracker. The polling tick checks
+		# the current voicingPerformanceIndicators value itself, so users can toggle
+		# the announcement on and off without restarting Unigram or NVDA.
+		if not File_transfer_progress_tracking.active:
+			File_transfer_progress_tracking.start()
 		self.app_version = self.productVersion
 		# assign hotkeys for the function of reading messages by numbering
 		for i in range(10): self.bindGesture("kb:NVDA+control+%d" % i, "reviewRecentMessage")
@@ -1164,11 +1270,18 @@ class AppModule(appModuleHandler.AppModule):
 	# Change the announce level of progress bars
 	@script(description=_("Toggle progress bar announcements"), gesture="kb:ALT+U")
 	def script_toggleVoicingPerformanceIndicators(self, gesture):
-		if conf.get("voicingPerformanceIndicators") == "none":
+		current = conf.get("voicingPerformanceIndicators")
+		if current == "none":
+			conf.set("voicingPerformanceIndicators", "upload_download")
+			if not File_transfer_progress_tracking.active: File_transfer_progress_tracking.start()
+			message(_("Announce progress bars only during upload and download"))
+		elif current == "upload_download":
 			conf.set("voicingPerformanceIndicators", "all")
+			if not File_transfer_progress_tracking.active: File_transfer_progress_tracking.start()
 			message(_("Announce all progress bars"))
 		else:
 			conf.set("voicingPerformanceIndicators", "none")
+			File_transfer_progress_tracking.stop()
 			message(_("Do not announce any progress bars"))
 
 	def script_reviewRecentMessage(self, gesture):
@@ -1342,7 +1455,7 @@ class AppModule(appModuleHandler.AppModule):
 				# clsList.insert(0, ExplanationCorrectAnswerInQuiz)
 			elif obj.role == Role.SLIDER and obj.UIAAutomationId == "Slider":
 				self.saved_items.save("slider", obj)
-			elif conf.get("voicingPerformanceIndicators") == "none" and obj.role == Role.PROGRESSBAR:
+			elif conf.get("voicingPerformanceIndicators") in ("none", "upload_download") and obj.role == Role.PROGRESSBAR:
 				clsList.pop(0)
 		except Exception as e: pass
 

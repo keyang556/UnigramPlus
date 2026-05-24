@@ -81,6 +81,11 @@ NVDA+alt+U - Otvara prozor sa podešavanjima UnigramPlus-a.
 
 ## Lista promena:
 
+###Verzija 5.5.3
+
+* Dodato je automatsko najavljivanje napretka slanja i preuzimanja datoteka. U podešavanja najave traka napretka dodata je nova opcija „Samo tokom slanja i preuzimanja”, koja je sada podrazumevana. Prečica ALT+U sada se prebacuje između tri stanja: isključeno, samo tokom slanja/preuzimanja i najavljuj sve trake napretka.
+* Ažurirani su readme i prevodi.
+
 ###Verzija 5.5.2
 
 * Ažurirani su readme i prevodi.
@@ -103,7 +108,7 @@ NVDA+alt+U - Otvara prozor sa podešavanjima UnigramPlus-a.
 
 * Dodata je kompatibilnost sa NVDA 2025.1.2.
 
-###Verzija 5.4
+###Verzija 5.4.0
 
 * Rešen je problem sa listom ćaskanja.
 

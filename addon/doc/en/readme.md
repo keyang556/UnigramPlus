@@ -76,6 +76,11 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
+### Version 5.5.3
+
+* Added automatic announcement of file upload and download progress. A new option "Only during upload and download" was added to the progress bar announcement setting and is now the default. The ALT+U hotkey now cycles between three states: off, only during upload/download, and announce all progress bars.
+* Updated the readme and translations.
+
 ### Version 5.5.2
 
 * Updated the readme and translations.
@@ -98,7 +103,7 @@ And remember that everyone who read this line thought that someone will definite
 
 * Added compatibility with NVDA 2025.1.2.
 
-### Version 5.4
+### Version 5.4.0
 
 * Fixed an issue with the chat list.
 

@@ -902,6 +902,19 @@ msgid "Play a sound while the other side is typing in the open chat"
 msgstr ""
 "Riproduci un suono mentre l'altra parte sta scrivendo nella chat aperta"
 
+#: addon\appModules\unigram.py:1188
+msgid "Announce progress bars only during upload and download"
+msgstr "Annuncia le barre di avanzamento solo durante invio e download"
+
+#: addon\GlobalPlugins\UnigramPlus\__init__.py:180
+msgid "Only announce progress bars during file uploads and downloads"
+msgstr ""
+"Annuncia le barre di avanzamento solo durante caricamenti e download di file"
+
+#: addon\appModules\unigram.py:62
+msgid "%d percent"
+msgstr "%d percento"
+
 #~ msgid "Message copied"
 #~ msgstr "Messaggio copiato"
 

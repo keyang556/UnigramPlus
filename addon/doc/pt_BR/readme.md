@@ -53,6 +53,11 @@ o facto de que o recurso que coloca o cursor na marca de mensagens não lidas à
 
 ## Lista de alterações:
 
+### Versão 5.5.3
+
+* Adicionado o anúncio automático do progresso de envio e download de arquivos. Uma nova opção "Apenas durante o envio e download" foi adicionada à configuração de anúncio das barras de progresso e agora é a opção padrão. O atalho ALT+U alterna agora entre três estados: desativado, apenas durante envio/download, e anunciar todas as barras de progresso.
+* Atualização do readme e das traduções.
+
 ### Versão 5.5.2
 
 * Atualização do readme e das traduções.
@@ -75,7 +80,7 @@ o facto de que o recurso que coloca o cursor na marca de mensagens não lidas à
 
 * Adicionada compatibilidade com o NVDA 2025.1.2.
 
-### Versão 5.4
+### Versão 5.4.0
 
 * Corrigido um problema na lista de conversas.
 

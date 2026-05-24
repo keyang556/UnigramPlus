@@ -79,6 +79,11 @@ Si vous appréciez vraiment cette extension et que vous avez l'envie,  mais surt
 
 ##Liste des changements :
 
+### Version 5.5.3
+
+* Ajout de l'annonce automatique de la progression des téléchargements et envois de fichiers. Une nouvelle option « Uniquement pendant l'envoi et le téléchargement » a été ajoutée au paramètre d'annonce des barres de progression et est désormais l'option par défaut. La combinaison ALT+U bascule à présent entre trois états : désactivé, uniquement pendant l'envoi/téléchargement, et annoncer toutes les barres de progression.
+* Mise à jour du fichier readme et des traductions.
+
 ### Version 5.5.2
 
 * Mise à jour du fichier readme et des traductions.
@@ -101,7 +106,7 @@ Si vous appréciez vraiment cette extension et que vous avez l'envie,  mais surt
 
 * Compatibilité avec NVDA 2025.1.2 ajoutée.
 
-### Version 5.4
+### Version 5.4.0
 
 * Correction d'un problème avec la liste des conversations.
 
