@@ -893,6 +893,10 @@ msgstr ""
 msgid "%d percent"
 msgstr "%d pour cent"
 
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:250
+msgid "File transfer progress announcement interval (percent):"
+msgstr "Intervalle d'annonce de la progression du transfert de fichiers (pourcentage) :"
+
 #~ msgid "Announce some progress bars"
 #~ msgstr "Озвучувати деякі індикатори виконання"
 

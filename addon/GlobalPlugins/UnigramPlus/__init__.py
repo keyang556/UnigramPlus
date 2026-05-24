@@ -246,6 +246,9 @@ class UnigramPlusSettings(SettingsPanel):
 		# Progress bar announce
 		self.voicingPerformanceIndicators = settingsSizerHelper.addLabeledControl(_("Select the progress bar notification level:"), wx.Choice, choices=[self.listVoicingPerformanceIndicators[item] for item in self.listVoicingPerformanceIndicators])
 		self.voicingPerformanceIndicators.SetStringSelection(self.listVoicingPerformanceIndicators[conf.get("voicingPerformanceIndicators")])
+		self.fileTransferProgressInterval = settingsSizerHelper.addLabeledControl(
+			_("File transfer progress announcement interval (percent):"), wx.SpinCtrl, min=1, max=100)
+		self.fileTransferProgressInterval.SetValue(conf.get("fileTransferProgressInterval"))
 		# Processing messages containing links
 		self.actionDescriptionForLinks = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Read description of URLs attached to messages")))
 		self.actionDescriptionForLinks.SetValue(conf.get("actionDescriptionForLinks"))
@@ -289,6 +292,7 @@ class UnigramPlusSettings(SettingsPanel):
 		conf.set("audioPlaybackWhenDeleted", self.audioPlaybackWhenDeleted.IsChecked())
 		conf.set("voiceMessageRecordingIndicator", self.get_key(self.listVoiceMessageRecordingIndicator, self.voiceMessageRecordingIndicator.GetStringSelection()))
 		conf.set("voicingPerformanceIndicators", self.get_key(self.listVoicingPerformanceIndicators, self.voicingPerformanceIndicators.GetStringSelection()))
+		conf.set("fileTransferProgressInterval", self.fileTransferProgressInterval.GetValue())
 		conf.set("lang", self.get_key(listLanguages, self.lang.GetStringSelection()))
 		conf.set("action_when_pressing_up_arrow_in_text_field", self.get_key(self.list_actions_when_pressing_up_arrow_in_text_field, self.action_when_pressing_up_arrow_in_text_field.GetStringSelection()))
 		conf.set("actionDescriptionForLinks", self.actionDescriptionForLinks.IsChecked())

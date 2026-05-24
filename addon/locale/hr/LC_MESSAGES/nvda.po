@@ -902,6 +902,10 @@ msgstr "Najavljuj trake napretka samo tijekom slanja i preuzimanja datoteka"
 msgid "%d percent"
 msgstr "%d posto"
 
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:250
+msgid "File transfer progress announcement interval (percent):"
+msgstr "Interval najave napretka prijenosa datoteka (postotak):"
+
 #~ msgid "Message copied"
 #~ msgstr "Poruka je kopirana"
 
