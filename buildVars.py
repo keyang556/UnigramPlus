@@ -3,7 +3,7 @@
 
 from site_scons.site_tools.NVDATool.typings import AddonInfo, BrailleTables, SymbolDictionaries
 from site_scons.site_tools.NVDATool.utils import _
-
+import changelog
 
 # Add-on information variables
 addon_info = AddonInfo(
@@ -19,12 +19,10 @@ addon_info = AddonInfo(
 		"""This add-on adds a lot of hotkeys for quick navigation through the main elements of the Unigram application, convenient interaction with Chat messages, and also adds many small improvements that make working in Unigram much easier""",
 	),
 	# version
-	addon_version="5.5.3",
+	addon_version="5.5.4",
 	# Brief changelog for this version
 	# Translators: what's new content for the add-on version to be shown in the add-on store.
-	addon_changelog=_(
-		"- Added Burmese localization."
-	),
+	addon_changelog=changelog.value,
 	# Author(s)
 	addon_author="Kostya Gladkiy<gladkiy.kostya@gmail.com>",
 	# URL for the add-on documentation support
@@ -58,7 +56,7 @@ addon_info = AddonInfo(
 pythonSources: list[str] = ["addon/appModules/*.py", "addon/GlobalPlugins/UnigramPlus/*.py"]
 
 # Files that contain strings for translation. Usually your python sources
-i18nSources: list[str] = pythonSources + ["buildVars.py"]
+i18nSources: list[str] = pythonSources + ["buildVars.py", "changelog.py"]
 
 # Files that will be ignored when building the nvda-addon file
 # Paths are relative to the addon directory, not to the root directory of your addon sources.
