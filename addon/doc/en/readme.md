@@ -21,6 +21,9 @@ Use Unigram in a more comfortable and productive way. This addon provides many h
 * If the media attached to the message is opened using the spacebar, then after closing it, the focus will return to the last element that was in focus.
 * The add-on allows you to completely disable the announcement of progress bars, as well as disable only the announcement of the progress bar for playing voice messages.
 
+## Custom sounds
+UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Open NVDA Settings > UnigramPlus and press **Open UnigramPlus sounds folder** to open it. To customize a sound, copy your replacement WAV file into that folder using the same file name as the sound you want to replace, then restart NVDA or reload add-ons. Add-on updates may restore bundled sounds, so keep a backup of your custom files.
+
 ## Information about the opportunity to donate to the developer:
 If you really like this add-on and you have the desire, and most importantly the opportunity, to financially support the developer and thereby motivate him to further develop this add-on, you can do this by transferring a small amount to the following bank details: [donation link](https://unigramplus.diaka.ua/donate), or card number is 5169360009004502(Ukraine).
 And remember that everyone who read this line thought that someone will definitely support the developer, but it will not be me.
@@ -75,6 +78,14 @@ And remember that everyone who read this line thought that someone will definite
 * ALT+W: Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information.
 
 ## List of changes:
+
+### Version 5.5.4
+
+* Fixed unwanted announcements such as chat folder unread counts, for example "All 535". File transfer progress is now restricted to Unigram upload and download controls and is ignored outside Unigram windows.
+* Fixed coexistence with the Telegram Desktop NVDA add-on by enabling UnigramPlus only when the running application is detected as Unigram.
+* Added a button in UnigramPlus settings to open the bundled sounds folder, making it easier to replace sound files with custom WAV files that use the same names.
+* Added an up-arrow option for the message edit field that moves focus to the last focused message.
+* Rebuilt Traditional Chinese as zh_TW and added Simplified Chinese as zh_CN.
 
 ### Version 5.5.3
 

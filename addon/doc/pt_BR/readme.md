@@ -18,6 +18,9 @@ Use o Unigram de uma forma mais confortável e produtiva. Este extra fornece mui
 * Se os ficheiros de mídia anexados a uma mensagem forem abertos pressionando espaço, após fechá-los, o cursor retorna ao local onde estava anteriormente.
 * Todos os sons de prompt de função ou apenas os prompts de reprodução de mensagem de voz podem ser desactivados.
 
+## Sons personalizados
+Os sons do UnigramPlus ficam na pasta `appModules\media` do complemento. Abra Configurações do NVDA > UnigramPlus e pressione **Abrir pasta de sons do UnigramPlus**. Para personalizar um som, copie para essa pasta o arquivo WAV substituto com o mesmo nome do som que deseja trocar, depois reinicie o NVDA ou recarregue os complementos. Atualizações do complemento podem restaurar os sons incluídos, portanto mantenha uma cópia dos seus arquivos personalizados.
+
 ## Informações do desenvolvedor, sobre donativos:
 Se realmente gosta deste extra e deseja, e o mais importante, tem a oportunidade de apoiar o desenvolvedor financeiramente e, portanto, motivá-lo a continuar a desenvolver este extra, pode fazer isso transferindo uma pequena quantia usando os seguintes dados bancários: (link de doação ) (https://unigramplus.diaka.ua/donate), o número do cartão é 5169360009004502.
 E lembre-se que todos que leram este post pensaram que alguém definitivamente apoiaria o desenvolvedor, mas não serei eu.
@@ -52,6 +55,14 @@ Todas as teclas de atalho podem ser reatribuídas no menu NVDA> preferências> d
 o facto de que o recurso que coloca o cursor na marca de mensagens não lidas às vezes responde com um atraso é um problema conhecido. Isso pode depender do número de mensagens enviadas no momento.
 
 ## Lista de alterações:
+
+### Versão 5.5.4
+
+* Corrigidos anúncios indesejados, como contadores de chats não lidos em pastas, por exemplo "Todos 535". O progresso de transferência de arquivos agora fica limitado aos controles de envio e download do Unigram e é ignorado fora das janelas do Unigram.
+* Corrigida a convivência com o complemento de NVDA para Telegram Desktop, ativando o UnigramPlus apenas quando o aplicativo em execução é detectado como Unigram.
+* Adicionado um botão nas configurações do UnigramPlus para abrir a pasta de sons incluída, facilitando substituir arquivos WAV usando os mesmos nomes.
+* Adicionada uma opção para a seta para cima no campo de edição de mensagem que move o foco para a última mensagem focada.
+* O chinês tradicional foi recriado como zh_TW e o chinês simplificado foi adicionado como zh_CN.
 
 ### Versão 5.5.3
 

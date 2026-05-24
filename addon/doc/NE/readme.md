@@ -23,6 +23,9 @@
 ##विकासकर्तालाई दान गर्ने अवसरको बारेमा जानकारी:
 यदि तपाईंलाई यो औजार साँच्चै मनपर्छ र तपाईंसँग विकासकर्तालाई आर्थिक रूपमा सहयोग गर्ने र यस औजारलाई थप विकास गर्न उत्प्रेरित गर्ने इच्छाछ भने, तपाईंले निम्न बैंकमा थोरै रकम हस्तान्तरण गरेर यो गर्न सक्नुहुन्छ। विवरण:[दान लिङ्क](https://unigramplus.diaka.ua/donate), अथवा  कार्ड नम्बर: 5169360009004502(Ukraine).
 र याद गर्नुहोस् कि यो लाइन पढ्ने सबैले सोँचेका छनकि कि कसैले निश्चित रूपमा विकासकर्तालाई समर्थन गर्नेछ, तर मैले होईन ।
+## Custom sounds
+UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Open NVDA Settings > UnigramPlus and press **Open UnigramPlus sounds folder** to open it. To customize a sound, copy your replacement WAV file into that folder using the same file name as the sound you want to replace, then restart NVDA or reload add-ons. Add-on updates may restore bundled sounds, so keep a backup of your custom files.
+
 ## Hotkey list:
 * ALT+1: च्याट सूचीमा फोकस सार्नुहोस्;
 * ALT+2: खुला च्याटको अन्तिम सन्देशमा फोकस सार्नुहोस्;
@@ -297,3 +300,11 @@
 ###संस्करण १.१.७
 
 टर्की स्थानीयकरण थपियो।
+
+### Version 5.5.4
+
+* Fixed unwanted announcements such as chat folder unread counts, for example "All 535". File transfer progress is now restricted to Unigram upload and download controls and is ignored outside Unigram windows.
+* Fixed coexistence with the Telegram Desktop NVDA add-on by enabling UnigramPlus only when the running application is detected as Unigram.
+* Added a button in UnigramPlus settings to open the bundled sounds folder, making it easier to replace sound files with custom WAV files that use the same names.
+* Added an up-arrow option for the message edit field that moves focus to the last focused message.
+* Rebuilt Traditional Chinese as zh_TW and added Simplified Chinese as zh_CN.

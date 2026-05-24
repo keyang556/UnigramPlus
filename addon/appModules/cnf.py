@@ -6,8 +6,6 @@ import languageHandler
 import addonHandler
 addonHandler.initTranslation()
 
-lang = languageHandler.getLanguage().split("_")[0]
-
 listLanguages = {
 	"ar": _("Arabic"),
 	"be": _("Belarus"),
@@ -29,9 +27,19 @@ listLanguages = {
 	"uk": _("Ukrainian"),
 	"hr": _("Croatian"),
 	"sr": _("Serbian"),
-	"zh": _("Chinese (Traditional)"),
+	"zh_TW": _("Chinese (Traditional)"),
+	"zh_CN": _("Chinese (Simplified)"),
 	"ro": _("Romanian"),
 }
+
+def getDefaultLang():
+	lang = languageHandler.getLanguage()
+	if lang in listLanguages:
+		return lang
+	baseLang = lang.split("_")[0]
+	return baseLang if baseLang in listLanguages else "en"
+
+lang = getDefaultLang()
 
 spec = (
 	f"lang = string(default={lang if lang in listLanguages else 'en'})",
@@ -68,6 +76,8 @@ class cnf:
 		self.conf = ConfigObj(self.path, configspec=spec )
 		validator = Validator()
 		self.conf.validate(validator, copy=True)
+		if self.conf.get("lang") == "zh":
+			self.conf["lang"] = "zh_TW"
 		self.conf.write()
 	def get(self, key):
 		return self.conf[key]

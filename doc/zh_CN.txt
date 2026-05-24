@@ -1,0 +1,10 @@
+* 修复聊天文件夹未读数量变化被不必要读出的问题，例如“所有聊天 535”。文件传输进度现在只会在 Unigram 的上传和下载控件中读出，且会忽略非 Unigram 窗口。
+* 修复与 Telegram Desktop NVDA 插件的冲突；只有检测到当前运行的应用程序是 Unigram 时，才会启用 UnigramPlus。
+* 在 UnigramPlus 设置中新增打开内置声音文件夹的按钮，方便用户以相同文件名替换自定义 WAV 声音文件。
+* 在消息编辑字段的上方向键操作中，新增“移到最后获得焦点的消息”选项。
+* 繁体中文重新整理并独立为 zh_TW，另新增简体中文 zh_CN。
+
+If you have the desire, and most importantly the opportunity, to support the developer of this add-on, you can do so using the following details:
+* PayPal: gladkiy.kostya@gmail.com.
+* Ukrainian donation system: https://unigramplus.diaka.ua/donate.
+* Card number: 5169360009004502 (Gladkiy Constantine).

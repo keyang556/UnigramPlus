@@ -21,6 +21,9 @@ Utiliza Unigram De forma más cómoda y productiva. Este complemento proporciona
 * si los archivos de medios adjuntos a un mensaje se abren presionando espacio, después de cerrarlos, el cursor regresa a donde estaba anteriormente.
 * El complemento ahora te permite desactivar completamente el anuncio de barras de progreso, además de desactivar únicamente el anuncio del progreso al reproducir un mensaje.
 
+## Sonidos personalizados
+Los sonidos de UnigramPlus se guardan en la carpeta `appModules\media` del complemento. Abre las opciones de NVDA > UnigramPlus y pulsa **Abrir carpeta de sonidos de UnigramPlus**. Para personalizar un sonido, copia en esa carpeta un archivo WAV de reemplazo con el mismo nombre del sonido que quieras sustituir y reinicia NVDA o recarga los complementos. Las actualizaciones del complemento pueden restaurar los sonidos incluidos, así que conserva una copia de tus archivos personalizados.
+
 ##Información sobre la oportunidad de donar al desarrollador:
 Si realmente te gusta este complemento y lo deseas, y lo más importante, tienes la oportunidad de apoyar financieramente al desarrollador y por ende motivarlo a seguir desarrollándolo, puedes hacerlo transfiriendo un pequeño monto usando los siguientes detalles bancarios: [Enlace de donación ](https://unigramplus.diaka.ua/donate), o el número de targeta 5169360009004502(Ucrania).
 Y recuerde que todos los que leyeron esta línea pensaron alguien definitivamente apoyará al desarrollador, pero no seré yo.
@@ -74,6 +77,14 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 * ALT+K: Ir al resultado siguiente en el chat.
 
 ##Lista de cambios:
+
+### Versión 5.5.4
+
+* Se corrigieron anuncios no deseados, como los contadores de chats sin leer en carpetas, por ejemplo "Todos 535". El progreso de transferencia de archivos ahora se limita a los controles de subida y descarga de Unigram y se ignora fuera de las ventanas de Unigram.
+* Se corrigió la convivencia con el complemento de NVDA para Telegram Desktop activando UnigramPlus solo cuando la aplicación en ejecución se detecta como Unigram.
+* Se añadió un botón en las opciones de UnigramPlus para abrir la carpeta de sonidos incluida y facilitar el reemplazo de archivos WAV con el mismo nombre.
+* Se añadió una opción para la flecha arriba en el campo de edición de mensajes que mueve el foco al último mensaje enfocado.
+* Se reconstruyó el chino tradicional como zh_TW y se añadió chino simplificado como zh_CN.
 
 ### Versión 5.5.3
 

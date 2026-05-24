@@ -19,7 +19,7 @@ import queueHandler
 from utils.security import objectBelowLockScreenAndWindowsIsLocked
 import threading, time, queue, random
 from appModules.cnf import conf, listLanguages, lang
-from appModules.unigram import AppModule
+from appModules.unigram import AppModule, baseDir
 from ui import message
 
 path_to_server = "http://46.254.107.124/addons/unigramplus/"
@@ -64,6 +64,13 @@ def onCheckForUpdates(event = False, is_start = False):
 	if last_version > addon_version and NVDAVersion >= minimum_version:
 		wx.CallAfter(window_for_update, None, str_last_version, url)
 	elif not is_start: wx.CallAfter(no_updates_dialog)
+
+
+def openSoundFolder(event=False):
+	try:
+		os.startfile(os.path.normpath(baseDir))
+	except Exception:
+		message(_("Unable to open UnigramPlus sounds folder"))
 
 class window_for_update(wx.Frame):
 	def __init__(self, parent, str_last_version, url):
@@ -205,6 +212,7 @@ class UnigramPlusSettings(SettingsPanel):
 		"block": _("Do nothing"),
 		"normal": _("Activate editing of last sent message"),
 		"to_messages": _("Move focus to the last message in a chat"),
+		"to_last_focused_message": _("Move focus to the last focused message in a chat"),
 	}
 	
 	def makeSettings(self, settingsSizer):
@@ -270,6 +278,9 @@ class UnigramPlusSettings(SettingsPanel):
 		# Play looped Typing.wav while the other side is typing/recording in the open chat
 		self.play_typing_sound = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Play a sound while the other side is typing in the open chat")))
 		self.play_typing_sound.SetValue(conf.get("play_typing_sound"))
+		# Button to open the bundled sounds folder
+		self.openSoundsFolder = settingsSizerHelper.addItem(wx.Button(self, label=_("Open UnigramPlus sounds folder")))
+		self.openSoundsFolder.Bind(wx.EVT_BUTTON, openSoundFolder)
 		# Checking for Updates on NVDA Startup
 		self.is_automatically_check_for_updates = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Check for UnigramPlus updates on NVDA startup")))
 		self.is_automatically_check_for_updates.SetValue(conf.get("is_automatically_check_for_updates"))

@@ -25,12 +25,77 @@ from logHandler import log
 import queueHandler
 import sys
 import re
+import importlib.util
 sys.path.insert(0, ".")
 from .data import *
 from .text_window import *
 from .cnf import conf, lang
 
 baseDir = os.path.join(os.path.dirname(__file__), "media\\")
+_telegramDesktopFallbackClass = None
+_telegramDesktopFallbackLoadAttempted = False
+
+_APP_MODULE_NAME_IGNORED_CHARS = str.maketrans("", "", "\u200e\u200f\u2066\u2067\u2068\u2069")
+
+
+def _normalized_text(text):
+	try: text = text or ""
+	except Exception: text = ""
+	return str(text).translate(_APP_MODULE_NAME_IGNORED_CHARS).strip().casefold()
+
+
+def is_unigram_app_module(appModule):
+	if not appModule:
+		return False
+	values = (
+		getattr(appModule, "productName", ""),
+		getattr(appModule, "appName", ""),
+		getattr(appModule, "appPath", ""),
+	)
+	return any("unigram" in _normalized_text(value) for value in values)
+
+
+def _load_telegram_desktop_fallback_class():
+	global _telegramDesktopFallbackClass, _telegramDesktopFallbackLoadAttempted
+	if _telegramDesktopFallbackLoadAttempted:
+		return _telegramDesktopFallbackClass
+	_telegramDesktopFallbackLoadAttempted = True
+	current_module = os.path.abspath(__file__)
+	candidates = []
+	try:
+		for addon in addonHandler.getRunningAddons():
+			try: addon_name = addon.manifest.get("name", "")
+			except Exception: addon_name = ""
+			if addon_name != "telegramDesktop":
+				continue
+			for attr in ("path", "_path"):
+				addon_path = getattr(addon, attr, "")
+				if addon_path:
+					candidates.append(os.path.join(addon_path, "appModules", "telegram.py"))
+	except Exception:
+		pass
+	try:
+		import globalVars
+		candidates.append(os.path.join(globalVars.appArgs.configPath, "addons", "telegramDesktop", "appModules", "telegram.py"))
+	except Exception:
+		pass
+	for candidate in candidates:
+		try:
+			candidate = os.path.abspath(candidate)
+			if candidate == current_module or not os.path.isfile(candidate):
+				continue
+			spec = importlib.util.spec_from_file_location("_unigramPlusTelegramDesktopFallback", candidate)
+			if not spec or not spec.loader:
+				continue
+			module = importlib.util.module_from_spec(spec)
+			spec.loader.exec_module(module)
+			_telegramDesktopFallbackClass = getattr(module, "AppModule", None)
+			if _telegramDesktopFallbackClass:
+				return _telegramDesktopFallbackClass
+		except Exception as e:
+			try: log.debug("Could not load Telegram Desktop fallback app module from %r: %r" % (candidate, e))
+			except Exception: pass
+	return None
 
 
 class File_transfer_progress_tracking:
@@ -87,7 +152,30 @@ class File_transfer_progress_tracking:
 	def _is_transfer_button(cls, obj):
 		try: role = obj.role
 		except Exception: return False
-		return role in cls._candidate_roles and cls._get_automation_id(obj) in cls._candidate_automation_ids
+		return (
+			role in cls._candidate_roles
+			and cls._get_automation_id(obj) in cls._candidate_automation_ids
+			and cls._is_inside_messages(obj)
+		)
+
+	@classmethod
+	def _is_inside_messages(cls, obj):
+		root = obj
+		for _ in range(10):
+			if not root:
+				return False
+			if cls._get_automation_id(root) == "Messages":
+				return True
+			try: parent = root.parent
+			except Exception: return False
+			if not parent or parent is root:
+				return False
+			root = parent
+
+	@classmethod
+	def _is_unigram_object(cls, obj):
+		try: return is_unigram_app_module(getattr(obj, "appModule", None))
+		except Exception: return False
 
 	@classmethod
 	def _is_visible(cls, obj):
@@ -193,6 +281,8 @@ class File_transfer_progress_tracking:
 	@classmethod
 	def _find_transfer_button(cls, focus):
 		if not focus: return None
+		if not cls._is_unigram_object(focus): return None
+		if not cls._is_inside_messages(focus): return None
 		candidates = []
 		for root in cls._iter_candidate_roots(focus):
 			for obj in cls._walk(root):
@@ -217,6 +307,7 @@ class File_transfer_progress_tracking:
 	@classmethod
 	def handle_progress(cls, obj, speak_first=False):
 		if conf.get("voicingPerformanceIndicators") == "none": return False
+		if not cls._is_unigram_object(obj): return False
 		if not cls._is_in_foreground(obj): return False
 		if not cls._is_transfer_button(obj): return False
 		val = cls._read_fresh_value(obj)
@@ -246,6 +337,9 @@ class File_transfer_progress_tracking:
 		try:
 			obj = api.getFocusObject()
 			if obj is None:
+				Timer(cls.interval, cls.tick).start(); return
+			if not cls._is_unigram_object(obj):
+				cls._last_logged_id = None
 				Timer(cls.interval, cls.tick).start(); return
 			if not cls._is_in_foreground(obj):
 				cls._last_logged_id = None
@@ -646,6 +740,8 @@ class EditableText(editableText.EditableText):
 		if info and info.text == "":
 			if conf.get("action_when_pressing_up_arrow_in_text_field") == "to_messages":
 				self.appModule.script_toLastMessage(None)
+			elif conf.get("action_when_pressing_up_arrow_in_text_field") == "to_last_focused_message":
+				self.appModule.script_toLastFocusedMessage(None)
 			else: message("")
 			return
 		return super().script_caret_moveByLine(gesture)
@@ -655,6 +751,17 @@ class AppModule(appModuleHandler.AppModule):
 	
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
+		self.isUnigramWindow = is_unigram_app_module(self)
+		if not self.isUnigramWindow:
+			self._fallbackAppModule = None
+			fallbackClass = _load_telegram_desktop_fallback_class()
+			if fallbackClass:
+				try:
+					self._fallbackAppModule = fallbackClass(*args, **kwargs)
+				except Exception as e:
+					try: log.debug("Could not initialize Telegram Desktop fallback app module: %r" % e)
+					except Exception: pass
+			return
 		self.saved_items = Saved_items()
 		if conf.get("automatically announce new messages") and not Chat_update.active: Chat_update.restore(self)
 		if conf.get("automatically announce activity in chats") and not Title_change_tracking.active: Title_change_tracking.restore(self.saved_items)
@@ -671,6 +778,15 @@ class AppModule(appModuleHandler.AppModule):
 		# for i in range(10): self.bindGesture("kb:control+ALT+%d" % i, "rewind_voice_message")
 		# Binding reactions to the corresponding hotkeys
 		# for i in range(1,8): self.bindGesture("kb:NVDA+ALT+%d" % i, "set_reaction")
+
+	def getScript(self, gesture):
+		if not getattr(self, "isUnigramWindow", False):
+			fallback = getattr(self, "_fallbackAppModule", None)
+			if fallback:
+				try: return fallback.getScript(gesture)
+				except Exception: return None
+			return None
+		return super().getScript(gesture)
 
 
 	scriptCategory = "UnigramPlus"
@@ -704,6 +820,15 @@ class AppModule(appModuleHandler.AppModule):
 				else: item = item.next
 			if obj: self.saved_items.save("messages", obj)
 		return obj
+
+	def _get_last_focused_message(self):
+		obj = self.saved_items.get("last focus object")
+		try:
+			if obj and self.is_message_object(obj) and obj.location and obj.location.width:
+				return obj
+		except Exception:
+			pass
+		return None
 
 	def getChatsListElement(self):
 		targetList = self.saved_items.get("chats")
@@ -885,6 +1010,13 @@ class AppModule(appModuleHandler.AppModule):
 				settings_panel.setFocus()
 				return
 			message(_("No open chat"))
+
+	def script_toLastFocusedMessage(self, gesture):
+		obj = self._get_last_focused_message()
+		if obj:
+			obj.setFocus()
+			return True
+		return self.script_toLastMessage(gesture)
 
 	# Move focus to the list of chat folders 
 	@script(description=_("Move focus to list of chat folders"), gesture="kb:ALT+4")
@@ -1478,6 +1610,16 @@ class AppModule(appModuleHandler.AppModule):
 
 	# Focus change tracking
 	def event_gainFocus(self, obj, nextHandler):
+		if not getattr(self, "isUnigramWindow", False):
+			fallback = getattr(self, "_fallbackAppModule", None)
+			if fallback and hasattr(fallback, "event_gainFocus"):
+				try:
+					fallback.event_gainFocus(obj, nextHandler)
+					return
+				except Exception:
+					pass
+			nextHandler()
+			return
 		if conf.get("automatically announce new messages") and Chat_update.pouse:
 			# Since the timer is suspended when the program window is minimized, it needs to be restored as soon as the focus is set on some element in the window
 			Chat_update.restore(self)
@@ -1590,6 +1732,12 @@ class AppModule(appModuleHandler.AppModule):
 
 	# Processing item initialization
 	def chooseNVDAObjectOverlayClasses(self, obj, clsList):
+		if not getattr(self, "isUnigramWindow", False):
+			fallback = getattr(self, "_fallbackAppModule", None)
+			if fallback and hasattr(fallback, "chooseNVDAObjectOverlayClasses"):
+				try: fallback.chooseNVDAObjectOverlayClasses(obj, clsList)
+				except Exception: pass
+			return
 		try:
 			if obj.role == Role.LISTITEM and  obj.name and obj.isFocusable:
 				parent = obj.parent
@@ -1741,16 +1889,21 @@ class AppModule(appModuleHandler.AppModule):
 		winUser.setCursorPos(oldX, oldY)
 
 	def change_chats_folder(self, obj, parent):
-		tab_items = obj.name.split(", ")
-		count_chats = None
+		selected_folder = self._get_chat_folder_name(obj.name)
 		last_selected_folder = self.saved_items.get("last selected folder")
-		if last_selected_folder != tab_items[0]:
-			self.saved_items.save("last selected folder", tab_items[0])
-			if len(tab_items) > 1 and tab_items[1] != "0": count_chats = tab_items[1]
+		if last_selected_folder != selected_folder:
+			self.saved_items.save("last selected folder", selected_folder)
 		else: return False
 		text = self.saved_items.get("last selected folder")
-		if count_chats: text+= ", "+count_chats
 		queueHandler.queueFunction(queueHandler.eventQueue, message, text)
+
+	def _get_chat_folder_name(self, name):
+		name = str(name or "").strip()
+		if name.startswith("(") and name.endswith(")"):
+			name = name[1:-1].strip()
+		name = name.split(", ")[0].strip()
+		name = re.sub(r"\s+\d+$", "", name).strip()
+		return name
 
 	# Data copy function for broadcasting
 	@script(description=_("Copy data for broadcasting to the clipboard"), gesture="kb:ALT+shift+L")

@@ -23,6 +23,9 @@ Utilisez Unigram de manière plus confortable et plus productive. Cet extension 
 
 Si vous appréciez vraiment cette extension et que vous avez l'envie,  mais surtout la possibilité de soutenir financièrement le développeur, le motivant ainsi à faire évoluer cette extension, vous pouvez le faire en envoyant votre contribution à l'aide des coordonnées bancaires suivantes : [Faire un don,](https://unigramplus.diaka.ua/donate) ou en utilisant le numéro de carte suivant : 5169360009004502 (Ukraine). Et rappelez-vous que certains de ceux qui ont lu ces lignes ce sont dit que quelqu'un soutiendra bien le développeur, mais que ce ne sera pas eux".
 
+## Sons personnalisés
+Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'extension. Ouvrez les paramètres de NVDA > UnigramPlus puis appuyez sur **Ouvrir le dossier des sons UnigramPlus**. Pour personnaliser un son, copiez dans ce dossier un fichier WAV de remplacement portant le même nom que le son à remplacer, puis redémarrez NVDA ou rechargez les extensions. Les mises à jour de l'extension peuvent restaurer les sons fournis, gardez donc une copie de vos fichiers personnalisés.
+
 ## Liste de raccourcis :
 
 * ALT+1 : Déplacer le focus vers la liste des échanges;
@@ -78,6 +81,14 @@ Si vous appréciez vraiment cette extension et que vous avez l'envie,  mais surt
 * Le fait que la fonction qui focalise le curseur sur l'étiquette "message non lu" puisse parfois réagir avec un certain retard est un problème connu. Cela peut dépendre du nombre de messages en attente à ce moment-là.
 
 ##Liste des changements :
+
+### Version 5.5.4
+
+* Correction des annonces indésirables comme les compteurs de discussions non lues dans les dossiers, par exemple "Tous 535". La progression des transferts de fichiers est maintenant limitée aux contrôles d'envoi et de téléchargement d'Unigram et ignorée hors des fenêtres Unigram.
+* Correction de la coexistence avec l'extension NVDA pour Telegram Desktop en activant UnigramPlus uniquement lorsque l'application exécutée est détectée comme Unigram.
+* Ajout d'un bouton dans les paramètres d'UnigramPlus pour ouvrir le dossier des sons fournis afin de remplacer plus facilement les fichiers WAV en conservant les mêmes noms.
+* Ajout d'une option pour flèche haut dans le champ d'édition de message afin de placer le focus sur le dernier message ayant reçu le focus.
+* Reconstruction du chinois traditionnel en zh_TW et ajout du chinois simplifié en zh_CN.
 
 ### Version 5.5.3
 

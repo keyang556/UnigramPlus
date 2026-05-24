@@ -22,7 +22,12 @@ addon_info = AddonInfo(
 	addon_version="5.5.4",
 	# Brief changelog for this version
 	# Translators: what's new content for the add-on version to be shown in the add-on store.
-	addon_changelog=changelog.value,
+	addon_changelog=_(
+		"- Fixed unwanted chat folder unread-count announcements and limited file transfer progress announcements to Unigram file uploads and downloads.\n"
+		"- Added a setting to open the UnigramPlus sounds folder so users can replace bundled sound files.\n"
+		"- Added an up-arrow action that moves from the message edit field to the last focused message.\n"
+		"- Added separate Traditional Chinese and Simplified Chinese localizations."
+	),
 	# Author(s)
 	addon_author="Kostya Gladkiy<gladkiy.kostya@gmail.com>",
 	# URL for the add-on documentation support
