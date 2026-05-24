@@ -903,7 +903,7 @@ msgstr "yüzde %d"
 
 #: addon/GlobalPlugins/UnigramPlus/__init__.py:250
 msgid "File transfer progress announcement interval (percent):"
-msgstr "Dosya aktar?m? ilerleme duyurusu aral??? (y?zde):"
+msgstr "Dosya aktarımı ilerleme duyurusu aralığı (yüzde):"
 
 #~ msgid "Message copied"
 #~ msgstr "Mesaj kopyalandı"

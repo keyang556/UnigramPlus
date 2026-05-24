@@ -711,4 +711,4 @@ msgstr "%d procent"
 
 #: addon/GlobalPlugins/UnigramPlus/__init__.py:250
 msgid "File transfer progress announcement interval (percent):"
-msgstr "Interwa? og?aszania post?pu transferu pliku (procent):"
+msgstr "Interwał ogłaszania postępu przesyłania pliku (procent):"

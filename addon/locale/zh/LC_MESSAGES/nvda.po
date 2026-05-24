@@ -874,7 +874,7 @@ msgstr "%d %%"
 
 #: addon/GlobalPlugins/UnigramPlus/__init__.py:250
 msgid "File transfer progress announcement interval (percent):"
-msgstr "????????????????"
+msgstr "檔案傳輸進度朗讀間隔（百分比）："
 
 #~ msgid "Message copied"
 #~ msgstr "訊息已複製到剪貼簿"

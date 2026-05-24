@@ -98,6 +98,23 @@ class File_transfer_progress_tracking:
 			return True
 
 	@classmethod
+	def _is_in_foreground(cls, obj):
+		try:
+			if not obj or not obj.isInForeground:
+				return False
+		except Exception:
+			try:
+				foreground = api.getForegroundObject()
+				return bool(
+					foreground
+					and getattr(foreground, "windowHandle", None)
+					and getattr(foreground, "windowHandle", None) == getattr(obj, "windowHandle", None)
+				)
+			except Exception:
+				return False
+		return True
+
+	@classmethod
 	def _get_key(cls, obj):
 		aid = cls._get_automation_id(obj)
 		context = cls._get_context_key(obj)
@@ -200,6 +217,7 @@ class File_transfer_progress_tracking:
 	@classmethod
 	def handle_progress(cls, obj, speak_first=False):
 		if conf.get("voicingPerformanceIndicators") == "none": return False
+		if not cls._is_in_foreground(obj): return False
 		if not cls._is_transfer_button(obj): return False
 		val = cls._read_fresh_value(obj)
 		percentage = cls._parse_percentage(val)
@@ -228,6 +246,9 @@ class File_transfer_progress_tracking:
 		try:
 			obj = api.getFocusObject()
 			if obj is None:
+				Timer(cls.interval, cls.tick).start(); return
+			if not cls._is_in_foreground(obj):
+				cls._last_logged_id = None
 				Timer(cls.interval, cls.tick).start(); return
 			if conf.get("voicingPerformanceIndicators") == "none":
 				Timer(cls.interval, cls.tick).start(); return
