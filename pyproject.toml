@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "unigramplus"
-version = "5.5.4"
+version = "5.5.5"
 description = "NVDA add-on for Unigram"
 maintainers = [
 	{name = "Kostya Gladkiy", email = "gladkiy.kostya@gmail.com"},

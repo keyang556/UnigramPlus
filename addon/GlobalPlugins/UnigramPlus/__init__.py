@@ -219,13 +219,13 @@ class UnigramPlusSettings(SettingsPanel):
 		settingsSizerHelper = gui.guiHelper.BoxSizerHelper(self, sizer=settingsSizer)
 		# Selecting an interface language
 		# self.lang = settingsSizerHelper.addLabeledControl(_("Interface language in Unigram:"), wx.Choice, choices=[listLanguages[item] for item in listLanguages])
-		self.lang = settingsSizerHelper.addLabeledControl(_("Interface language in Unigram:"), wx.Choice, choices=list(listLanguages.values()))
+		self.lang = settingsSizerHelper.addLabeledControl(_("Unigram's interface language"), wx.Choice, choices=list(listLanguages.values()))
 		self.lang.SetStringSelection(listLanguages[conf.get("lang")])
 		# Chat type announce mode
-		self.voiceTypeAfterChatName = settingsSizerHelper.addLabeledControl(_("Speak the type of chat in the chat list:"), wx.Choice, choices=[self.listVoiceTypeAfterChatName[item] for item in self.listVoiceTypeAfterChatName])
+		self.voiceTypeAfterChatName = settingsSizerHelper.addLabeledControl(_("Speak the type of chat in the chat list"), wx.Choice, choices=[self.listVoiceTypeAfterChatName[item] for item in self.listVoiceTypeAfterChatName])
 		self.voiceTypeAfterChatName.SetStringSelection(self.listVoiceTypeAfterChatName[conf.get("voiceTypeAfterChatName")])
 		# Message sender announcement
-		self.saySenderName = settingsSizerHelper.addLabeledControl(_("Say the sender's name in:"), wx.Choice, choices=[self.listSaySenderName[item] for item in self.listSaySenderName])
+		self.saySenderName = settingsSizerHelper.addLabeledControl(_("Say the sender's name in"), wx.Choice, choices=[self.listSaySenderName[item] for item in self.listSaySenderName])
 		self.saySenderName.SetStringSelection(self.listSaySenderName[conf.get("saySenderName")])
 		# Selecting the action when pressing the up arrow in the text editor
 		self.action_when_pressing_up_arrow_in_text_field = settingsSizerHelper.addLabeledControl(
@@ -249,13 +249,13 @@ class UnigramPlusSettings(SettingsPanel):
 		self.confirmation_at_deletion = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Display confirmation dialog when deleting messages and chats")))
 		self.confirmation_at_deletion.SetValue(conf.get("confirmation_at_deletion"))
 		# Type of notification when recording voice messages
-		self.voiceMessageRecordingIndicator = settingsSizerHelper.addLabeledControl(_("Set voice message recording notification method as:"), wx.Choice, choices=[self.listVoiceMessageRecordingIndicator[item] for item in self.listVoiceMessageRecordingIndicator])
+		self.voiceMessageRecordingIndicator = settingsSizerHelper.addLabeledControl(_("Set voice message recording notification method as"), wx.Choice, choices=[self.listVoiceMessageRecordingIndicator[item] for item in self.listVoiceMessageRecordingIndicator])
 		self.voiceMessageRecordingIndicator.SetStringSelection(self.listVoiceMessageRecordingIndicator[conf.get("voiceMessageRecordingIndicator")])
 		# Progress bar announce
-		self.voicingPerformanceIndicators = settingsSizerHelper.addLabeledControl(_("Select the progress bar notification level:"), wx.Choice, choices=[self.listVoicingPerformanceIndicators[item] for item in self.listVoicingPerformanceIndicators])
+		self.voicingPerformanceIndicators = settingsSizerHelper.addLabeledControl(_("Select the progress bar notification level"), wx.Choice, choices=[self.listVoicingPerformanceIndicators[item] for item in self.listVoicingPerformanceIndicators])
 		self.voicingPerformanceIndicators.SetStringSelection(self.listVoicingPerformanceIndicators[conf.get("voicingPerformanceIndicators")])
 		self.fileTransferProgressInterval = settingsSizerHelper.addLabeledControl(
-			_("File transfer progress announcement interval (percent):"), wx.SpinCtrl, min=1, max=100)
+			_("File transfer progress announcement interval (percent)"), wx.SpinCtrl, min=1, max=100)
 		self.fileTransferProgressInterval.SetValue(conf.get("fileTransferProgressInterval"))
 		# Processing messages containing links
 		self.actionDescriptionForLinks = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Read description of URLs attached to messages")))

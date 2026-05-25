@@ -11,9 +11,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v6
-      - name: Install uv
+      - name: Install UV
         uses: astral-sh/setup-uv@v7
         with:
           enable-cache: true
@@ -24,14 +24,18 @@ jobs:
           uv sync
       - name: building addon
         run: uv run scons && uv run scons pot
-      - uses: actions/upload-artifact@v7
+      - name: "Upload Add-on"
+        if: github.event_name == 'release' || github.event_name == 'push'
+        uses: actions/upload-artifact@v7
         with:
           name: packaged_addon
           path: |
             ./*.nvda-addon
           archive: false
           retention-days: 1
-      - uses: actions/upload-artifact@v7
+      - name: Upload Translation
+        if: github.event_name == 'release' || github.event_name == 'push'
+        uses: actions/upload-artifact@v7
         with:
           name: translation_template
           path: |
