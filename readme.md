@@ -79,6 +79,9 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
+### Version 5.5.5
+* Updated Burmese localization.
+
 ### Version 5.5.4
 
 * Fixed unwanted announcements such as chat folder unread counts, for example "All 535". File transfer progress is now restricted to Unigram upload and download controls and is ignored outside Unigram windows.
