@@ -78,6 +78,12 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 
 ##Lista de cambios:
 
+### Versión 5.5.5
+
+* Responder o editar un mensaje ahora se anuncia en el campo de entrada de mensajes en lugar del aviso de mensaje habitual.
+* Se corrigió que el sonido de escritura a veces siguiera reproduciéndose tras cerrar la aplicación, después de que la otra persona dejara de escribir o tras salir del chat; ahora se detiene en cuanto nadie está escribiendo en el chat abierto.
+* Se actualizó la localización birmana.
+
 ### Versión 5.5.4
 
 * Se corrigieron anuncios no deseados, como los contadores de chats sin leer en carpetas, por ejemplo "Todos 535". El progreso de transferencia de archivos ahora se limita a los controles de subida y descarga de Unigram y se ignora fuera de las ventanas de Unigram.

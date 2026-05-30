@@ -940,3 +940,7 @@ msgstr "Intervalul de anunțare a progresului transferului de fișiere (procent)
 
 #~ msgid "Answer"
 #~ msgstr "Відповідь"
+
+#: changelog.py:5
+msgid "Replying to or editing a message is now announced in the message input field. Fixed the typing indicator sound sometimes continuing to play after closing the app or leaving the chat."
+msgstr "Răspunsul la un mesaj sau editarea acestuia este acum anunțat în câmpul de introducere a mesajului. A fost corectat sunetul de tastare care uneori continua să se redea după închiderea aplicației sau părăsirea chat-ului."

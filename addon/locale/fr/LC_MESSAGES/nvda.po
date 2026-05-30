@@ -939,3 +939,7 @@ msgstr "Intervalle d'annonce de la progression du transfert de fichiers (pourcen
 
 #~ msgid "Answer"
 #~ msgstr "Відповідь"
+
+#: changelog.py:5
+msgid "Replying to or editing a message is now announced in the message input field. Fixed the typing indicator sound sometimes continuing to play after closing the app or leaving the chat."
+msgstr "La réponse à un message ou sa modification est désormais annoncée dans le champ de saisie. Correction du son de saisie qui continuait parfois à être joué après la fermeture de l'application ou après avoir quitté la discussion."

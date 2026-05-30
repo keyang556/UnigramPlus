@@ -605,7 +605,6 @@ class Typing_sound_tracking:
 	interval = .3
 	saved_items = False
 	is_playing = False
-	last_status = ""
 	@classmethod
 	def _is_typing(cls, status_text):
 		if not status_text: return False
@@ -626,26 +625,43 @@ class Typing_sound_tracking:
 		try: winsound.PlaySound(None, 0)
 		except: pass
 	@classmethod
+	def _chat_status(cls):
+		# Returns the live status text from the chat title, or None when no chat is
+		# really in the foreground (app closed / left the chat) so the caller can pause.
+		title = cls.saved_items.get("profile name") if cls.saved_items else None
+		if not title: return None
+		try:
+			if not title.isInForeground: return None
+		except Exception:
+			return None
+		try:
+			location = title.location
+			if not location or not location.width: return None
+		except Exception:
+			return None
+		try:
+			return title.lastChild.name if title.childCount > 1 else ""
+		except Exception:
+			return ""
+	@classmethod
 	def tick(cls):
 		if not cls.active or cls.pouse:
 			cls.stop_sound()
 			return
-		title = cls.saved_items.get("profile name") if cls.saved_items else None
-		if not title or not title.isInForeground:
-			cls.pouse = True
-			cls.stop_sound()
-			return False
 		try:
-			status_text = title.lastChild.name if title.childCount > 1 else ""
-		except: status_text = ""
-		# Reset state when the user switches chats (chat-name part changed).
-		try: first_name = title.firstChild.name
-		except: first_name = ""
-		if cls.last_status != (first_name, status_text):
-			cls.last_status = (first_name, status_text)
+			status_text = cls._chat_status()
+			if status_text is None:
+				# No chat is really in the foreground anymore: stop and wait for focus.
+				cls.stop_sound()
+				cls.pouse = True
+				return
+			# Reconcile the looping sound with the live status on every tick.
 			if cls._is_typing(status_text): cls.start_sound()
 			else: cls.stop_sound()
-		Timer(cls.interval, cls.tick).start()
+		except Exception:
+			cls.stop_sound()
+		if cls.active and not cls.pouse:
+			Timer(cls.interval, cls.tick).start()
 	@classmethod
 	def toggle(cls, saved_items=False):
 		if not conf.get("play_typing_sound") or not saved_items:
@@ -665,7 +681,6 @@ class Typing_sound_tracking:
 		cls.pouse = False
 		cls.active = True
 		cls.saved_items = saved_items
-		cls.last_status = ""
 		Timer(cls.interval, cls.tick).start()
 
 
@@ -1681,11 +1696,23 @@ class AppModule(appModuleHandler.AppModule):
 				obj.name = ". ".join((labels[0], labels[2], labels[1]))
 		elif obj.role == Role.EDITABLETEXT:
 			try:
-				# Determining if this input field is a message input field. If yes, then check if its title needs to be changed
-				if obj.UIAAutomationId == "TextField" and (obj.previous.UIAAutomationId == "ComposerHeaderCancel" or obj.previous.previous.UIAAutomationId == "ComposerHeaderCancel"):
-					label = obj.previous.previous.previous if obj.previous.UIAAutomationId == "ButtonMore" else obj.previous.previous
-					if label.name == "\uea4b": obj.name = _("Editing")
-					elif label.name == "\uea4a": obj.name = _("Reply")
+				# If this message input field has a composer header attached (reply or edit),
+				# announce "Reply"/"Editing" instead of the usual "type a message" prompt.
+				if obj.UIAAutomationId == "TextField":
+					# The composer header's cancel button sits a few siblings before the field
+					# (an extra ButtonMore/upload ring may come between), so scan back for it.
+					cancel = obj.previous
+					for step in range(5):
+						if not cancel or cancel.UIAAutomationId == "ComposerHeaderCancel": break
+						cancel = cancel.previous
+					if cancel and cancel.UIAAutomationId == "ComposerHeaderCancel":
+						# The reply/edit glyph sits just before the cancel button.
+						glyph = cancel.previous
+						for step in range(3):
+							if not glyph or glyph.name in ("\uea4a", "\uea4b"): break
+							glyph = glyph.previous
+						if glyph and glyph.name == "\uea4b": obj.name = _("Editing")
+						elif glyph and glyph.name == "\uea4a": obj.name = _("Reply")
 			except: pass
 		elif obj.role == Role.LINK:
 			try:

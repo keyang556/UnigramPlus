@@ -56,6 +56,12 @@ o facto de que o recurso que coloca o cursor na marca de mensagens não lidas à
 
 ## Lista de alterações:
 
+### Versão 5.5.5
+
+* Responder ou editar uma mensagem agora é anunciado no campo de entrada de mensagem, em vez do prompt de mensagem habitual.
+* Corrigido o som de digitação que às vezes continuava tocando após fechar o aplicativo, depois que a outra pessoa parava de digitar ou após sair do chat; agora ele para assim que ninguém está digitando no chat aberto.
+* Atualizada a localização birmanesa.
+
 ### Versão 5.5.4
 
 * Corrigidos anúncios indesejados, como contadores de chats não lidos em pastas, por exemplo "Todos 535". O progresso de transferência de arquivos agora fica limitado aos controles de envio e download do Unigram e é ignorado fora das janelas do Unigram.

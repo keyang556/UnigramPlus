@@ -904,3 +904,7 @@ msgstr ""
 "- 新增上方向鍵動作，可從訊息編輯欄位移到最後取得焦點的訊息。\n"
 "- 新增獨立的正體中文與簡體中文在地化。"
 
+
+#: changelog.py:5
+msgid "Replying to or editing a message is now announced in the message input field. Fixed the typing indicator sound sometimes continuing to play after closing the app or leaving the chat."
+msgstr "回覆或編輯訊息時，現在會在訊息輸入欄位中提示。已修正關閉應用程式或離開聊天後，輸入音效有時仍持續播放的問題。"

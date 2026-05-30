@@ -714,3 +714,7 @@ msgstr "Interval oznamování průběhu přenosu souborů (v procentech):"
 
 #~ msgid "The broadcast window is not found"
 #~ msgstr "Okno vysílání nelze najít"
+
+#: changelog.py:5
+msgid "Replying to or editing a message is now announced in the message input field. Fixed the typing indicator sound sometimes continuing to play after closing the app or leaving the chat."
+msgstr "Odpověď na zprávu nebo její úprava se nyní oznamuje v poli pro zadání zprávy. Opraveno občasné pokračování zvuku psaní po zavření aplikace nebo opuštění konverzace."

@@ -975,3 +975,7 @@ msgstr "Interval najave napretka prenosa datoteka (procenat):"
 
 #~ msgid "This message is not playing"
 #~ msgstr "Ova poruka se ne reprodukuje"
+
+#: changelog.py:5
+msgid "Replying to or editing a message is now announced in the message input field. Fixed the typing indicator sound sometimes continuing to play after closing the app or leaving the chat."
+msgstr "Odgovaranje na poruku ili njeno uređivanje sada se izgovara u polju za unos poruke. Ispravljeno je povremeno nastavljanje zvuka kucanja nakon zatvaranja aplikacije ili napuštanja ćaskanja."

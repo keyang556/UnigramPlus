@@ -981,3 +981,7 @@ msgstr "الفاصل الزمني للإعلان عن تقدم نقل الملف
 
 #~ msgid "Rewind voice message forward"
 #~ msgstr "تقديم سريع للرسالة الصوتية"
+
+#: changelog.py:5
+msgid "Replying to or editing a message is now announced in the message input field. Fixed the typing indicator sound sometimes continuing to play after closing the app or leaving the chat."
+msgstr "أصبح الرد على رسالة أو تحريرها يُعلَن الآن في حقل إدخال الرسالة. وتم إصلاح استمرار صوت الكتابة بالعمل أحيانًا بعد إغلاق التطبيق أو مغادرة الدردشة."

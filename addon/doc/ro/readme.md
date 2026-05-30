@@ -82,6 +82,12 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 ##Lista de modificări:
 
+### Versiunea 5.5.5
+
+* Răspunsul la un mesaj sau editarea acestuia este acum anunțat în câmpul de introducere a mesajului, în locul solicitării obișnuite de mesaj.
+* A fost corectat sunetul de tastare care uneori continua să se redea după închiderea aplicației, după ce interlocutorul se oprea din tastat sau după părăsirea chat-ului; acum se oprește imediat ce nimeni nu mai tastează în chat-ul deschis.
+* A fost actualizată localizarea birmaneză.
+
 ### Versiunea 5.5.4
 
 * Au fost corectate anunțurile nedorite, cum ar fi contoarele de chat-uri necitite din foldere, de exemplu „Toate 535”. Progresul transferului de fișiere este acum limitat la controalele de încărcare și descărcare din Unigram și este ignorat în afara ferestrelor Unigram.

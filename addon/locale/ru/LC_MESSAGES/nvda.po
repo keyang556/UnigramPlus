@@ -945,3 +945,7 @@ msgstr "Интервал объявления хода передачи файл
 
 #~ msgid "Announce some progress bars"
 #~ msgstr "Оповещать о некоторых индикаторах выполнения"
+
+#: changelog.py:5
+msgid "Replying to or editing a message is now announced in the message input field. Fixed the typing indicator sound sometimes continuing to play after closing the app or leaving the chat."
+msgstr "Ответ на сообщение или его редактирование теперь объявляется в поле ввода сообщения. Исправлено, что звук набора текста иногда продолжал воспроизводиться после закрытия приложения или выхода из чата."

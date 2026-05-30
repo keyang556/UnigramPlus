@@ -941,3 +941,7 @@ msgstr "Interval najave napretka prijenosa datoteka (postotak):"
 
 #~ msgid "Announce some progress bars"
 #~ msgstr "Najavi neke trake napretka"
+
+#: changelog.py:5
+msgid "Replying to or editing a message is now announced in the message input field. Fixed the typing indicator sound sometimes continuing to play after closing the app or leaving the chat."
+msgstr "Odgovaranje na poruku ili njezino uređivanje sada se izgovara u polju za unos poruke. Ispravljeno je povremeno nastavljanje zvuka tipkanja nakon zatvaranja aplikacije ili napuštanja razgovora."

@@ -86,6 +86,12 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 
 	##Popis promjena:
 
+### Verzija 5.5.5
+
+* Odgovaranje na poruku ili njezino uređivanje sada se izgovara u polju za unos poruke umjesto uobičajenog upita za poruku.
+* Ispravljeno je da se zvuk tipkanja ponekad nastavljao reproducirati nakon zatvaranja aplikacije, nakon što druga strana prestane tipkati ili nakon napuštanja razgovora; sada se zaustavlja čim nitko ne tipka u otvorenom razgovoru.
+* Ažurirana je burmanska lokalizacija.
+
 ### Verzija 5.5.4
 
 * Ispravljena su neželjena čitanja, poput broja nepročitanih chatova u mapama, primjerice „Svi 535”. Napredak prijenosa datoteka sada je ograničen na Unigram kontrole za slanje i preuzimanje te se zanemaruje izvan Unigram prozora.

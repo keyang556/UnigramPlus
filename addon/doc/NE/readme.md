@@ -301,6 +301,12 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 
 टर्की स्थानीयकरण थपियो।
 
+### Version 5.5.5
+
+* Replying to or editing a message is now announced in the message input field instead of the usual message prompt.
+* Fixed the typing indicator sound sometimes continuing to play after the app was closed, after the other person stopped typing, or after leaving the chat; it now stops as soon as no one is typing in the open chat.
+* Updated Burmese localization.
+
 ### Version 5.5.4
 
 * Fixed unwanted announcements such as chat folder unread counts, for example "All 535". File transfer progress is now restricted to Unigram upload and download controls and is ignored outside Unigram windows.

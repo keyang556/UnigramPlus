@@ -878,3 +878,7 @@ msgstr "فاصله اعلام پیشرفت انتقال فایل (درصد):"
 
 #~ msgid "Rewind voice message forward"
 #~ msgstr "پیام صوتی را جلو میبرد."
+
+#: changelog.py:5
+msgid "Replying to or editing a message is now announced in the message input field. Fixed the typing indicator sound sometimes continuing to play after closing the app or leaving the chat."
+msgstr "پاسخ به یک پیام یا ویرایش آن اکنون در کادر ورودی پیام اعلام می‌شود. اشکال ادامه‌یافتن گاه‌به‌گاه صدای تایپ پس از بستن برنامه یا خروج از گفتگو برطرف شد."

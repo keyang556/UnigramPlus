@@ -1049,3 +1049,7 @@ msgstr "Intervallo di annuncio dell'avanzamento del trasferimento file (percentu
 
 #~ msgid "Announce the presence of reaction in the messages"
 #~ msgstr "Повідомляти про наявність реакції в повідомленнях"
+
+#: changelog.py:5
+msgid "Replying to or editing a message is now announced in the message input field. Fixed the typing indicator sound sometimes continuing to play after closing the app or leaving the chat."
+msgstr "La risposta a un messaggio o la sua modifica viene ora annunciata nel campo di immissione del messaggio. Corretto il suono di digitazione che a volte continuava a essere riprodotto dopo la chiusura dell'app o l'uscita dalla chat."

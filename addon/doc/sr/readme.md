@@ -354,6 +354,12 @@ Added Turkish localization
 
 
 
+### Verzija 5.5.5
+
+* Odgovaranje na poruku ili njeno uređivanje sada se izgovara u polju za unos poruke umesto uobičajenog upita za poruku.
+* Ispravljeno je to što se zvuk kucanja ponekad nastavljao reprodukovati nakon zatvaranja aplikacije, nakon što druga strana prestane da kuca ili nakon napuštanja ćaskanja; sada se zaustavlja čim niko ne kuca u otvorenom ćaskanju.
+* Ažuriran je burmanski prevod.
+
 ### Verzija 5.5.4
 
 * Ispravljena su neželjena izgovaranja, kao što su brojači nepročitanih ćaskanja u fasciklama, na primer „Svi 535”. Napredak prenosa datoteka sada je ograničen na Unigram kontrole za otpremanje i preuzimanje i ignoriše se van Unigram prozora.

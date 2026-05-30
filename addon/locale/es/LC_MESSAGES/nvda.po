@@ -900,3 +900,7 @@ msgstr "%d por ciento"
 #: addon/GlobalPlugins/UnigramPlus/__init__.py:250
 msgid "File transfer progress announcement interval (percent):"
 msgstr "Intervalo de anuncio del progreso de transferencia de archivos (porcentaje):"
+
+#: changelog.py:5
+msgid "Replying to or editing a message is now announced in the message input field. Fixed the typing indicator sound sometimes continuing to play after closing the app or leaving the chat."
+msgstr "Responder o editar un mensaje ahora se anuncia en el campo de entrada de mensajes. Se corrigió que el sonido de escritura a veces siguiera reproduciéndose tras cerrar la aplicación o salir del chat."

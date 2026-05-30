@@ -753,3 +753,7 @@ msgstr "Intervalo de anúncio do progresso da transferência de arquivos (porcen
 
 #~ msgid "Chat activity tracking enabled"
 #~ msgstr "Seguimento da actividade de conversação activado"
+
+#: changelog.py:5
+msgid "Replying to or editing a message is now announced in the message input field. Fixed the typing indicator sound sometimes continuing to play after closing the app or leaving the chat."
+msgstr "Responder ou editar uma mensagem agora é anunciado no campo de entrada de mensagem. Corrigido o som de digitação que às vezes continuava tocando após fechar o aplicativo ou sair do chat."

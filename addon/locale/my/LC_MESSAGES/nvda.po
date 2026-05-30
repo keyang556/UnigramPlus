@@ -905,8 +905,8 @@ msgstr ""
 "ကီးများစွာကို ပေါင်းထည့်ကာ Unigram တွင် အလုပ်လုပ်ရန် ပိုမိုလွယ်ကူစေမည့် သေးငယ်သော တိုးတက်မှုများစွာကိုလည်း ပေါင်းထည့်ထားသည်။"
 
 #: changelog.py:5
-msgid "Updated Burmese translations."
-msgstr "မြန်မာဘာသာပြန်များကို အပ်ဒိတ်လုပ်ထားသည်။"
+msgid "Replying to or editing a message is now announced in the message input field. Fixed the typing indicator sound sometimes continuing to play after closing the app or leaving the chat."
+msgstr "စာတစ်စောင်ကို ပြန်ဖြေခြင်း သို့မဟုတ် တည်းဖြတ်ခြင်းကို ယခု မက်ဆေ့ဂျ် ထည့်သွင်းရာ နေရာတွင် ကြေညာပါသည်။ အက်ပ်ကို ပိတ်ပြီးနောက် သို့မဟုတ် ချတ်မှ ထွက်ပြီးနောက် စာရိုက်သံ တစ်ခါတစ်ရံ ဆက်လက်မြည်နေသည့် ပြဿနာကို ပြင်ဆင်ပြီးပါပြီ။"
 
 #~ msgid "Interface language in Unigram:"
 #~ msgstr "Unigram ရှိ အင်တာဖေ့စ်ဘာသာစကား"

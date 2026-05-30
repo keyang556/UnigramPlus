@@ -80,6 +80,8 @@ And remember that everyone who read this line thought that someone will definite
 ## List of changes:
 
 ### Version 5.5.5
+* Replying to or editing a message is now announced in the message input field instead of the usual message prompt.
+* Fixed the typing indicator sound sometimes continuing to play after the app was closed, after the other person stopped typing, or after leaving the chat; it now stops as soon as no one is typing in the open chat.
 * Updated Burmese localization.
 
 ### Version 5.5.4

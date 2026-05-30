@@ -831,3 +831,7 @@ msgstr "फाइल स्थानान्तरण प्रगति घो
 
 #~ msgid "Answer"
 #~ msgstr "Відповідь"
+
+#: changelog.py:5
+msgid "Replying to or editing a message is now announced in the message input field. Fixed the typing indicator sound sometimes continuing to play after closing the app or leaving the chat."
+msgstr "सन्देशको जवाफ दिँदा वा सम्पादन गर्दा अब सन्देश इनपुट फिल्डमा घोषणा गरिन्छ। एप बन्द गरेपछि वा कुराकानी छाडेपछि टाइपिङ आवाज कहिलेकाहीँ बजिरहने समस्या समाधान गरियो।"

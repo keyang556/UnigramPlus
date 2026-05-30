@@ -82,6 +82,12 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 
 ##Liste des changements :
 
+### Version 5.5.5
+
+* La réponse à un message ou sa modification est désormais annoncée dans le champ de saisie au lieu de l'invite de message habituelle.
+* Correction du son de saisie qui continuait parfois à être joué après la fermeture de l'application, après que l'interlocuteur a cessé d'écrire ou après avoir quitté la discussion ; il s'arrête maintenant dès que plus personne n'écrit dans la discussion ouverte.
+* Mise à jour de la localisation birmane.
+
 ### Version 5.5.4
 
 * Correction des annonces indésirables comme les compteurs de discussions non lues dans les dossiers, par exemple "Tous 535". La progression des transferts de fichiers est maintenant limitée aux contrôles d'envoi et de téléchargement d'Unigram et ignorée hors des fenêtres Unigram.

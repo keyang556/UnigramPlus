@@ -2,5 +2,5 @@
 def _(t): return t
 
 value = _(
-"Updated Burmese translations."
+"Replying to or editing a message is now announced in the message input field. Fixed the typing indicator sound sometimes continuing to play after closing the app or leaving the chat."
 )
