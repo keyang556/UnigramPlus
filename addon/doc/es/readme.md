@@ -78,6 +78,12 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 
 ##Lista de cambios:
 
+### Versión 5.5.6
+
+* Se ha corregido el botón de identidad en el perfil de un grupo o canal que anunciaba «Identity root» al pasar el nombre con la tecla Tab; ahora anuncia el nombre del chat y el número de miembros.
+* Se ha corregido el sonido de escritura que se detenía a los pocos segundos mientras la otra persona seguía escribiendo; ahora sigue sonando hasta que la escritura se detiene realmente.
+* Ctrl+C ya no se procesa dos veces: copia el enlace cuando el foco está sobre un enlace y, en los demás casos, deja que Unigram copie el mensaje.
+
 ### Versión 5.5.5
 
 * Responder o editar un mensaje ahora se anuncia en el campo de entrada de mensajes en lugar del aviso de mensaje habitual.

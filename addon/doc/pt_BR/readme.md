@@ -56,6 +56,12 @@ o facto de que o recurso que coloca o cursor na marca de mensagens não lidas à
 
 ## Lista de alterações:
 
+### Versão 5.5.6
+
+* Corrigido o botão de identidade no perfil de um grupo ou canal que anunciava "Identity root" ao passar pelo nome com a tecla Tab; agora ele anuncia o nome da conversa e o número de membros.
+* Corrigido o som de digitação que parava após alguns segundos enquanto a outra pessoa ainda digitava; agora ele continua tocando até a digitação realmente parar.
+* O Ctrl+C não é mais processado duas vezes: copia o link quando o foco está sobre um link e, nos demais casos, deixa o Unigram copiar a mensagem.
+
 ### Versão 5.5.5
 
 * Responder ou editar uma mensagem agora é anunciado no campo de entrada de mensagem, em vez do prompt de mensagem habitual.

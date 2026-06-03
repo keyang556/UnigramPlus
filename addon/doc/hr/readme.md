@@ -86,6 +86,12 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 
 	##Popis promjena:
 
+### Verzija 5.5.6
+
+* Ispravljeno je da gumb identiteta u profilu grupe ili kanala izgovara „Identity root” pri prolasku tipkom Tab nakon imena; sada izgovara naziv razgovora i broj članova.
+* Ispravljeno je zaustavljanje zvuka tipkanja nakon nekoliko sekundi dok druga strana još tipka; sada se nastavlja reproducirati dok tipkanje stvarno ne prestane.
+* Ctrl+C se više ne obrađuje dvaput: kopira poveznicu kada je fokus na poveznici, a u ostalim slučajevima kopiranje poruke prepušta Unigramu.
+
 ### Verzija 5.5.5
 
 * Odgovaranje na poruku ili njezino uređivanje sada se izgovara u polju za unos poruke umjesto uobičajenog upita za poruku.

@@ -906,5 +906,5 @@ msgstr ""
 
 
 #: changelog.py:5
-msgid "Replying to or editing a message is now announced in the message input field. Fixed the typing indicator sound sometimes continuing to play after closing the app or leaving the chat."
-msgstr "回覆或編輯訊息時，現在會在訊息輸入欄位中提示。已修正關閉應用程式或離開聊天後，輸入音效有時仍持續播放的問題。"
+msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Fixed the typing sound stopping after a few seconds while the other side was still typing. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
+msgstr "修正在群組或頻道個人資料中，身分按鈕被讀成「Identity root」的問題；現在會讀出聊天名稱與成員數。修正對方仍在輸入時，輸入音效播放幾秒後就停止的問題。control+C 不再被處理兩次：焦點在連結上時複製連結，其他情況則交由 Unigram 複製訊息。"

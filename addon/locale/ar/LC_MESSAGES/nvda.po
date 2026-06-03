@@ -983,5 +983,5 @@ msgstr "الفاصل الزمني للإعلان عن تقدم نقل الملف
 #~ msgstr "تقديم سريع للرسالة الصوتية"
 
 #: changelog.py:5
-msgid "Replying to or editing a message is now announced in the message input field. Fixed the typing indicator sound sometimes continuing to play after closing the app or leaving the chat."
-msgstr "أصبح الرد على رسالة أو تحريرها يُعلَن الآن في حقل إدخال الرسالة. وتم إصلاح استمرار صوت الكتابة بالعمل أحيانًا بعد إغلاق التطبيق أو مغادرة الدردشة."
+msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Fixed the typing sound stopping after a few seconds while the other side was still typing. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
+msgstr "تم إصلاح إعلان زر الهوية في ملف تعريف مجموعة أو قناة بعبارة \"Identity root\"؛ أصبح الآن يعلن اسم الدردشة وعدد الأعضاء. تم إصلاح توقف صوت الكتابة بعد بضع ثوانٍ بينما لا يزال الطرف الآخر يكتب. لم يعد Ctrl+C يُعالَج مرتين: فهو ينسخ الرابط عندما يكون التركيز على رابط، وفي الحالات الأخرى يترك النسخ لـ Unigram."

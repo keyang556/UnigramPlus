@@ -902,5 +902,5 @@ msgid "File transfer progress announcement interval (percent):"
 msgstr "Intervalo de anuncio del progreso de transferencia de archivos (porcentaje):"
 
 #: changelog.py:5
-msgid "Replying to or editing a message is now announced in the message input field. Fixed the typing indicator sound sometimes continuing to play after closing the app or leaving the chat."
-msgstr "Responder o editar un mensaje ahora se anuncia en el campo de entrada de mensajes. Se corrigió que el sonido de escritura a veces siguiera reproduciéndose tras cerrar la aplicación o salir del chat."
+msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Fixed the typing sound stopping after a few seconds while the other side was still typing. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
+msgstr "Se ha corregido el botón de identidad en el perfil de un grupo o canal que anunciaba «Identity root»; ahora anuncia el nombre del chat y el número de miembros. Se ha corregido el sonido de escritura que se detenía a los pocos segundos mientras la otra persona seguía escribiendo. Ctrl+C ya no se procesa dos veces: copia el enlace cuando el foco está sobre un enlace y, en los demás casos, deja que Unigram copie el mensaje."

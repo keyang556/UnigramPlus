@@ -625,39 +625,52 @@ class Typing_sound_tracking:
 		try: winsound.PlaySound(None, 0)
 		except: pass
 	@classmethod
-	def _chat_status(cls):
-		# Returns the live status text from the chat title, or None when no chat is
-		# really in the foreground (app closed / left the chat) so the caller can pause.
-		title = cls.saved_items.get("profile name") if cls.saved_items else None
-		if not title: return None
+	def _foreground_is_unigram(cls):
+		# Robust "is the Unigram window currently active" check. We pause the loop only
+		# when the user genuinely leaves Unigram, instead of relying on the cached title's
+		# isInForeground, which can momentarily report False and silence the sound for good.
 		try:
-			if not title.isInForeground: return None
+			foreground = api.getForegroundObject()
+			return bool(foreground) and is_unigram_app_module(getattr(foreground, "appModule", None))
 		except Exception:
-			return None
+			return False
+	@classmethod
+	def _chat_status(cls):
+		# Live status text from the open chat's title (the chat-header "Profile" button):
+		#  - ""   -> no one is typing right now (or no chat is open)
+		#  - None -> the status genuinely could not be read this tick, so the caller should
+		#            keep the current sound state and retry rather than cutting it short.
+		title = cls.saved_items.get("profile name") if cls.saved_items else None
+		if not title: return ""
 		try:
 			location = title.location
-			if not location or not location.width: return None
+			if not location or not location.width: return ""
 		except Exception:
 			return None
 		try:
 			return title.lastChild.name if title.childCount > 1 else ""
 		except Exception:
-			return ""
+			return None
 	@classmethod
 	def tick(cls):
 		if not cls.active or cls.pouse:
 			cls.stop_sound()
 			return
 		try:
-			status_text = cls._chat_status()
-			if status_text is None:
-				# No chat is really in the foreground anymore: stop and wait for focus.
+			if not cls._foreground_is_unigram():
+				# Left the Unigram window: stop the loop and wait for the next focus event.
 				cls.stop_sound()
 				cls.pouse = True
 				return
-			# Reconcile the looping sound with the live status on every tick.
-			if cls._is_typing(status_text): cls.start_sound()
-			else: cls.stop_sound()
+			status_text = cls._chat_status()
+			if status_text is None:
+				# Could not read the status this tick (transient glitch): keep the current
+				# sound state and try again next tick, instead of stopping while typing.
+				pass
+			elif cls._is_typing(status_text):
+				cls.start_sound()
+			else:
+				cls.stop_sound()
 		except Exception:
 			cls.stop_sound()
 		if cls.active and not cls.pouse:
@@ -1070,6 +1083,25 @@ class AppModule(appModuleHandler.AppModule):
 			except: pass
 		return False
 
+	def _label_profile_identity(self, obj):
+		# Build "<chat name>, <members/status>" for the profile-header identity button by
+		# reading the neighbouring Title and Subtitle. Walk up from the button until we reach
+		# a container that also holds the Subtitle (member count / status), grabbing the Title
+		# on the way, so it works regardless of how the header is nested in the UIA tree.
+		container = obj
+		title_name = ""
+		for _ in range(6):
+			container = getattr(container, "parent", None)
+			if not container: break
+			if not title_name:
+				title = self._find_descendant(container, automation_id="Title", max_depth=5)
+				if title and title.name: title_name = title.name.strip()
+			subtitle = self._find_descendant(container, automation_id="Subtitle", max_depth=5)
+			if subtitle:
+				parts = [part for part in (title_name, (subtitle.name or "").strip()) if part]
+				if parts: return ", ".join(parts)
+		return title_name
+
 	def _looks_like_topic_item(self, obj):
 		# A ForumTopicCell exposes child TextBlocks named TitleLabel + TimeLabel
 		# (and BriefText/UnreadBadge). Detecting two of these is enough to be safe.
@@ -1299,21 +1331,20 @@ class AppModule(appModuleHandler.AppModule):
 			def spechState(): message(targetButton.name)
 			thr = Timer(.1, spechState).start()
 
-	# Copy current message to clipboard
+	# Copy the focused link to the clipboard. For anything else we defer to Unigram's own
+	# Ctrl+C, so the shortcut is never handled twice (Unigram can't copy just a link, and
+	# its copy does not apply while the focus is on a link, so the two no longer conflict).
 	@script(description=_("Copy the message if it contains text. If the focus is on a link, the link will be copied"), gesture="kb:control+C")
 	def script_copyMessage(self, gesture):
-		gesture.send()
 		obj = api.getFocusObject()
-		# if self.is_message_object(obj):
-			# textMessage = next((item.name for item in obj.children if item.UIAAutomationId in ("TextBlock", "Message", "Question", "RecognizedText")), False)
-			# mes = _("Message copied")
-		if obj.parent.UIAAutomationId in ("Message", "TextBlock"):
-			textMessage = obj.name
-			mes = _("Link copied")
-		else: return
+		if not (obj.parent and obj.parent.UIAAutomationId in ("Message", "TextBlock")):
+			# Not on a link: let Unigram perform its native copy so it isn't done twice.
+			gesture.send()
+			return
+		textMessage = obj.name
 		if textMessage:
 			api.copyToClip(textMessage.strip())
-			message(mes)
+			message(_("Link copied"))
 		else: message(_("This message does not contain text"))
 
 	# Copy message via context menu
@@ -1744,6 +1775,12 @@ class AppModule(appModuleHandler.AppModule):
 					obj.name = re.sub(r"^(.+)reactionTypeEmoji.+\"(.)\".+", "\g<1>\g<2>", obj.name, flags=re.S)
 				if obj.firstChild.UIAAutomationId == "Loading"  and obj.lastChild.UIAAutomationId == "Votes" and obj.childCount == 3: obj.name = self.processing_of_answer_options_in_surveys(obj)
 			except: pass
+		# In the profile-page header, the verified-badge button (IdentityRoot) is the next
+		# focusable element after the chat name but carries no text of its own, so NVDA would
+		# otherwise announce its automation id ("Identity root"). Replace that with the chat
+		# name and member count read from the neighbouring Title and Subtitle.
+		if obj.UIAAutomationId == "IdentityRoot" and not obj.name:
+			obj.name = self._label_profile_identity(obj)
 		if obj.name == "":
 			if obj.firstChild and obj.firstChild.name in labels_in_buttons: # If the button contains an icon, check if the dictionary contains the label for that icon
 				obj.name = labels_in_buttons[obj.firstChild.name]
