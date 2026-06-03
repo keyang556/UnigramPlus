@@ -947,5 +947,5 @@ msgstr "Интервал объявления хода передачи файл
 #~ msgstr "Оповещать о некоторых индикаторах выполнения"
 
 #: changelog.py:5
-msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Fixed the typing sound stopping after a few seconds while the other side was still typing. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
-msgstr "Исправлено объявление кнопки идентификации в профиле группы или канала как «Identity root»; теперь объявляются название чата и количество участников. Исправлена остановка звука набора через несколько секунд, когда собеседник ещё печатает. Ctrl+C больше не обрабатывается дважды: ссылка копируется, когда фокус находится на ссылке, в остальных случаях копирование сообщения выполняет Unigram."
+msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
+msgstr "Исправлено объявление кнопки идентификации в профиле группы или канала как «Identity root»; теперь объявляются название чата и количество участников. Ctrl+C больше не обрабатывается дважды: ссылка копируется, когда фокус находится на ссылке, в остальных случаях копирование сообщения выполняет Unigram."

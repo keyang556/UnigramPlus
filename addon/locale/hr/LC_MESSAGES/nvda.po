@@ -943,5 +943,5 @@ msgstr "Interval najave napretka prijenosa datoteka (postotak):"
 #~ msgstr "Najavi neke trake napretka"
 
 #: changelog.py:5
-msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Fixed the typing sound stopping after a few seconds while the other side was still typing. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
-msgstr "Ispravljeno je da gumb identiteta u profilu grupe ili kanala izgovara „Identity root”; sada izgovara naziv razgovora i broj članova. Ispravljeno je zaustavljanje zvuka tipkanja nakon nekoliko sekundi dok druga strana još tipka. Ctrl+C se više ne obrađuje dvaput: kopira poveznicu kada je fokus na poveznici, a u ostalim slučajevima kopiranje poruke prepušta Unigramu."
+msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
+msgstr "Ispravljeno je da gumb identiteta u profilu grupe ili kanala izgovara „Identity root“; sada izgovara naziv razgovora i broj članova. Ctrl+C se više ne obrađuje dvaput: kopira poveznicu kada je fokus na poveznici, a u ostalim slučajevima kopiranje poruke prepušta Unigramu."

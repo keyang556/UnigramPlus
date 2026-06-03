@@ -755,5 +755,5 @@ msgstr "Intervalo de anúncio do progresso da transferência de arquivos (porcen
 #~ msgstr "Seguimento da actividade de conversação activado"
 
 #: changelog.py:5
-msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Fixed the typing sound stopping after a few seconds while the other side was still typing. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
-msgstr "Corrigido o botão de identidade no perfil de um grupo ou canal que anunciava \"Identity root\"; agora ele anuncia o nome da conversa e o número de membros. Corrigido o som de digitação que parava após alguns segundos enquanto a outra pessoa ainda digitava. O Ctrl+C não é mais processado duas vezes: copia o link quando o foco está sobre um link e, nos demais casos, deixa o Unigram copiar a mensagem."
+msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
+msgstr "Corrigido o botão de identidade no perfil de um grupo ou canal que anunciava \"Identity root\"; agora ele anuncia o nome da conversa e o número de membros. O Ctrl+C não é mais processado duas vezes: copia o link quando o foco está sobre um link e, nos demais casos, deixa o Unigram copiar a mensagem."

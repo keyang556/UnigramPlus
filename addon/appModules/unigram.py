@@ -625,52 +625,39 @@ class Typing_sound_tracking:
 		try: winsound.PlaySound(None, 0)
 		except: pass
 	@classmethod
-	def _foreground_is_unigram(cls):
-		# Robust "is the Unigram window currently active" check. We pause the loop only
-		# when the user genuinely leaves Unigram, instead of relying on the cached title's
-		# isInForeground, which can momentarily report False and silence the sound for good.
-		try:
-			foreground = api.getForegroundObject()
-			return bool(foreground) and is_unigram_app_module(getattr(foreground, "appModule", None))
-		except Exception:
-			return False
-	@classmethod
 	def _chat_status(cls):
-		# Live status text from the open chat's title (the chat-header "Profile" button):
-		#  - ""   -> no one is typing right now (or no chat is open)
-		#  - None -> the status genuinely could not be read this tick, so the caller should
-		#            keep the current sound state and retry rather than cutting it short.
+		# Returns the live status text from the chat title, or None when no chat is
+		# really in the foreground (app closed / left the chat) so the caller can pause.
 		title = cls.saved_items.get("profile name") if cls.saved_items else None
-		if not title: return ""
+		if not title: return None
+		try:
+			if not title.isInForeground: return None
+		except Exception:
+			return None
 		try:
 			location = title.location
-			if not location or not location.width: return ""
+			if not location or not location.width: return None
 		except Exception:
 			return None
 		try:
 			return title.lastChild.name if title.childCount > 1 else ""
 		except Exception:
-			return None
+			return ""
 	@classmethod
 	def tick(cls):
 		if not cls.active or cls.pouse:
 			cls.stop_sound()
 			return
 		try:
-			if not cls._foreground_is_unigram():
-				# Left the Unigram window: stop the loop and wait for the next focus event.
+			status_text = cls._chat_status()
+			if status_text is None:
+				# No chat is really in the foreground anymore: stop and wait for focus.
 				cls.stop_sound()
 				cls.pouse = True
 				return
-			status_text = cls._chat_status()
-			if status_text is None:
-				# Could not read the status this tick (transient glitch): keep the current
-				# sound state and try again next tick, instead of stopping while typing.
-				pass
-			elif cls._is_typing(status_text):
-				cls.start_sound()
-			else:
-				cls.stop_sound()
+			# Reconcile the looping sound with the live status on every tick.
+			if cls._is_typing(status_text): cls.start_sound()
+			else: cls.stop_sound()
 		except Exception:
 			cls.stop_sound()
 		if cls.active and not cls.pouse:

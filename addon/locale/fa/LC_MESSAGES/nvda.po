@@ -880,5 +880,5 @@ msgstr "فاصله اعلام پیشرفت انتقال فایل (درصد):"
 #~ msgstr "پیام صوتی را جلو میبرد."
 
 #: changelog.py:5
-msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Fixed the typing sound stopping after a few seconds while the other side was still typing. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
-msgstr "خطای اعلام دکمه‌ی هویت در نمایه‌ی گروه یا کانال به‌صورت «Identity root» برطرف شد؛ اکنون نام گفت‌وگو و تعداد اعضا اعلام می‌شود. خطای توقف صدای تایپ پس از چند ثانیه در حالی که طرف مقابل هنوز در حال تایپ بود برطرف شد. کلید Ctrl+C دیگر دو بار پردازش نمی‌شود: وقتی تمرکز روی یک پیوند باشد پیوند را کپی می‌کند و در غیر این صورت کپی پیام را به Unigram واگذار می‌کند."
+msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
+msgstr "خطای اعلام دکمه‌ی هویت در نمایه‌ی گروه یا کانال به‌صورت «Identity root» برطرف شد؛ اکنون نام گفت‌وگو و تعداد اعضا اعلام می‌شود. کلید Ctrl+C دیگر دو بار پردازش نمی‌شود: وقتی تمرکز روی یک پیوند باشد پیوند را کپی می‌کند و در غیر این صورت کپی پیام را به Unigram واگذار می‌کند."

@@ -357,7 +357,6 @@ Added Turkish localization
 ### Verzija 5.5.6
 
 * Ispravljeno je da dugme identiteta u profilu grupe ili kanala izgovara „Identity root” pri prelasku tasterom Tab nakon imena; sada izgovara naziv ćaskanja i broj članova.
-* Ispravljeno je zaustavljanje zvuka kucanja nakon nekoliko sekundi dok druga strana još kuca; sada se reprodukuje sve dok kucanje zaista ne prestane.
 * Ctrl+C se više ne obrađuje dvaput: kopira vezu kada je fokus na vezi, a u ostalim slučajevima kopiranje poruke prepušta Unigramu.
 
 ### Verzija 5.5.5

@@ -1002,5 +1002,5 @@ msgstr "Dosya aktarımı ilerleme duyurusu aralığı (yüzde):"
 #~ msgstr "Bu mesaj oynatılmıyor"
 
 #: changelog.py:5
-msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Fixed the typing sound stopping after a few seconds while the other side was still typing. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
-msgstr "Bir grup veya kanal profilinde kimlik düğmesinin \"Identity root\" olarak seslendirilmesi düzeltildi; artık sohbet adını ve üye sayısını seslendiriyor. Karşı taraf hâlâ yazarken yazma sesinin birkaç saniye sonra durması düzeltildi. Ctrl+C artık iki kez işlenmiyor: odak bir bağlantıdayken bağlantıyı kopyalar, diğer durumlarda mesajı kopyalamayı Unigram'a bırakır."
+msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
+msgstr "Bir grup veya kanal profilinde kimlik dügmesinin \"Identity root\" olarak seslendirilmesi düzeltildi; artık sohbet adını ve üye sayısını seslendiriyor. Ctrl+C artık iki kez işlenmiyor: odak bir bağlantıdayken bağlantıyı kopyalar, diğer durumlarda mesajı kopyalamayı Unigram'a bırakır."

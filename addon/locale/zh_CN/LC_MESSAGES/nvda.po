@@ -906,5 +906,5 @@ msgstr ""
 
 
 #: changelog.py:5
-msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Fixed the typing sound stopping after a few seconds while the other side was still typing. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
-msgstr "修复在群组或频道个人资料中，身份按钮被读成“Identity root”的问题；现在会读出聊天名称与成员数。修复对方仍在输入时，输入声音播放几秒后就停止的问题。control+C 不再被处理两次：焦点在链接上时复制链接，其他情况则交由 Unigram 复制消息。"
+msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
+msgstr "修复在群组或频道个人资料中，身份按鈕被读成“Identity root”的问题；现在会读出聊天名称与成员数。control+C 不再被处理两次：焦点在链接上时复制链接，其他情况则交由 Unigram 复制消息。"

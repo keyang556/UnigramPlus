@@ -942,5 +942,5 @@ msgstr "Intervalul de anunțare a progresului transferului de fișiere (procent)
 #~ msgstr "Відповідь"
 
 #: changelog.py:5
-msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Fixed the typing sound stopping after a few seconds while the other side was still typing. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
-msgstr "S-a corectat anunțarea butonului de identitate din profilul unui grup sau canal ca „Identity root”; acum anunță numele conversației și numărul de membri. S-a corectat oprirea sunetului de tastare după câteva secunde în timp ce interlocutorul încă scria. Ctrl+C nu mai este procesat de două ori: copiază linkul când focalizarea este pe un link, iar în rest lasă Unigram să copieze mesajul."
+msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
+msgstr "S-a corectat anunțarea butonului de identitate din profilul unui grup sau canal ca „Identity root”; acum anunță numele conversației şi numărul de membri. Ctrl+C nu mai este procesat de două ori: copiază linkul când focalizarea este pe un link, iar în rest lasă Unigram să copieze mesajul."

@@ -85,7 +85,6 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 ### Version 5.5.6
 
 * Correction du bouton d'identité dans le profil d'un groupe ou d'un canal qui annonçait « Identity root » lorsqu'on passait le nom avec la touche Tab ; il annonce désormais le nom de la discussion et le nombre de membres.
-* Correction du son de saisie qui s'arrêtait au bout de quelques secondes alors que l'interlocuteur écrivait encore ; il continue maintenant jusqu'à ce que la saisie cesse réellement.
 * Ctrl+C n'est plus traité deux fois : il copie le lien lorsque le focus est sur un lien, et laisse sinon Unigram copier le message.
 
 ### Version 5.5.5

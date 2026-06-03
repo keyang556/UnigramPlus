@@ -833,5 +833,5 @@ msgstr "फाइल स्थानान्तरण प्रगति घो
 #~ msgstr "Відповідь"
 
 #: changelog.py:5
-msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Fixed the typing sound stopping after a few seconds while the other side was still typing. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
-msgstr "समूह वा च्यानलको प्रोफाइलमा पहिचान बटनले \"Identity root\" भन्ने समस्या सच्याइयो; अब यसले कुराकानीको नाम र सदस्य संख्या बोल्छ। अर्को पक्ष अझै टाइप गरिरहेको बेला टाइपिङ ध्वनि केही सेकेन्डपछि रोकिने समस्या सच्याइयो। Ctrl+C अब दुई पटक प्रशोधन हुँदैन: फोकस लिङ्कमा हुँदा यसले लिङ्क प्रतिलिपि गर्छ, अन्य अवस्थामा सन्देश प्रतिलिपि गर्न Unigram लाई छोड्छ।"
+msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
+msgstr "samUha vA chेnalkō prōpAīilamā pahichāna baṭanale \"Identity root\" bhanने samasyaā sachāīyō; aba yasale kurākānīkō nāma ra sadasya saṅkhyA bolaṭchaḥ. Ctrl+C aba dui paṭaka praśodhāna huṃdैna: phokāsa liṅkamā huṃdā yasale liṅka pratilipi garcha, anya avasthāmā sandesa pratilipi garna Unigram lāī chodaṭchaḥ."

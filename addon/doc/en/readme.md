@@ -82,7 +82,6 @@ And remember that everyone who read this line thought that someone will definite
 ### Version 5.5.6
 
 * Fixed the identity button in a group or channel profile announcing "Identity root" when tabbing past the name; it now announces the chat name and member count.
-* Fixed the typing sound stopping after a few seconds while the other side was still typing; it now keeps playing until typing actually stops.
 * Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message.
 
 ### Version 5.5.5

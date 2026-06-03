@@ -85,7 +85,6 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 ### Versiunea 5.5.6
 
 * S-a corectat anunțarea butonului de identitate din profilul unui grup sau canal ca „Identity root” la trecerea cu tasta Tab după nume; acum anunță numele conversației și numărul de membri.
-* S-a corectat oprirea sunetului de tastare după câteva secunde în timp ce interlocutorul încă scria; acum continuă să se redea până când tastarea se oprește cu adevărat.
 * Ctrl+C nu mai este procesat de două ori: copiază linkul când focalizarea este pe un link, iar în rest lasă Unigram să copieze mesajul.
 
 ### Versiunea 5.5.5
