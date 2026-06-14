@@ -84,12 +84,10 @@ And remember that everyone who read this line thought that someone will definite
 * When recording a voice or video message, NVDA now announces "Recording a voice message" or "Recording a video message" along with the elapsed time, instead of "Tn voice message".
 
 ### Version 5.5.6
-
 * Fixed the identity button in a group or channel profile announcing "Identity root" when tabbing past the name; it now announces the chat name and member count.
 * Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message.
 
 ### Version 5.5.5
-
 * Replying to or editing a message is now announced in the message input field instead of the usual message prompt.
 * Fixed the typing indicator sound sometimes continuing to play after the app was closed, after the other person stopped typing, or after leaving the chat; it now stops as soon as no one is typing in the open chat.
 * Updated Burmese localization.
