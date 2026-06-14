@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: UnigramPlus 5.5.4\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2026-05-24 00:00+0800\n"
-"PO-Revision-Date: 2026-05-24 00:00+0800\n"
+"PO-Revision-Date: 2026-06-14 20:36+0800\n"
 "Last-Translator: Ken Chang <lindsay714322@gmail.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Codex\n"
+"X-Generator: Poedit 3.9\n"
 
 #: addon\appModules\cnf.py:10
 msgid "Arabic"
@@ -804,7 +804,7 @@ msgstr "讀出訊息內容前先讀出「未讀」"
 
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:239
 msgid "Announce the phrases \"Administrator\" and \"Owner\" on messages in communities"
-msgstr "在社群訊息中讀出「管理員」與「擁有者」"
+msgstr "在群組訊息中讀出「管理員」與「擁有者」"
 
 #. Speak active folder name when switching between them
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:243
@@ -903,7 +903,6 @@ msgstr ""
 "- 新增開啟 UnigramPlus 音效資料夾的設定，讓使用者可以取代內建音效檔案。\n"
 "- 新增上方向鍵動作，可從訊息編輯欄位移到最後取得焦點的訊息。\n"
 "- 新增獨立的正體中文與簡體中文在地化。"
-
 
 #: addon\appModules\unigram.py:1767
 msgid "Recording a voice message, elapsed time"
