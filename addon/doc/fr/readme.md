@@ -82,6 +82,10 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 
 ##Liste des changements :
 
+### Version 5.5.7
+
+* Lors de l'enregistrement d'un message vocal ou vidéo, NVDA annonce désormais "Enregistrement d'un message vocal" ou "Enregistrement d'un message vidéo" avec le temps écoulé, au lieu de "Tn voice message".
+
 ### Version 5.5.6
 
 * Correction du bouton d'identité dans le profil d'un groupe ou d'un canal qui annonçait « Identity root » lorsqu'on passait le nom avec la touche Tab ; il annonce désormais le nom de la discussion et le nombre de membres.

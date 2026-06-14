@@ -879,6 +879,22 @@ msgstr "فاصله اعلام پیشرفت انتقال فایل (درصد):"
 #~ msgid "Rewind voice message forward"
 #~ msgstr "پیام صوتی را جلو میبرد."
 
+#: addon\appModules\unigram.py:1767
+msgid "Recording a voice message, elapsed time"
+msgstr "در حال ضبط پیام صوتی، زمان سپری‌شده"
+
+#: addon\appModules\unigram.py:1767
+msgid "Recording a video message, elapsed time"
+msgstr "در حال ضبط پیام تصویری، زمان سپری‌شده"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a voice message"
+msgstr "ضبط پیام صوتی"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a video message"
+msgstr "ضبط پیام تصویری"
+
 #: changelog.py:5
-msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
-msgstr "خطای اعلام دکمه‌ی هویت در نمایه‌ی گروه یا کانال به‌صورت «Identity root» برطرف شد؛ اکنون نام گفت‌وگو و تعداد اعضا اعلام می‌شود. کلید Ctrl+C دیگر دو بار پردازش نمی‌شود: وقتی تمرکز روی یک پیوند باشد پیوند را کپی می‌کند و در غیر این صورت کپی پیام را به Unigram واگذار می‌کند."
+msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
+msgstr "هنگام ضبط پیام صوتی یا تصویری، NVDA اکنون به‌جای \"Tn voice message\" عبارت \"در حال ضبط پیام صوتی\" یا \"در حال ضبط پیام تصویری\" را همراه با زمان سپری‌شده اعلام می‌کند."

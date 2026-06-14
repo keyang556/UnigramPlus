@@ -78,6 +78,10 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 
 ##Lista de cambios:
 
+### Versión 5.5.7
+
+* Al grabar un mensaje de voz o de video, NVDA ahora anuncia "Grabando un mensaje de voz" o "Grabando un mensaje de video" junto con el tiempo transcurrido, en lugar de "Tn voice message".
+
 ### Versión 5.5.6
 
 * Se ha corregido el botón de identidad en el perfil de un grupo o canal que anunciaba «Identity root» al pasar el nombre con la tecla Tab; ahora anuncia el nombre del chat y el número de miembros.

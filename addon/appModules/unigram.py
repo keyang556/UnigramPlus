@@ -1757,10 +1757,22 @@ class AppModule(appModuleHandler.AppModule):
 			except: pass
 		elif obj.role == Role.TOGGLEBUTTON:
 			try:
-				# Checking if a toggle button is an answer option in a vote
-				if "reactionTypeEmoji {" in obj.name:
-					obj.name = re.sub(r"^(.+)reactionTypeEmoji.+\"(.)\".+", "\g<1>\g<2>", obj.name, flags=re.S)
-				if obj.firstChild.UIAAutomationId == "Loading"  and obj.lastChild.UIAAutomationId == "Votes" and obj.childCount == 3: obj.name = self.processing_of_answer_options_in_surveys(obj)
+				# The voice/video message record button carries no text of its own, so NVDA
+				# would otherwise announce its automation id as "Tn voice message". Give it a
+				# clear label; while recording is in progress also read the elapsed time shown
+				# next to it (a pressed toggle means video-note mode, otherwise a voice message).
+				if obj.UIAAutomationId == "btnVoiceMessage":
+					isVideo = State.PRESSED in obj.states
+					if obj.next and obj.next.UIAAutomationId == "ElapsedLabel":
+						label = _("Recording a video message, elapsed time") if isVideo else _("Recording a voice message, elapsed time")
+						obj.name = label+" "+re.split(r"[.,]", obj.next.name)[0]
+					else:
+						obj.name = _("Record a video message") if isVideo else _("Record a voice message")
+				else:
+					# Checking if a toggle button is an answer option in a vote
+					if "reactionTypeEmoji {" in obj.name:
+						obj.name = re.sub(r"^(.+)reactionTypeEmoji.+\"(.)\".+", "\g<1>\g<2>", obj.name, flags=re.S)
+					if obj.firstChild.UIAAutomationId == "Loading"  and obj.lastChild.UIAAutomationId == "Votes" and obj.childCount == 3: obj.name = self.processing_of_answer_options_in_surveys(obj)
 			except: pass
 		# In the profile-page header, the verified-badge button (IdentityRoot) is the next
 		# focusable element after the chat name but carries no text of its own, so NVDA would

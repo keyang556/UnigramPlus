@@ -354,6 +354,10 @@ Added Turkish localization
 
 
 
+### Verzija 5.5.7
+
+* Pri snimanju glasovne ili video poruke NVDA sada najavljuje "Snimanje glasovne poruke" ili "Snimanje video poruke" zajedno sa proteklim vremenom umesto "Tn voice message".
+
 ### Verzija 5.5.6
 
 * Ispravljeno je da dugme identiteta u profilu grupe ili kanala izgovara „Identity root” pri prelasku tasterom Tab nakon imena; sada izgovara naziv ćaskanja i broj članova.

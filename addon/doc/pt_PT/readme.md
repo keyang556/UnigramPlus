@@ -56,6 +56,10 @@ o facto de que o recurso que coloca o cursor na marca de mensagens não lidas à
 
 ## Lista de alterações:
 
+### Versão 5.5.7
+
+* Ao gravar uma mensagem de voz ou de vídeo, o NVDA anuncia agora "A gravar uma mensagem de voz" ou "A gravar uma mensagem de vídeo" juntamente com o tempo decorrido, em vez de "Tn voice message".
+
 ### Versão 5.5.6
 
 * Corrigido o botão de identidade no perfil de um grupo ou canal que anunciava "Identity root" ao passar pelo nome com a tecla Tab; agora anuncia o nome da conversa e o número de membros.

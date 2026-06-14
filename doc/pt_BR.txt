@@ -1,8 +1,4 @@
-* Corrigidos anúncios indesejados, como contadores de chats não lidos em pastas, por exemplo "Todos 535". O progresso de transferência de arquivos agora fica limitado aos controles de envio e download do Unigram e é ignorado fora das janelas do Unigram.
-* Corrigida a convivência com o complemento de NVDA para Telegram Desktop, ativando o UnigramPlus apenas quando o aplicativo em execução é detectado como Unigram.
-* Adicionado um botão nas configurações do UnigramPlus para abrir a pasta de sons incluída, facilitando substituir arquivos WAV usando os mesmos nomes.
-* Adicionada uma opção para a seta para cima no campo de edição de mensagem que move o foco para a última mensagem focada.
-* O chinês tradicional foi recriado como zh_TW e o chinês simplificado foi adicionado como zh_CN.
+* Ao gravar uma mensagem de voz ou de vídeo, o NVDA agora anuncia "Gravando uma mensagem de voz" ou "Gravando uma mensagem de vídeo" junto com o tempo decorrido, em vez de "Tn voice message".
 
 Se deseja, e, pode, apoiar o desenvolvedor deste complemento, pode fazê-lo usando os seguintes detalhes:
 * PayPal: gladkiy.kostya@gmail.com.

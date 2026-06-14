@@ -86,6 +86,10 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 
 	##Popis promjena:
 
+### Verzija 5.5.7
+
+* Pri snimanju glasovne ili videoporuke NVDA sada najavljuje "Snimanje glasovne poruke" ili "Snimanje videoporuke" zajedno s proteklim vremenom umjesto "Tn voice message".
+
 ### Verzija 5.5.6
 
 * Ispravljeno je da gumb identiteta u profilu grupe ili kanala izgovara „Identity root” pri prolasku tipkom Tab nakon imena; sada izgovara naziv razgovora i broj članova.

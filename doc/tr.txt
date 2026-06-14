@@ -1,8 +1,4 @@
-* Sohbet klasörlerindeki okunmamış sayaçları gibi istenmeyen duyurular düzeltildi; örneğin "Tümü 535". Dosya aktarım ilerlemesi artık yalnızca Unigram yükleme ve indirme denetimleriyle sınırlıdır ve Unigram pencereleri dışında yok sayılır.
-* Telegram Desktop NVDA eklentisiyle birlikte çalışabilmesi için UnigramPlus yalnızca çalışan uygulama Unigram olarak algılandığında etkinleşecek şekilde düzeltildi.
-* Aynı adları kullanan özel WAV dosyalarıyla sesleri değiştirmeyi kolaylaştırmak için UnigramPlus ayarlarına yerleşik sesler klasörünü açan bir düğme eklendi.
-* Mesaj düzenleme alanında yukarı ok için odağı son odaklanılan mesaja taşıyan yeni bir seçenek eklendi.
-* Geleneksel Çince zh_TW olarak yeniden oluşturuldu ve Basitleştirilmiş Çince zh_CN olarak eklendi.
+* Sesli veya görüntülü mesaj kaydederken NVDA artık "Tn voice message" yerine geçen süreyle birlikte "Sesli mesaj kaydediliyor" veya "Görüntülü mesaj kaydediliyor" anonsunu yapıyor.
 
 Bu eklentinin geliştiricisini destekleme isteğiniz ve en önemlisi fırsatınız varsa, aşağıdaki ayrıntıları kullanarak bunu yapabilirsiniz:
 * PayPal: gladkiy.kostya@gmail.com.

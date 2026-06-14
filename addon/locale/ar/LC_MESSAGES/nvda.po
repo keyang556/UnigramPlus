@@ -982,6 +982,22 @@ msgstr "الفاصل الزمني للإعلان عن تقدم نقل الملف
 #~ msgid "Rewind voice message forward"
 #~ msgstr "تقديم سريع للرسالة الصوتية"
 
+#: addon\appModules\unigram.py:1767
+msgid "Recording a voice message, elapsed time"
+msgstr "جارٍ تسجيل رسالة صوتية، الوقت المنقضي"
+
+#: addon\appModules\unigram.py:1767
+msgid "Recording a video message, elapsed time"
+msgstr "جارٍ تسجيل رسالة مرئية، الوقت المنقضي"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a voice message"
+msgstr "تسجيل رسالة صوتية"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a video message"
+msgstr "تسجيل رسالة مرئية"
+
 #: changelog.py:5
-msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
-msgstr "تم إصلاح إعلان زر الهوية في ملف تعريف مجموعة أو قناة بعبارة \"Identity root\"؛ أصبح الآن يعلن اسم الدردشة وعدد الأعضاء. لم يعد Ctrl+C يُعالَج مرتين: فهو ينسخ الرابط عندما يكون التركيز على رابط، وفي الحالات الأخرى يترك النسخ لـ Unigram."
+msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
+msgstr "عند تسجيل رسالة صوتية أو مرئية، يعلن NVDA الآن \"جارٍ تسجيل رسالة صوتية\" أو \"جارٍ تسجيل رسالة مرئية\" مع الوقت المنقضي، بدلاً من \"Tn voice message\"."

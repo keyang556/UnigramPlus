@@ -79,6 +79,10 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
+### Version 5.5.7
+
+* When recording a voice or video message, NVDA now announces "Recording a voice message" or "Recording a video message" along with the elapsed time, instead of "Tn voice message".
+
 ### Version 5.5.6
 
 * Fixed the identity button in a group or channel profile announcing "Identity root" when tabbing past the name; it now announces the chat name and member count.

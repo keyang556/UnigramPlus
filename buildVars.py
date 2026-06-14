@@ -19,7 +19,7 @@ addon_info = AddonInfo(
 		"""This add-on adds a lot of hotkeys for quick navigation through the main elements of the Unigram application, convenient interaction with Chat messages, and also adds many small improvements that make working in Unigram much easier""",
 	),
 	# version
-	addon_version="5.5.6",
+	addon_version="5.5.7",
 	# Brief changelog for this version
 	# Translators: what's new content for the add-on version to be shown in the add-on store.
 	# Note: Edit changelog.py instead of this.

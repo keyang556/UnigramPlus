@@ -905,6 +905,22 @@ msgstr ""
 "- 新增獨立的正體中文與簡體中文在地化。"
 
 
+#: addon\appModules\unigram.py:1767
+msgid "Recording a voice message, elapsed time"
+msgstr "正在錄製語音訊息，經過時間"
+
+#: addon\appModules\unigram.py:1767
+msgid "Recording a video message, elapsed time"
+msgstr "正在錄製視訊訊息，經過時間"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a voice message"
+msgstr "錄製語音訊息"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a video message"
+msgstr "錄製視訊訊息"
+
 #: changelog.py:5
-msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
-msgstr "修正在群組或頻道個人資料中，身分按鈕被讀成「Identity root」的問題；現在會讀出聊天名稱與成員數。control+C 不再被處理兩次：焦點在連結上時複製連結，其他情況則交由 Unigram 複製訊息。"
+msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
+msgstr "錄製語音或視訊訊息時，NVDA 現在會朗讀「正在錄製語音訊息」或「正在錄製視訊訊息」並念出經過時間，而不再是「Tn voice message」。"

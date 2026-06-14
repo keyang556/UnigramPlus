@@ -1,8 +1,4 @@
-* 修正聊天資料夾未讀數量變化被不必要讀出的問題，例如「全部 535」。檔案傳輸進度現在只會在 Unigram 的上傳與下載控制項中讀出，且會忽略非 Unigram 視窗。
-* 修正與 Telegram Desktop NVDA 附加元件的衝突；只有偵測到目前執行的應用程式是 Unigram 時，才會啟用 UnigramPlus。
-* 在 UnigramPlus 設定中新增開啟內建音效資料夾的按鈕，方便使用者以相同檔名替換自訂 WAV 音效檔案。
-* 在訊息編輯欄位的上方向鍵動作中，新增「移到最後取得焦點的訊息」選項。
-* 正體中文重新整理並獨立為 zh_TW，另新增簡體中文 zh_CN。
+* 錄製語音或視訊訊息時，NVDA 現在會朗讀「正在錄製語音訊息」或「正在錄製視訊訊息」並念出經過時間，而不再是「Tn voice message」。
 
 If you have the desire, and most importantly the opportunity, to support the developer of this add-on, you can do so using the following details:
 * PayPal: gladkiy.kostya@gmail.com.

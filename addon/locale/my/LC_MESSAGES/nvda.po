@@ -904,9 +904,25 @@ msgstr ""
 "ဤ add-on သည် Unigram အပလီကေးရှင်း၏ အဓိက အစိတ်အပိုင်းများမှတစ်ဆင့် အမြန်လမ်းညွှန်မှု၊ Chat မက်ဆေ့ဂျ်များနှင့် အဆင်ပြေသော အပြန်အလှန် ဆက်သွယ်မှုများအတွက် "
 "ကီးများစွာကို ပေါင်းထည့်ကာ Unigram တွင် အလုပ်လုပ်ရန် ပိုမိုလွယ်ကူစေမည့် သေးငယ်သော တိုးတက်မှုများစွာကိုလည်း ပေါင်းထည့်ထားသည်။"
 
+#: addon\appModules\unigram.py:1767
+msgid "Recording a voice message, elapsed time"
+msgstr "အသံမက်ဆေ့ဂျ် မှတ်တမ်းတင်နေသည်၊ ကုန်လွန်ချိန်"
+
+#: addon\appModules\unigram.py:1767
+msgid "Recording a video message, elapsed time"
+msgstr "ဗီဒီယိုမက်ဆေ့ဂျ် မှတ်တမ်းတင်နေသည်၊ ကုန်လွန်ချိန်"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a voice message"
+msgstr "အသံမက်ဆေ့ဂျ် မှတ်တမ်းတင်ရန်"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a video message"
+msgstr "ဗီဒီယိုမက်ဆေ့ဂျ် မှတ်တမ်းတင်ရန်"
+
 #: changelog.py:5
-msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
-msgstr ""
+msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
+msgstr "အသံ သို့မဟုတ် ဗီဒီယိုမက်ဆေ့ဂျ် မှတ်တမ်းတင်သည့်အခါ NVDA သည် \"Tn voice message\" အစား \"အသံမက်ဆေ့ဂျ် မှတ်တမ်းတင်နေသည်\" သို့မဟုတ် \"ဗီဒီယိုမက်ဆေ့ဂျ် မှတ်တမ်းတင်နေသည်\" ကို ကုန်လွန်ချိန်နှင့်အတူ ကြေညာပါသည်။"
 
 #~ msgid "Interface language in Unigram:"
 #~ msgstr "Unigram ရှိ အင်တာဖေ့စ်ဘာသာစကား"

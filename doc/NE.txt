@@ -1,8 +1,4 @@
-* Fixed unwanted announcements such as chat folder unread counts, for example "All 535". File transfer progress is now restricted to Unigram upload and download controls and is ignored outside Unigram windows.
-* Fixed coexistence with the Telegram Desktop NVDA add-on by enabling UnigramPlus only when the running application is detected as Unigram.
-* Added a button in UnigramPlus settings to open the bundled sounds folder, making it easier to replace sound files with custom WAV files that use the same names.
-* Added an up-arrow option for the message edit field that moves focus to the last focused message.
-* Rebuilt Traditional Chinese as zh_TW and added Simplified Chinese as zh_CN.
+* आवाज वा भिडियो सन्देश रेकर्ड गर्दा, NVDA ले अब "Tn voice message" को सट्टा बितेको समयसहित "आवाज सन्देश रेकर्ड गर्दै" वा "भिडियो सन्देश रेकर्ड गर्दै" घोषणा गर्छ।
 
 If you have the desire, and most importantly the opportunity, to support the developer of this add-on, you can do so using the following details:
 * PayPal: gladkiy.kostya@gmail.com.

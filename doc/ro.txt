@@ -1,8 +1,4 @@
-* Au fost corectate anunțurile nedorite, cum ar fi contoarele de chat-uri necitite din foldere, de exemplu „Toate 535”. Progresul transferului de fișiere este acum limitat la controalele de încărcare și descărcare din Unigram și este ignorat în afara ferestrelor Unigram.
-* A fost corectată coexistența cu suplimentul NVDA pentru Telegram Desktop, activând UnigramPlus numai când aplicația rulată este detectată ca Unigram.
-* A fost adăugat un buton în setările UnigramPlus pentru deschiderea folderului de sunete incluse, ca fișierele WAV să poată fi înlocuite mai ușor cu fișiere având același nume.
-* A fost adăugată o opțiune pentru săgeata sus în câmpul de editare a mesajului, care mută focalizarea la ultimul mesaj focalizat.
-* Chineza tradițională a fost reconstruită ca zh_TW și a fost adăugată chineza simplificată ca zh_CN.
+* La înregistrarea unui mesaj vocal sau video, NVDA anunță acum "Se înregistrează un mesaj vocal" sau "Se înregistrează un mesaj video" împreună cu timpul scurs, în loc de "Tn voice message".
 
 Dacă ai dorința și, mai ales, posibilitatea de a sprijini dezvoltatorul acestui add-on, o poți face folosind următoarele detalii:
 * PayPal: gladkiy.kostya@gmail.com.

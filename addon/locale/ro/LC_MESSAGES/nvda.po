@@ -941,6 +941,22 @@ msgstr "Intervalul de anunțare a progresului transferului de fișiere (procent)
 #~ msgid "Answer"
 #~ msgstr "Відповідь"
 
+#: addon\appModules\unigram.py:1767
+msgid "Recording a voice message, elapsed time"
+msgstr "Se înregistrează un mesaj vocal, timp scurs"
+
+#: addon\appModules\unigram.py:1767
+msgid "Recording a video message, elapsed time"
+msgstr "Se înregistrează un mesaj video, timp scurs"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a voice message"
+msgstr "Înregistrează un mesaj vocal"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a video message"
+msgstr "Înregistrează un mesaj video"
+
 #: changelog.py:5
-msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
-msgstr "S-a corectat anunțarea butonului de identitate din profilul unui grup sau canal ca „Identity root”; acum anunță numele conversației şi numărul de membri. Ctrl+C nu mai este procesat de două ori: copiază linkul când focalizarea este pe un link, iar în rest lasă Unigram să copieze mesajul."
+msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
+msgstr "La înregistrarea unui mesaj vocal sau video, NVDA anunță acum \"Se înregistrează un mesaj vocal\" sau \"Se înregistrează un mesaj video\" împreună cu timpul scurs, în loc de \"Tn voice message\"."

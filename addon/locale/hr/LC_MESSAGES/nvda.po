@@ -942,6 +942,22 @@ msgstr "Interval najave napretka prijenosa datoteka (postotak):"
 #~ msgid "Announce some progress bars"
 #~ msgstr "Najavi neke trake napretka"
 
+#: addon\appModules\unigram.py:1767
+msgid "Recording a voice message, elapsed time"
+msgstr "Snimanje glasovne poruke, proteklo vrijeme"
+
+#: addon\appModules\unigram.py:1767
+msgid "Recording a video message, elapsed time"
+msgstr "Snimanje videoporuke, proteklo vrijeme"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a voice message"
+msgstr "Snimi glasovnu poruku"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a video message"
+msgstr "Snimi videoporuku"
+
 #: changelog.py:5
-msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
-msgstr "Ispravljeno je da gumb identiteta u profilu grupe ili kanala izgovara „Identity root“; sada izgovara naziv razgovora i broj članova. Ctrl+C se više ne obrađuje dvaput: kopira poveznicu kada je fokus na poveznici, a u ostalim slučajevima kopiranje poruke prepušta Unigramu."
+msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
+msgstr "Pri snimanju glasovne ili videoporuke NVDA sada najavljuje \"Snimanje glasovne poruke\" ili \"Snimanje videoporuke\" zajedno s proteklim vremenom umjesto \"Tn voice message\"."

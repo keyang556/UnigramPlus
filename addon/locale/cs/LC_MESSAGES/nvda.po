@@ -715,6 +715,22 @@ msgstr "Interval oznamování průběhu přenosu souborů (v procentech):"
 #~ msgid "The broadcast window is not found"
 #~ msgstr "Okno vysílání nelze najít"
 
+#: addon\appModules\unigram.py:1767
+msgid "Recording a voice message, elapsed time"
+msgstr "Nahrávání hlasové zprávy, uplynulý čas"
+
+#: addon\appModules\unigram.py:1767
+msgid "Recording a video message, elapsed time"
+msgstr "Nahrávání video zprávy, uplynulý čas"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a voice message"
+msgstr "Nahrát hlasovou zprávu"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a video message"
+msgstr "Nahrát video zprávu"
+
 #: changelog.py:5
-msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
-msgstr "Opraveno hlášení tlačítka identity v profilu skupiny nebo kanálu jako „Identity root“; nyní oznamuje název konverzace a počet členů. Ctrl+C se již nezpracovává dvakrát: zkopíruje odkaz, když je zaměření na odkazu, jinak nechá zkopírování zprávy na Unigramu."
+msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
+msgstr "Při nahrávání hlasové nebo video zprávy nyní NVDA oznámí \"Nahrávání hlasové zprávy\" nebo \"Nahrávání video zprávy\" spolu s uplynulým časem namísto \"Tn voice message\"."

@@ -946,6 +946,22 @@ msgstr "Интервал объявления хода передачи файл
 #~ msgid "Announce some progress bars"
 #~ msgstr "Оповещать о некоторых индикаторах выполнения"
 
+#: addon\appModules\unigram.py:1767
+msgid "Recording a voice message, elapsed time"
+msgstr "Запись голосового сообщения, истекшее время"
+
+#: addon\appModules\unigram.py:1767
+msgid "Recording a video message, elapsed time"
+msgstr "Запись видеосообщения, истекшее время"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a voice message"
+msgstr "Записать голосовое сообщение"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a video message"
+msgstr "Записать видеосообщение"
+
 #: changelog.py:5
-msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
-msgstr "Исправлено объявление кнопки идентификации в профиле группы или канала как «Identity root»; теперь объявляются название чата и количество участников. Ctrl+C больше не обрабатывается дважды: ссылка копируется, когда фокус находится на ссылке, в остальных случаях копирование сообщения выполняет Unigram."
+msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
+msgstr "При записи голосового или видеосообщения NVDA теперь объявляет \"Запись голосового сообщения\" или \"Запись видеосообщения\" вместе с истекшим временем вместо \"Tn voice message\"."

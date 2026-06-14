@@ -832,6 +832,22 @@ msgstr "फाइल स्थानान्तरण प्रगति घो
 #~ msgid "Answer"
 #~ msgstr "Відповідь"
 
+#: addon\appModules\unigram.py:1767
+msgid "Recording a voice message, elapsed time"
+msgstr "आवाज सन्देश रेकर्ड गर्दै, बितेको समय"
+
+#: addon\appModules\unigram.py:1767
+msgid "Recording a video message, elapsed time"
+msgstr "भिडियो सन्देश रेकर्ड गर्दै, बितेको समय"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a voice message"
+msgstr "आवाज सन्देश रेकर्ड गर्नुहोस्"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a video message"
+msgstr "भिडियो सन्देश रेकर्ड गर्नुहोस्"
+
 #: changelog.py:5
-msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
-msgstr "samUha vA chेnalkō prōpAīilamā pahichāna baṭanale \"Identity root\" bhanने samasyaā sachāīyō; aba yasale kurākānīkō nāma ra sadasya saṅkhyA bolaṭchaḥ. Ctrl+C aba dui paṭaka praśodhāna huṃdैna: phokāsa liṅkamā huṃdā yasale liṅka pratilipi garcha, anya avasthāmā sandesa pratilipi garna Unigram lāī chodaṭchaḥ."
+msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
+msgstr "आवाज वा भिडियो सन्देश रेकर्ड गर्दा, NVDA ले अब \"Tn voice message\" को सट्टा बितेको समयसहित \"आवाज सन्देश रेकर्ड गर्दै\" वा \"भिडियो सन्देश रेकर्ड गर्दै\" घोषणा गर्छ।"

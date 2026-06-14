@@ -82,6 +82,10 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 ##Lista de modificări:
 
+### Versiunea 5.5.7
+
+* La înregistrarea unui mesaj vocal sau video, NVDA anunță acum "Se înregistrează un mesaj vocal" sau "Se înregistrează un mesaj video" împreună cu timpul scurs, în loc de "Tn voice message".
+
 ### Versiunea 5.5.6
 
 * S-a corectat anunțarea butonului de identitate din profilul unui grup sau canal ca „Identity root” la trecerea cu tasta Tab după nume; acum anunță numele conversației și numărul de membri.

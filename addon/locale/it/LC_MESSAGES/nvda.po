@@ -1050,6 +1050,22 @@ msgstr "Intervallo di annuncio dell'avanzamento del trasferimento file (percentu
 #~ msgid "Announce the presence of reaction in the messages"
 #~ msgstr "Повідомляти про наявність реакції в повідомленнях"
 
+#: addon\appModules\unigram.py:1767
+msgid "Recording a voice message, elapsed time"
+msgstr "Registrazione di un messaggio vocale, tempo trascorso"
+
+#: addon\appModules\unigram.py:1767
+msgid "Recording a video message, elapsed time"
+msgstr "Registrazione di un messaggio video, tempo trascorso"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a voice message"
+msgstr "Registra un messaggio vocale"
+
+#: addon\appModules\unigram.py:1770
+msgid "Record a video message"
+msgstr "Registra un messaggio video"
+
 #: changelog.py:5
-msgid "Fixed the identity button in a group or channel profile announcing \"Identity root\"; it now announces the chat name and member count. Ctrl+C is no longer handled twice: it copies the link when the focus is on a link, and otherwise lets Unigram copy the message."
-msgstr "Corretto il pulsante di identità nel profilo di un gruppo o canale che annunciava \"Identity root\"; ora annuncia il nome della chat e il numero di membri. Ctrl+C non viene più gestito due volte: copia il link quando il focus è su un link e, negli altri casi, lascia che Unigram copi il messaggio."
+msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
+msgstr "Durante la registrazione di un messaggio vocale o video, NVDA ora annuncia \"Registrazione di un messaggio vocale\" o \"Registrazione di un messaggio video\" insieme al tempo trascorso, invece di \"Tn voice message\"."

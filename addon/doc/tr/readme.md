@@ -77,6 +77,10 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 
 ##Değişiklik listesi:
 
+### Sürüm 5.5.7
+
+* Sesli veya görüntülü mesaj kaydederken NVDA artık "Tn voice message" yerine geçen süreyle birlikte "Sesli mesaj kaydediliyor" veya "Görüntülü mesaj kaydediliyor" anonsunu yapıyor.
+
 ### Sürüm 5.5.6
 
 * Bir grup veya kanal profilinde Tab tuşuyla addan geçerken kimlik düğmesinin "Identity root" olarak seslendirilmesi düzeltildi; artık sohbet adını ve üye sayısını seslendiriyor.
