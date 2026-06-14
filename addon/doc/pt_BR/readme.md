@@ -26,38 +26,160 @@ Se realmente gosta deste extra e deseja, e o mais importante, tem a oportunidade
 E lembre-se que todos que leram este post pensaram que alguém definitivamente apoiaria o desenvolvedor, mas não serei eu.
 (nota dos tradutores: não se entende o que se quer dizer com a frase anterior)
 
+<!-- shortcut-table-start -->
 ## lista de teclas de atalho:
-* ALT + 1 - mover o foco para a lista de Conversas.
-* ALT + 2 - mover o foco para a última mensagem da lista de conversas.
-* ALT + 3 - mover o foco para o rótulo da mensagem não lida.
-* ALT + D - Mover o foco para o campo de edição. Se o foco já estiver no campo de edição, após pressionar as teclas de atalho ele mover-se-á para onde estava anteriormente.
-* ALT + T - Ler o nome e o estado do perfil em Conversas públicas. Pressione duas vezes para alternar entre "Activar o seguimento da actividade de chat até que o aplicativo feche", ou "Activar o seguimento da actividade das chat" e "Desactivar o seguimento da actividade de chat".
-* espaço - Reproduzir / pausar mensagem de voz ou vídeo em foco ou abrir mídia anexada à mensagem actual.
-* ALT + P - Reproduzir / pausar a mensagem de voz actualmente em execução.
-* ALT + S - Aumentar / diminuir a velocidade de reprodução da mensagem de voz.
-* ALT + E - Fechar o reprodutor de áudio.
-* control + C - Copiar mensagem se ela contiver texto.
-* ALT + shift + C - pressionar o botão "ligar".
-* ALT + shift + V - Pressionar o botão de videochamada.
-* ALT + Y - aceitar chamada
-* ALT + N - Pressionar o botão "rejeitar chamada" se houver uma chamada recebida, encerrar a chamada se houver uma chamada em andamento ou sair do chat de voz se estiver activo.
-* ALT + A - Pressionar o botão "microfone on / off".
-* ALT + V - Pressionar o botão "activar / desactivar câmera".
-* ALT + Q - pressionar o botão "visualização rápida", se a mensagem actual o contiver.
-* ALT + O - Pressionar o botão "mais opções" num chat de alerta, chat de voz ou janela de chamada.
-* ALT + M - abrir o menu de navegação.
-* control + R - Começar a gravar mensagem de voz / enviar mensagem de voz.
-* control + D - Cancelar a gravação da mensagem de voz. Pressioná-lo duas vezes altera o tipo de notificação quando começa a gravar, enviar ou cancelar a gravação de mensagens de voz.
-* ALT + U - Alternar anúncios da barra de progresso.
 
-### Observação
-Todas as teclas de atalho podem ser reatribuídas no menu NVDA> preferências> definir comandos.
-o facto de que o recurso que coloca o cursor na marca de mensagens não lidas às vezes responde com um atraso é um problema conhecido. Isso pode depender do número de mensagens enviadas no momento.
+> In the Category column, `UnigramPlus` identifies shortcuts provided by the add-on and `Unigram` identifies shortcuts built into Unigram.
+
+> [!TIP]
+> You can customize UnigramPlus shortcuts from NVDA menu > Preferences > Input gestures.
+
+### Navegação entre chats
+
+| Atalho | Categoria | Ação |
+|---|---|---|
+| **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
+| **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **ALT+1** | UnigramPlus | Mover o foco para a lista de conversação |
+| **ALT+2** | UnigramPlus | Move focus to the last message in an open chat |
+| **ALT+3** | UnigramPlus | Mover o foco para o rótulo de 'mensagens não lidas |
+| **ALT+4** | UnigramPlus | Move focus to list of chat folders |
+| **ALT+5** | UnigramPlus | Move focus to open profile |
+| **ALT+6** | UnigramPlus | Move focus to the list of group threads |
+| **ALT+D** | UnigramPlus | Mover o foco para o campo de edição. Se o foco já estiver no campo de edição, depois de premir as teclas de atalho, irá deslocar-se para onde estava anteriormente |
+| **ALT+End** | UnigramPlus | Go to the end |
+
+### Pesquisa
+
+| Atalho | Categoria | Ação |
+|---|---|---|
+| **Ctrl+E** | Unigram | Chat search |
+| **Ctrl+F** | Unigram | Messages search per chat |
+| **ALT+I** | UnigramPlus | Go to the list with search results |
+| **F3** | UnigramPlus | Go to the next search result |
+| **Shift+F3** | UnigramPlus | Go to the previous search result |
+
+### Texto selecionado na área de digitação
+
+| Atalho | Categoria | Ação |
+|---|---|---|
+| **Ctrl+Z** | Unigram | Undo |
+| **Ctrl+Y** | Unigram | Redo |
+| **Ctrl+X** | Unigram | Cut |
+| **Ctrl+C** | Unigram | Copy |
+| **Ctrl+V** | Unigram | Paste |
+| **Ctrl+A** | Unigram | Select All |
+| **Ctrl+B** | Unigram | Bold |
+| **Ctrl+I** | Unigram | Italic |
+| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+Shift+X** | Unigram | Strikethrough |
+| **Ctrl+Shift+M** | Unigram | Monospace |
+| **Ctrl+Shift+P** | Unigram | Spoiler |
+| **Ctrl+Shift+N** | Unigram | Null / Plain Text |
+
+### Pastas
+
+| Atalho | Categoria | Ação |
+|---|---|---|
+| **Ctrl+1** | Unigram | First folder (All chats) |
+| **Ctrl+2** | Unigram | Second folder |
+| **Ctrl+3** | Unigram | Third folder |
+| **Ctrl+4** | Unigram | Fourth folder |
+| **Ctrl+5** | Unigram | Fifth folder |
+| **Ctrl+6** | Unigram | Sixth folder |
+| **Ctrl+7** | Unigram | Seventh folder |
+| **Ctrl+8** | Unigram | Eighth folder |
+| **Ctrl+9** | Unigram | Archive |
+
+### Ações de mensagens
+
+| Atalho | Categoria | Ação |
+|---|---|---|
+| **Space** | UnigramPlus | Play or stop the focused voice or video message, or open media attached to the message |
+| **Ctrl+C** | UnigramPlus | Copy the message if it contains text. If the focus is on a link, the link will be copied |
+| **ALT+Q** | UnigramPlus | Pressione o botão "Visão instantânea", se estiver contido na mensagem actual |
+| **ALT+Delete** | UnigramPlus | Excluir uma mensagem ou conversa |
+| **Shift+Delete** | UnigramPlus | Excluir mensagem ou conversa de ambos os lados |
+| **Ctrl+ALT+C** | UnigramPlus | Abrir comentários |
+| **Enter** | UnigramPlus | Responder à mensagem |
+| **ALT+F** | UnigramPlus | Encaminhar mensagem |
+| **Backspace** | UnigramPlus | Editar mensagem |
+| **ALT+Shift+R** | UnigramPlus | Marcar conversa como lida |
+| **Ctrl+Space** | UnigramPlus | Alternar para o modo de seleção |
+| **Unassigned** | UnigramPlus | Salvar arquivo como... |
+| **Unassigned** | UnigramPlus | Pin a message or chat |
+| **Left Arrow** | UnigramPlus | Announce the original message, the message that was replied to |
+| **Right Arrow** | UnigramPlus | Move to the next media attachment in the focused message |
+| **ALT+C** | UnigramPlus | Show message text in popup window |
+| **ALT+W** | UnigramPlus | Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information. |
+| **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
+| **Ctrl+Shift+A** | UnigramPlus | Press "Attach file" button |
+| **Ctrl+N** | UnigramPlus | Press "New conversation" button |
+| **Arrow Up** | Unigram | Edit last sent message |
+| **Ctrl+Arrow Up** | Unigram | Reply to last sent message |
+| **Esc / Alt+Arrow Left** | Unigram | Go back |
+| **Alt+Arrow Right** | Unigram | Redo go back |
+
+### Mensagens de voz e mídia
+
+| Atalho | Categoria | Ação |
+|---|---|---|
+| **ALT+P** | UnigramPlus | Reproduzir/pausar a mensagem de voz que está actualmente a tocar |
+| **ALT+S** | UnigramPlus | Aumentar/diminuir a velocidade de reprodução de mensagens de voz |
+| **ALT+E** | UnigramPlus | Fechar o leitor de áudio |
+| **NVDA+ALT+R** | UnigramPlus | Convert voice message to text |
+| **Ctrl+ALT+Right Arrow** | UnigramPlus | Fast forward a voice message |
+| **Ctrl+ALT+Left Arrow** | UnigramPlus | Rewind voice message |
+
+### Gravação de mensagens
+
+| Atalho | Categoria | Ação |
+|---|---|---|
+| **Ctrl+R** | Unigram | Start record |
+| **Ctrl+R (again)** | Unigram | Send recorded |
+| **Ctrl+D** | Unigram | Stop recording |
+| **Space (while recording) / Ctrl+P** | Unigram | Pause recording |
+| **Ctrl+R** | UnigramPlus | Start or stop recording a voice message |
+| **Ctrl+D** | UnigramPlus | Press once to cancel voice-message recording; press twice to change the recording notification type |
+
+### Chamadas
+
+| Atalho | Categoria | Ação |
+|---|---|---|
+| **Ctrl+Home** | Unigram | Accept incoming call |
+| **Ctrl+End** | Unigram | Reject incoming call |
+| **Ctrl+Page Up** | Unigram | Toggle camera |
+| **Ctrl+Page Down** | Unigram | Toggle microphone |
+| **ALT+Shift+C** | UnigramPlus | Telefonar se for um contacto ou entrar na conversação de voz se for um grupo |
+| **ALT+Shift+V** | UnigramPlus | Pressionar o botão de videochamada |
+| **ALT+Y** | UnigramPlus | Aceitar chamada |
+| **ALT+N** | UnigramPlus | Premir botão "Declinar chamada" se houver uma chamada recebida, botão "Terminar chamada" se uma chamada estiver em curso ou deixar conversa por voz se estiver activa. |
+| **ALT+A** | UnigramPlus | Pressionar o botão "Activar/desactivar microfone" |
+| **ALT+V** | UnigramPlus | Pressionar o botão "Activar/desactivar câmera |
+
+### Outros atalhos
+
+| Atalho | Categoria | Ação |
+|---|---|---|
+| **Ctrl+0** | Unigram | Saved messages |
+| **Ctrl+W** | Unigram | Close current window |
+| **Ctrl+Q** | Unigram | Close Unigram (main window only) |
+| **Ctrl+Shift+Y** | Unigram | Change status |
+| **ALT+T** | UnigramPlus | Anunciar o nome e o status de uma conversa aberta |
+| **ALT+M** | UnigramPlus | Abrir menu de navegação |
+| **ALT+Shift+P** | UnigramPlus | Abrir o perfil da conversa atual |
+| **ALT+L** | UnigramPlus | Enable automatic reading of new messages in the current chat |
+| **ALT+H** | UnigramPlus | Show a list of all UnigramPlus shortcuts |
+| **ALT+U** | UnigramPlus | Alternar anúncios da barra de progresso |
+| **ALT+Shift+L** | UnigramPlus | Copiar dados de transmissão para a área de transferência |
+| **NVDA+ALT+U** | UnigramPlus | Open UnigramPlus settings window |
+<!-- shortcut-table-end -->
 
 ## Lista de alterações:
 
 ### Versão 5.5.7
 
+* A seção de atalhos de teclado foi reorganizada em tabelas por categoria e agora combina os atalhos do Unigram e do UnigramPlus.
 * Ao gravar uma mensagem de voz ou de vídeo, o NVDA agora anuncia "Gravando uma mensagem de voz" ou "Gravando uma mensagem de vídeo" junto com o tempo decorrido, em vez de "Tn voice message".
 
 ### Versão 5.5.6

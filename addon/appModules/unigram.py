@@ -30,6 +30,7 @@ sys.path.insert(0, ".")
 from .data import *
 from .text_window import *
 from .cnf import conf, lang
+from .readme_shortcuts import extractShortcutText  # noqa: E402
 
 baseDir = os.path.join(os.path.dirname(__file__), "media\\")
 _telegramDesktopFallbackClass = None
@@ -2099,13 +2100,7 @@ class AppModule(appModuleHandler.AppModule):
 		# We replace the file extension, because we need an md file
 		a = a[:-4]+"md"
 		with open(a, "r", encoding="utf-8") as file:
-			text = file.read()
-		blocks = text.split("\n\n")
-		count_rows = [len(item.split("\n")) for item in blocks]
-		index = count_rows.index(max(count_rows))
-		text = blocks[index]
-		text = text.replace("* ", "")
-		text = text.replace("## ", "")
+			text = extractShortcutText(file.read())
 		TextWindow(text.strip(), _("List of shortcuts"), readOnly=True)
 
 

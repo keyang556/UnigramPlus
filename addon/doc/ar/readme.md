@@ -29,60 +29,160 @@
 إذا كنت تحب هذه الإضافة ولديك الرغبة ، والأهم من ذلك ، الفرصة ، لدعم المطور ماليًا وبالتالي تحفيزه على تطوير هذه الإضافة، يمكنك القيام بذلك عن طريق تحويل مبلغ صغير إلى التفاصيل التالية: [رابط التبرع](https://unigramplus.diaka.ua/donate), أو رقم البطاقة  5169360009004502(Ukraine).
 وتذكر أن كل من قرأ هذا السطر يعتقد أن شخصًا ما سيدعم المطور بالتأكيد ، لكنه لن يكون أنا.
 
+<!-- shortcut-table-start -->
 ## قائمة مفاتيح الاختصارات
 
-* ALT+1: نقل التركيز إلى قائمة الدردشات;
-* ALT+2: نقل التركيز إلى آخر رسالة في الدردشة المفتوحة;
-* ALT+3: نقل التركيز إلى تصنيف الرسائل غير المقروءة;
-* ALT+D: نقل التركيز إلى حقل التحرير. إذا كان التركيز موجودًا بالفعل في حقل التحرير ، فبعد الضغط على مفتاح الاختصار، سينتقل إلى حيث كان من قبل;
-* ALT+T: يعلن عن اسم وحالة الدردشة المفتوحة;
-* space: تشغيل/إيقاف الرسالة الصوتية أو رسالة الفيديو التي يتم التركيز عليها، أو فتح ملف وسائط مرفق بالرسالة الحالية;
-* ALT+P: تشغيل/إيقاف مؤقت للرسالة الصوتية قيد التشغيل حاليًا;
-* ALT+S: زيادة/تقليل سرعة تشغيل الرسائل الصوتية;
-* ALT+E: أغلاق مشغل الصوت;
-* control+C: نسخ الرسالة إذا كانت تحتوي على نص. إذا كان التركيز على رابط، فسيتم نسخ الرابط.
-* ALT+shift+C: إجراء مكالمة إذا كانت جهة اتصال، أو الانضمام إلى دردشة صوتية إذا كانت مجموعة;
-* ALT+shift+V: الضغط على زر مكالمة فيديو;
-* ALT+Y: قبول مكالمة;
-* ALT+N: الضغط على زر "رفض المكالمة" إذا كانت هناك مكالمة واردة، أو الضغط على زر "إنهاء المكالمة" إذا كانت مكالمة جارية، أو مغادرة الدردشة إذا كانت نشطة;
-* ALT+A: الضغط على زر "كتم/إلغاء كتم صوت الميكروفون";
-* ALT+V: الضغط على زر "تمكين/تعطيل الكاميرا";
-* ALT+Q: الضغط على زر "عرض فوري"، إذا كان مضمنًا في الرسالة الحالية;
-* ALT+M: فتح قائمة التنقل;
-* control+R: بدء أو إيقاف تسجيل الرسالة الصوتية;
-* control+D: إذا تم الضغط عليه مرة واحدة، يتم إلغاء تسجيل الرسالة الصوتية. في حالة الضغط عليه مرتين، يقوم بتغيير نوع الإشعار عند بدء تسجيل رسالة صوتية أو إرسالها أو إلغائها;
-* ALT+U: تبديل إعلان شريط التقدم;
-* control+P: فتح ملف الدردشة الحالية;
-* delete: حذف رسالة أو دردشة;
-* shift+delete: حذف الرسالة أو الدردشة للطرفين
-* control+ALT+C: فتح التعليقات;
-* Enter: الرد على رسالة;
-* ALT+F: إعادة توجيه رسالة;
-* backspace: تعديل رسالة;
-* ALT+shift+R: وضع علامة على الدردشة كمقروءة;
-* control+space: التبديل إلى وضع التحديد;
-* ALT+shift+L: نسخ بيانات البث المباشر إلى الحافظة;
-* ALT+C: إظهار نص الرسالة في نافذة منبثقة.
-* NVDA+ALT+U: فتح نافذة إعدادات UnigramPlus
-* ALT+4: نقل التركيز إلى قائمة مجلدات الدردشات.
-* control+shift+A: الضغط على زر "إرفاق ملف".
-* control+N: الضغط على زر "دردشة جديدة".
-* غير محدد: تثبيت دردشة أو رسالة.
-* ALT+5: نقل التركيز إلى الملف الشخصي المفتوح.
-* ALT+L: تمكين القراءة التلقائية للرسائل الجديدة في الدردشة الحالية.
-* NVDA+ALT+R: تحويل الرسالة الصوتية إلى نص.
-* Left arrow: يعلن عن الرسالة الأصلية، الرسالة التي تم الرد عليها. يؤدي ضغطه مرتين إلى نقل التركيز إلى تلك الرسالة.
-* ALT+6: نقل التركيز إلى موضوعات المجموعة.
-* ALT+H: عرض قائمة بجميع اختصارات UnigramPlus.
-* ALT+I: فتح قائمة لنتائج البحث في الدردشة.
-* shift+F3: الانتقال إلى نتيجة البحث السابقة في الدردشة.
-* F3: الانتقال إلى نتيجة البحث التالية في الدردشة.
-* ALT+W: الإعلان عن وقت إرسال أو استلام الرسالة، بالإضافة إلى قائمة التفاعلات. وعند الضغط عليه مرتين يتم التبديل بين تعطيل أو تفعيل قراءة المعلومات.
+> In the Category column, `UnigramPlus` identifies shortcuts provided by the add-on and `Unigram` identifies shortcuts built into Unigram.
+
+> [!TIP]
+> You can customize UnigramPlus shortcuts from NVDA menu > Preferences > Input gestures.
+
+### التنقل بين الدردشات
+
+| الاختصار | الفئة | الإجراء |
+|---|---|---|
+| **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
+| **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **ALT+1** | UnigramPlus | نقل التركيز إلى قائمة الدردشات |
+| **ALT+2** | UnigramPlus | نقل التركيز إلى الرسالة الأخيرة في الدردشة |
+| **ALT+3** | UnigramPlus | نقل التركيز إلى تصنيف "الرسائل غير المقروءة" |
+| **ALT+4** | UnigramPlus | الإنتقال إلى مجلد قائمة المحادثات |
+| **ALT+5** | UnigramPlus | نقل التركيز لفتح الملف الشخصي |
+| **ALT+6** | UnigramPlus | نقل التركيز إلى قائمة مواضيع المجموعة |
+| **ALT+D** | UnigramPlus | نقل التركيز إلى حقل كتابة الرسائل. إذا كان التركيز موجودًا بالفعل في هذا الحقل، فبعد الضغط على مفاتيح الاختصار هذه سينتقل إلى حيث كان سابقًا |
+| **ALT+End** | UnigramPlus | الذهاب إلى التفاعل التالي |
+
+### البحث
+
+| الاختصار | الفئة | الإجراء |
+|---|---|---|
+| **Ctrl+E** | Unigram | Chat search |
+| **Ctrl+F** | Unigram | Messages search per chat |
+| **ALT+I** | UnigramPlus | الانتقال إلى القائمة التي تحتوي على نتائج البحث |
+| **F3** | UnigramPlus | الانتقال إلى نتيجة البحث التالية |
+| **Shift+F3** | UnigramPlus | الانتقال إلى نتيجة البحث السابقة |
+
+### النص المحدد في منطقة الكتابة
+
+| الاختصار | الفئة | الإجراء |
+|---|---|---|
+| **Ctrl+Z** | Unigram | Undo |
+| **Ctrl+Y** | Unigram | Redo |
+| **Ctrl+X** | Unigram | Cut |
+| **Ctrl+C** | Unigram | Copy |
+| **Ctrl+V** | Unigram | Paste |
+| **Ctrl+A** | Unigram | Select All |
+| **Ctrl+B** | Unigram | Bold |
+| **Ctrl+I** | Unigram | Italic |
+| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+Shift+X** | Unigram | Strikethrough |
+| **Ctrl+Shift+M** | Unigram | Monospace |
+| **Ctrl+Shift+P** | Unigram | Spoiler |
+| **Ctrl+Shift+N** | Unigram | Null / Plain Text |
+
+### المجلدات
+
+| الاختصار | الفئة | الإجراء |
+|---|---|---|
+| **Ctrl+1** | Unigram | First folder (All chats) |
+| **Ctrl+2** | Unigram | Second folder |
+| **Ctrl+3** | Unigram | Third folder |
+| **Ctrl+4** | Unigram | Fourth folder |
+| **Ctrl+5** | Unigram | Fifth folder |
+| **Ctrl+6** | Unigram | Sixth folder |
+| **Ctrl+7** | Unigram | Seventh folder |
+| **Ctrl+8** | Unigram | Eighth folder |
+| **Ctrl+9** | Unigram | Archive |
+
+### إجراءات الرسائل
+
+| الاختصار | الفئة | الإجراء |
+|---|---|---|
+| **Space** | UnigramPlus | Play or stop the focused voice or video message, or open media attached to the message |
+| **Ctrl+C** | UnigramPlus | نسخ الرسالة إذا كانت تحتوي على نص. إذا كان التركيز على رابط، فسيتم نسخ الرابط |
+| **ALT+Q** | UnigramPlus | الضغط على زر "استعراض فوري" إذا كان موجودًا في الرسالة الحالية |
+| **ALT+Delete** | UnigramPlus | حذف الرسالة أو الدردشة |
+| **Shift+Delete** | UnigramPlus | حذف الرسالة أو الدردشة على كلا الجانبين |
+| **Ctrl+ALT+C** | UnigramPlus | فتح التعليقات |
+| **Enter** | UnigramPlus | الرَدُّ على الرسالة |
+| **ALT+F** | UnigramPlus | تحويل الرسالة |
+| **Backspace** | UnigramPlus | تعديلُ الرسالة |
+| **ALT+Shift+R** | UnigramPlus | تعليم الدردشة كمقروءة |
+| **Ctrl+Space** | UnigramPlus | التبديل إلى وضع التحديد |
+| **Unassigned** | UnigramPlus | حفظ الملف بإسم... |
+| **Unassigned** | UnigramPlus | تثبيت رسالة أو دردشة |
+| **Left Arrow** | UnigramPlus | قراءة الرسالة الأصلية التي تم الرد عليها |
+| **Right Arrow** | UnigramPlus | Move to the next media attachment in the focused message |
+| **ALT+C** | UnigramPlus | إظهار نص الرسالة في نافذة منبثقة |
+| **ALT+W** | UnigramPlus | Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information. |
+| **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
+| **Ctrl+Shift+A** | UnigramPlus | الضغط على زر "إرفاق ملف" |
+| **Ctrl+N** | UnigramPlus | الضغط على زر "محادثة جديدة" |
+| **Arrow Up** | Unigram | Edit last sent message |
+| **Ctrl+Arrow Up** | Unigram | Reply to last sent message |
+| **Esc / Alt+Arrow Left** | Unigram | Go back |
+| **Alt+Arrow Right** | Unigram | Redo go back |
+
+### الرسائل الصوتية والوسائط
+
+| الاختصار | الفئة | الإجراء |
+|---|---|---|
+| **ALT+P** | UnigramPlus | قم بتشغيل / إيقاف الرسالة الصوتية قيد التشغيل حاليًّا |
+| **ALT+S** | UnigramPlus | زيادة / تقليل سرعة تشغيل الرسائل الصوتية |
+| **ALT+E** | UnigramPlus | إغلاق مُشَغِّل الصوتيات |
+| **NVDA+ALT+R** | UnigramPlus | تحويل الرسالة الصوتية إلى نص |
+| **Ctrl+ALT+Right Arrow** | UnigramPlus | Fast forward a voice message |
+| **Ctrl+ALT+Left Arrow** | UnigramPlus | Rewind voice message |
+
+### تسجيل الرسائل
+
+| الاختصار | الفئة | الإجراء |
+|---|---|---|
+| **Ctrl+R** | Unigram | Start record |
+| **Ctrl+R (again)** | Unigram | Send recorded |
+| **Ctrl+D** | Unigram | Stop recording |
+| **Space (while recording) / Ctrl+P** | Unigram | Pause recording |
+| **Ctrl+R** | UnigramPlus | Start or stop recording a voice message |
+| **Ctrl+D** | UnigramPlus | Press once to cancel voice-message recording; press twice to change the recording notification type |
+
+### المكالمات
+
+| الاختصار | الفئة | الإجراء |
+|---|---|---|
+| **Ctrl+Home** | Unigram | Accept incoming call |
+| **Ctrl+End** | Unigram | Reject incoming call |
+| **Ctrl+Page Up** | Unigram | Toggle camera |
+| **Ctrl+Page Down** | Unigram | Toggle microphone |
+| **ALT+Shift+C** | UnigramPlus | الاتصال إذا كانت جهة اتصال، أو الدخول إلى الدردشة الصوتية إذا كانت مجموعة |
+| **ALT+Shift+V** | UnigramPlus | الضغط على زر مكالمة مرئية |
+| **ALT+Y** | UnigramPlus | قبول المكالمة |
+| **ALT+N** | UnigramPlus | اضغط على زر "رفض المكالمة" إذا كانت هناك مكالمة واردة أو زر "إنهاء المكالمة" إذا كانت هناك مكالمة جارية أو اترك الدردشة الصوتية إذا كانت نشطة. |
+| **ALT+A** | UnigramPlus | الضغط على زر "كتم / إلغاء كتم المايكروفون" |
+| **ALT+V** | UnigramPlus | اضغط على زر "تفعيل / تعطيل الكاميرا" |
+
+### اختصارات أخرى
+
+| الاختصار | الفئة | الإجراء |
+|---|---|---|
+| **Ctrl+0** | Unigram | Saved messages |
+| **Ctrl+W** | Unigram | Close current window |
+| **Ctrl+Q** | Unigram | Close Unigram (main window only) |
+| **Ctrl+Shift+Y** | Unigram | Change status |
+| **ALT+T** | UnigramPlus | الإعلان عن اسم وحالة الدردشة المفتوحة حاليًّا |
+| **ALT+M** | UnigramPlus | فتح قائمة التنقل |
+| **ALT+Shift+P** | UnigramPlus | فتح ملف تعريف الدردشة الحالية |
+| **ALT+L** | UnigramPlus | تمكين القراءة التلقائية للرسائل الجديدة في الدردشة الحالية |
+| **ALT+H** | UnigramPlus | عرض قائمة بجميع اختصارات UnigramPlus |
+| **ALT+U** | UnigramPlus | تبديل إعلانات شريط التقدم |
+| **ALT+Shift+L** | UnigramPlus | نَسْخُ بيانات إجراء البث إلى الحافظة |
+| **NVDA+ALT+U** | UnigramPlus | فتح نافذة إعدادات UnigramPlus |
+<!-- shortcut-table-end -->
 
 ## قائمة التغييرات:
 
 ### الإصدار 5.5.7
 
+* أُعيد تنظيم قسم اختصارات لوحة المفاتيح في جداول مصنفة، ودُمجت اختصارات Unigram وUnigramPlus.
 * عند تسجيل رسالة صوتية أو مرئية، يعلن NVDA الآن "جارٍ تسجيل رسالة صوتية" أو "جارٍ تسجيل رسالة مرئية" مع الوقت المنقضي، بدلاً من "Tn voice message".
 
 ### الإصدار 5.5.6

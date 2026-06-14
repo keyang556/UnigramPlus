@@ -27,63 +27,160 @@ Sunetele UnigramPlus se află în folderul `appModules\media` al suplimentului. 
 ##Informații despre posibilitatea de a face donații către dezvoltator:
 Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai important, posibilitatea de a sprijini financiar dezvoltatorul și, astfel, de a-l motiva să dezvolte în continuare acest add-on, poți face acest lucru transferând o sumă mică la următoarele detalii bancare: [link de donații](https://unigramplus.diaka.ua/donate), sau numărul de card este 5169360009004502(Ucraina).
 
-##Lista de taste rapide:
-* ALT+1: Mută focalizarea pe lista de chat-uri;
-* ALT+2: Mută focalizarea pe ultimul mesaj dintr-un chat deschis;
-* ALT+3: Mută focalizarea pe mesajele necitite;
-* ALT+D: Mută focalizarea pe câmpul de editare. Dacă focalizarea se află deja în câmpul de editare, după apăsarea tastei rapide, se va muta în locul în care se afla înainte;
-* ALT+T: Anunță numele și starea unui chat deschis;
-* spațiu: Redă/oprește mesajul vocal sau video pe care ești focalizat sau deschide un fișier media atașat la mesajul curent;
-* ALT+P: Redă/oprește mesajul vocal în curs de redare;
-* ALT+S: Crește/micșorează viteza de redare a mesajelor vocale;
-* ALT+E: Închide playerul audio;
-* control+C: Copiază mesajul, dacă acesta conține text. Dacă focalizarea este pusă pe un link, acesta va fi copiat;
-* ALT+shift+C: sună dacă este vorba de un contact sau intră într-un chat vocal dacă este vorba de un grup;
-* ALT+shift+V: sună contactul cu video;
-* ALT+Y: Acceptă apelul;
-* ALT+N: Apasă butonul \"Decline call\" (Refuză apelul) dacă există un apel primit, butonul \"End call\" (Termină apelul) dacă apelul este în curs de desfășurare sau părăsește chat-ul vocal dacă acesta este activ;
-* ALT+A: Scoate sau pune microfonul pe mut;
-* ALT+C: Pornește sau oprește camera;
-* ALT+Q: Apasă butonul \"Vizualizare instantanee\", dacă este inclus în mesajul curent;
-* ALT+O: Apasă butonul "Mai multe opțiuni" într-o fereastră deschisă de chat, chat vocal sau apel;
-* ALT+M: Deschide meniul de navigare;
-* control+R: Începe/oprește înregistrarea mesajelor vocale;
-* control+D: Dacă este apăsat o dată, anulează înregistrarea unui mesaj vocal. Dacă este apăsat de două ori, schimbă tipul de notificare la începerea, trimiterea sau anularea înregistrării unui mesaj vocal;
-* ALT+U: Comută anunțurile din bara de progres;
-* control+P: Deschide profilul de chat curent;
-* delete: Șterge un mesaj sau un chat;
-* shift+delete: Șterge mesajul sau chat-ul din ambele părți;
-* control+ALT+C: Deschide comentariile;
-* Nealocat: Răspunde la mesaj;
-* ALT+F: Redirecționează mesajul;
-* Nealocat: Editează mesajul;
-* ALT+shift+R: Marchează un chat ca fiind citit;
-* control+spațiu: Treci la modul de selecție;
-* control+shift+C: Copiază mesajele cu formatarea păstrată;
-* ALT+shift+L: Copiază datele pentru difuzare în clipboard;
-* control+ALT+săgeată dreapta: Derulează înainte un mesaj vocal.
-* control+ALT+săgeată stânga: Derulează înapoi mesajul vocal.
-* ALT+C: Afișează textul mesajului într-o fereastră popup.
-* NVDA+control+U: Deschide fereastra de setări UnigramPlus
-* ALT+4: Mută focalizarea pe lista de dosare de chat.
-* control+shift+A: Atașează un fișier.
-* control+N: Începe un chat nou.
-* Nealocat: Fixează un mesaj sau un chat.
-* ALT+T: Anunță numele și starea unui chat deschis.
-* ALT+L: Convertește un mesaj vocal în text.
-* Săgeată stânga: Anunță mesajul original, cel la care s-a răspuns.
-* ALT+6: Focalizează-te pe lista de subiecte de grup.
-* ALT+H: Afișează o listă a tuturor scurtăturilor UnigramPlus.
+<!-- shortcut-table-start -->
+## Lista de taste rapide:
 
-### Notă
+> In the Category column, `UnigramPlus` identifies shortcuts provided by the add-on and `Unigram` identifies shortcuts built into Unigram.
 
-* Toate tastele rapide pot fi realocate în meniul NVDA>preferințe>gesturi de introducere a datelor.
-* Faptul că funcția care focalizează cursorul pe eticheta "mesaj necitit" poate reacționa uneori cu întârziere este o problemă cunoscută. Acest lucru poate depinde de numărul de mesaje necitite în acel moment.
+> [!TIP]
+> You can customize UnigramPlus shortcuts from NVDA menu > Preferences > Input gestures.
+
+### Navigare între conversații
+
+| Scurtătură | Categorie | Acțiune |
+|---|---|---|
+| **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
+| **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **ALT+1** | UnigramPlus | Mută focalizarea pe lista chat-urilor |
+| **ALT+2** | UnigramPlus | Mută focalizarea la ultimul mesaj dintr-un chat deschis |
+| **ALT+3** | UnigramPlus | Mută focalizarea pe eticheta "Mesaje necitite" |
+| **ALT+4** | UnigramPlus | Mută focalizarea la lista de foldere de chat |
+| **ALT+5** | UnigramPlus | Mută focalizarea pe profilul deschis |
+| **ALT+6** | UnigramPlus | Focalizează-te pe lista cu subiectele grupului |
+| **ALT+D** | UnigramPlus | Focalizează-te în câmpul de editare. Dacă deja ești focalizat în câmpul de editare, atunci, după apăsarea acestei scurtături, te vei focaliza în locul în care erai înainte. |
+| **ALT+End** | UnigramPlus | Go to the end |
+
+### Căutare
+
+| Scurtătură | Categorie | Acțiune |
+|---|---|---|
+| **Ctrl+E** | Unigram | Chat search |
+| **Ctrl+F** | Unigram | Messages search per chat |
+| **ALT+I** | UnigramPlus | Go to the list with search results |
+| **F3** | UnigramPlus | Go to the next search result |
+| **Shift+F3** | UnigramPlus | Go to the previous search result |
+
+### Text selectat în zona de tastare
+
+| Scurtătură | Categorie | Acțiune |
+|---|---|---|
+| **Ctrl+Z** | Unigram | Undo |
+| **Ctrl+Y** | Unigram | Redo |
+| **Ctrl+X** | Unigram | Cut |
+| **Ctrl+C** | Unigram | Copy |
+| **Ctrl+V** | Unigram | Paste |
+| **Ctrl+A** | Unigram | Select All |
+| **Ctrl+B** | Unigram | Bold |
+| **Ctrl+I** | Unigram | Italic |
+| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+Shift+X** | Unigram | Strikethrough |
+| **Ctrl+Shift+M** | Unigram | Monospace |
+| **Ctrl+Shift+P** | Unigram | Spoiler |
+| **Ctrl+Shift+N** | Unigram | Null / Plain Text |
+
+### Dosare
+
+| Scurtătură | Categorie | Acțiune |
+|---|---|---|
+| **Ctrl+1** | Unigram | First folder (All chats) |
+| **Ctrl+2** | Unigram | Second folder |
+| **Ctrl+3** | Unigram | Third folder |
+| **Ctrl+4** | Unigram | Fourth folder |
+| **Ctrl+5** | Unigram | Fifth folder |
+| **Ctrl+6** | Unigram | Sixth folder |
+| **Ctrl+7** | Unigram | Seventh folder |
+| **Ctrl+8** | Unigram | Eighth folder |
+| **Ctrl+9** | Unigram | Archive |
+
+### Acțiuni pentru mesaje
+
+| Scurtătură | Categorie | Acțiune |
+|---|---|---|
+| **Space** | UnigramPlus | Play or stop the focused voice or video message, or open media attached to the message |
+| **Ctrl+C** | UnigramPlus | Copiază mesajul dacă acesta conține text. Dacă ești focalizat pe un link, acesta va fi copiat. |
+| **ALT+Q** | UnigramPlus | Apasă butonul "Instant View", dacă este inclus în mesajul curent |
+| **ALT+Delete** | UnigramPlus | Șterge un mesaj sau un chat |
+| **Shift+Delete** | UnigramPlus | Șterge mesajul sau chat-ul din ambele părți |
+| **Ctrl+ALT+C** | UnigramPlus | Deschide comentariile |
+| **Enter** | UnigramPlus | Răspunde la mesaj |
+| **ALT+F** | UnigramPlus | Redirecționează mesaj |
+| **Backspace** | UnigramPlus | Editare mesaj |
+| **ALT+Shift+R** | UnigramPlus | Marchează un chat ca citit |
+| **Ctrl+Space** | UnigramPlus | Comută la modul de selectare |
+| **Unassigned** | UnigramPlus | Salvează fișierul ca... |
+| **Unassigned** | UnigramPlus | Fixează un mesaj sau un chat |
+| **Left Arrow** | UnigramPlus | Anunță mesajul original, cel la care s-a răspuns |
+| **Right Arrow** | UnigramPlus | Move to the next media attachment in the focused message |
+| **ALT+C** | UnigramPlus | Afișează textul mesajului într-o fereastră popup |
+| **ALT+W** | UnigramPlus | Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information. |
+| **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
+| **Ctrl+Shift+A** | UnigramPlus | Apasă butonul de atașare |
+| **Ctrl+N** | UnigramPlus | Apasă butonul de chat nou |
+| **Arrow Up** | Unigram | Edit last sent message |
+| **Ctrl+Arrow Up** | Unigram | Reply to last sent message |
+| **Esc / Alt+Arrow Left** | Unigram | Go back |
+| **Alt+Arrow Right** | Unigram | Redo go back |
+
+### Mesaje vocale și media
+
+| Scurtătură | Categorie | Acțiune |
+|---|---|---|
+| **ALT+P** | UnigramPlus | Pune pe pauză sau reia mesajul vocal care se redă acum |
+| **ALT+S** | UnigramPlus | Mărește sau micșorează viteza de redare a mesajelor vocale |
+| **ALT+E** | UnigramPlus | Închide playerul audio |
+| **NVDA+ALT+R** | UnigramPlus | Convertește acest mesaj în text |
+| **Ctrl+ALT+Right Arrow** | UnigramPlus | Avansarea rapidă a unui mesaj vocal |
+| **Ctrl+ALT+Left Arrow** | UnigramPlus | Derulare înapoi a mesajului vocal |
+
+### Înregistrarea mesajelor
+
+| Scurtătură | Categorie | Acțiune |
+|---|---|---|
+| **Ctrl+R** | Unigram | Start record |
+| **Ctrl+R (again)** | Unigram | Send recorded |
+| **Ctrl+D** | Unigram | Stop recording |
+| **Space (while recording) / Ctrl+P** | Unigram | Pause recording |
+| **Ctrl+R** | UnigramPlus | Start or stop recording a voice message |
+| **Ctrl+D** | UnigramPlus | Press once to cancel voice-message recording; press twice to change the recording notification type |
+
+### Apeluri
+
+| Scurtătură | Categorie | Acțiune |
+|---|---|---|
+| **Ctrl+Home** | Unigram | Accept incoming call |
+| **Ctrl+End** | Unigram | Reject incoming call |
+| **Ctrl+Page Up** | Unigram | Toggle camera |
+| **Ctrl+Page Down** | Unigram | Toggle microphone |
+| **ALT+Shift+C** | UnigramPlus | Apelează dacă este vorba de un contact sau intră într-un chat vocal dacă este vorba de un grup |
+| **ALT+Shift+V** | UnigramPlus | Apasă butonul de apelare video |
+| **ALT+Y** | UnigramPlus | Răspunde la apel |
+| **ALT+N** | UnigramPlus | Apasă butonul "Decline call" (Refuz apel) dacă există un apel primit, butonul "End call" (Terminare apel) dacă un apel qeste în desfășurare sau părăsește chat-ul vocal dacă acesta este activ. |
+| **ALT+A** | UnigramPlus | Apasă butonul "Mute/unmute microfon" |
+| **ALT+V** | UnigramPlus | Apasă butonul de comutare a camerei |
+
+### Alte scurtături
+
+| Scurtătură | Categorie | Acțiune |
+|---|---|---|
+| **Ctrl+0** | Unigram | Saved messages |
+| **Ctrl+W** | Unigram | Close current window |
+| **Ctrl+Q** | Unigram | Close Unigram (main window only) |
+| **Ctrl+Shift+Y** | Unigram | Change status |
+| **ALT+T** | UnigramPlus | Anunță numele și starea unui chat deschis |
+| **ALT+M** | UnigramPlus | Deschide meniul de navigare |
+| **ALT+Shift+P** | UnigramPlus | Deschide profilul de chat curent |
+| **ALT+L** | UnigramPlus | Activează citirea automată a mesajelor într-un chat |
+| **ALT+H** | UnigramPlus | Afișează o listă cu toate comenzile rapide UnigramPlus |
+| **ALT+U** | UnigramPlus | Comută enunțarea barelor de progres |
+| **ALT+Shift+L** | UnigramPlus | Copiază datele pentru difuzare în clipboard |
+| **NVDA+ALT+U** | UnigramPlus | Deschide setările UnigramPlus |
+<!-- shortcut-table-end -->
 
 ##Lista de modificări:
 
 ### Versiunea 5.5.7
 
+* Secțiunea de scurtături de tastatură a fost reorganizată în tabele pe categorii și combină scurtăturile Unigram și UnigramPlus.
 * La înregistrarea unui mesaj vocal sau video, NVDA anunță acum "Se înregistrează un mesaj vocal" sau "Se înregistrează un mesaj video" împreună cu timpul scurs, în loc de "Tn voice message".
 
 ### Versiunea 5.5.6

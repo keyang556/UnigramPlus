@@ -27,53 +27,154 @@
 ##اطلاعات در مورد فرصت اهدا به توسعه دهنده:
 اگر واقعاً این افزونه را دوست دارید و تمایل و مهمتر از همه این فرصت را دارید که از توسعه دهنده حمایت مالی کنید و از این طریق او را برای توسعه بیشتر این افزونه ترغیب کنید، می توانید با واریز مبلغ ناچیزی به بانک زیر این کار را انجام دهید. جزئیات: [پیوند اهدا] (https://unigramplus.diaka.ua/donate)، یا شماره کارت 5169360009004502 (اوکراین) است.
 و به یاد داشته باشید که همه کسانی که این خط را می خوانند فکر می کردند که کسی قطعاً از توسعه دهنده حمایت می کند ، اما من نخواهم بود.
+<!-- shortcut-table-start -->
 ## لیست کلیدهای میانبر:
-* ALT+1: انتقال فوکوس به لیست چت.
-* ALT+2: انتقال فوکوس به آخرین پیام در یک چت باز.
-* ALT+3: انتقال فوکوس به برچسب "پیام های خوانده نشده".
-* ALT+D: فوکوس را به قسمت ویرایش منتقل کنید. اگر فوکوس از قبل در قسمت ویرایش باشد، پس از فشار دادن کلید میانبر، به جایی که قبلا بود منتقل می شود.
-* ALT+T: نام و وضعیت یک چت باز را اعلام کنید.
-* فضا: پخش/توقف پیام صوتی یا ویدیویی متمرکز شده، یا باز کردن یک فایل رسانه ای پیوست شده به پیام فعلی.
-* ALT+P: پخش/مکث پیام صوتی در حال پخش.
-* ALT+S: افزایش/کاهش سرعت پخش پیام های صوتی.
-* ALT+E: بستن پخش کننده صوتی.
-* control+C: اگر پیام حاوی متن باشد کپی کنید. اگر تمرکز روی یک پیوند باشد، پیوند کپی می شود.
-* ALT+shift+C: اگر مخاطب است تماس بگیرید یا اگر گروهی است وارد چت صوتی شوید.
-* ALT+shift+V: دکمه تماس ویدیویی را فشار دهید.
-* ALT+Y: پذیرش تماس.
-* ALT+N: در صورت وجود تماس ورودی، دکمه \"رد تماس\"، اگر تماس در حال انجام است دکمه \"پایان تماس\" را فشار دهید یا در صورت فعال بودن چت صوتی را ترک کنید.
-* ALT+A: دکمه \"بی‌صدا/لغو میکروفون\" را فشار دهید.
-* ALT + C: دکمه "فعال/غیرفعال کردن دوربین" را فشار دهید.
-* ALT+Q: دکمه \"نمای فوری\" را فشار دهید، اگر در پیام فعلی موجود است.
-* ALT+O: دکمه "گزینه های بیشتر" را در یک گپ باز، چت صوتی یا پنجره تماس فشار دهید.
-* ALT+M: منوی ناوبری را باز کنید.
-* control+R: شروع/توقف ضبط پیام صوتی.
-* control+D: اگر یک بار فشار داده شود، ضبط یک پیام صوتی را لغو می کند. اگر دو بار فشار داده شود، هنگام شروع، ارسال یا لغو ضبط پیام صوتی، نوع اعلان را تغییر می‌دهد.
-* ALT+U: اعلان‌های نوار پیشرفت را تغییر دهید.
-* control+P: نمایه چت فعلی را باز کنید.
-* حذف: حذف یک پیام یا چت.
-* shift+delete: پیام یا چت را از هر دو طرف حذف کنید.
-* control+ALT+C: نظرات را باز کنید.
-* تعیین نشده: پاسخ به پیام.
-* ALT+F: پیام را فوروارد کنید.
-* تعیین نشده: ویرایش پیام.
-* ALT+shift+R: علامت گذاری یک چت به عنوان خوانده شده.
-* کنترل + فضا: تغییر به حالت انتخاب.
-* control+shift+C: کپی پیام ها با قالب بندی حفظ شده.
-* ALT+shift+L: کپی داده ها برای پخش در کلیپ بورد.
-* کنترل + ALT + پیکان سمت راست: پیام صوتی را سریع به جلو بفرستید.
-* کنترل + ALT + پیکان چپ: پیام صوتی را به عقب برگردانید.
-* ALT+C: نمایش متن پیام در پنجره بازشو.
-* NVDA+control+U: پنجره تنظیمات UnigramPlus را باز کنید
-* ALT+4: فوکوس را به لیست پوشه های چت منتقل کنید.
-* control+shift+A: دکمه "Attach file" را فشار دهید.
-* control+N: دکمه «چت جدید» را فشار دهید.
-* اختصاص داده نشده: پین کردن یک پیام یا چت.
 
-### توجه داشته باشید
+> In the Category column, `UnigramPlus` identifies shortcuts provided by the add-on and `Unigram` identifies shortcuts built into Unigram.
 
-* همه کلیدهای میانبر را می توان در منوی NVDA > تنظیمات برگزیده > حرکات ورودی مجدداً اختصاص داد.
-* این واقعیت که تابعی که مکان نما را روی برچسب "پیام خوانده نشده" متمرکز می کند، گاهی اوقات می تواند با تاخیر واکنش نشان دهد، یک مسئله شناخته شده است. این ممکن است به تعداد پیام های نقدی در حال حاضر بستگی داشته باشد.
+> [!TIP]
+> You can customize UnigramPlus shortcuts from NVDA menu > Preferences > Input gestures.
+
+### پیمایش بین چت‌ها
+
+| میانبر | دسته | عملکرد |
+|---|---|---|
+| **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
+| **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **ALT+1** | UnigramPlus | قرار دادن مکان نما بر روی لیست گفت و گوها. |
+| **ALT+2** | UnigramPlus | بردن مکاننما به روی آخرین پیام در گفت و گو. |
+| **ALT+3** | UnigramPlus | بردن مکان نما به برچسب پیامهای خوانده نشده. |
+| **ALT+4** | UnigramPlus | قرار دادن مکان نما بر روی لیست پوشه‌های گفتوگوها. |
+| **ALT+5** | UnigramPlus | قرار دادن مکان نما بر روی پنجره ی پروفایل باز شده |
+| **ALT+6** | UnigramPlus | Move focus to the list of group threads |
+| **ALT+D** | UnigramPlus | بردن مکان نما به کادر ویرایش. اگر مکان نما بر روی کادر ویرایش باشد با فشار دادن کلیدهای میانبر مکان نما به همان جایی که بود برمیگردد. |
+| **ALT+End** | UnigramPlus | Go to the end |
+
+### جستجو
+
+| میانبر | دسته | عملکرد |
+|---|---|---|
+| **Ctrl+E** | Unigram | Chat search |
+| **Ctrl+F** | Unigram | Messages search per chat |
+| **ALT+I** | UnigramPlus | Go to the list with search results |
+| **F3** | UnigramPlus | Go to the next search result |
+| **Shift+F3** | UnigramPlus | Go to the previous search result |
+
+### متن انتخاب‌شده در ناحیه تایپ
+
+| میانبر | دسته | عملکرد |
+|---|---|---|
+| **Ctrl+Z** | Unigram | Undo |
+| **Ctrl+Y** | Unigram | Redo |
+| **Ctrl+X** | Unigram | Cut |
+| **Ctrl+C** | Unigram | Copy |
+| **Ctrl+V** | Unigram | Paste |
+| **Ctrl+A** | Unigram | Select All |
+| **Ctrl+B** | Unigram | Bold |
+| **Ctrl+I** | Unigram | Italic |
+| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+Shift+X** | Unigram | Strikethrough |
+| **Ctrl+Shift+M** | Unigram | Monospace |
+| **Ctrl+Shift+P** | Unigram | Spoiler |
+| **Ctrl+Shift+N** | Unigram | Null / Plain Text |
+
+### پوشه‌ها
+
+| میانبر | دسته | عملکرد |
+|---|---|---|
+| **Ctrl+1** | Unigram | First folder (All chats) |
+| **Ctrl+2** | Unigram | Second folder |
+| **Ctrl+3** | Unigram | Third folder |
+| **Ctrl+4** | Unigram | Fourth folder |
+| **Ctrl+5** | Unigram | Fifth folder |
+| **Ctrl+6** | Unigram | Sixth folder |
+| **Ctrl+7** | Unigram | Seventh folder |
+| **Ctrl+8** | Unigram | Eighth folder |
+| **Ctrl+9** | Unigram | Archive |
+
+### عملیات پیام
+
+| میانبر | دسته | عملکرد |
+|---|---|---|
+| **Space** | UnigramPlus | Play or stop the focused voice or video message, or open media attached to the message |
+| **Ctrl+C** | UnigramPlus | اگر در پیام متن وجود دارد, پیام را کپی کن. اگر مکاننما روی لینک قرار دارد, آن لینک کپی خواهد شد. |
+| **ALT+Q** | UnigramPlus | فشار دادن دکمه ی مشاهده ی سریع اگر در این پیام موجود باشد. |
+| **ALT+Delete** | UnigramPlus | پاک کردن پیام یا گفتوگو. |
+| **Shift+Delete** | UnigramPlus | پاک کردن پیام یا گفتوگو برای دو طرف. |
+| **Ctrl+ALT+C** | UnigramPlus | باز کردن بخش نظرات. |
+| **Enter** | UnigramPlus | پاسخ بده به پیام. |
+| **ALT+F** | UnigramPlus | پیام را هدایت کن. |
+| **Backspace** | UnigramPlus | پیام را ویرایش کن. |
+| **ALT+Shift+R** | UnigramPlus | مارک کن گفتوگو را به حالت خوانده شده. |
+| **Ctrl+Space** | UnigramPlus | حالت را به حالت انتخاب تغییر بده. |
+| **Unassigned** | UnigramPlus | زخیره ی فایل به عنوان |
+| **Unassigned** | UnigramPlus | سنجاق کردن پیام یا گفتوگو. |
+| **Left Arrow** | UnigramPlus | Announce the original message, the message that was replied to |
+| **Right Arrow** | UnigramPlus | Move to the next media attachment in the focused message |
+| **ALT+C** | UnigramPlus | متن پیام را در پنجره نمایش بده. |
+| **ALT+W** | UnigramPlus | Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information. |
+| **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
+| **Ctrl+Shift+A** | UnigramPlus | فشار دادن دکمه "ضمیمه کردن رسانه" |
+| **Ctrl+N** | UnigramPlus | فشار دادن دکمه "گفتگوی جدید " |
+| **Arrow Up** | Unigram | Edit last sent message |
+| **Ctrl+Arrow Up** | Unigram | Reply to last sent message |
+| **Esc / Alt+Arrow Left** | Unigram | Go back |
+| **Alt+Arrow Right** | Unigram | Redo go back |
+
+### پیام‌های صوتی و رسانه
+
+| میانبر | دسته | عملکرد |
+|---|---|---|
+| **ALT+P** | UnigramPlus | پخش / توقف پیام صوتی که در حال حاضر در حال پخش شدن است. |
+| **ALT+S** | UnigramPlus | افزایش/کاهش سرعت پیام صوتی. |
+| **ALT+E** | UnigramPlus | بستن پخش کننده ی صدا. |
+| **NVDA+ALT+R** | UnigramPlus | Convert voice message to text |
+| **Ctrl+ALT+Right Arrow** | UnigramPlus | پیام را هدایت کن. |
+| **Ctrl+ALT+Left Arrow** | UnigramPlus | پیام صوتی را عقب میبرد. |
+
+### ضبط پیام
+
+| میانبر | دسته | عملکرد |
+|---|---|---|
+| **Ctrl+R** | Unigram | Start record |
+| **Ctrl+R (again)** | Unigram | Send recorded |
+| **Ctrl+D** | Unigram | Stop recording |
+| **Space (while recording) / Ctrl+P** | Unigram | Pause recording |
+| **Ctrl+R** | UnigramPlus | Start or stop recording a voice message |
+| **Ctrl+D** | UnigramPlus | Press once to cancel voice-message recording; press twice to change the recording notification type |
+
+### تماس‌ها
+
+| میانبر | دسته | عملکرد |
+|---|---|---|
+| **Ctrl+Home** | Unigram | Accept incoming call |
+| **Ctrl+End** | Unigram | Reject incoming call |
+| **Ctrl+Page Up** | Unigram | Toggle camera |
+| **Ctrl+Page Down** | Unigram | Toggle microphone |
+| **ALT+Shift+C** | UnigramPlus | تماس گرفتن اگر این مخاطب باشد یا ورود کن به گفت و گوی صوتی اگر این یک گروه باشد. |
+| **ALT+Shift+V** | UnigramPlus | فشار دادن دکمه تماس تصویری. |
+| **ALT+Y** | UnigramPlus | پاسخ دادن به تماس. |
+| **ALT+N** | UnigramPlus | فشار بده دکمه ی رد تماس را اگر تماس ورودی وجود داشت پایان دادن به تماس را اگر در حال برقراری تماسی بود یا فشار بده دکمه ی ترک کردن گفت و گوی صوتی را اگر فعال بود. |
+| **ALT+A** | UnigramPlus | فشار بده دکمه ی فعال/غیر فعال کردن میکروفون را. |
+| **ALT+V** | UnigramPlus | دکمه ی "فعال/غیر فعال کردن دوربین" را فشار بده. |
+
+### سایر میانبرها
+
+| میانبر | دسته | عملکرد |
+|---|---|---|
+| **Ctrl+0** | Unigram | Saved messages |
+| **Ctrl+W** | Unigram | Close current window |
+| **Ctrl+Q** | Unigram | Close Unigram (main window only) |
+| **Ctrl+Shift+Y** | Unigram | Change status |
+| **ALT+T** | UnigramPlus | نام و وضعیت گفتوگوی باز شده را بگو |
+| **ALT+M** | UnigramPlus | باز کردن فهرست مسیریابی. |
+| **ALT+Shift+P** | UnigramPlus | باز کن پروفایل گفتوگویی را که باز است. |
+| **ALT+L** | UnigramPlus | Enable automatic reading of new messages in the current chat |
+| **ALT+H** | UnigramPlus | Show a list of all UnigramPlus shortcuts |
+| **ALT+U** | UnigramPlus | جا به جا کردن گفته شدن نوار پیشرفت. |
+| **ALT+Shift+L** | UnigramPlus | اطلاعات مورد نیاز برای استریم کردن را در کلیپ برد کپی کن. |
+| **NVDA+ALT+U** | UnigramPlus | باز کردن پنجره ی تنزیمات UnigramPlus |
+<!-- shortcut-table-end -->
 
 ##فهرست تغییرات:
 
@@ -295,6 +396,7 @@
 
 ### نسخه 5.5.7
 
+* بخش میانبرهای صفحه‌کلید در جدول‌های دسته‌بندی‌شده بازآرایی شد و میانبرهای Unigram و UnigramPlus با هم ادغام شدند.
 * هنگام ضبط پیام صوتی یا تصویری، NVDA اکنون به‌جای "Tn voice message" عبارت "در حال ضبط پیام صوتی" یا "در حال ضبط پیام تصویری" را همراه با زمان سپری‌شده اعلام می‌کند.
 
 ### نسخه 5.5.6

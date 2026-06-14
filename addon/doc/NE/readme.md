@@ -26,57 +26,154 @@
 ## Custom sounds
 UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Open NVDA Settings > UnigramPlus and press **Open UnigramPlus sounds folder** to open it. To customize a sound, copy your replacement WAV file into that folder using the same file name as the sound you want to replace, then restart NVDA or reload add-ons. Add-on updates may restore bundled sounds, so keep a backup of your custom files.
 
+<!-- shortcut-table-start -->
 ## Hotkey list:
-* ALT+1: च्याट सूचीमा फोकस सार्नुहोस्;
-* ALT+2: खुला च्याटको अन्तिम सन्देशमा फोकस सार्नुहोस्;
-* ALT+3: "नपढिएका सन्देशहरू" लेबलमा फोकस सार्नुहोस्;
-* ALT+D: सम्पादन बाकसमा फोकस सार्नुहोस्। यदि फोकस पहिले नै सम्पादन बाकसमा छ भने, हटकी थिचेपछि, यो पहिलेको स्थानमा सर्नेछ;
-* ALT+T: खुला च्याटको नाम र स्थिति घोषणा गर्नुहोस्;
-* space: फोकस गरिएको आवाज वा भिडियो सन्देश बजाउँनुहोस/रोक्नुहोस्, वा हालको सन्देशमा संलग्न मिडिया फाइल खोल्नुहोस्;
-* ALT+P: हाल चलिरहेको आवाज सन्देश बजाउँनुहोस/रोक्नुहोस।
-* ALT+S: आवाज सन्देशहरूको बज्ने गति बढाउनुहोस्/घटाउनुहोस्;
-* ALT+E: अडियो प्लेयर बन्द गर्नुहोस्;
-* control+C: लिखित सन्देस हो भने सन्देश प्रतिलिपि गर्नुहोस्। यदि फोकस लिङ्कमा छ भने, लिङ्क प्रतिलिपि गरिनेछ;
-* ALT+shift+C: यदि यो एक ब्यक्ति हो भने कल गर्नुहोस्, वा यदि यो समूह हो भने भ्वाइस च्याटमा जानुहोस;
-* ALT+shift+V: भिडियो कल बटन थिच्नुहोस्;
-* ALT+Y: कल स्वीकार गर्नुहोस्;
-* ALT+N: यदि आगमन कल हो भने \"कल अस्वीकार गर्नुहोस्\" बटन थिच्नुहोस्, यदि कल प्रगतिमा छ भने \"कल अन्त्य गर्नुहोस्\" बटन, वा भ्वभ्वाईस च्याट शकृय छभने, "छोड्नुहोस" बटनमा थिच्नुहोस;
-* ALT+A: \"म्युट/अनम्युट माइक्रोफोन\" बटन थिच्नुहोस्;
-* ALT+C: "क्यामेरा सक्षम/असक्षम" बटन थिच्नुहोस्;
-* ALT+Q: \यदि तत्काल हेर्ने बटन हालको सन्देशमा समावेश छ भने"तत्काल हेर्नुहोस \" बटन" थिच्नुहोस्;
-* ALT+O: हाल चलिरहेको च्याट, भ्वाइस च्याट, वा कल विन्डोमा "थप विकल्पहरू" बटन थिच्नुहोस्;
-* ALT+M: नेभिगेसन मेनु खोल्नुहोस्;
-* control+R: आवाज सन्देश रेकर्डिङ सुरुगर्नुहोस/रोक्नुहोस्;
-* control+D: यस कुन्जिलाई यदि एक पटक थिच्नुभयो भने, आवाज सन्देशको रेकर्डिङ रद्द हुन्छ, र यदि दुई पटक थिच्नुभयो भने, आवाज सन्देश रेकर्डिङ सुरु गर्दा, पठाउँदा वा रद्द गर्दा प्राप्त हुँने सूचनाको प्रकार परिवर्तन हुन्छ;
-* ALT+U: प्रगति पट्टी घोषणाहरू टगल गर्नुहोस्;
-* control+P: हालको चलिरहेको च्याट प्रोफाइल खोल्नुहोस्;
-* delete: सन्देश वा कुराकानि मेटाउनुहोस्;
-* shift+delete: दुबै पक्षबाट सन्देश वा कुराकानि मेटाउनुहोस्;
-* control+ALT+C: टिप्पणीहरू खोल्नुहोस्;
-* Unassigned: सन्देशको जवाफ दिनुहोस्;
-* ALT+F: सन्देश फर्वार्ड गर्नुहोस ।;
-* Unassigned: सन्देश सम्पादन गर्नुहोस्;
-* ALT+shift+R: पढेको च्याटमा  चिन्ह लगाउनुहोस्;
-* control+space: चयन मोडमा जाँनुहोस;
-* control+shift+C: ढाँचा सुरक्षित गरी सन्देशहरू प्रतिलिपि गर्नुहोस्;
-* ALT+shift+L: क्लिपबोर्डमा प्रसारणको लागि डेटा प्रतिलिपि गर्नुहोस्;
-* control+ALT+right arrow: आवाज शन्देशलाई फर्वार्ड गर्नुहोस;
-* control+ALT+left arrow: आवाज सन्देशलाई रिवाइन्ड गर्नुहोस्;
-* ALT+C: सन्देश मा लेखिएको बिवरणलाई पपअप विन्डोमा देखाउनुहोस्;
-* NVDA+control+U: UnigramPlus सेटिंग्स खोल्नुहोस्;
-* ALT+4: च्याट फोल्डरहरूको सूचीमा फोकस सार्नुहोस्;
-* control+shift+A: "फाइल संलग्न गर्नुहोस्" बटन थिच्नुहोस्;
-* control+N: "नयाँ च्याट" बटन थिच्नुहोस्;
-* Unassigned: सन्देश वा च्याट पिन गर्नुहोस्;
-* ALT+5: खोलिएको प्रोफाईलमा फोकस सार्नुहोस्;
-* ALT+L: हालको च्याटमा नयाँ सन्देशहरूको स्वचालित पठन सक्षम गर्नुहोस्;
-* NVDA+ALT+R: आवाज सन्देशलाई लेख्य रुपमा रूपान्तरण गर्नुहोस्;
-* Left arrow: कुन शन्देशमा जवाफ प्राप्त भएकोहो भनि वाचन गर्नुहोस;
 
-### पुनस्च:
+> In the Category column, `UnigramPlus` identifies shortcuts provided by the add-on and `Unigram` identifies shortcuts built into Unigram.
 
-* सबै हटकीहरू लाई NVDA मेनु> प्राथमिकताहरू> इनपुट इशाराहरूमा गई पुन: परिमार्जन गर्न सकिन्छ।
-* "नपढिएको सन्देश" लेबलमा कर्सर फोकस गर्ने कार्यले कहिलेकाहीं ढिलाइको साथ प्रतिक्रिया दिन सक्छ भन्ने तथ्य हाँमिलाई पहिलेदेखिनै थाहा भएको मुद्दा हो, यो तपाइँको कम्प्युटर मा रहेको क्याश सन्देशहरूको संख्यामा निर्भर हुन सक्छ।
+> [!TIP]
+> You can customize UnigramPlus shortcuts from NVDA menu > Preferences > Input gestures.
+
+### च्याटहरू बीच नेभिगेसन
+
+| सर्टकट | श्रेणी | कार्य |
+|---|---|---|
+| **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
+| **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **ALT+1** | UnigramPlus | फोकस लाई च्याट सूचीमा लैजानुहोस |
+| **ALT+2** | UnigramPlus | हाल चलिरहेको च्याटमा फोकसलाई लैजानुहोस |
+| **ALT+3** | UnigramPlus | 'नपढिएका सन्देशहरू' लेबलमा फोकस सार्नुहोस् |
+| **ALT+4** | UnigramPlus | फोकस लाई च्याट फोल्डरहरूको सूचीमा सार्नुहोस् |
+| **ALT+5** | UnigramPlus | हाल खोलिएको च्याट प्रोफाइलमा फोकस सार्नुहोस । |
+| **ALT+6** | UnigramPlus | Move focus to the list of group threads |
+| **ALT+D** | UnigramPlus | सम्पादन बाकसमा फोकस सार्नुहोस्। यदि फोकस पहिले नै सम्पादन बाकसमा छ भने, हटकी थिचेपछि, यो पहिलेकै स्थानमा सर्नेछ। |
+| **ALT+End** | UnigramPlus | Go to the end |
+
+### खोज
+
+| सर्टकट | श्रेणी | कार्य |
+|---|---|---|
+| **Ctrl+E** | Unigram | Chat search |
+| **Ctrl+F** | Unigram | Messages search per chat |
+| **ALT+I** | UnigramPlus | Go to the list with search results |
+| **F3** | UnigramPlus | Go to the next search result |
+| **Shift+F3** | UnigramPlus | Go to the previous search result |
+
+### टाइप गर्ने क्षेत्रमा चयन गरिएको पाठ
+
+| सर्टकट | श्रेणी | कार्य |
+|---|---|---|
+| **Ctrl+Z** | Unigram | Undo |
+| **Ctrl+Y** | Unigram | Redo |
+| **Ctrl+X** | Unigram | Cut |
+| **Ctrl+C** | Unigram | Copy |
+| **Ctrl+V** | Unigram | Paste |
+| **Ctrl+A** | Unigram | Select All |
+| **Ctrl+B** | Unigram | Bold |
+| **Ctrl+I** | Unigram | Italic |
+| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+Shift+X** | Unigram | Strikethrough |
+| **Ctrl+Shift+M** | Unigram | Monospace |
+| **Ctrl+Shift+P** | Unigram | Spoiler |
+| **Ctrl+Shift+N** | Unigram | Null / Plain Text |
+
+### फोल्डरहरू
+
+| सर्टकट | श्रेणी | कार्य |
+|---|---|---|
+| **Ctrl+1** | Unigram | First folder (All chats) |
+| **Ctrl+2** | Unigram | Second folder |
+| **Ctrl+3** | Unigram | Third folder |
+| **Ctrl+4** | Unigram | Fourth folder |
+| **Ctrl+5** | Unigram | Fifth folder |
+| **Ctrl+6** | Unigram | Sixth folder |
+| **Ctrl+7** | Unigram | Seventh folder |
+| **Ctrl+8** | Unigram | Eighth folder |
+| **Ctrl+9** | Unigram | Archive |
+
+### सन्देश कार्यहरू
+
+| सर्टकट | श्रेणी | कार्य |
+|---|---|---|
+| **Space** | UnigramPlus | Play or stop the focused voice or video message, or open media attached to the message |
+| **Ctrl+C** | UnigramPlus | यदि यदि सन्देश लिखितहो भने सन्देश प्रतिलिपि गर्नुहोस्। यदि फोकस लिङ्कमा छ भने, लिङ्क प्रतिलिपि गरिनेछ |
+| **ALT+Q** | UnigramPlus | यदि हालको सन्देशमा तत्काल हेर्ने विकल्प समावेश छभने, "तत्काल हेर्ने" बटन थिच्नुहोस् |
+| **ALT+Delete** | UnigramPlus | सन्देश वा कुराकानि मेटाउनुहोस् |
+| **Shift+Delete** | UnigramPlus | दुबै तर्फबाट सन्देश वा कुराकानि मेटाउनुहोस् |
+| **Ctrl+ALT+C** | UnigramPlus | टिप्पणीहरू खोल्नुहोस् |
+| **Enter** | UnigramPlus | सन्देशको जवाफ दिनुहोस् |
+| **ALT+F** | UnigramPlus | सन्देश फर्वार्ड गर्नुहोस् |
+| **Backspace** | UnigramPlus | सन्देश सम्पादन गर्नुहोस् |
+| **ALT+Shift+R** | UnigramPlus | च्याटलाई पढिएको भनी चिन्ह लगाउनुहोस् |
+| **Ctrl+Space** | UnigramPlus | चयन मोडमा जाँनुहोस् |
+| **Unassigned** | UnigramPlus | यस रूपमा फाइल बचत गर्नुहोस्... |
+| **Unassigned** | UnigramPlus | सन्देश वा च्याट पिन गर्नुहोस् |
+| **Left Arrow** | UnigramPlus | कुन् शन्देशमा जबाफ प्राप्त भएकोहो, त्यो पनि पढ्नुहोस । |
+| **Right Arrow** | UnigramPlus | Move to the next media attachment in the focused message |
+| **ALT+C** | UnigramPlus | पपअप विन्डोमा लिखित शन्देश देखाउनुहोस् |
+| **ALT+W** | UnigramPlus | Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information. |
+| **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
+| **Ctrl+Shift+A** | UnigramPlus | "फाइल संलग्न गर्नुहोस्" बटन थिच्नुहोस् |
+| **Ctrl+N** | UnigramPlus | "नयाँ कुराकानी" बटन थिच्नुहोस् |
+| **Arrow Up** | Unigram | Edit last sent message |
+| **Ctrl+Arrow Up** | Unigram | Reply to last sent message |
+| **Esc / Alt+Arrow Left** | Unigram | Go back |
+| **Alt+Arrow Right** | Unigram | Redo go back |
+
+### आवाज सन्देश र मिडिया
+
+| सर्टकट | श्रेणी | कार्य |
+|---|---|---|
+| **ALT+P** | UnigramPlus | हाल चलिरहेको आवाज सन्देश बजाउँनुहोस/रोक्नुहोस |
+| **ALT+S** | UnigramPlus | आवाज शन्देशहरूको बज्ने गति बढाउनुहोस्/घटाउनुहोस् |
+| **ALT+E** | UnigramPlus | अडियो प्लेयर बन्द गर्नुहोस् |
+| **NVDA+ALT+R** | UnigramPlus | आवाज सन्देशलाई लेख्य रुपमा रूपान्तरण गर्नुहोस् |
+| **Ctrl+ALT+Right Arrow** | UnigramPlus | आवाज सन्देशलाइ फर्वार्ड गर्नुहोस |
+| **Ctrl+ALT+Left Arrow** | UnigramPlus | आवाज सन्देश रिवाइन्ड गर्नुहोस् |
+
+### सन्देश रेकर्डिङ
+
+| सर्टकट | श्रेणी | कार्य |
+|---|---|---|
+| **Ctrl+R** | Unigram | Start record |
+| **Ctrl+R (again)** | Unigram | Send recorded |
+| **Ctrl+D** | Unigram | Stop recording |
+| **Space (while recording) / Ctrl+P** | Unigram | Pause recording |
+| **Ctrl+R** | UnigramPlus | Start or stop recording a voice message |
+| **Ctrl+D** | UnigramPlus | Press once to cancel voice-message recording; press twice to change the recording notification type |
+
+### कलहरू
+
+| सर्टकट | श्रेणी | कार्य |
+|---|---|---|
+| **Ctrl+Home** | Unigram | Accept incoming call |
+| **Ctrl+End** | Unigram | Reject incoming call |
+| **Ctrl+Page Up** | Unigram | Toggle camera |
+| **Ctrl+Page Down** | Unigram | Toggle microphone |
+| **ALT+Shift+C** | UnigramPlus | यदि ब्यक्तिलाई हो भने कल गर्नुहोस्, यदि समूह हो भने भ्वाइस च्याट मा जाँनुहोस |
+| **ALT+Shift+V** | UnigramPlus | भिडियो कल बटनमा थिच्नुहोस |
+| **ALT+Y** | UnigramPlus | कल स्वीकार गर्नुहोस् |
+| **ALT+N** | UnigramPlus | यदि आगमन कल हो भने "कल अस्वीकार गर्नुहोस्" बटन थिच्नुहोस्, यदि कल चलिरहेको छ भने "कल अन्त्य गर्नुहोस्" बटन थिच्नुहोस् वा यदि भ्वाइस च्याट चलिरहेको छ भने, छोड्नुहोस् बटनमा थिच्नुहोस। |
+| **ALT+A** | UnigramPlus | "म्युट/अनम्युट माइक्रोफोन" बटन थिच्नुहोस् |
+| **ALT+V** | UnigramPlus | "क्यामेरा सक्षम/असक्षम गर्नुहोस्" बटन थिच्नुहोस् |
+
+### अन्य सर्टकटहरू
+
+| सर्टकट | श्रेणी | कार्य |
+|---|---|---|
+| **Ctrl+0** | Unigram | Saved messages |
+| **Ctrl+W** | Unigram | Close current window |
+| **Ctrl+Q** | Unigram | Close Unigram (main window only) |
+| **Ctrl+Shift+Y** | Unigram | Change status |
+| **ALT+T** | UnigramPlus | हाल खुला रहेको च्याटको नाम र स्थिति घोषणा गर्नुहोस् |
+| **ALT+M** | UnigramPlus | नेभिगेसन मेनु खोल्नुहोस् |
+| **ALT+Shift+P** | UnigramPlus | हाल च्याट गरिरहेको प्रोफाइल खोल्नुहोस् |
+| **ALT+L** | UnigramPlus | हाल चलिरहेको च्याटमा नयाँ सन्देशहरूको स्वचालित पठन सक्षम गर्नुहोस् |
+| **ALT+H** | UnigramPlus | Show a list of all UnigramPlus shortcuts |
+| **ALT+U** | UnigramPlus | प्रगति पट्टी घोषणा परिवर्तन गर्नुहोस् |
+| **ALT+Shift+L** | UnigramPlus | क्लिपबोर्डमा प्रसारणको लागि डेटा प्रतिलिपि गर्नुहोस् |
+| **NVDA+ALT+U** | UnigramPlus | युनिग्राम प्लसको सेटिङ् खोल्नुहोस । |
+<!-- shortcut-table-end -->
 
 ##यस संस्करणका परिवर्तनहरू:
 
@@ -303,6 +400,7 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 
 ### Version 5.5.7
 
+* किबोर्ड सर्टकट खण्डलाई वर्गीकृत तालिकाहरूमा पुनर्गठित गरी Unigram र UnigramPlus सर्टकटहरू एकीकृत गरियो।
 * आवाज वा भिडियो सन्देश रेकर्ड गर्दा, NVDA ले अब "Tn voice message" को सट्टा बितेको समयसहित "आवाज सन्देश रेकर्ड गर्दै" वा "भिडियो सन्देश रेकर्ड गर्दै" घोषणा गर्छ।
 
 ### Version 5.5.6

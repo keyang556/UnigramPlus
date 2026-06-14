@@ -26,64 +26,160 @@ Si vous appréciez vraiment cette extension et que vous avez l'envie,  mais surt
 ## Sons personnalisés
 Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'extension. Ouvrez les paramètres de NVDA > UnigramPlus puis appuyez sur **Ouvrir le dossier des sons UnigramPlus**. Pour personnaliser un son, copiez dans ce dossier un fichier WAV de remplacement portant le même nom que le son à remplacer, puis redémarrez NVDA ou rechargez les extensions. Les mises à jour de l'extension peuvent restaurer les sons fournis, gardez donc une copie de vos fichiers personnalisés.
 
+<!-- shortcut-table-start -->
 ## Liste de raccourcis :
 
-* ALT+1 : Déplacer le focus vers la liste des échanges;
-* ALT+2 : Déplacer le focus sur le dernier message d'un échange ouvert ;
-* ALT+3 : Déplacer le focus sur l'étiquette "messages non lus" ;
-* ALT+D : Déplacer le focus au champ d'édition. Si le focus y est déjà, il reviendra où il était auparavant;
-* ALT+T : Annonce le nom et le statut d'un échange ouvert ;
-* Espace : Lire/arrêter le message vocal ou vidéo en cours, ou ouvrir un fichier multimédia joint au message courant ;
-* ALT+P : Lire/mettre en pause le message vocal en cours de lecture ;
-* ALT+S : Augmenter/diminuer la vitesse de lecture des messages vocaux ;
-* ALT+E : Fermer le lecteur audio ;
-* Ctrl+C : Copier le message s'il contient du texte. Si le focus est sur un lien, le lien sera copié ;
-* ALT+Maj+C : Appeler si c'est un contact, ou entrer dans un échange vocal si c'est un groupe ;
-* ALT+Maj+V : appuyer sur le bouton d'appel vidéo ;
-* ALT+Y : Accepter l'appel ;
-* ALT+N : Appuyer sur le bouton "Décliner l'appel" en cas d'appel entrant, sur le bouton "Terminer l'appel" si l'appel est en cours, ou quitter l'échange vocal s'il est actif ;
-* ALT+A : Appuyez sur le bouton ""activer/désactiver le microphone" ;
-* ALT+C : Appuyez sur le bouton "Activer/désactiver la caméra" ;
-* ALT+Q : appuyer sur le bouton "affichage instantané", s'il est inclus dans le message en cours ;
-* ALT+O : Appuyez sur le bouton "Plus d'options" dans une fenêtre d'échange, d'échange vocal ou d'appel ouverte ;
-* ALT+M : Ouvrir le menu de navigation ;
-* Ctrl+R : démarrer/arrêter l'enregistrement des messages vocaux ;
-* Ctrl+D : si vous exécutez ce raccourci une fois, vous annulez l'enregistrement d'un message vocal. Si vous l'exécutez deux fois, vous changez le type de notification lors du démarrage, de l'envoi ou de l'annulation de l'enregistrement d'un message vocal ;
-* ALT+U : basculer les annonces de la barre de progression ;
-* Ctrl+P : Ouvrir le profil de l'échange courant ;
-* Suppression : Supprimer un message ou un échange ;
-* MAJ+suppression : Supprimer un message ou un échange des deux côtés ;
-* Ctrl+ALT+C : ouvrir les commentaires ;
-* non attribué : Répondre au message ;
-* ALT+F : Transférer le message ;
-* Non attribué : Modifier le message ;
-* ALT+Maj+R : Marquer un échange comme lu ;
-* Ctrl+Espace : Passer en mode sélection ;
-* Ctrl+Maj+C : Copier les messages en préservant le formatage ;
-* ALT+Maj+L : Copier les données de diffusion dans le presse-papiers ;
-* Ctrl+ALT+flèche droite : Avancer rapidement dans un message vocal.
-* Ctrl+ALT+flèche gauche : Reculer rapidement dans un message vocal.
-* ALT+C : Afficher le texte du message dans une fenêtre
-* NVDA+Ctrl+U : Ouvrir la fenêtre des préférences d'UnigramPlus
-* ALT+4 : Déplacer le focus sur la liste des dossiers d'échanges.
-* Ctrl+Maj+A : appuyer sur le bouton "Joindre un fichier".
-* Ctrl+N : Appuyez sur le bouton "Nouvel échange".
-* Non attribué : Épingler un message ou un échange.
-* ALT+5 : Déplacer le focus sur le profil ouvert.
-* ALT+L : Activer la lecture automatique des nouveaux messages dans l'échange courant.
-* NVDA+ALT+R : Convertir le message vocal en texte.
-* Flèche gauche : Annoncer le message d'origine, qui a reçu une réponse.
-* Alt+6 : Déplacer le focus vers la liste des conversations de groupe.
+> In the Category column, `UnigramPlus` identifies shortcuts provided by the add-on and `Unigram` identifies shortcuts built into Unigram.
 
-### Note
+> [!TIP]
+> You can customize UnigramPlus shortcuts from NVDA menu > Preferences > Input gestures.
 
-* Toutes les touches de raccourci peuvent être réaffectées dans le menu NVDA>préférences>gestes de commandes.
-* Le fait que la fonction qui focalise le curseur sur l'étiquette "message non lu" puisse parfois réagir avec un certain retard est un problème connu. Cela peut dépendre du nombre de messages en attente à ce moment-là.
+### Navigation entre les discussions
+
+| Raccourci | Catégorie | Action |
+|---|---|---|
+| **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
+| **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **ALT+1** | UnigramPlus | Déplacer le focus vers la liste des échanges |
+| **ALT+2** | UnigramPlus | Déplace le focus au dernier message d'un échange ouvert |
+| **ALT+3** | UnigramPlus | Déplacer le focus à l'indicateur de messages non lus |
+| **ALT+4** | UnigramPlus | Déplace le focus à la liste des dossiers des échanges |
+| **ALT+5** | UnigramPlus | Déplace le focus au profil ouvert |
+| **ALT+6** | UnigramPlus | Déplace le focus à la liste des dossiers des échanges |
+| **ALT+D** | UnigramPlus | Déplacer le focus au champ d'édition. Si le focus y est déjà, il reviendra où il était auparavant |
+| **ALT+End** | UnigramPlus | Go to the end |
+
+### Recherche
+
+| Raccourci | Catégorie | Action |
+|---|---|---|
+| **Ctrl+E** | Unigram | Chat search |
+| **Ctrl+F** | Unigram | Messages search per chat |
+| **ALT+I** | UnigramPlus | Go to the list with search results |
+| **F3** | UnigramPlus | Go to the next search result |
+| **Shift+F3** | UnigramPlus | Go to the previous search result |
+
+### Texte sélectionné dans la zone de saisie
+
+| Raccourci | Catégorie | Action |
+|---|---|---|
+| **Ctrl+Z** | Unigram | Undo |
+| **Ctrl+Y** | Unigram | Redo |
+| **Ctrl+X** | Unigram | Cut |
+| **Ctrl+C** | Unigram | Copy |
+| **Ctrl+V** | Unigram | Paste |
+| **Ctrl+A** | Unigram | Select All |
+| **Ctrl+B** | Unigram | Bold |
+| **Ctrl+I** | Unigram | Italic |
+| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+Shift+X** | Unigram | Strikethrough |
+| **Ctrl+Shift+M** | Unigram | Monospace |
+| **Ctrl+Shift+P** | Unigram | Spoiler |
+| **Ctrl+Shift+N** | Unigram | Null / Plain Text |
+
+### Dossiers
+
+| Raccourci | Catégorie | Action |
+|---|---|---|
+| **Ctrl+1** | Unigram | First folder (All chats) |
+| **Ctrl+2** | Unigram | Second folder |
+| **Ctrl+3** | Unigram | Third folder |
+| **Ctrl+4** | Unigram | Fourth folder |
+| **Ctrl+5** | Unigram | Fifth folder |
+| **Ctrl+6** | Unigram | Sixth folder |
+| **Ctrl+7** | Unigram | Seventh folder |
+| **Ctrl+8** | Unigram | Eighth folder |
+| **Ctrl+9** | Unigram | Archive |
+
+### Actions sur les messages
+
+| Raccourci | Catégorie | Action |
+|---|---|---|
+| **Space** | UnigramPlus | Play or stop the focused voice or video message, or open media attached to the message |
+| **Ctrl+C** | UnigramPlus | Copier le message s'il contient du texte. Si le focus est sur un lien, ce dernier sera copié |
+| **ALT+Q** | UnigramPlus | Activer le bouton "affichage instantanée" s'il est inclus dans le message courant. |
+| **ALT+Delete** | UnigramPlus | Supprimer un message ou un échange |
+| **Shift+Delete** | UnigramPlus | Supprimer un message ou un échange pour tout le monde |
+| **Ctrl+ALT+C** | UnigramPlus | Ouvrir les commentaires |
+| **Enter** | UnigramPlus | Répondre au message |
+| **ALT+F** | UnigramPlus | Transférer le message |
+| **Backspace** | UnigramPlus | Éditer le message |
+| **ALT+Shift+R** | UnigramPlus | Marquer un échange comme lu |
+| **Ctrl+Space** | UnigramPlus | Basculer en mode sélection |
+| **Unassigned** | UnigramPlus | Enregistrer le fichier sous... |
+| **Unassigned** | UnigramPlus | Épingler un message ou un échange |
+| **Left Arrow** | UnigramPlus | Annoncer si un message contient une réaction |
+| **Right Arrow** | UnigramPlus | Move to the next media attachment in the focused message |
+| **ALT+C** | UnigramPlus | Montrer le message dans une fenêtre virtuelle |
+| **ALT+W** | UnigramPlus | Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information. |
+| **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
+| **Ctrl+Shift+A** | UnigramPlus | Activer le bouton "joindre un fichier" |
+| **Ctrl+N** | UnigramPlus | Activer le bouton "nouvel échange" |
+| **Arrow Up** | Unigram | Edit last sent message |
+| **Ctrl+Arrow Up** | Unigram | Reply to last sent message |
+| **Esc / Alt+Arrow Left** | Unigram | Go back |
+| **Alt+Arrow Right** | Unigram | Redo go back |
+
+### Messages vocaux et médias
+
+| Raccourci | Catégorie | Action |
+|---|---|---|
+| **ALT+P** | UnigramPlus | Jouer / mettre en pause le message en cours de lecture |
+| **ALT+S** | UnigramPlus | Accélérer et ralentir la vistesse de lecture |
+| **ALT+E** | UnigramPlus | Fermer le lecteur audio |
+| **NVDA+ALT+R** | UnigramPlus | Convertir le message vocal en texte |
+| **Ctrl+ALT+Right Arrow** | UnigramPlus | Avancer rapidement dans un message vocal |
+| **Ctrl+ALT+Left Arrow** | UnigramPlus | Reculer dans un message vocal |
+
+### Enregistrement de messages
+
+| Raccourci | Catégorie | Action |
+|---|---|---|
+| **Ctrl+R** | Unigram | Start record |
+| **Ctrl+R (again)** | Unigram | Send recorded |
+| **Ctrl+D** | Unigram | Stop recording |
+| **Space (while recording) / Ctrl+P** | Unigram | Pause recording |
+| **Ctrl+R** | UnigramPlus | Start or stop recording a voice message |
+| **Ctrl+D** | UnigramPlus | Press once to cancel voice-message recording; press twice to change the recording notification type |
+
+### Appels
+
+| Raccourci | Catégorie | Action |
+|---|---|---|
+| **Ctrl+Home** | Unigram | Accept incoming call |
+| **Ctrl+End** | Unigram | Reject incoming call |
+| **Ctrl+Page Up** | Unigram | Toggle camera |
+| **Ctrl+Page Down** | Unigram | Toggle microphone |
+| **ALT+Shift+C** | UnigramPlus | Appeler s'il s'agit d'un contact, ou initier un échange vocal s'il s'agit d'un groupe |
+| **ALT+Shift+V** | UnigramPlus | Activer le bouton Appell vidéo |
+| **ALT+Y** | UnigramPlus | Accepter l'appel |
+| **ALT+N** | UnigramPlus | Activer le bouton "refuser l'appel" lors d'un appell entrant, "terminer l'appel" si un appel est en cours ou quitter l'échange vocal s'il est actif |
+| **ALT+A** | UnigramPlus | Activer le bouton "activer/désactiver le micro" |
+| **ALT+V** | UnigramPlus | Activer le bouton "activer/désactiver la caméra |
+
+### Autres raccourcis
+
+| Raccourci | Catégorie | Action |
+|---|---|---|
+| **Ctrl+0** | Unigram | Saved messages |
+| **Ctrl+W** | Unigram | Close current window |
+| **Ctrl+Q** | Unigram | Close Unigram (main window only) |
+| **Ctrl+Shift+Y** | Unigram | Change status |
+| **ALT+T** | UnigramPlus | Annoncer le nom et l'état d'un échange ouvert |
+| **ALT+M** | UnigramPlus | Ouvrir le menu de navigation |
+| **ALT+Shift+P** | UnigramPlus | Ouvrir le profil de l'échange en cours |
+| **ALT+L** | UnigramPlus | Activer la lecture automatique des nouveaux messages dans l'échange courant |
+| **ALT+H** | UnigramPlus | Show a list of all UnigramPlus shortcuts |
+| **ALT+U** | UnigramPlus | Basculer l'annonce des bares de progression |
+| **ALT+Shift+L** | UnigramPlus | Copier les données relatives à la diffusion dans le presse-papiers |
+| **NVDA+ALT+U** | UnigramPlus | Ouvrir les préférences d'UnigramPlus |
+<!-- shortcut-table-end -->
 
 ##Liste des changements :
 
 ### Version 5.5.7
 
+* La section des raccourcis clavier a été réorganisée en tableaux par catégorie et combine désormais les raccourcis d’Unigram et d’UnigramPlus.
 * Lors de l'enregistrement d'un message vocal ou vidéo, NVDA annonce désormais "Enregistrement d'un message vocal" ou "Enregistrement d'un message vidéo" avec le temps écoulé, au lieu de "Tn voice message".
 
 ### Version 5.5.6

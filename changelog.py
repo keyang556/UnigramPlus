@@ -2,5 +2,9 @@
 def _(t): return t
 
 value = _(
-"When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
+	"When recording a voice or video message, NVDA now announces \"Recording a voice message\" or "
+	"\"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
+) + " " + _(
+	"The keyboard shortcut documentation was reorganized into categorized tables that combine Unigram "
+	"and UnigramPlus shortcuts, and ALT+H now reads the new table format."
 )
