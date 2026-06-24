@@ -27,8 +27,8 @@ keywordsInMessages = {
 	"hr": (". Viđeno", ". Nije viđeno", ", Poslano u ", ", Primljeno u ", ", Poslano u ", ", Primljeno u "),
 	"ro": (". Citit", ". Necitit.", ", Trimis la ", ", Primit la ", ", Trimis la ", ", Primit la "),
 }
-keywordsInMessages["zh_TW"] = (". 已讀", ". 未讀", ", 傳了 ", ", 收到了 ", ", 傳了 ", ", 收到了 ")
-keywordsInMessages["zh_CN"] = (". 已读", ". 未读", ", 已发送 ", ", 已收到 ", ", 已发送 ", ", 已收到 ")
+keywordsInMessages["zh_TW"] = (". 已讀", ". 未讀", ", 傳送於 ", ", 收到了 ", ", 傳送於 ", ", 收到了 ")
+keywordsInMessages["zh_CN"] = (". 已读", ". 未读", ", 已发送于 ", ", 已收到 ", ", 已发送于 ", ", 已收到 ")
 
 icons_from_context_menu = {
 	"attach": "\ue840",
