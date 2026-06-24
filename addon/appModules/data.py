@@ -22,7 +22,7 @@ keywordsInMessages = {
 	"tr": (". Görüldü", ". Görülmedi", "tarihinde gönderildi.", "tarihinde alındı.", ", bugün ", ", bugün "),
 	"uk": (". Прочитане", ". Непрочитане", ", Надіслано ", ", Отримано ", ", Надіслано ", ", Отримано "),
 	"be": (". Прагледжана", ". Не прагледжана", ", Адпраўлена а ", ", Атрымана а ", ", Адпраўлена а ", ", Атрымана а "),
-	"zh": (". 已讀", ". 未讀", ", 傳了  今天", ", 收到了  今天", ", 傳了  今天", ", 收到了  今天"),
+	"zh": (". 已讀", ". 未讀", ", 傳送於  今天", ", 收到了  今天", ", 傳送於  今天", ", 收到了  今天"),
 	"sr": (". Viđeno", ". Nije viđeno", ", Poslato u ", ", Primljeno u ", ", Poslato u ", ", Primljeno u "),
 	"hr": (". Viđeno", ". Nije viđeno", ", Poslano u ", ", Primljeno u ", ", Poslano u ", ", Primljeno u "),
 	"ro": (". Citit", ". Necitit.", ", Trimis la ", ", Primit la ", ", Trimis la ", ", Primit la "),
