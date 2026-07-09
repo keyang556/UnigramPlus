@@ -86,7 +86,16 @@ class cnf:
 		self.conf.write()
 
 try: conf = cnf()
-except:
+except OSError:
+	# Environmental failure (e.g. permissions, locked file, full disk): the
+	# ini itself may still be valid, so don't destroy it - just propagate.
+	raise
+except Exception:
+	# Anything else (parse/validation errors, unexpected values, etc.) means
+	# the ini content itself is the problem: drop it and rebuild from defaults.
+	from logHandler import log
+	log.error("UnigramPlus.ini could not be loaded, recreating it with defaults", exc_info=True)
 	path = os.path.join(globalVars.appArgs.configPath, "UnigramPlus.ini")
-	os.remove(path)
+	if os.path.exists(path):
+		os.remove(path)
 	conf = cnf()
