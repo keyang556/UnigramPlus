@@ -86,7 +86,11 @@ class cnf:
 		self.conf.write()
 
 try: conf = cnf()
-except:
+except Exception:
+	# The ini file is unreadable/corrupt; drop it and rebuild from defaults.
+	from logHandler import log
+	log.error("UnigramPlus.ini could not be loaded, recreating it with defaults", exc_info=True)
 	path = os.path.join(globalVars.appArgs.configPath, "UnigramPlus.ini")
-	os.remove(path)
+	if os.path.exists(path):
+		os.remove(path)
 	conf = cnf()

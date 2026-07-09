@@ -9,6 +9,8 @@ from gui import guiHelper, nvdaControls
 from gui.settingsDialogs import SettingsPanel
 import wx
 import urllib.request
+import urllib.parse
+import json
 import core
 import globalVars
 import os
@@ -16,13 +18,15 @@ import re
 addonHandler.initTranslation()
 import languageHandler
 import queueHandler
+from logHandler import log
 from utils.security import objectBelowLockScreenAndWindowsIsLocked
 import threading, time, queue, random
-from appModules.cnf import conf, listLanguages, lang
+from appModules.cnf import conf, listLanguages
 from appModules.unigram import AppModule, baseDir
 from ui import message
 
-path_to_server = "http://46.254.107.124/addons/unigramplus/"
+update_repo = "keyang556/UnigramPlus"
+update_api_url = "https://api.github.com/repos/%s/releases/latest" % update_repo
 
 def no_updates_dialog():
 	res = gui.messageBox(
@@ -30,39 +34,48 @@ def no_updates_dialog():
 		_("UnigramPlus update"),
 		wx.OK | wx.ICON_INFORMATION)
 
+def _http_get(url, timeout=30):
+	request = urllib.request.Request(url, headers={
+		"User-Agent": "UnigramPlus-updater",
+		"Accept": "application/vnd.github+json",
+	})
+	with urllib.request.urlopen(request, timeout=timeout) as response:
+		return response.read()
+
+def _parse_version(text):
+	parts = []
+	for piece in str(text).lstrip("vV").split("."):
+		digits = re.sub(r"\D", "", piece)
+		parts.append(int(digits) if digits else 0)
+	return tuple(parts) if parts else (0,)
+
+def _addon_asset_url(release):
+	# Only accept HTTPS download URLs served by GitHub itself, so a compromised
+	# or spoofed API response can't redirect the installer to another host.
+	for asset in release.get("assets") or ():
+		name = str(asset.get("name") or "")
+		url = str(asset.get("browser_download_url") or "")
+		if not name.lower().endswith(".nvda-addon"):
+			continue
+		parsed = urllib.parse.urlsplit(url)
+		host = (parsed.hostname or "").lower()
+		if parsed.scheme == "https" and (host == "github.com" or host.endswith(".githubusercontent.com")):
+			return url
+	return None
+
 def onCheckForUpdates(event = False, is_start = False):
-	import versionInfo
-	# Newer NVDA snapshots renamed `version_year` to `version_major` and shifted the others down.
-	# Fall back to parsing versionInfo.version so we stay compatible across both layouts.
-	try:
-		year = getattr(versionInfo, "version_year", None)
-		if year is not None:
-			parts = (year, versionInfo.version_major, versionInfo.version_minor)
-		else:
-			# Layout used by alpha/2026+: version_major.version_minor.version_build
-			parts = (versionInfo.version_major, versionInfo.version_minor, getattr(versionInfo, "version_build", 0))
-	except Exception:
-		try:
-			pieces = str(versionInfo.version).split(".")[:3]
-			parts = tuple(int(re.sub(r"\D", "", p) or 0) for p in pieces)
-		except Exception:
-			parts = (0, 0, 0)
-	NVDAVersion = int("".join(str(p) for p in parts))
-	fp = os.path.join(globalVars.appArgs.configPath, "unigramplus.nvda-addon")
 	addon_version = addonHandler.getCodeAddon().manifest["version"]
-	addon_version = int(addon_version.replace(".", ""))
-	try: response = urllib.request.urlopen(path_to_server+"version.txt").read().decode('utf-8')
-	except:
+	try:
+		release = json.loads(_http_get(update_api_url).decode("utf-8"))
+		str_last_version = str(release.get("tag_name") or "").lstrip("vV")
+		url = _addon_asset_url(release)
+	except Exception:
+		log.debugWarning("UnigramPlus update check failed", exc_info=True)
 		if not is_start: wx.CallAfter(no_updates_dialog)
 		return
-	response = str(response)
-	str_last_version = response.split("\n")[0]
-	last_version = int(str_last_version.replace(".", ""))
-	minimum_version = response.split("\n")[1]
-	minimum_version = int(minimum_version.replace(".", ""))
-	url = response.split("\n")[-1]
-	if last_version > addon_version and NVDAVersion >= minimum_version:
-		wx.CallAfter(window_for_update, None, str_last_version, url)
+	if url and _parse_version(str_last_version) > _parse_version(addon_version):
+		changelog = str(release.get("body") or "")
+		wx.CallAfter(window_for_update, None, str_last_version, url, changelog)
 	elif not is_start: wx.CallAfter(no_updates_dialog)
 
 
@@ -73,9 +86,11 @@ def openSoundFolder(event=False):
 		message(_("Unable to open UnigramPlus sounds folder"))
 
 class window_for_update(wx.Frame):
-	def __init__(self, parent, str_last_version, url):
+	def __init__(self, parent, str_last_version, url, changelog=""):
 		title = _("UnigramPlus update")
 		text = _("A new version of the add-on is available. Do you want to update UnigramPlus to version %version?").replace("%version", str_last_version)
+		if changelog: text += "\n"+_("Changes in this version:")+"\n"+changelog
+		else: text += "\n"+_("No update information")
 		no_resize = wx.DEFAULT_FRAME_STYLE & ~ (wx.RESIZE_BORDER | wx.MAXIMIZE_BOX)
 		wx.Frame.__init__(self, parent, title = title, size = (640, 360), style=no_resize)
 		self.url = str(url)
@@ -98,43 +113,64 @@ class window_for_update(wx.Frame):
 		panel.SetSizer(sizer)
 		self.Raise()
 		self.Show(True)
-		self.get_documentation()
 
 	def download_update(self, event):
 		self.text.SetValue(_("Download in progress"))
 		self.text.SetFocus()
 		self.button_ok.Disable()
 		self.button_close.Disable()
-		try: response_addon = urllib.request.urlopen(self.url).read()
-		except:
-			no_updates_dialog()
-			self.Close()
+		threading.Thread(target=self._download, daemon=True).start()
+
+	def _download(self):
+		try:
+			response_addon = _http_get(self.url, timeout=120)
+		except Exception:
+			log.error("UnigramPlus update download failed", exc_info=True)
+			wx.CallAfter(self._download_failed)
 			return
 		fp = os.path.join(globalVars.appArgs.configPath, "unigramplus.nvda-addon")
-		with open(fp, 'wb') as addon:
-			addon.write(response_addon)
-		self.setup_update(fp)
+		try:
+			with open(fp, 'wb') as addon:
+				addon.write(response_addon)
+		except Exception:
+			log.error("Could not save the UnigramPlus update bundle", exc_info=True)
+			wx.CallAfter(self._download_failed)
+			return
+		wx.CallAfter(self.setup_update, fp)
+
+	def _download_failed(self):
+		no_updates_dialog()
+		self.Close()
 
 	def window_close(self, event):
 		self.Close()
-	
-	def get_documentation(self):
-		doc = False
-		url = path_to_server+"documentation/"+self.str_last_version+"/"+lang+".txt"
-		try: doc = urllib.request.urlopen(url).read().decode('utf-8')
-		except: pass
-		try:
-			url = path_to_server+"documentation/"+self.str_last_version+"/en.txt"
-			if not doc: doc = urllib.request.urlopen(url).read().decode('utf-8')
-		except: pass
-		if doc: text = "\n"+_("Changes in this version:")+"\n"+str(doc)
-		else: text = "\n"+_(_("No update information"))
-		self.text.SetValue(self.text.GetValue()+text)
 
 	def setup_update(self, fp):
+		try:
+			bundle = addonHandler.AddonBundle(fp)
+			bundleName = bundle.manifest['name']
+			# Refuse bundles that aren't this add-on or that target a newer NVDA.
+			if bundleName != addonHandler.getCodeAddon().manifest['name']:
+				raise ValueError("Downloaded bundle %r does not match this add-on" % bundleName)
+			try:
+				from addonHandler import addonVersionCheck
+				compatible = addonVersionCheck.isAddonCompatible(bundle)
+			except ImportError:
+				compatible = True
+			if not compatible:
+				gui.messageBox(
+					_("The new version of UnigramPlus is not compatible with this version of NVDA. Please update NVDA first."),
+					_("UnigramPlus update"),
+					wx.OK | wx.ICON_WARNING)
+				self.Close()
+				return
+		except Exception:
+			log.error("The downloaded UnigramPlus update bundle failed validation", exc_info=True)
+			try: os.remove(fp)
+			except OSError: pass
+			self._download_failed()
+			return
 		curAddons = addonHandler.getAvailableAddons()
-		bundle = addonHandler.AddonBundle(fp)
-		bundleName = bundle.manifest['name']
 		prevAddon = next((addon for addon in curAddons if not addon.isPendingRemove and bundleName == addon.manifest['name']), None)
 		if prevAddon: prevAddon.requestRemove()
 		addonHandler.installAddonBundle(bundle)

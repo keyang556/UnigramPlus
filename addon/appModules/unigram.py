@@ -57,6 +57,9 @@ def is_unigram_app_module(appModule):
 
 
 def _load_telegram_desktop_fallback_class():
+	# Security note: this executes telegram.py from the user's own NVDA-managed
+	# add-on directories (same trust level as any installed add-on). Candidate
+	# paths must never be extended to network shares or world-writable locations.
 	global _telegramDesktopFallbackClass, _telegramDesktopFallbackLoadAttempted
 	if _telegramDesktopFallbackLoadAttempted:
 		return _telegramDesktopFallbackClass
