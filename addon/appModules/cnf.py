@@ -86,19 +86,16 @@ class cnf:
 		self.conf.write()
 
 try: conf = cnf()
+except OSError:
+	# Environmental failure (e.g. permissions, locked file, full disk): the
+	# ini itself may still be valid, so don't destroy it - just propagate.
+	raise
 except Exception:
+	# Anything else (parse/validation errors, unexpected values, etc.) means
+	# the ini content itself is the problem: drop it and rebuild from defaults.
 	from logHandler import log
-	log.error("UnigramPlus.ini could not be loaded", exc_info=True)
+	log.error("UnigramPlus.ini could not be loaded, recreating it with defaults", exc_info=True)
 	path = os.path.join(globalVars.appArgs.configPath, "UnigramPlus.ini")
-	# Only treat this as a corrupt ini and rebuild from defaults if the file
-	# itself fails to parse. If parsing succeeds, the failure was something
-	# else (e.g. a permissions error on write), and deleting a valid,
-	# user-edited config would just lose their settings without fixing anything.
-	try:
-		ConfigObj(path, configspec=spec)
-	except Exception:
-		if os.path.exists(path):
-			os.remove(path)
-		conf = cnf()
-	else:
-		raise
+	if os.path.exists(path):
+		os.remove(path)
+	conf = cnf()
