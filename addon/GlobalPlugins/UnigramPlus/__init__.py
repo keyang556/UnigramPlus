@@ -45,8 +45,10 @@ def _http_get(url, timeout=30):
 def _parse_version(text):
 	parts = []
 	for piece in str(text).lstrip("vV").split("."):
-		digits = re.sub(r"\D", "", piece)
-		parts.append(int(digits) if digits else 0)
+		# Only take the leading digits of each segment, so a prerelease suffix
+		# like "10-rc1" parses as 10, not as 101.
+		match = re.match(r"\d+", piece)
+		parts.append(int(match.group()) if match else 0)
 	return tuple(parts) if parts else (0,)
 
 def _addon_asset_url(release):
@@ -64,6 +66,12 @@ def _addon_asset_url(release):
 	return None
 
 def onCheckForUpdates(event = False, is_start = False):
+	# Runs the network check on a background thread so a slow/unreachable
+	# GitHub API doesn't freeze the NVDA UI, whether triggered at startup or
+	# from the settings button.
+	threading.Thread(target=_checkForUpdates, args=(is_start,), daemon=True).start()
+
+def _checkForUpdates(is_start):
 	addon_version = addonHandler.getCodeAddon().manifest["version"]
 	try:
 		release = json.loads(_http_get(update_api_url).decode("utf-8"))
@@ -187,7 +195,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if os.path.exists(fp): os.remove(fp)
 		# Checking for updates
 		if conf.get("is_automatically_check_for_updates") and not globalVars.appArgs.secure:
-			threading.Thread(target=onCheckForUpdates, args=(False, True,)).start()
+			onCheckForUpdates(False, True)
 
 	@script(description=_("Open UnigramPlus settings window"), gesture="kb:NVDA+ALT+U")
 	def script_open_settings_dialog(self, gesture, arg = False):
