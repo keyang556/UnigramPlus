@@ -1,4 +1,8 @@
-* La înregistrarea unui mesaj vocal sau video, NVDA anunță acum "Se înregistrează un mesaj vocal" sau "Se înregistrează un mesaj video" împreună cu timpul scurs, în loc de "Tn voice message".
+* S-a restabilit compatibilitatea cu Unigram 12.7, unde mai multe scurtături și anunțuri încetaseră să funcționeze.
+* Mesajele de tip sondaj anunță din nou întrebarea și opțiunile de răspuns.
+* Lista de subiecte a forumului anunță din nou previzualizarea ultimului mesaj.
+* În timpul unui apel individual, scurtăturile pentru dezactivarea microfonului (ALT+A), activarea sau dezactivarea camerei (ALT+V) și încheierea apelului (ALT+N) funcționează din nou.
+* ALT+End se deplasează din nou la cel mai recent mesaj din conversație.
 
 Dacă ai dorința și, mai ales, posibilitatea de a sprijini dezvoltatorul acestui add-on, o poți face folosind următoarele detalii:
 * PayPal: gladkiy.kostya@gmail.com.

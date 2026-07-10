@@ -452,6 +452,14 @@ Added Turkish localization
 
 
 
+### Verzija 5.5.8
+
+* Vraćena je kompatibilnost sa Unigramom 12.7, gde je nekoliko prečica i obaveštenja prestalo da radi.
+* Poruke ankete ponovo najavljuju pitanje i opcije odgovora.
+* Lista tema foruma ponovo najavljuje pregled poslednje poruke.
+* Tokom pojedinačnog poziva ponovo rade prečice za isključivanje mikrofona (ALT+A), uključivanje ili isključivanje kamere (ALT+V) i završavanje poziva (ALT+N).
+* ALT+End ponovo prelazi na najnoviju poruku u ćaskanju.
+
 ### Verzija 5.5.7
 
 * Odeljak sa prečicama na tastaturi reorganizovan je u kategorizovane tabele i objedinjuje prečice Unigrama i UnigramPlusa.

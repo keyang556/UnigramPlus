@@ -177,6 +177,14 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 
 ##Liste des changements :
 
+### Version 5.5.8
+
+* Compatibilité restaurée avec Unigram 12.7, où plusieurs raccourcis et annonces ne fonctionnaient plus.
+* Les messages de sondage annoncent à nouveau la question et les options de réponse.
+* La liste des sujets du forum annonce à nouveau l'aperçu du dernier message.
+* Pendant un appel individuel, les raccourcis pour couper le micro (ALT+A), activer ou désactiver la caméra (ALT+V) et terminer l'appel (ALT+N) fonctionnent à nouveau.
+* ALT+End se déplace à nouveau vers le message le plus récent de la discussion.
+
 ### Version 5.5.7
 
 * La section des raccourcis clavier a été réorganisée en tableaux par catégorie et combine désormais les raccourcis d’Unigram et d’UnigramPlus.

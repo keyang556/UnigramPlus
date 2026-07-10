@@ -920,3 +920,25 @@ msgstr "Grabar un mensaje de video"
 #: changelog.py:5
 msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
 msgstr "Al grabar un mensaje de voz o de video, NVDA ahora anuncia \"Grabando un mensaje de voz\" o \"Grabando un mensaje de video\" junto con el tiempo transcurrido, en lugar de \"Tn voice message\"."
+
+
+msgid "Microphone on"
+msgstr "Micrófono activado"
+
+msgid "Microphone muted"
+msgstr "Micrófono silenciado"
+
+msgid "Microphone button not found"
+msgstr "No se encontró el botón de micrófono"
+
+msgid "Camera button not found"
+msgstr "No se encontró el botón de cámara"
+
+msgid "This release restores compatibility with Unigram 12.7, where several shortcuts and announcements had stopped working."
+msgstr "Esta versión restaura la compatibilidad con Unigram 12.7, donde varios atajos y anuncios habían dejado de funcionar."
+
+msgid "Poll messages again announce the question and answer options, and the forum topic list again announces the message preview."
+msgstr "Los mensajes de encuesta vuelven a anunciar la pregunta y las opciones de respuesta, y la lista de temas del foro vuelve a anunciar la vista previa del mensaje."
+
+msgid "During a one-to-one call, the mute microphone (ALT+A), enable or disable camera (ALT+V) and end call (ALT+N) shortcuts work again, and ALT+End again moves to the latest message."
+msgstr "Durante una llamada individual, los atajos para silenciar el micrófono (ALT+A), activar o desactivar la cámara (ALT+V) y finalizar la llamada (ALT+N) vuelven a funcionar, y ALT+End vuelve al mensaje más reciente."

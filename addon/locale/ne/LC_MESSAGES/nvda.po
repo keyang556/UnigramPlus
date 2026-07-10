@@ -851,3 +851,25 @@ msgstr "भिडियो सन्देश रेकर्ड गर्नु
 #: changelog.py:5
 msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
 msgstr "आवाज वा भिडियो सन्देश रेकर्ड गर्दा, NVDA ले अब \"Tn voice message\" को सट्टा बितेको समयसहित \"आवाज सन्देश रेकर्ड गर्दै\" वा \"भिडियो सन्देश रेकर्ड गर्दै\" घोषणा गर्छ।"
+
+
+msgid "Microphone on"
+msgstr "माइक्रोफोन खुला"
+
+msgid "Microphone muted"
+msgstr "माइक्रोफोन म्युट"
+
+msgid "Microphone button not found"
+msgstr "माइक्रोफोन बटन फेला परेन"
+
+msgid "Camera button not found"
+msgstr "क्यामेरा बटन फेला परेन"
+
+msgid "This release restores compatibility with Unigram 12.7, where several shortcuts and announcements had stopped working."
+msgstr "यो संस्करणले Unigram 12.7 सँगको उपयुक्तता पुनःस्थापना गर्छ, जहाँ धेरै सर्टकट र घोषणाहरूले काम गर्न बन्द गरेका थिए।"
+
+msgid "Poll messages again announce the question and answer options, and the forum topic list again announces the message preview."
+msgstr "मतदान सन्देशहरूले फेरि प्रश्न र उत्तरका विकल्पहरू घोषणा गर्छन्, र फोरम विषय सूचीले फेरि सन्देशको पूर्वावलोकन घोषणा गर्छ।"
+
+msgid "During a one-to-one call, the mute microphone (ALT+A), enable or disable camera (ALT+V) and end call (ALT+N) shortcuts work again, and ALT+End again moves to the latest message."
+msgstr "एक-एक कलमा माइक्रोफोन म्युट (ALT+A), क्यामेरा सक्रिय वा निष्क्रिय (ALT+V) र कल अन्त्य (ALT+N) का सर्टकटहरू फेरि काम गर्छन्, र ALT+End ले फेरि सबैभन्दा नयाँ सन्देशमा जान्छ।"

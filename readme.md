@@ -179,6 +179,14 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
+### Version 5.5.8
+
+* Restored compatibility with Unigram 12.7, where several shortcuts and announcements had stopped working.
+* Poll messages again announce the question and the answer options.
+* The forum topic list again announces the last message preview.
+* During a one-to-one call, the mute microphone (ALT+A), enable or disable camera (ALT+V) and end call (ALT+N) shortcuts work again.
+* ALT+End again moves to the latest message in the chat.
+
 ### Version 5.5.7
 
 * Reorganized the keyboard shortcuts section into categorized tables and combined Unigram and UnigramPlus shortcuts.

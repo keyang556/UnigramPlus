@@ -399,8 +399,13 @@ class File_transfer_progress_button:
 
 class Audio_and_video_button:
 	def script_enter(self, gesture):
+		# Capture the toggle state before activating, so we can announce the state the button
+		# flips to (the app updates its own toggle state asynchronously after the click).
+		toggled_on = State.PRESSED in self.states or State.CHECKED in self.states
 		gesture.send()
-		if self.UIAAutomationId == "Audio": new_name = self.next.name if self.next else self.name
+		if self.UIAAutomationId == "Mute": new_name = _("Microphone on") if toggled_on else _("Microphone muted")
+		elif self.UIAAutomationId == "Camera": new_name = _("Camera off") if toggled_on else _("Camera on")
+		elif self.UIAAutomationId == "Audio": new_name = self.next.name if self.next else self.name
 		elif self.UIAAutomationId == "Video": new_name = _("Camera on") if self.firstChild.name == "\ue964" else _("Camera off") if self.firstChild.name == "\ue963" else self.name
 		def spechState(): message(new_name)
 		thr = Timer(.1, spechState).start()
@@ -432,7 +437,7 @@ class Message_list_item(ListItem):
 
 	@script(description=_("Show message text in popup window"), gesture="kb:ALT+C")
 	def script_show_text_message(self, gesture):
-		text_message = next((item.name for item in self.children if item.UIAAutomationId in ("TextBlock", "Message", "Question")), "")
+		text_message = next((item.name for item in self.children if item.UIAAutomationId in ("TextBlock", "Message", "Question", "QuestionText")), "")
 		recognized_text = next((item.name for item in self.children if item.UIAAutomationId == "RecognizedText"), "")
 		if not text_message and not recognized_text:
 			message(_("This message does not contain text"))
@@ -1074,6 +1079,46 @@ class AppModule(appModuleHandler.AppModule):
 			except: pass
 		return False
 
+	def _get_call_button_grid(self, foreground):
+		# Return the VoipPage 1:1-call button grid (whose children include the named toggles
+		# Mute/Camera/Screen and the unnamed hang-up button), or None when we are not in a
+		# 1:1 call window. Used to tell a 1:1 call apart from a group call and from the story
+		# viewer, which has its own unrelated "Mute" button.
+		mute = self._find_descendant(foreground, automation_id="Mute", max_depth=14)
+		if not mute or not mute.parent: return None
+		try: ids = {child.UIAAutomationId for child in mute.parent.children}
+		except: return None
+		if "Camera" in ids: return mute.parent
+		return None
+
+	def _find_end_call_button(self, foreground):
+		# 12.7's 1:1 hang-up button (VoipPage) has no automation id; it sits in the same grid
+		# as Mute, wrapped in a Border, carrying the hang-up glyph \uea1f.
+		grid = self._get_call_button_grid(foreground)
+		if not grid: return None
+		fallback = None
+		queue_list = [grid]
+		while queue_list:
+			node = queue_list.pop(0)
+			child = node.firstChild
+			while child:
+				try:
+					if child.role == Role.BUTTON and child.UIAAutomationId not in ("Screen", "Camera", "Mute"):
+						if child.firstChild and child.firstChild.name == "\uea1f": return child
+						if not child.UIAAutomationId and fallback is None: fallback = child
+				except: pass
+				queue_list.append(child)
+				child = child.next
+		return fallback
+
+	def _format_forum_topic_name(self, obj):
+		# Speak a ForumTopicCell as "title, preview, time". 12.7 renamed the preview id
+		# BriefInfo -> BriefText; guard the join so a partial cell never raises IndexError.
+		labels = [label.name for label in obj.children if label.UIAAutomationId in ("TitleLabel", "BriefInfo", "BriefText", "TimeLabel")]
+		if len(labels) >= 3: return ". ".join((labels[0], labels[2], labels[1]))
+		if labels: return ". ".join(labels)
+		return obj.name
+
 	def _label_profile_identity(self, obj):
 		# Build "<chat name>, <members/status>" for the profile-header identity button by
 		# reading the neighbouring Title and Subtitle. Walk up from the button until we reach
@@ -1258,69 +1303,80 @@ class AppModule(appModuleHandler.AppModule):
 
 	# End a call, decline call, or leave a voice chat
 	def script_callCancellation(self, gesture):
-		# The first check concerns the situation when the call is already ongoing
-		# The second check concerns the situation when the user wants to leave the voice chat while in the voice chat window
-		# The fourth check concerns the situation when an incoming call is received
-		targetButton = next((item for item in self.getElements(self)[1:] if (item.UIAAutomationId == "Accept" and item.previous.UIAAutomationId == "Audio") or (item.UIAAutomationId == "Leave" and item.firstChild and item.firstChild.name == "\ue711") or (item.previous.UIAAutomationId == "Audio" and item.firstChild and item.firstChild.name == "\ue711")), False)
+		# Invoked from the GlobalPlugin ALT+N handler when there is no incoming-call toast,
+		# i.e. to end an ongoing 1:1 call or leave a group voice chat.
+		foreground = api.getForegroundObject()
+		# 1:1 call: the hang-up button carries no automation id, so locate it positionally.
+		targetButton = self._find_end_call_button(foreground) if foreground else None
+		if not targetButton:
+			# Group voice chat: the Leave button is named.
+			targetButton = self._find_descendant(foreground, Role.BUTTON, "Leave", max_depth=14) if foreground else False
 		if targetButton:
 			lastFocus = api.getFocusObject()
 			message(targetButton.name)
-			self.fixedDoAction(self, targetButton)
-			lastFocus.setFocus()
+			self.fixedDoAction(targetButton)
+			try: lastFocus.setFocus()
+			except: pass
 
 	# Mute/unmute the microphone
 	@script(description=_("Press \"Mute/unmute microphone\" button"), gesture="kb:ALT+A")
 	def script_microphone(self, gesture):
 		obj = api.getFocusObject()
-		targetButton = False
-		isVoiceChat = False
-		for item in self.getElements():
-			if item.UIAAutomationId == "Audio" and item.previous.UIAAutomationId == "Video" and item.next.UIAAutomationId == "Accept":
-				targetButton = item
-				break
-			elif item.UIAAutomationId == "Audio" and item.next.UIAAutomationId == "AudioInfo":
-				targetButton = item
-				isVoiceChat = True
-				break
-		if targetButton:
-			if isVoiceChat:
-				targetButton.doAction()
+		foreground = api.getForegroundObject()
+		# 1:1 call window (VoipPage): the mic toggle is x:Name="Mute" (checked == muted).
+		grid = self._get_call_button_grid(foreground) if foreground else None
+		if grid:
+			mute = next((child for child in grid.children if child.UIAAutomationId == "Mute"), None)
+			if mute:
+				# The toggle flips on click, so announce the state it flips to.
+				muted = State.PRESSED in mute.states or State.CHECKED in mute.states
+				self.fixedDoAction(mute)
 				obj.setFocus()
-				def spechState(): message(targetButton.next.name)
-				thr = Timer(.1, spechState).start()
-				return True
-			self.fixedDoAction(targetButton)
+				new_name = _("Microphone on") if muted else _("Microphone muted")
+				def spechState(): message(new_name)
+				Timer(.15, spechState).start()
+				return
+		# Group voice chat (GroupCallPage): mic button x:Name="Audio", status label "AudioInfo".
+		audio = self._find_descendant(foreground, automation_id="Audio", max_depth=14) if foreground else False
+		info = self._find_descendant(foreground, automation_id="AudioInfo", max_depth=14) if foreground else False
+		if audio and info:
+			audio.doAction()
 			obj.setFocus()
-			def spechState(): message(targetButton.name)
-			thr = Timer(.1, spechState).start()
+			def spechState(): message(info.name)
+			Timer(.15, spechState).start()
+			return
+		message(_("Microphone button not found"))
 
 	# Turn off/on the camera
 	@script(description=_("Press \"Enable/disable camera\" button"), gesture="kb:ALT+V")
 	def script_video(self, gesture):
 		obj = api.getFocusObject()
-		targetButton = False
-		isVoiceChat = False
-		for item in self.getElements():
-			if item.UIAAutomationId == "Video" and item.next.UIAAutomationId == "Audio" and item.next.next.UIAAutomationId == "Accept":
-				targetButton = item
-				break
-			elif item.UIAAutomationId == "Video" and item.next.UIAAutomationId == "VideoInfo":
-				targetButton = item
-				isVoiceChat = True
-				break
-		if targetButton:
-			if isVoiceChat:
-				targetButton.doAction()
+		foreground = api.getForegroundObject()
+		# 1:1 call window (VoipPage): the camera toggle is x:Name="Camera" (checked == on).
+		grid = self._get_call_button_grid(foreground) if foreground else None
+		if grid:
+			camera = next((child for child in grid.children if child.UIAAutomationId == "Camera"), None)
+			if camera:
+				on = State.PRESSED in camera.states or State.CHECKED in camera.states
+				self.fixedDoAction(camera)
 				obj.setFocus()
-				def spechState():
-					if targetButton.firstChild.name == "\ue964": message(_("Camera on"))
-					elif targetButton.firstChild.name == "\ue963": message(_("Camera off"))
-				thr = Timer(.1, spechState).start()
+				new_name = _("Camera off") if on else _("Camera on")
+				def spechState(): message(new_name)
+				Timer(.15, spechState).start()
 				return
-			self.fixedDoAction(targetButton)
+		# Group voice chat (GroupCallPage): camera button x:Name="Video", status label "VideoInfo".
+		video = self._find_descendant(foreground, automation_id="Video", max_depth=14) if foreground else False
+		info = self._find_descendant(foreground, automation_id="VideoInfo", max_depth=14) if foreground else False
+		if video and info:
+			video.doAction()
 			obj.setFocus()
-			def spechState(): message(targetButton.name)
-			thr = Timer(.1, spechState).start()
+			def spechState():
+				if video.firstChild and video.firstChild.name == "\ue964": message(_("Camera on"))
+				elif video.firstChild and video.firstChild.name == "\ue963": message(_("Camera off"))
+				else: message(info.name)
+			Timer(.15, spechState).start()
+			return
+		message(_("Camera button not found"))
 
 	# Copy the focused link to the clipboard. For anything else we defer to Unigram's own
 	# Ctrl+C, so the shortcut is never handled twice (Unigram can't copy just a link, and
@@ -1513,7 +1569,7 @@ class AppModule(appModuleHandler.AppModule):
 		sender_message = self.sender_message or ""
 		item = obj.firstChild
 		while item:
-			if item.UIAAutomationId == "Question":
+			if item.UIAAutomationId in ("Question", "QuestionText"):
 				# Processing messages containing a poll
 				options, votes = "", ""
 				for el in obj.children:
@@ -1700,8 +1756,7 @@ class AppModule(appModuleHandler.AppModule):
 				obj.name = self.actionChatElementInFocus(obj)
 			elif obj.parent.UIAAutomationId == "ScrollingHost":
 				if obj.name.startswith("forumTopic {\n  info = forumTopicInfo {"):
-					labels = [label.name for label in obj.children if label.UIAAutomationId in ("TitleLabel", "BriefInfo", "TimeLabel") ]
-					if len(labels) >= 3: obj.name = ". ".join((labels[0], labels[2], labels[1]))
+					obj.name = self._format_forum_topic_name(obj)
 				elif obj.name == "" and obj.childCount != 0:
 					for item in obj.children: obj.name+=item.name
 				elif obj.name.startswith("inlineQueryResult"):
@@ -1714,8 +1769,7 @@ class AppModule(appModuleHandler.AppModule):
 			elif obj.name == "Unigram.ViewModels.Folders.FilterFlag": obj.name = obj.children[1].name
 			elif obj.name.startswith("chatTheme {"): obj.name = obj.firstChild.name
 			elif obj.name.startswith("forumTopic {\n  info = forumTopicInfo {"):
-				labels = [label.name for label in obj.children if label.UIAAutomationId in ("TitleLabel", "BriefInfo", "TimeLabel") ]
-				obj.name = ". ".join((labels[0], labels[2], labels[1]))
+				obj.name = self._format_forum_topic_name(obj)
 		elif obj.role == Role.EDITABLETEXT:
 			try:
 				# If this message input field has a composer header attached (reply or edit),
@@ -1784,6 +1838,17 @@ class AppModule(appModuleHandler.AppModule):
 		# name and member count read from the neighbouring Title and Subtitle.
 		if obj.UIAAutomationId == "IdentityRoot" and not obj.name:
 			obj.name = self._label_profile_identity(obj)
+		# In a 1:1 call the Mute/Camera toggles keep a static name, so make the announced label
+		# reflect the current state. Scope to the call button grid to avoid the story viewer's
+		# own "Mute" button.
+		if obj.UIAAutomationId in ("Mute", "Camera"):
+			try:
+				sib = {child.UIAAutomationId for child in obj.parent.children}
+				if "Camera" in sib and ("Screen" in sib or "Mute" in sib):
+					on = State.PRESSED in obj.states or State.CHECKED in obj.states
+					if obj.UIAAutomationId == "Mute": obj.name = _("Microphone muted") if on else _("Microphone on")
+					else: obj.name = _("Camera on") if on else _("Camera off")
+			except: pass
 		if obj.name == "":
 			if obj.firstChild and obj.firstChild.name in labels_in_buttons: # If the button contains an icon, check if the dictionary contains the label for that icon
 				obj.name = labels_in_buttons[obj.firstChild.name]
@@ -1831,6 +1896,13 @@ class AppModule(appModuleHandler.AppModule):
 				self.saved_items.save("profile name", obj)
 			elif obj.UIAAutomationId in ("Audio", "Video"):
 				clsList.insert(0, Audio_and_video_button)
+			elif obj.UIAAutomationId in ("Mute", "Camera"):
+				# 1:1 call toggles share their grid with Camera/Screen; the story viewer also has
+				# an unrelated "Mute" button, so only attach the overlay inside the call grid.
+				try:
+					sib = {child.UIAAutomationId for child in obj.parent.children}
+					if "Camera" in sib and ("Screen" in sib or "Mute" in sib): clsList.insert(0, Audio_and_video_button)
+				except: pass
 			# elif obj.role == Role.BUTTON and obj.UIAAutomationId == "Explanation":
 				# clsList.insert(0, ExplanationCorrectAnswerInQuiz)
 			elif obj.role == Role.SLIDER and obj.UIAAutomationId == "Slider":
@@ -2109,9 +2181,15 @@ class AppModule(appModuleHandler.AppModule):
 
 	@script(description=_("Go to the end"), gesture="kb:ALT+end")
 	def script_to_down(self, gesture):
-		button = next((button for button in self.getElements() if button.role == Role.BUTTON and button.UIAAutomationId == "MessagesButton"), None)
-		if button: button.doAction()
-		else: message(_("Button not found"))
+		# 12.7 nests the scroll-to-bottom button (MessagesButton) deep inside the Arrows overlay
+		# and hides it while already at the bottom. Walk the tree to find it; if it is not
+		# present/visible we are already at the bottom, so focus the last message instead.
+		foreground = api.getForegroundObject()
+		button = self._find_descendant(foreground, Role.BUTTON, "MessagesButton", max_depth=25) if foreground else False
+		if button and button.location and button.location.width:
+			button.doAction()
+		else:
+			self.script_toLastMessage(gesture)
 
 	@script(description=_("Go to the list with search results"), gesture="kb:ALT+I")
 	def script_go_to_list_search_results(self, gesture):

@@ -965,3 +965,25 @@ msgstr "Записать видеосообщение"
 #: changelog.py:5
 msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
 msgstr "При записи голосового или видеосообщения NVDA теперь объявляет \"Запись голосового сообщения\" или \"Запись видеосообщения\" вместе с истекшим временем вместо \"Tn voice message\"."
+
+
+msgid "Microphone on"
+msgstr "Микрофон включён"
+
+msgid "Microphone muted"
+msgstr "Микрофон отключён"
+
+msgid "Microphone button not found"
+msgstr "Кнопка микрофона не найдена"
+
+msgid "Camera button not found"
+msgstr "Кнопка камеры не найдена"
+
+msgid "This release restores compatibility with Unigram 12.7, where several shortcuts and announcements had stopped working."
+msgstr "Этот выпуск восстанавливает совместимость с Unigram 12.7, где перестали работать несколько горячих клавиш и объявлений."
+
+msgid "Poll messages again announce the question and answer options, and the forum topic list again announces the message preview."
+msgstr "Сообщения-опросы снова озвучивают вопрос и варианты ответа, а список тем форума снова озвучивает предпросмотр сообщения."
+
+msgid "During a one-to-one call, the mute microphone (ALT+A), enable or disable camera (ALT+V) and end call (ALT+N) shortcuts work again, and ALT+End again moves to the latest message."
+msgstr "Во время личного звонка снова работают горячие клавиши отключения микрофона (ALT+A), включения или выключения камеры (ALT+V) и завершения звонка (ALT+N), а ALT+End снова переходит к последнему сообщению."

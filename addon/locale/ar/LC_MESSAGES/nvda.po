@@ -1001,3 +1001,25 @@ msgstr "تسجيل رسالة مرئية"
 #: changelog.py:5
 msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
 msgstr "عند تسجيل رسالة صوتية أو مرئية، يعلن NVDA الآن \"جارٍ تسجيل رسالة صوتية\" أو \"جارٍ تسجيل رسالة مرئية\" مع الوقت المنقضي، بدلاً من \"Tn voice message\"."
+
+
+msgid "Microphone on"
+msgstr "الميكروفون قيد التشغيل"
+
+msgid "Microphone muted"
+msgstr "الميكروفون صامت"
+
+msgid "Microphone button not found"
+msgstr "زر الميكروفون غير موجود"
+
+msgid "Camera button not found"
+msgstr "زر الكاميرا غير موجود"
+
+msgid "This release restores compatibility with Unigram 12.7, where several shortcuts and announcements had stopped working."
+msgstr "استعادت هذه النسخة التوافق مع Unigram 12.7، حيث توقفت عدة اختصارات وإعلانات عن العمل."
+
+msgid "Poll messages again announce the question and answer options, and the forum topic list again announces the message preview."
+msgstr "تعلن رسائل الاستطلاع مرة أخرى عن السؤال وخيارات الإجابة، وتعلن قائمة مواضيع المنتدى مرة أخرى عن معاينة الرسالة."
+
+msgid "During a one-to-one call, the mute microphone (ALT+A), enable or disable camera (ALT+V) and end call (ALT+N) shortcuts work again, and ALT+End again moves to the latest message."
+msgstr "أثناء المكالمة الفردية، تعمل مرة أخرى اختصارات كتم الميكروفون (ALT+A) وتشغيل الكاميرا أو إيقافها (ALT+V) وإنهاء المكالمة (ALT+N)، ويعود ALT+End إلى أحدث رسالة."

@@ -178,6 +178,14 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 ##Lista de modificări:
 
+### Versiunea 5.5.8
+
+* S-a restabilit compatibilitatea cu Unigram 12.7, unde mai multe scurtături și anunțuri încetaseră să funcționeze.
+* Mesajele de tip sondaj anunță din nou întrebarea și opțiunile de răspuns.
+* Lista de subiecte a forumului anunță din nou previzualizarea ultimului mesaj.
+* În timpul unui apel individual, scurtăturile pentru dezactivarea microfonului (ALT+A), activarea sau dezactivarea camerei (ALT+V) și încheierea apelului (ALT+N) funcționează din nou.
+* ALT+End se deplasează din nou la cel mai recent mesaj din conversație.
+
 ### Versiunea 5.5.7
 
 * Secțiunea de scurtături de tastatură a fost reorganizată în tabele pe categorii și combină scurtăturile Unigram și UnigramPlus.

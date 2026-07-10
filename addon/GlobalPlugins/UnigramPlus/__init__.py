@@ -219,7 +219,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		desctop = api.getDesktopObject()
 		notification = next((item.firstChild.firstChild for item in desctop.children if item.firstChild and hasattr(item.firstChild, "UIAAutomationId") and item.firstChild.UIAAutomationId == "ToastCenterScrollViewer"), False)
 		if not notification:
-			AppModule.script_callCancellation(AppModule, gesture)
+			# No incoming-call toast: hand off to the app module to end an ongoing call or leave
+			# a voice chat. Use the live instance so its helper methods resolve correctly.
+			appMod = getattr(api.getFocusObject(), "appModule", None)
+			if appMod is not None and hasattr(appMod, "script_callCancellation"):
+				appMod.script_callCancellation(gesture)
 			return
 		button = next((item.next for item in notification.children if item.UIAAutomationId == "VerbButton"), None)
 		if button:

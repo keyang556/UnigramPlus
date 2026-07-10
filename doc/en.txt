@@ -1,4 +1,8 @@
-* When recording a voice or video message, NVDA now announces "Recording a voice message" or "Recording a video message" along with the elapsed time, instead of "Tn voice message".
+* Restored compatibility with Unigram 12.7, where several shortcuts and announcements had stopped working.
+* Poll messages again announce the question and the answer options.
+* The forum topic list again announces the last message preview.
+* During a one-to-one call, the mute microphone (ALT+A), enable or disable camera (ALT+V) and end call (ALT+N) shortcuts work again.
+* ALT+End again moves to the latest message in the chat.
 
 If you have the desire, and most importantly the opportunity, to support the developer of this add-on, you can do so using the following details:
 * PayPal: gladkiy.kostya@gmail.com.
