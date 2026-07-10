@@ -964,9 +964,6 @@ msgstr "Intervallo di annuncio dell'avanzamento del trasferimento file (percentu
 #~ msgid "Mute or unmute the microphone"
 #~ msgstr "Attiva o disattiva il microfono"
 
-#~ msgid "Microphone on"
-#~ msgstr "Microfono attivato"
-
 #~ msgid "Microphone off"
 #~ msgstr "Microfono disattivato"
 
