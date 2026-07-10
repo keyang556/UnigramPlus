@@ -1,4 +1,8 @@
-* Pri snimanju glasovne ili video poruke NVDA sada najavljuje "Snimanje glasovne poruke" ili "Snimanje video poruke" zajedno sa proteklim vremenom umesto "Tn voice message".
+* Vraćena je kompatibilnost sa Unigramom 12.7, gde je nekoliko prečica i obaveštenja prestalo da radi.
+* Poruke ankete ponovo najavljuju pitanje i opcije odgovora.
+* Lista tema foruma ponovo najavljuje pregled poslednje poruke.
+* Tokom pojedinačnog poziva ponovo rade prečice za isključivanje mikrofona (ALT+A), uključivanje ili isključivanje kamere (ALT+V) i završavanje poziva (ALT+N).
+* ALT+End ponovo prelazi na najnoviju poruku u ćaskanju.
 
 Ako imate želju, a što je najvažnije, priliku, da biste podržali programera ovog dodatka, možete to učiniti koristeći sledeće detalje:
 * Peipal: gladkii.kostia@gmail.com.

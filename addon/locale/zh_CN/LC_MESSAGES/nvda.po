@@ -924,3 +924,25 @@ msgstr "录制视频消息"
 #: changelog.py:5
 msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
 msgstr "录制语音或视频消息时，NVDA 现在会朗读「正在录制语音消息」或「正在录制视频消息」并念出经过时间，而不再是「Tn voice message」。"
+
+
+msgid "Microphone on"
+msgstr "麦克风开启"
+
+msgid "Microphone muted"
+msgstr "麦克风静音"
+
+msgid "Microphone button not found"
+msgstr "找不到麦克风按钮"
+
+msgid "Camera button not found"
+msgstr "找不到摄像头按钮"
+
+msgid "This release restores compatibility with Unigram 12.7, where several shortcuts and announcements had stopped working."
+msgstr "此版本恢复了与 Unigram 12.7 的兼容性，此前有多个快捷键和语音提示失效。"
+
+msgid "Poll messages again announce the question and answer options, and the forum topic list again announces the message preview."
+msgstr "投票消息会再次朗读问题和答案选项，论坛话题列表会再次朗读消息预览。"
+
+msgid "During a one-to-one call, the mute microphone (ALT+A), enable or disable camera (ALT+V) and end call (ALT+N) shortcuts work again, and ALT+End again moves to the latest message."
+msgstr "一对一通话中，静音麦克风（ALT+A）、开启或关闭摄像头（ALT+V）和结束通话（ALT+N）的快捷键可再次使用，ALT+End 会再次回到最新消息。"

@@ -177,6 +177,14 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 
 ## Lista de alterações:
 
+### Versão 5.5.8
+
+* Compatibilidade restaurada com o Unigram 12.7, onde vários atalhos e anúncios haviam parado de funcionar.
+* As mensagens de enquete voltam a anunciar a pergunta e as opções de resposta.
+* A lista de tópicos do fórum volta a anunciar a prévia da última mensagem.
+* Durante uma chamada individual, os atalhos para silenciar o microfone (ALT+A), ativar ou desativar a câmera (ALT+V) e encerrar a chamada (ALT+N) voltam a funcionar.
+* ALT+End volta a ir para a mensagem mais recente do bate-papo.
+
 ### Versão 5.5.7
 
 * A seção de atalhos de teclado foi reorganizada em tabelas por categoria e agora combina os atalhos do Unigram e do UnigramPlus.

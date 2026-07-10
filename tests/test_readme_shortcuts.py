@@ -91,7 +91,7 @@ def test_all_readmes_have_complete_integrated_shortcut_tables():
 		assert text.count("|---|---|---|") == 9, readme
 		assert text.count("| Unigram |") == 42, readme
 		assert text.count("| UnigramPlus |") == 53, readme
-		assert "5.5.7" in text, readme
+		assert "5.5.8" in text, readme
 
 
 def test_chinese_readmes_use_unigram_interface_terms():

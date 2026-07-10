@@ -1,4 +1,8 @@
-* Sesli veya görüntülü mesaj kaydederken NVDA artık "Tn voice message" yerine geçen süreyle birlikte "Sesli mesaj kaydediliyor" veya "Görüntülü mesaj kaydediliyor" anonsunu yapıyor.
+* Birkaç kısayolun ve duyurunun çalışmayı bıraktığı Unigram 12.7 ile uyumluluk geri getirildi.
+* Anket iletileri soruyu ve yanıt seçeneklerini yeniden duyuruyor.
+* Forum konuları listesi son iletinin önizlemesini yeniden duyuruyor.
+* Bire bir çağrı sırasında mikrofonu sessize alma (ALT+A), kamerayı açma veya kapatma (ALT+V) ve çağrıyı sonlandırma (ALT+N) kısayolları yeniden çalışıyor.
+* ALT+End yeniden sohbetteki en son iletiye gidiyor.
 
 Bu eklentinin geliştiricisini destekleme isteğiniz ve en önemlisi fırsatınız varsa, aşağıdaki ayrıntıları kullanarak bunu yapabilirsiniz:
 * PayPal: gladkiy.kostya@gmail.com.

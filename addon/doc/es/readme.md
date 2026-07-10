@@ -179,6 +179,14 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 
 ##Lista de cambios:
 
+### Versión 5.5.8
+
+* Se restauró la compatibilidad con Unigram 12.7, donde varios atajos y anuncios habían dejado de funcionar.
+* Los mensajes de encuesta vuelven a anunciar la pregunta y las opciones de respuesta.
+* La lista de temas del foro vuelve a anunciar la vista previa del último mensaje.
+* Durante una llamada individual, los atajos para silenciar el micrófono (ALT+A), activar o desactivar la cámara (ALT+V) y finalizar la llamada (ALT+N) vuelven a funcionar.
+* ALT+End vuelve a desplazarse al mensaje más reciente del chat.
+
 ### Versión 5.5.7
 
 * Se reorganizó la sección de atajos de teclado en tablas por categorías y se combinaron los atajos de Unigram y UnigramPlus.

@@ -2,9 +2,9 @@
 def _(t): return t
 
 value = _(
-	"When recording a voice or video message, NVDA now announces \"Recording a voice message\" or "
-	"\"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
+	"This release restores compatibility with Unigram 12.7, where several shortcuts and announcements had stopped working."
 ) + " " + _(
-	"The keyboard shortcut documentation was reorganized into categorized tables that combine Unigram "
-	"and UnigramPlus shortcuts, and ALT+H now reads the new table format."
+	"Poll messages again announce the question and answer options, and the forum topic list again announces the message preview."
+) + " " + _(
+	"During a one-to-one call, the mute microphone (ALT+A), enable or disable camera (ALT+V) and end call (ALT+N) shortcuts work again, and ALT+End again moves to the latest message."
 )

@@ -180,6 +180,14 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 
 ##Popis promjena:
 
+### Verzija 5.5.8
+
+* Vraćena je kompatibilnost s Unigramom 12.7, gdje je nekoliko prečaca i najava prestalo raditi.
+* Poruke ankete ponovno najavljuju pitanje i mogućnosti odgovora.
+* Popis tema foruma ponovno najavljuje pretpregled posljednje poruke.
+* Tijekom pojedinačnog poziva ponovno rade prečaci za isključivanje mikrofona (ALT+A), uključivanje ili isključivanje kamere (ALT+V) i završetak poziva (ALT+N).
+* ALT+End ponovno prelazi na najnoviju poruku u razgovoru.
+
 ### Verzija 5.5.7
 
 * Odjeljak tipkovničkih prečaca reorganiziran je u kategorizirane tablice te objedinjuje prečace Unigrama i UnigramPlusa.
