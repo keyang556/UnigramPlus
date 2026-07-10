@@ -1114,7 +1114,7 @@ class AppModule(appModuleHandler.AppModule):
 	def _format_forum_topic_name(self, obj):
 		# Speak a ForumTopicCell as "title, preview, time". 12.7 renamed the preview id
 		# BriefInfo -> BriefText; guard the join so a partial cell never raises IndexError.
-		labels = [label.name for label in obj.children if label.UIAAutomationId in ("TitleLabel", "BriefText", "TimeLabel")]
+		labels = [label.name for label in obj.children if label.UIAAutomationId in ("TitleLabel", "BriefInfo", "BriefText", "TimeLabel")]
 		if len(labels) >= 3: return ". ".join((labels[0], labels[2], labels[1]))
 		if labels: return ". ".join(labels)
 		return obj.name
