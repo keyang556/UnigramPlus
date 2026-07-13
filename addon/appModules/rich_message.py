@@ -7,6 +7,7 @@ tree handling straightforward to regression test.
 """
 
 from collections import deque
+from html import escape
 
 
 _RICH_MESSAGE_CLASS = "instantcontent"
@@ -34,6 +35,26 @@ def _children(obj):
 def _is_instant_content(obj):
 	class_name = str(_safe_attr(obj, "UIAClassName", "") or "")
 	return class_name.replace(":", ".").rsplit(".", 1)[-1].casefold() == _RICH_MESSAGE_CLASS
+
+
+def _message_text_nodes(message):
+	return tuple(
+		node
+		for node in _children(message)
+		if _safe_attr(node, "UIAAutomationId", "") in _MESSAGE_TEXT_AUTOMATION_IDS
+	)
+
+
+def _surface_has_message_text(message):
+	"""Whether Unigram's unprocessed item summary already contains normal message text."""
+	surface = _clean_text(_safe_attr(message, "name", "")).casefold()
+	if not surface:
+		return False
+	for node in _message_text_nodes(message):
+		text = _clean_text(_safe_attr(node, "name", "")).casefold()
+		if text and text in surface:
+			return True
+	return False
 
 
 class _RawUIANode:
@@ -156,6 +177,12 @@ def find_rich_message_root(message):
 		return None
 	if _is_instant_content(message):
 		return message
+	# A normal message exposes its TextBlock content in the list item's own UIA
+	# summary. MessageRichMessage currently contributes only a separator comma;
+	# its real PageBlock text lives below InstantContent. This guard also rejects
+	# visible recycled InstantContent controls retained by ordinary message cells.
+	if _surface_has_message_text(message):
+		return None
 	raw_available, raw_root = _find_raw_rich_message_root(message)
 	if raw_available:
 		return raw_root
@@ -181,13 +208,59 @@ def insert_hint_before_status(name, hint, status_markers):
 def extract_message_text(message):
 	"""Collect all text controls flattened into a message's control-view children."""
 	parts = []
-	for node in _children(message):
-		if _safe_attr(node, "UIAAutomationId", "") not in _MESSAGE_TEXT_AUTOMATION_IDS:
-			continue
+	for node in _message_text_nodes(message):
 		text = _clean_text(_safe_attr(node, "name", ""))
 		if text and text not in parts:
 			parts.append(text)
 	return "\n\n".join(parts)
+
+
+def _is_link(node):
+	role = _safe_attr(node, "role", None)
+	role_name = _safe_attr(role, "name", "")
+	return str(role_name).casefold() == "link"
+
+
+def _link_url(node):
+	for attribute in ("value", "description"):
+		value = _clean_text(_safe_attr(node, attribute, ""))
+		if value.startswith(("https://", "http://", "tg://", "mailto:")):
+			return value
+	return "#"
+
+
+def _text_with_links_to_html(text, links):
+	parts = []
+	position = 0
+	for label, url in links:
+		index = text.find(label, position)
+		if index < 0:
+			continue
+		parts.append(escape(text[position:index]))
+		parts.append('<a href="%s">%s</a>' % (escape(url, quote=True), escape(label)))
+		position = index + len(label)
+	parts.append(escape(text[position:]))
+	return "".join(parts).replace("\n", "<br>")
+
+
+def extract_message_html(message):
+	"""Build safe semantic HTML from flattened text blocks and their UIA links."""
+	blocks = []
+	for node in _message_text_nodes(message):
+		text = _clean_text(_safe_attr(node, "name", ""))
+		if not text:
+			continue
+		links = []
+		for descendant in _walk_descendants(node, max_depth=6, max_nodes=200):
+			if not _is_link(descendant):
+				continue
+			label = _clean_text(_safe_attr(descendant, "name", ""))
+			if not label:
+				continue
+			links.append((label, _link_url(descendant)))
+		content = _text_with_links_to_html(text, links)
+		blocks.append("<p>%s</p>" % content)
+	return "".join(blocks)
 
 
 def _clean_text(value):

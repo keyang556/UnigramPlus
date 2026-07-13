@@ -31,7 +31,7 @@ from .data import *
 from .text_window import *
 from .cnf import conf, lang
 from .readme_shortcuts import extractShortcutText  # noqa: E402
-from .rich_message import extract_message_text, extract_rich_message_text, find_rich_message_root, insert_hint_before_status  # noqa: E402
+from .rich_message import extract_message_html, extract_message_text, extract_rich_message_text, find_rich_message_root, insert_hint_before_status  # noqa: E402
 
 baseDir = os.path.join(os.path.dirname(__file__), "media\\")
 _telegramDesktopFallbackClass = None
@@ -439,16 +439,21 @@ class Message_list_item(ListItem):
 	@script(description=_("Show message text in popup window"), gesture="kb:ALT+C")
 	def script_show_text_message(self, gesture):
 		rich_message = find_rich_message_root(self)
+		html = extract_message_html(self)
 		if rich_message:
 			text = extract_rich_message_text(rich_message, textInfos.POSITION_ALL)
 			log.debug("Rich message extraction returned %d characters" % len(text))
-			if not text:
-				text = extract_message_text(self)
-				log.debug("Rich message control-view fallback returned %d characters" % len(text))
+			if html:
+				# Translators: Title of the NVDA browse-mode window containing a rich message.
+				browseableMessage(html, _("Rich message"), isHtml=True)
+				return
 			if text:
 				# Translators: Title of the NVDA browse-mode window containing a rich message.
 				browseableMessage(text, _("Rich message"))
 				return
+		if html:
+			browseableMessage(html, _("message text"), isHtml=True)
+			return
 		text = extract_message_text(self)
 		if not text:
 			message(_("This message does not contain text"))

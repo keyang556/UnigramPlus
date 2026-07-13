@@ -8,6 +8,7 @@ import warnings
 sys.path.insert(0, str(Path(__file__).parents[1] / "addon" / "appModules"))
 
 from rich_message import (  # noqa: E402
+	extract_message_html,
 	extract_message_text,
 	extract_rich_message_text,
 	find_rich_message_root,
@@ -113,6 +114,12 @@ def test_finds_and_extracts_instant_content_from_raw_uia_view(monkeypatch):
 	assert root.UIAClassName == "InstantContent"
 	assert extract_rich_message_text(root) == "First raw block\n\nSecond raw block"
 	assert (5, False) in message_element.find_condition
+	ordinary = SimpleNamespace(
+		name="Ordinary text, Sent at 18:17",
+		children=[Node(name="Ordinary text", automation_id="TextBlock")],
+		UIAElement=message_element,
+	)
+	assert find_rich_message_root(ordinary) is None
 
 
 def test_collects_all_flattened_message_text_controls():
@@ -126,6 +133,21 @@ def test_collects_all_flattened_message_text_controls():
 	)
 
 	assert extract_message_text(message) == "First paragraph\n\nSecond paragraph\n\nrecognized"
+
+
+def test_builds_browseable_html_with_links():
+	first_link = Node(name="OpenAI")
+	first_link.role = SimpleNamespace(name="LINK")
+	first_link.value = "https://openai.com/first"
+	second_link = Node(name="OpenAI")
+	second_link.role = SimpleNamespace(name="LINK")
+	second_link.value = "https://openai.com/second"
+	block = Node(name="Visit OpenAI and OpenAI", automation_id="TextBlock", children=[first_link, second_link])
+
+	assert extract_message_html(Node(children=[block])) == (
+		'<p>Visit <a href="https://openai.com/first">OpenAI</a> and '
+		'<a href="https://openai.com/second">OpenAI</a></p>'
+	)
 
 
 def test_extracts_layout_children_as_separate_markdown_blocks():
@@ -214,10 +236,11 @@ def test_all_message_text_uses_browse_mode_when_rich_content_is_empty_or_absent(
 		namespace = {
 			"find_rich_message_root": lambda obj, result=rich_root: result,
 			"extract_rich_message_text": lambda root, position: "",
+			"extract_message_html": extract_message_html,
 			"extract_message_text": extract_message_text,
 			"textInfos": SimpleNamespace(POSITION_ALL="all"),
 			"log": SimpleNamespace(debug=lambda text: None),
-			"browseableMessage": lambda *args: opened.append(("browse", args)),
+			"browseableMessage": lambda *args, **kwargs: opened.append(("browse", args, kwargs)),
 			"message": lambda text: opened.append(("message", text)),
 			"_": lambda text: text,
 		}
@@ -226,7 +249,8 @@ def test_all_message_text_uses_browse_mode_when_rich_content_is_empty_or_absent(
 		namespace["script_show_text_message"](message_item, None)
 
 		title = "Rich message" if rich_root else "message text"
-		assert opened == [("browse", ("Ordinary text\n\nRecognized text", title))]
+		html = "<p>Ordinary text</p><p>Recognized text</p>"
+		assert opened == [("browse", (html, title), {"isHtml": True})]
 
 
 def test_focus_hint_uses_the_message_overlay_keywords():
