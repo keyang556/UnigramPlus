@@ -6,7 +6,7 @@ import re
 
 
 _INTERNAL_LINK_PATTERN = re.compile(
-	r'<a href="nvda-action://unigram-link-\d+">(?P<label>.*?)</a>',
+	r'<a href="nvda-action://unigram-link-\d+"(?: onclick="[^"]*")?>(?P<label>.*?)</a>',
 	re.DOTALL,
 )
 
@@ -18,6 +18,13 @@ def _without_internal_links(message_html):
 
 def _activate_uia_link(link):
 	try:
+		from logHandler import log
+
+		log.debug("Activating a delegated Unigram rich-message link")
+		try:
+			link.setFocus()
+		except (AttributeError, NotImplementedError):
+			pass
 		link.doAction()
 	except Exception:
 		from logHandler import log
@@ -27,9 +34,21 @@ def _activate_uia_link(link):
 
 def _delegate_link(dialog, link, wx):
 	# Close first so the action is performed with Unigram restored as the active
-	# window. CallAfter also lets the WebView finish handling its navigation event.
+	# window. A short delay lets focus restoration finish before a UWP Hyperlink
+	# receives focus and its default action.
 	dialog.Close()
-	wx.CallAfter(_activate_uia_link, link)
+	call_later = getattr(wx, "CallLater", None)
+	if call_later:
+		call_later(200, _activate_uia_link, link)
+	else:
+		wx.CallAfter(_activate_uia_link, link)
+
+
+def _make_link_handler(dialog, link, wx):
+	def handler():
+		_delegate_link(dialog, link, wx)
+
+	return handler
 
 
 def show_browseable_message(message_html, title, link_actions=None):
@@ -73,10 +92,11 @@ def show_browseable_message(message_html, title, link_actions=None):
 			)
 		dialog = HtmlMessageDialog(None, document, title, buttons=None)
 		for action_name, link in link_actions.items():
-			dialog.registerAction(
-				action_name,
-				lambda link=link: _delegate_link(dialog, link, wx),
-			)
+			handler = _make_link_handler(dialog, link, wx)
+			dialog.registerAction(action_name, handler)
+			# The IE WebView can normalize a custom-scheme host with a trailing
+			# slash. Register both forms so the delegated action is not discarded.
+			dialog.registerAction(action_name + "/", handler)
 	except Exception:
 		from logHandler import log
 

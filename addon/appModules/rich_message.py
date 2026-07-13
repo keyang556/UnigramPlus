@@ -259,16 +259,29 @@ def _text_with_links_to_html(text, links):
 			unmatched.append((label, url, action))
 			continue
 		parts.append(escape(text[position:index]))
-		parts.append('<a href="%s">%s</a>' % (escape(url, quote=True), escape(label)))
+		parts.append(_link_to_html(label, url, action))
 		if action:
 			actions[action[0]] = action[1]
 		position = index + len(label)
 	parts.append(escape(text[position:]))
 	for label, url, action in unmatched:
-		parts.append('<br><a href="%s">%s</a>' % (escape(url, quote=True), escape(label)))
+		parts.append("<br>%s" % _link_to_html(label, url, action))
 		if action:
 			actions[action[0]] = action[1]
 	return "".join(parts).replace("\n", "<br>"), actions
+
+
+def _link_to_html(label, url, action):
+	href = escape(url, quote=True)
+	if action:
+		# MSHTML's accessibility action does not reliably navigate unknown URL
+		# schemes. Explicitly assigning location from the click event ensures both
+		# Enter and Space reach HtmlMessageDialog._onNavigating.
+		return (
+			'<a href="%s" onclick="window.location.href=this.href; return false;">%s</a>'
+			% (href, escape(label))
+		)
+	return '<a href="%s">%s</a>' % (href, escape(label))
 
 
 def extract_message_html_and_actions(message):

@@ -184,7 +184,8 @@ def test_delegates_a_link_when_uia_does_not_expose_its_real_target():
 	html, actions = extract_message_html_and_actions(Node(children=[block]))
 
 	assert html == (
-		'<p>Read <a href="nvda-action://unigram-link-0">label without URL</a></p>'
+		'<p>Read <a href="nvda-action://unigram-link-0" '
+		'onclick="window.location.href=this.href; return false;">label without URL</a></p>'
 	)
 	assert actions == {"unigram-link-0": link}
 
@@ -210,6 +211,9 @@ def test_action_link_activates_the_original_unigram_uia_object(monkeypatch, tmp_
 			self.closed = True
 
 	class Link:
+		def setFocus(self):
+			opened.append("focusLink")
+
 		def doAction(self):
 			state.activated = True
 
@@ -229,7 +233,9 @@ def test_action_link_activates_the_original_unigram_uia_object(monkeypatch, tmp_
 	security_module = ModuleType("utils.security")
 	security_module.isRunningOnSecureDesktop = lambda: False
 	wx_module = ModuleType("wx")
-	wx_module.CallAfter = lambda function, *args: function(*args)
+	wx_module.CallLater = lambda delay, function, *args: function(*args)
+	log_module = ModuleType("logHandler")
+	log_module.log = SimpleNamespace(debug=lambda text: None, exception=lambda text: None)
 
 	for name, module in {
 		"ui": ui_module,
@@ -238,21 +244,24 @@ def test_action_link_activates_the_original_unigram_uia_object(monkeypatch, tmp_
 		"gui.message": gui_message_module,
 		"utils.security": security_module,
 		"wx": wx_module,
+		"logHandler": log_module,
 	}.items():
 		monkeypatch.setitem(sys.modules, name, module)
 	dialog_module = importlib.import_module("rich_message_dialog")
 
 	dialog_module.show_browseable_message(
-		'<p><a href="nvda-action://unigram-link-0">Open</a></p>',
+		'<p><a href="nvda-action://unigram-link-0" '
+		'onclick="window.location.href=this.href; return false;">Open</a></p>',
 		"Rich message",
 		{"unigram-link-0": Link()},
 	)
 	state.dialog.actions["unigram-link-0"]()
 
-	assert opened == ["pre", "show", "post"]
+	assert opened == ["pre", "show", "post", "focusLink"]
 	assert state.dialog.closed
 	assert state.activated
 	assert "nvda-action://unigram-link-0" in state.dialog.document
+	assert "unigram-link-0/" in state.dialog.actions
 
 
 def test_extracts_layout_children_as_separate_markdown_blocks():
