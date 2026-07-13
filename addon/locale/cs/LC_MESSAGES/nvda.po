@@ -756,3 +756,18 @@ msgstr "Zprávy s anketou opět oznamují otázku a možnosti odpovědi a seznam
 
 msgid "During a one-to-one call, the mute microphone (ALT+A), enable or disable camera (ALT+V) and end call (ALT+N) shortcuts work again, and ALT+End again moves to the latest message."
 msgstr "Během individuálního hovoru opět fungují zkratky pro ztlumení mikrofonu (ALT+A), zapnutí nebo vypnutí kamery (ALT+V) a ukončení hovoru (ALT+N) a ALT+End se opět přesune na nejnovější zprávu."
+
+msgid "Rich message"
+msgstr "Formátovaná zpráva"
+
+msgid "Rich message. Press Alt+C to browse"
+msgstr "Formátovaná zpráva. Pro procházení stiskněte Alt+C"
+
+msgid "Added support for rich messages. Rich messages are now announced when focused and can be opened with Alt+C in a browseable window."
+msgstr "Byla přidána podpora formátovaných zpráv. Tyto zprávy jsou nyní při zaměření oznámeny a lze je otevřít pomocí Alt+C v okně pro procházení."
+
+msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
+msgstr "Odkazy a smíšený obsah ve formátovaných zprávách jsou zachovány a odkazy lze aktivovat z okna pro procházení."
+
+msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
+msgstr "Automatické aktualizace byly opraveny: vydání jsou nyní bezpečně získávána z GitHubu a stažený doplněk je před instalací ověřen."

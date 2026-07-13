@@ -179,7 +179,14 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
+### Version 5.5.9
+
+* Added support for rich messages. Rich messages are announced when focused and can be opened with Alt+C in a browseable window.
+* Links and mixed content are preserved, and links can be activated from the browseable window.
+
 ### Version 5.5.8
+
+* Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation.
 
 * Restored compatibility with Unigram 12.7, where several shortcuts and announcements had stopped working.
 * Poll messages again announce the question and the answer options.

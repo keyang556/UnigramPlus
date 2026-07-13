@@ -1042,3 +1042,18 @@ msgstr "Anket iletileri soruyu ve yanıt seçeneklerini yeniden duyuruyor ve for
 
 msgid "During a one-to-one call, the mute microphone (ALT+A), enable or disable camera (ALT+V) and end call (ALT+N) shortcuts work again, and ALT+End again moves to the latest message."
 msgstr "Bire bir çağrı sırasında mikrofonu sessize alma (ALT+A), kamerayı açma veya kapatma (ALT+V) ve çağrıyı sonlandırma (ALT+N) kısayolları yeniden çalışıyor ve ALT+End en son iletiye geri dönüyor."
+
+msgid "Rich message"
+msgstr "Zengin ileti"
+
+msgid "Rich message. Press Alt+C to browse"
+msgstr "Zengin ileti. Göz atmak için Alt+C tuşlarına basın"
+
+msgid "Added support for rich messages. Rich messages are now announced when focused and can be opened with Alt+C in a browseable window."
+msgstr "Zengin ileti desteği eklendi. Zengin iletiler artık odaklandığında duyurulur ve Alt+C ile göz atılabilir bir pencerede açılabilir."
+
+msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
+msgstr "Zengin iletilerdeki bağlantılar ve karma içerik korunur; bağlantılar göz atılabilir pencereden etkinleştirilebilir."
+
+msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
+msgstr "Otomatik güncellemeler düzeltildi: sürümler artık GitHub'dan güvenli bir şekilde alınıyor ve indirilen eklenti kurulumdan önce doğrulanıyor."

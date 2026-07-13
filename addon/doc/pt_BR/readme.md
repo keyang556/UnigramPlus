@@ -177,7 +177,14 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 
 ## Lista de alterações:
 
+### Versão 5.5.9
+
+* Adicionado suporte a mensagens avançadas. Elas são anunciadas quando recebem foco e podem ser abertas com Alt+C em uma janela navegável.
+* Links e conteúdo misto são preservados, e os links podem ser ativados na janela navegável.
+
 ### Versão 5.5.8
+
+* Corrigidas as atualizações automáticas: as versões agora são obtidas com segurança do GitHub e o complemento baixado é validado antes da instalação.
 
 * Compatibilidade restaurada com o Unigram 12.7, onde vários atalhos e anúncios haviam parado de funcionar.
 * As mensagens de enquete voltam a anunciar a pergunta e as opções de resposta.

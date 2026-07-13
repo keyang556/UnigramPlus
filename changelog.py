@@ -2,9 +2,7 @@
 def _(t): return t
 
 value = _(
-	"This release restores compatibility with Unigram 12.7, where several shortcuts and announcements had stopped working."
+	"Added support for rich messages. Rich messages are now announced when focused and can be opened with Alt+C in a browseable window."
 ) + " " + _(
-	"Poll messages again announce the question and answer options, and the forum topic list again announces the message preview."
-) + " " + _(
-	"During a one-to-one call, the mute microphone (ALT+A), enable or disable camera (ALT+V) and end call (ALT+N) shortcuts work again, and ALT+End again moves to the latest message."
+	"Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
 )

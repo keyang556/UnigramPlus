@@ -180,7 +180,14 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 
 ##Popis promjena:
 
+### Verzija 5.5.9
+
+* Dodana je podrška za obogaćene poruke. Izgovaraju se kada prime fokus i mogu se otvoriti pomoću Alt+C u prozoru za pregledavanje.
+* Poveznice i mješoviti sadržaj ostaju sačuvani, a poveznice se mogu aktivirati iz prozora za pregledavanje.
+
 ### Verzija 5.5.8
+
+* Ispravljena su automatska ažuriranja: izdanja se sada sigurno dohvaćaju s GitHuba, a preuzeti dodatak provjerava se prije instalacije.
 
 * Vraćena je kompatibilnost s Unigramom 12.7, gdje je nekoliko prečaca i najava prestalo raditi.
 * Poruke ankete ponovno najavljuju pitanje i mogućnosti odgovora.

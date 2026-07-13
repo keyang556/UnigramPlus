@@ -982,3 +982,18 @@ msgstr "Mesajele de tip sondaj anunță din nou întrebarea și opțiunile de r�
 
 msgid "During a one-to-one call, the mute microphone (ALT+A), enable or disable camera (ALT+V) and end call (ALT+N) shortcuts work again, and ALT+End again moves to the latest message."
 msgstr "În timpul unui apel individual, scurtăturile pentru dezactivarea microfonului (ALT+A), activarea sau dezactivarea camerei (ALT+V) și încheierea apelului (ALT+N) funcționează din nou, iar ALT+End revine la cel mai recent mesaj."
+
+msgid "Rich message"
+msgstr "Mesaj îmbogățit"
+
+msgid "Rich message. Press Alt+C to browse"
+msgstr "Mesaj îmbogățit. Apăsați Alt+C pentru a-l parcurge"
+
+msgid "Added support for rich messages. Rich messages are now announced when focused and can be opened with Alt+C in a browseable window."
+msgstr "A fost adăugat suportul pentru mesaje îmbogățite. Acestea sunt acum anunțate când primesc focalizarea și pot fi deschise cu Alt+C într-o fereastră navigabilă."
+
+msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
+msgstr "Legăturile și conținutul mixt din mesajele îmbogățite sunt păstrate, iar legăturile pot fi activate din fereastra navigabilă."
+
+msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
+msgstr "Au fost corectate actualizările automate: versiunile sunt acum preluate în siguranță de pe GitHub, iar suplimentul descărcat este validat înainte de instalare."

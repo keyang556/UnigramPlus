@@ -942,3 +942,18 @@ msgstr "Los mensajes de encuesta vuelven a anunciar la pregunta y las opciones d
 
 msgid "During a one-to-one call, the mute microphone (ALT+A), enable or disable camera (ALT+V) and end call (ALT+N) shortcuts work again, and ALT+End again moves to the latest message."
 msgstr "Durante una llamada individual, los atajos para silenciar el micrófono (ALT+A), activar o desactivar la cámara (ALT+V) y finalizar la llamada (ALT+N) vuelven a funcionar, y ALT+End vuelve al mensaje más reciente."
+
+msgid "Rich message"
+msgstr "Mensaje enriquecido"
+
+msgid "Rich message. Press Alt+C to browse"
+msgstr "Mensaje enriquecido. Pulsa Alt+C para navegar"
+
+msgid "Added support for rich messages. Rich messages are now announced when focused and can be opened with Alt+C in a browseable window."
+msgstr "Se añadió compatibilidad con mensajes enriquecidos. Ahora se anuncian al recibir el foco y pueden abrirse con Alt+C en una ventana navegable."
+
+msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
+msgstr "Se conservan los enlaces y el contenido mixto de los mensajes enriquecidos, y los enlaces pueden activarse desde la ventana navegable."
+
+msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
+msgstr "Se corrigieron las actualizaciones automáticas: ahora las versiones se obtienen de forma segura desde GitHub y el complemento descargado se valida antes de instalarlo."

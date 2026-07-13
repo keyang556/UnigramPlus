@@ -987,3 +987,18 @@ msgstr "Сообщения-опросы снова озвучивают вопр
 
 msgid "During a one-to-one call, the mute microphone (ALT+A), enable or disable camera (ALT+V) and end call (ALT+N) shortcuts work again, and ALT+End again moves to the latest message."
 msgstr "Во время личного звонка снова работают горячие клавиши отключения микрофона (ALT+A), включения или выключения камеры (ALT+V) и завершения звонка (ALT+N), а ALT+End снова переходит к последнему сообщению."
+
+msgid "Rich message"
+msgstr "Форматированное сообщение"
+
+msgid "Rich message. Press Alt+C to browse"
+msgstr "Форматированное сообщение. Нажмите Alt+C для просмотра"
+
+msgid "Added support for rich messages. Rich messages are now announced when focused and can be opened with Alt+C in a browseable window."
+msgstr "Добавлена поддержка форматированных сообщений. Теперь они озвучиваются при получении фокуса и могут быть открыты с помощью Alt+C в окне просмотра."
+
+msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
+msgstr "Ссылки и смешанное содержимое форматированных сообщений сохраняются, а ссылки можно активировать из окна просмотра."
+
+msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
+msgstr "Исправлено автоматическое обновление: выпуски теперь безопасно загружаются с GitHub, а загруженное дополнение проверяется перед установкой."

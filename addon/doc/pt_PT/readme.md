@@ -177,7 +177,14 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 
 ## Lista de alterações:
 
+### Versão 5.5.9
+
+* Adicionado suporte a mensagens enriquecidas. São anunciadas quando recebem o foco e podem ser abertas com Alt+C numa janela navegável.
+* As ligações e o conteúdo misto são preservados, e as ligações podem ser ativadas a partir da janela navegável.
+
 ### Versão 5.5.8
+
+* Corrigidas as atualizações automáticas: as versões são agora obtidas de forma segura do GitHub e o extra transferido é validado antes da instalação.
 
 * Compatibilidade restaurada com o Unigram 12.7, onde vários atalhos e anúncios tinham deixado de funcionar.
 * As mensagens de sondagem voltam a anunciar a pergunta e as opções de resposta.

@@ -156,11 +156,11 @@ msgid "Interface language in Unigram:"
 msgstr "Język interfejsu w Unigramie:"
 
 #: GlobalPlugins/UnigramPlus/__init__.py:172
-msgid "Speak chat type in the chat list:"
+msgid "Speak the type of chat in the chat list:"
 msgstr "Wymawiaj typ czatu na liście czatów:"
 
 #: GlobalPlugins/UnigramPlus/__init__.py:175
-msgid "say sender's name in:"
+msgid "Say the sender's name in:"
 msgstr "Wymawiaj imię nadawcy w:"
 
 #: GlobalPlugins/UnigramPlus/__init__.py:178
@@ -181,14 +181,12 @@ msgstr ""
 "Pokazuj okno dialogowe potwierdzenia podczas usuwania wiadomości i czatów"
 
 #: GlobalPlugins/UnigramPlus/__init__.py:194
-#, fuzzy
-#| msgid "Voice message recording notifications are set to text"
-msgid "Set method of voice message recording notification as:"
-msgstr "Powiadomienia o nagrywaniu wiadomości głosowych są ustawione na tekst"
+msgid "Set voice message recording notification method as:"
+msgstr "Ustaw sposób powiadamiania o nagrywaniu wiadomości głosowych:"
 
 #: GlobalPlugins/UnigramPlus/__init__.py:197
-msgid "Select level of notification of progress bars: "
-msgstr "Wybierz poziom powiadomień dla pasków postępu: "
+msgid "Select the progress bar notification level:"
+msgstr "Wybierz poziom powiadomień dla pasków postępu:"
 
 #: GlobalPlugins/UnigramPlus/__init__.py:200
 msgid "Read description of URLs attached to messages"
@@ -754,3 +752,18 @@ msgstr "Wiadomości z ankietą ponownie odczytują pytanie i opcje odpowiedzi, a
 
 msgid "During a one-to-one call, the mute microphone (ALT+A), enable or disable camera (ALT+V) and end call (ALT+N) shortcuts work again, and ALT+End again moves to the latest message."
 msgstr "Podczas połączenia indywidualnego skróty wyciszenia mikrofonu (ALT+A), włączania lub wyłączania kamery (ALT+V) oraz kończenia połączenia (ALT+N) znów działają, a ALT+End ponownie przechodzi do najnowszej wiadomości."
+
+msgid "Rich message"
+msgstr "Wiadomość z formatowaniem"
+
+msgid "Rich message. Press Alt+C to browse"
+msgstr "Wiadomość z formatowaniem. Naciśnij Alt+C, aby ją przeglądać"
+
+msgid "Added support for rich messages. Rich messages are now announced when focused and can be opened with Alt+C in a browseable window."
+msgstr "Dodano obsługę wiadomości z formatowaniem. Są teraz oznajmiane po uzyskaniu fokusu i można je otworzyć klawiszami Alt+C w oknie przeglądania."
+
+msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
+msgstr "Łącza i mieszana treść wiadomości z formatowaniem są zachowywane, a łącza można aktywować z okna przeglądania."
+
+msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
+msgstr "Naprawiono automatyczne aktualizacje: wydania są teraz bezpiecznie pobierane z GitHuba, a pobrany dodatek jest sprawdzany przed instalacją."

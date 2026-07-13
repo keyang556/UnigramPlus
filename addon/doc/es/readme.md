@@ -179,7 +179,14 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 
 ##Lista de cambios:
 
+### Versión 5.5.9
+
+* Se añadió compatibilidad con mensajes enriquecidos. Se anuncian al recibir el foco y pueden abrirse con Alt+C en una ventana navegable.
+* Se conservan los enlaces y el contenido mixto, y los enlaces pueden activarse desde la ventana navegable.
+
 ### Versión 5.5.8
+
+* Se corrigieron las actualizaciones automáticas: ahora las versiones se obtienen de forma segura desde GitHub y el complemento descargado se valida antes de instalarlo.
 
 * Se restauró la compatibilidad con Unigram 12.7, donde varios atajos y anuncios habían dejado de funcionar.
 * Los mensajes de encuesta vuelven a anunciar la pregunta y las opciones de respuesta.

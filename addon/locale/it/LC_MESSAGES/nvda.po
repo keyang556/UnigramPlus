@@ -1089,3 +1089,18 @@ msgstr "Durante una chiamata individuale, le scorciatoie per disattivare il micr
 
 msgid "Microphone on"
 msgstr "Microfono attivato"
+
+msgid "Rich message"
+msgstr "Messaggio avanzato"
+
+msgid "Rich message. Press Alt+C to browse"
+msgstr "Messaggio avanzato. Premi Alt+C per esplorarlo"
+
+msgid "Added support for rich messages. Rich messages are now announced when focused and can be opened with Alt+C in a browseable window."
+msgstr "Aggiunto il supporto per i messaggi avanzati. Ora vengono annunciati quando ricevono il focus e possono essere aperti con Alt+C in una finestra esplorabile."
+
+msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
+msgstr "I collegamenti e il contenuto misto nei messaggi avanzati vengono mantenuti e i collegamenti possono essere attivati dalla finestra esplorabile."
+
+msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
+msgstr "Corretti gli aggiornamenti automatici: le versioni ora vengono recuperate in modo sicuro da GitHub e il componente aggiuntivo scaricato viene convalidato prima dell'installazione."

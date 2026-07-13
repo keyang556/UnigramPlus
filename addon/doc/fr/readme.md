@@ -177,7 +177,14 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 
 ##Liste des changements :
 
+### Version 5.5.9
+
+* Ajout de la prise en charge des messages enrichis. Ils sont annoncés lorsqu'ils reçoivent le focus et peuvent être ouverts avec Alt+C dans une fenêtre navigable.
+* Les liens et le contenu mixte sont préservés, et les liens peuvent être activés depuis la fenêtre navigable.
+
 ### Version 5.5.8
+
+* Correction des mises à jour automatiques : les versions sont désormais récupérées de manière sécurisée depuis GitHub et l'extension téléchargée est validée avant son installation.
 
 * Compatibilité restaurée avec Unigram 12.7, où plusieurs raccourcis et annonces ne fonctionnaient plus.
 * Les messages de sondage annoncent à nouveau la question et les options de réponse.

@@ -452,7 +452,14 @@ Added Turkish localization
 
 
 
+### Verzija 5.5.9
+
+* Dodata je podrška za obogaćene poruke. One se izgovaraju kada dobiju fokus i mogu se otvoriti kombinacijom Alt+C u prozoru za pregledanje.
+* Linkovi i mešoviti sadržaj se čuvaju, a linkovi se mogu aktivirati iz prozora za pregledanje.
+
 ### Verzija 5.5.8
+
+* Ispravljeno je automatsko ažuriranje: izdanja se sada bezbedno preuzimaju sa GitHuba, a preuzeti dodatak se proverava pre instalacije.
 
 * Vraćena je kompatibilnost sa Unigramom 12.7, gde je nekoliko prečica i obaveštenja prestalo da radi.
 * Poruke ankete ponovo najavljuju pitanje i opcije odgovora.

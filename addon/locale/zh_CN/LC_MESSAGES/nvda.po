@@ -946,3 +946,18 @@ msgstr "投票消息会再次朗读问题和答案选项，论坛话题列表会
 
 msgid "During a one-to-one call, the mute microphone (ALT+A), enable or disable camera (ALT+V) and end call (ALT+N) shortcuts work again, and ALT+End again moves to the latest message."
 msgstr "一对一通话中，静音麦克风（ALT+A）、开启或关闭摄像头（ALT+V）和结束通话（ALT+N）的快捷键可再次使用，ALT+End 会再次回到最新消息。"
+
+msgid "Rich message"
+msgstr "富文本消息"
+
+msgid "Rich message. Press Alt+C to browse"
+msgstr "富文本消息。按 Alt+C 浏览"
+
+msgid "Added support for rich messages. Rich messages are now announced when focused and can be opened with Alt+C in a browseable window."
+msgstr "新增富文本消息支持。富文本消息获得焦点时会被朗读，并可按 Alt+C 在浏览窗口中打开。"
+
+msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
+msgstr "富文本消息中的链接和混合内容会被保留，且可在浏览窗口中激活链接。"
+
+msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
+msgstr "修复自动更新：现在会从 GitHub 安全获取版本，并在安装前验证下载的插件。"

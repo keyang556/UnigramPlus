@@ -178,7 +178,14 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 ##Lista de modificări:
 
+### Versiunea 5.5.9
+
+* A fost adăugat suportul pentru mesaje îmbogățite. Acestea sunt anunțate când primesc focalizarea și pot fi deschise cu Alt+C într-o fereastră navigabilă.
+* Legăturile și conținutul mixt sunt păstrate, iar legăturile pot fi activate din fereastra navigabilă.
+
 ### Versiunea 5.5.8
+
+* Au fost corectate actualizările automate: versiunile sunt acum preluate în siguranță de pe GitHub, iar suplimentul descărcat este validat înainte de instalare.
 
 * S-a restabilit compatibilitatea cu Unigram 12.7, unde mai multe scurtături și anunțuri încetaseră să funcționeze.
 * Mesajele de tip sondaj anunță din nou întrebarea și opțiunile de răspuns.

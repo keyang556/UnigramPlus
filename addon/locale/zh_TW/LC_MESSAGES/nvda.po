@@ -945,3 +945,18 @@ msgstr "投票訊息會再次朗讀問題與答案選項，論壇主題清單會
 
 msgid "During a one-to-one call, the mute microphone (ALT+A), enable or disable camera (ALT+V) and end call (ALT+N) shortcuts work again, and ALT+End again moves to the latest message."
 msgstr "一對一通話中，靜音麥克風（ALT+A）、開啟或關閉鏡頭（ALT+V）與結束通話（ALT+N）的快速鍵可再次使用，ALT+End 會再次回到最新訊息。"
+
+msgid "Rich message"
+msgstr "豐富訊息"
+
+msgid "Rich message. Press Alt+C to browse"
+msgstr "豐富訊息。按 Alt+C 瀏覽"
+
+msgid "Added support for rich messages. Rich messages are now announced when focused and can be opened with Alt+C in a browseable window."
+msgstr "新增豐富訊息支援。豐富訊息取得焦點時會被朗讀，並可按 Alt+C 在可瀏覽視窗中開啟。"
+
+msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
+msgstr "豐富訊息中的連結與混合內容會被保留，且可在可瀏覽視窗中啟用連結。"
+
+msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
+msgstr "修正自動更新：現在會從 GitHub 安全取得版本，並在安裝前驗證下載的附加元件。"
