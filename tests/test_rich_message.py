@@ -174,3 +174,37 @@ def test_all_message_text_uses_browse_mode_when_rich_content_is_empty_or_absent(
 		namespace["script_show_text_message"](message_item, None)
 
 		assert opened == [("browse", ("Ordinary text\n\nRecognized text", "message text"))]
+
+
+def test_focus_hint_uses_the_message_overlay_keywords():
+	source = (Path(__file__).parents[1] / "addon" / "appModules" / "unigram.py").read_text(encoding="utf-8")
+	with warnings.catch_warnings():
+		warnings.simplefilter("ignore", SyntaxWarning)
+		module = ast.parse(source)
+	event_method = next(
+		node
+		for node in ast.walk(module)
+		if isinstance(node, ast.FunctionDef) and node.name == "event_gainFocus"
+	)
+	rich_branch = next(
+		node
+		for node in ast.walk(event_method)
+		if isinstance(node, ast.If)
+		and isinstance(node.test, ast.Call)
+		and isinstance(node.test.func, ast.Name)
+		and node.test.func.id == "find_rich_message_root"
+	)
+	obj = SimpleNamespace(
+		name="Content, Received at 18:17",
+		keywords=("Seen", "Not seen", ", Sent at ", ", Received at "),
+	)
+	namespace = {
+		"obj": obj,
+		"find_rich_message_root": lambda candidate: object(),
+		"insert_hint_before_status": insert_hint_before_status,
+		"_": lambda text: text,
+	}
+
+	exec(compile(ast.Module(body=[rich_branch], type_ignores=[]), "unigram.py", "exec"), namespace)
+
+	assert obj.name == "Content. Rich message. Press Alt+C to browse, Received at 18:17"

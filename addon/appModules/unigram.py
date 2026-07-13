@@ -1763,7 +1763,7 @@ class AppModule(appModuleHandler.AppModule):
 				if find_rich_message_root(obj):
 					# Translators: Announced after the content of a rich message when it receives focus.
 					hint = _("Rich message. Press Alt+C to browse")
-					obj.name = insert_hint_before_status(obj.name, hint, keywords[2:4])
+					obj.name = insert_hint_before_status(obj.name, hint, obj.keywords[2:4])
 			elif obj.parent.UIAAutomationId == "ChatsList":
 				self.saved_items.save("last focused chat", obj)
 				obj.name = self.actionChatElementInFocus(obj)
