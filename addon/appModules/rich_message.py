@@ -35,6 +35,72 @@ def _is_instant_content(obj):
 	return class_name.replace(":", ".").rsplit(".", 1)[-1].casefold() == _RICH_MESSAGE_CLASS
 
 
+class _RawUIANode:
+	"""Expose a raw UIA element through the small interface used by this module."""
+
+	def __init__(self, element, walker, uia):
+		self._element = element
+		self._walker = walker
+		self._uia = uia
+
+	def _property(self, property_id):
+		try:
+			return self._element.GetCurrentPropertyValueEx(property_id, True) or ""
+		except Exception:
+			return ""
+
+	@property
+	def name(self):
+		return self._property(self._uia.UIA_NamePropertyId)
+
+	@property
+	def UIAClassName(self):
+		return self._property(self._uia.UIA_ClassNamePropertyId)
+
+	@property
+	def UIAAutomationId(self):
+		return self._property(self._uia.UIA_AutomationIdPropertyId)
+
+	@property
+	def children(self):
+		children = []
+		try:
+			element = self._walker.GetFirstChildElement(self._element)
+			while element is not None and len(children) < _DEFAULT_MAX_NODES:
+				children.append(_RawUIANode(element, self._walker, self._uia))
+				element = self._walker.GetNextSiblingElement(element)
+		except Exception:
+			pass
+		return children
+
+
+def _find_raw_rich_message_root(message):
+	"""Search the raw UIA view, where non-control containers are still visible.
+
+	Returns ``(available, result)``. If raw UIA is available, callers should trust
+	the native query even when no result was found instead of repeating an
+	expensive Python walk of the same provider tree.
+	"""
+	element = _safe_attr(message, "UIAElement", None)
+	if element is None:
+		return False, None
+	try:
+		import UIAHandler
+
+		handler = UIAHandler.handler
+		client = handler.clientObject
+		condition = client.CreatePropertyCondition(
+			UIAHandler.UIA.UIA_ClassNamePropertyId,
+			"InstantContent",
+		)
+		result = element.findFirst(UIAHandler.TreeScope_Descendants, condition)
+		if result is None:
+			return True, None
+		return True, _RawUIANode(result, client.RawViewWalker, UIAHandler.UIA)
+	except Exception:
+		return False, None
+
+
 def _walk_descendants(root, max_depth=_DEFAULT_MAX_DEPTH, max_nodes=_DEFAULT_MAX_NODES):
 	"""Yield a bounded breadth-first walk, tolerating stale and cyclic UIA nodes."""
 	queue = deque((child, 1) for child in _children(root))
@@ -58,6 +124,9 @@ def find_rich_message_root(message):
 		return None
 	if _is_instant_content(message):
 		return message
+	raw_available, raw_root = _find_raw_rich_message_root(message)
+	if raw_available:
+		return raw_root
 	return next((node for node in _walk_descendants(message) if _is_instant_content(node)), None)
 
 

@@ -31,6 +31,53 @@ def test_does_not_misclassify_an_unrelated_layout_root():
 	assert find_rich_message_root(message) is None
 
 
+def test_finds_and_extracts_instant_content_from_raw_uia_view(monkeypatch):
+	class UiaConstants:
+		UIA_NamePropertyId = 1
+		UIA_ClassNamePropertyId = 2
+		UIA_AutomationIdPropertyId = 3
+
+	class Element:
+		def __init__(self, *, name="", class_name="", automation_id="", children=None):
+			self.properties = {1: name, 2: class_name, 3: automation_id}
+			self.children = children or []
+
+		def GetCurrentPropertyValueEx(self, property_id, ignore_default):
+			return self.properties.get(property_id, "")
+
+		def findFirst(self, scope, condition):
+			assert scope == "descendants"
+			return condition
+
+	class Walker:
+		def GetFirstChildElement(self, element):
+			return element.children[0] if element.children else None
+
+		def GetNextSiblingElement(self, element):
+			return siblings.get(id(element))
+
+	text = Element(name="Raw rich text")
+	layout = Element(automation_id="LayoutRoot", children=[text])
+	rich = Element(class_name="InstantContent", children=[layout])
+	siblings = {}
+	client = SimpleNamespace(
+		RawViewWalker=Walker(),
+		CreatePropertyCondition=lambda property_id, value: rich,
+	)
+	fake_uia_handler = SimpleNamespace(
+		handler=SimpleNamespace(clientObject=client),
+		UIA=UiaConstants,
+		TreeScope_Descendants="descendants",
+	)
+	monkeypatch.setitem(sys.modules, "UIAHandler", fake_uia_handler)
+	message = SimpleNamespace(UIAElement=Element())
+
+	root = find_rich_message_root(message)
+
+	assert root.UIAClassName == "InstantContent"
+	assert extract_rich_message_text(root) == "Raw rich text"
+
+
 def test_extracts_layout_children_as_separate_markdown_blocks():
 	layout = Node(
 		automation_id="LayoutRoot",
