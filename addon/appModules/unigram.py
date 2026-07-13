@@ -31,6 +31,7 @@ from .data import *
 from .text_window import *
 from .cnf import conf, lang
 from .readme_shortcuts import extractShortcutText  # noqa: E402
+from .rich_message import extract_rich_message_text, find_rich_message_root  # noqa: E402
 
 baseDir = os.path.join(os.path.dirname(__file__), "media\\")
 _telegramDesktopFallbackClass = None
@@ -437,6 +438,13 @@ class Message_list_item(ListItem):
 
 	@script(description=_("Show message text in popup window"), gesture="kb:ALT+C")
 	def script_show_text_message(self, gesture):
+		rich_message = find_rich_message_root(self)
+		if rich_message:
+			text = extract_rich_message_text(rich_message, textInfos.POSITION_ALL)
+			if text:
+				# Translators: Title of the NVDA browse-mode window containing a rich message.
+				browseableMessage(text, _("Rich message"))
+				return
 		text_message = next((item.name for item in self.children if item.UIAAutomationId in ("TextBlock", "Message", "Question", "QuestionText")), "")
 		recognized_text = next((item.name for item in self.children if item.UIAAutomationId == "RecognizedText"), "")
 		if not text_message and not recognized_text:
@@ -1751,6 +1759,12 @@ class AppModule(appModuleHandler.AppModule):
 			if self.is_message_object(obj):
 				self.saved_items.save("last focus object", obj)
 				obj.name = self.action_message_focus(obj)
+				if find_rich_message_root(obj):
+					# Translators: Announced after the content of a rich message when it receives focus.
+					hint = _("Rich message. Press Alt+C to browse")
+					if hint not in obj.name:
+						name = obj.name.rstrip(". ")
+						obj.name = "%s. %s" % (name, hint) if name else hint
 			elif obj.parent.UIAAutomationId == "ChatsList":
 				self.saved_items.save("last focused chat", obj)
 				obj.name = self.actionChatElementInFocus(obj)
