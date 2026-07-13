@@ -31,7 +31,15 @@ from .data import *
 from .text_window import *
 from .cnf import conf, lang
 from .readme_shortcuts import extractShortcutText  # noqa: E402
-from .rich_message import extract_rich_message_text, find_rich_message_root  # noqa: E402
+from .rich_message import (  # noqa: E402
+	extract_message_html_and_actions,
+	extract_message_text,
+	extract_rich_message_text,
+	find_rich_message_root,
+	insert_hint_before_status,
+	merge_message_html_and_rich_text,
+)
+from .rich_message_dialog import show_browseable_message  # noqa: E402
 
 baseDir = os.path.join(os.path.dirname(__file__), "media\\")
 _telegramDesktopFallbackClass = None
@@ -439,24 +447,27 @@ class Message_list_item(ListItem):
 	@script(description=_("Show message text in popup window"), gesture="kb:ALT+C")
 	def script_show_text_message(self, gesture):
 		rich_message = find_rich_message_root(self)
+		html, link_actions = extract_message_html_and_actions(self)
+		message_text = extract_message_text(self)
 		if rich_message:
 			text = extract_rich_message_text(rich_message, textInfos.POSITION_ALL)
+			log.debug("Rich message extraction returned %d characters" % len(text))
+			html = merge_message_html_and_rich_text(html, message_text, text)
+			if html:
+				# Translators: Title of the NVDA browse-mode window containing a rich message.
+				show_browseable_message(html, _("Rich message"), link_actions)
+				return
 			if text:
 				# Translators: Title of the NVDA browse-mode window containing a rich message.
 				browseableMessage(text, _("Rich message"))
 				return
-		text_message = next((item.name for item in self.children if item.UIAAutomationId in ("TextBlock", "Message", "Question", "QuestionText")), "")
-		recognized_text = next((item.name for item in self.children if item.UIAAutomationId == "RecognizedText"), "")
-		if not text_message and not recognized_text:
+		if html:
+			show_browseable_message(html, _("message text"), link_actions)
+			return
+		if not message_text:
 			message(_("This message does not contain text"))
 			return
-		text_message = text_message.strip().replace("‍", "")
-		recognized_text = recognized_text.strip().replace("‍", "")
-		if text_message and recognized_text:
-			text = "\n\n".join([text_message, recognized_text])
-		else:
-			text = text_message or recognized_text
-		TextWindow(text, _("message text"), readOnly=False)
+		browseableMessage(message_text, _("message text"))
 
 	@script(description=_("Open comments"), gesture="kb:control+ALT+C")
 	def script_openComentars(self, gesture):
@@ -1762,9 +1773,7 @@ class AppModule(appModuleHandler.AppModule):
 				if find_rich_message_root(obj):
 					# Translators: Announced after the content of a rich message when it receives focus.
 					hint = _("Rich message. Press Alt+C to browse")
-					if hint not in obj.name:
-						name = obj.name.rstrip(". ")
-						obj.name = "%s. %s" % (name, hint) if name else hint
+					obj.name = insert_hint_before_status(obj.name, hint, obj.keywords[2:4])
 			elif obj.parent.UIAAutomationId == "ChatsList":
 				self.saved_items.save("last focused chat", obj)
 				obj.name = self.actionChatElementInFocus(obj)
