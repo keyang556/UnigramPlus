@@ -171,22 +171,38 @@ def _walk_descendants(root, max_depth=_DEFAULT_MAX_DEPTH, max_nodes=_DEFAULT_MAX
 			queue.extend((child, depth + 1) for child in _children(node))
 
 
+def _rich_content_is_distinct(message, root):
+	"""Whether a rich root contributes text not already exposed by the message."""
+	rich_text = _clean_text(extract_rich_message_text(root))
+	if not rich_text:
+		return False
+	message_text = _clean_text(extract_message_text(message))
+	return not message_text or _text_for_comparison(rich_text) not in _text_for_comparison(message_text)
+
+
 def find_rich_message_root(message):
 	"""Return the ``InstantContent`` descendant of a message, if present."""
 	if message is None:
 		return None
 	if _is_instant_content(message):
 		return message
-	# A normal message exposes its TextBlock content in the list item's own UIA
-	# summary. MessageRichMessage currently contributes only a separator comma;
-	# its real PageBlock text lives below InstantContent. This guard also rejects
-	# visible recycled InstantContent controls retained by ordinary message cells.
-	if _surface_has_message_text(message):
-		return None
+	has_surface_text = _surface_has_message_text(message)
 	raw_available, raw_root = _find_raw_rich_message_root(message)
 	if raw_available:
-		return raw_root
-	return next((node for node in _walk_descendants(message) if _is_instant_content(node)), None)
+		if raw_root is None:
+			return None
+		# Ordinary cells can retain an empty, visible InstantContent from a
+		# recycled template. Mixed rich messages are valid when their root adds
+		# content beyond the caption or other flattened message text.
+		if not has_surface_text or _rich_content_is_distinct(message, raw_root):
+			return raw_root
+		return None
+	root = next((node for node in _walk_descendants(message) if _is_instant_content(node)), None)
+	if root is None:
+		return None
+	if not has_surface_text or _rich_content_is_distinct(message, root):
+		return root
+	return None
 
 
 def insert_hint_before_status(name, hint, status_markers):
@@ -213,6 +229,22 @@ def extract_message_text(message):
 		if text and text not in parts:
 			parts.append(text)
 	return "\n\n".join(parts)
+
+
+def merge_message_html_and_rich_text(message_html, message_text, rich_text):
+	"""Append distinct rich text to already generated message HTML safely."""
+	rich_text = _clean_text(rich_text)
+	if not rich_text:
+		return message_html
+	message_text = _clean_text(message_text)
+	if message_text and _text_for_comparison(rich_text) in _text_for_comparison(message_text):
+		return message_html
+	blocks = []
+	for block in rich_text.split("\n\n"):
+		block = _clean_text(block)
+		if block:
+			blocks.append("<p>%s</p>" % escape(block).replace("\n", "<br>"))
+	return message_html + "".join(blocks)
 
 
 def _is_link(node):
@@ -336,6 +368,11 @@ def _clean_text(value):
 	except Exception:
 		return ""
 	return "\n".join(line.rstrip() for line in text.replace("\r\n", "\n").replace("\r", "\n").split("\n")).strip()
+
+
+def _text_for_comparison(value):
+	"""Normalize case and whitespace when checking whether content is duplicated."""
+	return " ".join(_clean_text(value).casefold().split())
 
 
 def _text_for_block(block):

@@ -15,6 +15,7 @@ from rich_message import (  # noqa: E402
 	extract_rich_message_text,
 	find_rich_message_root,
 	insert_hint_before_status,
+	merge_message_html_and_rich_text,
 )
 
 
@@ -29,6 +30,19 @@ class Node:
 def test_finds_namespaced_instant_content_below_message():
 	rich = Node(class_name="Telegram.Controls.Messages.Content.InstantContent")
 	message = Node(children=[Node(children=[rich])])
+
+	assert find_rich_message_root(message) is rich
+
+
+def test_finds_distinct_rich_content_alongside_a_plain_caption():
+	rich = Node(
+		class_name="InstantContent",
+		children=[Node(automation_id="LayoutRoot", children=[Node(name="Rich block")])],
+	)
+	message = Node(
+		name="Caption, Received at 18:17",
+		children=[Node(name="Caption", automation_id="TextBlock"), rich],
+	)
 
 	assert find_rich_message_root(message) is rich
 
@@ -116,6 +130,15 @@ def test_finds_and_extracts_instant_content_from_raw_uia_view(monkeypatch):
 	assert root.UIAClassName == "InstantContent"
 	assert extract_rich_message_text(root) == "First raw block\n\nSecond raw block"
 	assert (5, False) in message_element.find_condition
+	mixed = SimpleNamespace(
+		name="Caption, Sent at 18:17",
+		children=[Node(name="Caption", automation_id="TextBlock")],
+		UIAElement=message_element,
+	)
+	assert find_rich_message_root(mixed).UIAClassName == "InstantContent"
+
+	empty_layout = Element(automation_id="LayoutRoot")
+	message_element.find_result = Element(class_name="InstantContent", children=[empty_layout])
 	ordinary = SimpleNamespace(
 		name="Ordinary text, Sent at 18:17",
 		children=[Node(name="Ordinary text", automation_id="TextBlock")],
@@ -135,6 +158,22 @@ def test_collects_all_flattened_message_text_controls():
 	)
 
 	assert extract_message_text(message) == "First paragraph\n\nSecond paragraph\n\nrecognized"
+
+
+def test_merges_distinct_rich_text_with_plain_message_html():
+	assert merge_message_html_and_rich_text(
+		"<p>Caption</p>",
+		"Caption",
+		"Rich heading\n\nRich paragraph\ncontinues",
+	) == "<p>Caption</p><p>Rich heading</p><p>Rich paragraph<br>continues</p>"
+
+
+def test_does_not_duplicate_rich_text_already_exposed_by_plain_html():
+	assert merge_message_html_and_rich_text(
+		"<p>Caption and rich text</p>",
+		"Caption and rich text",
+		"rich text",
+	) == "<p>Caption and rich text</p>"
 
 
 def test_builds_browseable_html_with_links():
@@ -349,9 +388,10 @@ def test_all_message_text_uses_browse_mode_when_rich_content_is_empty_or_absent(
 		opened = []
 		namespace = {
 			"find_rich_message_root": lambda obj, result=rich_root: result,
-			"extract_rich_message_text": lambda root, position: "",
+			"extract_rich_message_text": lambda root, position: "Distinct rich text" if root else "",
 			"extract_message_html_and_actions": extract_message_html_and_actions,
 			"extract_message_text": extract_message_text,
+			"merge_message_html_and_rich_text": merge_message_html_and_rich_text,
 			"textInfos": SimpleNamespace(POSITION_ALL="all"),
 			"log": SimpleNamespace(debug=lambda text: None),
 			"browseableMessage": lambda *args, **kwargs: opened.append(("browse", args, kwargs)),
@@ -365,6 +405,8 @@ def test_all_message_text_uses_browse_mode_when_rich_content_is_empty_or_absent(
 
 		title = "Rich message" if rich_root else "message text"
 		html = "<p>Ordinary text</p><p>Recognized text</p>"
+		if rich_root:
+			html += "<p>Distinct rich text</p>"
 		assert opened == [("browseHtml", (html, title, {}))]
 
 

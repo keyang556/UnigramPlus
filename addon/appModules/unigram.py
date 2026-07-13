@@ -31,7 +31,14 @@ from .data import *
 from .text_window import *
 from .cnf import conf, lang
 from .readme_shortcuts import extractShortcutText  # noqa: E402
-from .rich_message import extract_message_html_and_actions, extract_message_text, extract_rich_message_text, find_rich_message_root, insert_hint_before_status  # noqa: E402
+from .rich_message import (  # noqa: E402
+	extract_message_html_and_actions,
+	extract_message_text,
+	extract_rich_message_text,
+	find_rich_message_root,
+	insert_hint_before_status,
+	merge_message_html_and_rich_text,
+)
 from .rich_message_dialog import show_browseable_message  # noqa: E402
 
 baseDir = os.path.join(os.path.dirname(__file__), "media\\")
@@ -441,9 +448,11 @@ class Message_list_item(ListItem):
 	def script_show_text_message(self, gesture):
 		rich_message = find_rich_message_root(self)
 		html, link_actions = extract_message_html_and_actions(self)
+		message_text = extract_message_text(self)
 		if rich_message:
 			text = extract_rich_message_text(rich_message, textInfos.POSITION_ALL)
 			log.debug("Rich message extraction returned %d characters" % len(text))
+			html = merge_message_html_and_rich_text(html, message_text, text)
 			if html:
 				# Translators: Title of the NVDA browse-mode window containing a rich message.
 				show_browseable_message(html, _("Rich message"), link_actions)
@@ -455,11 +464,10 @@ class Message_list_item(ListItem):
 		if html:
 			show_browseable_message(html, _("message text"), link_actions)
 			return
-		text = extract_message_text(self)
-		if not text:
+		if not message_text:
 			message(_("This message does not contain text"))
 			return
-		browseableMessage(text, _("message text"))
+		browseableMessage(message_text, _("message text"))
 
 	@script(description=_("Open comments"), gesture="kb:control+ALT+C")
 	def script_openComentars(self, gesture):
