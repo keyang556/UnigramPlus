@@ -442,6 +442,7 @@ class Message_list_item(ListItem):
 		text = ""
 		if rich_message:
 			text = extract_rich_message_text(rich_message, textInfos.POSITION_ALL)
+			log.debug("Rich message extraction returned %d characters" % len(text))
 			if text:
 				# Translators: Title of the NVDA browse-mode window containing a rich message.
 				browseableMessage(text, _("Rich message"))

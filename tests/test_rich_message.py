@@ -38,8 +38,17 @@ def test_finds_and_extracts_instant_content_from_raw_uia_view(monkeypatch):
 		UIA_AutomationIdPropertyId = 3
 
 	class Element:
-		def __init__(self, *, name="", class_name="", automation_id="", children=None):
+		def __init__(
+			self,
+			*,
+			name="",
+			class_name="",
+			automation_id="",
+			text_pattern_text=None,
+			children=None,
+		):
 			self.properties = {1: name, 2: class_name, 3: automation_id}
+			self.text_pattern_text = text_pattern_text
 			self.children = children or []
 
 		def GetCurrentPropertyValueEx(self, property_id, ignore_default):
@@ -49,6 +58,20 @@ def test_finds_and_extracts_instant_content_from_raw_uia_view(monkeypatch):
 			assert scope == "descendants"
 			return condition
 
+		def GetCurrentPattern(self, pattern_id):
+			assert pattern_id == 4
+			if self.text_pattern_text is None:
+				raise RuntimeError("TextPattern unavailable")
+			return Pattern(self.text_pattern_text)
+
+	class Pattern:
+		def __init__(self, text):
+			self.DocumentRange = SimpleNamespace(GetText=lambda max_length: text)
+
+		def QueryInterface(self, interface):
+			assert interface == "IUIAutomationTextPattern"
+			return self
+
 	class Walker:
 		def GetFirstChildElement(self, element):
 			return element.children[0] if element.children else None
@@ -56,10 +79,11 @@ def test_finds_and_extracts_instant_content_from_raw_uia_view(monkeypatch):
 		def GetNextSiblingElement(self, element):
 			return siblings.get(id(element))
 
-	text = Element(name="Raw rich text")
-	layout = Element(automation_id="LayoutRoot", children=[text])
+	first_text = Element(text_pattern_text="First raw block")
+	second_text = Element(text_pattern_text="Second raw block")
+	layout = Element(automation_id="LayoutRoot", children=[first_text, second_text])
 	rich = Element(class_name="InstantContent", children=[layout])
-	siblings = {}
+	siblings = {id(first_text): second_text}
 	client = SimpleNamespace(
 		RawViewWalker=Walker(),
 		CreatePropertyCondition=lambda property_id, value: rich,
@@ -67,6 +91,8 @@ def test_finds_and_extracts_instant_content_from_raw_uia_view(monkeypatch):
 	fake_uia_handler = SimpleNamespace(
 		handler=SimpleNamespace(clientObject=client),
 		UIA=UiaConstants,
+		UIA_TextPatternId=4,
+		IUIAutomationTextPattern="IUIAutomationTextPattern",
 		TreeScope_Descendants="descendants",
 	)
 	monkeypatch.setitem(sys.modules, "UIAHandler", fake_uia_handler)
@@ -75,7 +101,7 @@ def test_finds_and_extracts_instant_content_from_raw_uia_view(monkeypatch):
 	root = find_rich_message_root(message)
 
 	assert root.UIAClassName == "InstantContent"
-	assert extract_rich_message_text(root) == "Raw rich text"
+	assert extract_rich_message_text(root) == "First raw block\n\nSecond raw block"
 
 
 def test_extracts_layout_children_as_separate_markdown_blocks():
@@ -165,6 +191,7 @@ def test_all_message_text_uses_browse_mode_when_rich_content_is_empty_or_absent(
 			"find_rich_message_root": lambda obj, result=rich_root: result,
 			"extract_rich_message_text": lambda root, position: "",
 			"textInfos": SimpleNamespace(POSITION_ALL="all"),
+			"log": SimpleNamespace(debug=lambda text: None),
 			"browseableMessage": lambda *args: opened.append(("browse", args)),
 			"message": lambda text: opened.append(("message", text)),
 			"_": lambda text: text,

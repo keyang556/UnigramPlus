@@ -38,10 +38,12 @@ def _is_instant_content(obj):
 class _RawUIANode:
 	"""Expose a raw UIA element through the small interface used by this module."""
 
-	def __init__(self, element, walker, uia):
+	def __init__(self, element, walker, uia, text_pattern_id=None, text_pattern_interface=None):
 		self._element = element
 		self._walker = walker
 		self._uia = uia
+		self._text_pattern_id = text_pattern_id
+		self._text_pattern_interface = text_pattern_interface
 
 	def _property(self, property_id):
 		try:
@@ -51,7 +53,17 @@ class _RawUIANode:
 
 	@property
 	def name(self):
-		return self._property(self._uia.UIA_NamePropertyId)
+		name = self._property(self._uia.UIA_NamePropertyId)
+		if name:
+			return name
+		if self._text_pattern_id is None or self._text_pattern_interface is None:
+			return ""
+		try:
+			pattern = self._element.GetCurrentPattern(self._text_pattern_id)
+			pattern = pattern.QueryInterface(self._text_pattern_interface)
+			return pattern.DocumentRange.GetText(-1) or ""
+		except Exception:
+			return ""
 
 	@property
 	def UIAClassName(self):
@@ -67,7 +79,15 @@ class _RawUIANode:
 		try:
 			element = self._walker.GetFirstChildElement(self._element)
 			while element is not None and len(children) < _DEFAULT_MAX_NODES:
-				children.append(_RawUIANode(element, self._walker, self._uia))
+				children.append(
+					_RawUIANode(
+						element,
+						self._walker,
+						self._uia,
+						self._text_pattern_id,
+						self._text_pattern_interface,
+					)
+				)
 				element = self._walker.GetNextSiblingElement(element)
 		except Exception:
 			pass
@@ -96,7 +116,13 @@ def _find_raw_rich_message_root(message):
 		result = element.findFirst(UIAHandler.TreeScope_Descendants, condition)
 		if result is None:
 			return True, None
-		return True, _RawUIANode(result, client.RawViewWalker, UIAHandler.UIA)
+		return True, _RawUIANode(
+			result,
+			client.RawViewWalker,
+			UIAHandler.UIA,
+			UIAHandler.UIA_TextPatternId,
+			UIAHandler.IUIAutomationTextPattern,
+		)
 	except Exception:
 		return False, None
 
