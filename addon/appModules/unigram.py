@@ -31,7 +31,7 @@ from .data import *
 from .text_window import *
 from .cnf import conf, lang
 from .readme_shortcuts import extractShortcutText  # noqa: E402
-from .rich_message import extract_rich_message_text, find_rich_message_root  # noqa: E402
+from .rich_message import extract_rich_message_text, find_rich_message_root, insert_hint_before_status  # noqa: E402
 
 baseDir = os.path.join(os.path.dirname(__file__), "media\\")
 _telegramDesktopFallbackClass = None
@@ -439,6 +439,7 @@ class Message_list_item(ListItem):
 	@script(description=_("Show message text in popup window"), gesture="kb:ALT+C")
 	def script_show_text_message(self, gesture):
 		rich_message = find_rich_message_root(self)
+		text = ""
 		if rich_message:
 			text = extract_rich_message_text(rich_message, textInfos.POSITION_ALL)
 			if text:
@@ -456,7 +457,7 @@ class Message_list_item(ListItem):
 			text = "\n\n".join([text_message, recognized_text])
 		else:
 			text = text_message or recognized_text
-		TextWindow(text, _("message text"), readOnly=False)
+		browseableMessage(text, _("message text"))
 
 	@script(description=_("Open comments"), gesture="kb:control+ALT+C")
 	def script_openComentars(self, gesture):
@@ -1762,9 +1763,7 @@ class AppModule(appModuleHandler.AppModule):
 				if find_rich_message_root(obj):
 					# Translators: Announced after the content of a rich message when it receives focus.
 					hint = _("Rich message. Press Alt+C to browse")
-					if hint not in obj.name:
-						name = obj.name.rstrip(". ")
-						obj.name = "%s. %s" % (name, hint) if name else hint
+					obj.name = insert_hint_before_status(obj.name, hint, keywords[2:4])
 			elif obj.parent.UIAAutomationId == "ChatsList":
 				self.saved_items.save("last focused chat", obj)
 				obj.name = self.actionChatElementInFocus(obj)

@@ -7,7 +7,7 @@ import warnings
 
 sys.path.insert(0, str(Path(__file__).parents[1] / "addon" / "appModules"))
 
-from rich_message import extract_rich_message_text, find_rich_message_root  # noqa: E402
+from rich_message import extract_rich_message_text, find_rich_message_root, insert_hint_before_status  # noqa: E402
 
 
 class Node:
@@ -125,7 +125,19 @@ def test_text_info_fallback_handles_flattened_provider():
 	assert extract_rich_message_text(rich, "all") == "Fallback rich text"
 
 
-def test_empty_rich_content_falls_back_to_ordinary_message_text():
+def test_inserts_hint_before_localized_message_status():
+	assert insert_hint_before_status(
+		"Message content, Received at 18:17",
+		"Rich message. Press Alt+C to browse",
+		(", Sent at ", ", Received at "),
+	) == "Message content. Rich message. Press Alt+C to browse, Received at 18:17"
+
+
+def test_appends_hint_when_message_status_is_unavailable():
+	assert insert_hint_before_status("Message content.", "Rich message", ()) == "Message content. Rich message"
+
+
+def test_all_message_text_uses_browse_mode_when_rich_content_is_empty_or_absent():
 	"""Exercise the actual Alt+C method body without importing NVDA."""
 	source = (Path(__file__).parents[1] / "addon" / "appModules" / "unigram.py").read_text(encoding="utf-8")
 	with warnings.catch_warnings():
@@ -141,26 +153,24 @@ def test_empty_rich_content_falls_back_to_ordinary_message_text():
 	)
 	method.decorator_list = []
 
-	opened = []
-	namespace = {
-		"find_rich_message_root": lambda obj: object(),
-		"extract_rich_message_text": lambda root, position: "",
-		"textInfos": SimpleNamespace(POSITION_ALL="all"),
-		"browseableMessage": lambda *args: opened.append(("browse", args)),
-		"message": lambda text: opened.append(("message", text)),
-		"TextWindow": lambda *args, **kwargs: opened.append(("window", args, kwargs)),
-		"_": lambda text: text,
-	}
-	exec(compile(ast.Module(body=[method], type_ignores=[]), "unigram.py", "exec"), namespace)
 	message_item = SimpleNamespace(
 		children=[
 			SimpleNamespace(UIAAutomationId="TextBlock", name="Ordinary text"),
 			SimpleNamespace(UIAAutomationId="RecognizedText", name="Recognized text"),
 		]
 	)
+	for rich_root in (None, object()):
+		opened = []
+		namespace = {
+			"find_rich_message_root": lambda obj, result=rich_root: result,
+			"extract_rich_message_text": lambda root, position: "",
+			"textInfos": SimpleNamespace(POSITION_ALL="all"),
+			"browseableMessage": lambda *args: opened.append(("browse", args)),
+			"message": lambda text: opened.append(("message", text)),
+			"_": lambda text: text,
+		}
+		exec(compile(ast.Module(body=[method], type_ignores=[]), "unigram.py", "exec"), namespace)
 
-	namespace["script_show_text_message"](message_item, None)
+		namespace["script_show_text_message"](message_item, None)
 
-	assert opened == [
-		("window", ("Ordinary text\n\nRecognized text", "message text"), {"readOnly": False})
-	]
+		assert opened == [("browse", ("Ordinary text\n\nRecognized text", "message text"))]

@@ -130,6 +130,22 @@ def find_rich_message_root(message):
 	return next((node for node in _walk_descendants(message) if _is_instant_content(node)), None)
 
 
+def insert_hint_before_status(name, hint, status_markers):
+	"""Insert a rich-message hint immediately before the trailing send/receive status."""
+	name = _clean_text(name)
+	hint = _clean_text(hint)
+	if not hint or hint in name:
+		return name
+	positions = [name.rfind(marker) for marker in status_markers if marker]
+	positions = [position for position in positions if position >= 0]
+	if not positions:
+		return "%s. %s" % (name.rstrip(". "), hint) if name else hint
+	position = max(positions)
+	prefix = name[:position].rstrip(". ")
+	suffix = name[position:]
+	return "%s. %s%s" % (prefix, hint, suffix) if prefix else "%s%s" % (hint, suffix)
+
+
 def _clean_text(value):
 	try:
 		text = str(value or "")
