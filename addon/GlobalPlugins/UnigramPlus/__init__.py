@@ -25,8 +25,8 @@ from appModules.cnf import conf, listLanguages
 from appModules.unigram import AppModule, baseDir
 from ui import message
 
-update_repo = "keyang556/UnigramPlus"
-update_api_url = "https://api.github.com/repos/%s/releases/latest" % update_repo
+UPDATE_REPO = "keyang556/UnigramPlus"
+UPDATE_API_URL = "https://api.github.com/repos/%s/releases/latest" % update_repo
 
 def no_updates_dialog():
 	res = gui.messageBox(
@@ -74,7 +74,7 @@ def onCheckForUpdates(event = False, is_start = False):
 def _checkForUpdates(is_start):
 	addon_version = addonHandler.getCodeAddon().manifest["version"]
 	try:
-		release = json.loads(_http_get(update_api_url).decode("utf-8"))
+		release = json.loads(_http_get(UPDATE_API_URL).decode("utf-8"))
 		str_last_version = str(release.get("tag_name") or "").lstrip("vV")
 		url = _addon_asset_url(release)
 	except Exception:

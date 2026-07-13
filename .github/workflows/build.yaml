@@ -11,8 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v7
+      - uses: actions/checkout@v7
       - name: Install UV
         uses: astral-sh/setup-uv@v7
         with:
@@ -23,7 +22,9 @@ jobs:
           sudo apt-get install -y gettext
           uv sync
       - name: building addon
-        run: uv run scons && uv run scons pot
+        run: |
+          uv run scons
+          uv run scons pot
       - name: "Upload Add-on"
         if: github.event_name == 'release' || github.event_name == 'push'
         uses: actions/upload-artifact@v7
