@@ -31,7 +31,7 @@ from .data import *
 from .text_window import *
 from .cnf import conf, lang
 from .readme_shortcuts import extractShortcutText  # noqa: E402
-from .rich_message import extract_rich_message_text, find_rich_message_root, insert_hint_before_status  # noqa: E402
+from .rich_message import extract_message_text, extract_rich_message_text, find_rich_message_root, insert_hint_before_status  # noqa: E402
 
 baseDir = os.path.join(os.path.dirname(__file__), "media\\")
 _telegramDesktopFallbackClass = None
@@ -439,25 +439,20 @@ class Message_list_item(ListItem):
 	@script(description=_("Show message text in popup window"), gesture="kb:ALT+C")
 	def script_show_text_message(self, gesture):
 		rich_message = find_rich_message_root(self)
-		text = ""
 		if rich_message:
 			text = extract_rich_message_text(rich_message, textInfos.POSITION_ALL)
 			log.debug("Rich message extraction returned %d characters" % len(text))
+			if not text:
+				text = extract_message_text(self)
+				log.debug("Rich message control-view fallback returned %d characters" % len(text))
 			if text:
 				# Translators: Title of the NVDA browse-mode window containing a rich message.
 				browseableMessage(text, _("Rich message"))
 				return
-		text_message = next((item.name for item in self.children if item.UIAAutomationId in ("TextBlock", "Message", "Question", "QuestionText")), "")
-		recognized_text = next((item.name for item in self.children if item.UIAAutomationId == "RecognizedText"), "")
-		if not text_message and not recognized_text:
+		text = extract_message_text(self)
+		if not text:
 			message(_("This message does not contain text"))
 			return
-		text_message = text_message.strip().replace("‍", "")
-		recognized_text = recognized_text.strip().replace("‍", "")
-		if text_message and recognized_text:
-			text = "\n\n".join([text_message, recognized_text])
-		else:
-			text = text_message or recognized_text
 		browseableMessage(text, _("message text"))
 
 	@script(description=_("Open comments"), gesture="kb:control+ALT+C")

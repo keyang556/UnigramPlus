@@ -13,6 +13,7 @@ _RICH_MESSAGE_CLASS = "instantcontent"
 _LAYOUT_ROOT_AUTOMATION_ID = "LayoutRoot"
 _DEFAULT_MAX_DEPTH = 12
 _DEFAULT_MAX_NODES = 1000
+_MESSAGE_TEXT_AUTOMATION_IDS = frozenset(("TextBlock", "Message", "Question", "QuestionText", "RecognizedText"))
 
 
 def _safe_attr(obj, name, default=""):
@@ -113,6 +114,11 @@ def _find_raw_rich_message_root(message):
 			UIAHandler.UIA.UIA_ClassNamePropertyId,
 			"InstantContent",
 		)
+		visible_condition = client.CreatePropertyCondition(
+			UIAHandler.UIA.UIA_IsOffscreenPropertyId,
+			False,
+		)
+		condition = client.createAndConditionFromArray([condition, visible_condition])
 		result = element.findFirst(UIAHandler.TreeScope_Descendants, condition)
 		if result is None:
 			return True, None
@@ -170,6 +176,18 @@ def insert_hint_before_status(name, hint, status_markers):
 	prefix = name[:position].rstrip(". ")
 	suffix = name[position:]
 	return "%s. %s%s" % (prefix, hint, suffix) if prefix else "%s%s" % (hint, suffix)
+
+
+def extract_message_text(message):
+	"""Collect all text controls flattened into a message's control-view children."""
+	parts = []
+	for node in _children(message):
+		if _safe_attr(node, "UIAAutomationId", "") not in _MESSAGE_TEXT_AUTOMATION_IDS:
+			continue
+		text = _clean_text(_safe_attr(node, "name", ""))
+		if text and text not in parts:
+			parts.append(text)
+	return "\n\n".join(parts)
 
 
 def _clean_text(value):

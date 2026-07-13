@@ -7,7 +7,12 @@ import warnings
 
 sys.path.insert(0, str(Path(__file__).parents[1] / "addon" / "appModules"))
 
-from rich_message import extract_rich_message_text, find_rich_message_root, insert_hint_before_status  # noqa: E402
+from rich_message import (  # noqa: E402
+	extract_message_text,
+	extract_rich_message_text,
+	find_rich_message_root,
+	insert_hint_before_status,
+)
 
 
 class Node:
@@ -36,6 +41,7 @@ def test_finds_and_extracts_instant_content_from_raw_uia_view(monkeypatch):
 		UIA_NamePropertyId = 1
 		UIA_ClassNamePropertyId = 2
 		UIA_AutomationIdPropertyId = 3
+		UIA_IsOffscreenPropertyId = 5
 
 	class Element:
 		def __init__(
@@ -56,7 +62,8 @@ def test_finds_and_extracts_instant_content_from_raw_uia_view(monkeypatch):
 
 		def findFirst(self, scope, condition):
 			assert scope == "descendants"
-			return condition
+			self.find_condition = condition
+			return self.find_result
 
 		def GetCurrentPattern(self, pattern_id):
 			assert pattern_id == 4
@@ -86,7 +93,8 @@ def test_finds_and_extracts_instant_content_from_raw_uia_view(monkeypatch):
 	siblings = {id(first_text): second_text}
 	client = SimpleNamespace(
 		RawViewWalker=Walker(),
-		CreatePropertyCondition=lambda property_id, value: rich,
+		CreatePropertyCondition=lambda property_id, value: (property_id, value),
+		createAndConditionFromArray=lambda conditions: tuple(conditions),
 	)
 	fake_uia_handler = SimpleNamespace(
 		handler=SimpleNamespace(clientObject=client),
@@ -96,12 +104,28 @@ def test_finds_and_extracts_instant_content_from_raw_uia_view(monkeypatch):
 		TreeScope_Descendants="descendants",
 	)
 	monkeypatch.setitem(sys.modules, "UIAHandler", fake_uia_handler)
-	message = SimpleNamespace(UIAElement=Element())
+	message_element = Element()
+	message_element.find_result = rich
+	message = SimpleNamespace(UIAElement=message_element)
 
 	root = find_rich_message_root(message)
 
 	assert root.UIAClassName == "InstantContent"
 	assert extract_rich_message_text(root) == "First raw block\n\nSecond raw block"
+	assert (5, False) in message_element.find_condition
+
+
+def test_collects_all_flattened_message_text_controls():
+	message = Node(
+		children=[
+			Node(name="First paragraph", automation_id="TextBlock"),
+			Node(name="Second paragraph", automation_id="TextBlock"),
+			Node(name="recognized", automation_id="RecognizedText"),
+			Node(name="18:17", automation_id="Footer"),
+		]
+	)
+
+	assert extract_message_text(message) == "First paragraph\n\nSecond paragraph\n\nrecognized"
 
 
 def test_extracts_layout_children_as_separate_markdown_blocks():
@@ -190,6 +214,7 @@ def test_all_message_text_uses_browse_mode_when_rich_content_is_empty_or_absent(
 		namespace = {
 			"find_rich_message_root": lambda obj, result=rich_root: result,
 			"extract_rich_message_text": lambda root, position: "",
+			"extract_message_text": extract_message_text,
 			"textInfos": SimpleNamespace(POSITION_ALL="all"),
 			"log": SimpleNamespace(debug=lambda text: None),
 			"browseableMessage": lambda *args: opened.append(("browse", args)),
@@ -200,7 +225,8 @@ def test_all_message_text_uses_browse_mode_when_rich_content_is_empty_or_absent(
 
 		namespace["script_show_text_message"](message_item, None)
 
-		assert opened == [("browse", ("Ordinary text\n\nRecognized text", "message text"))]
+		title = "Rich message" if rich_root else "message text"
+		assert opened == [("browse", ("Ordinary text\n\nRecognized text", title))]
 
 
 def test_focus_hint_uses_the_message_overlay_keywords():
