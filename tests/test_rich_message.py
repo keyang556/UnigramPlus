@@ -150,6 +150,35 @@ def test_builds_browseable_html_with_links():
 	)
 
 
+def test_reads_text_url_from_uia_help_text(monkeypatch):
+	class LinkElement:
+		def GetCurrentPropertyValueEx(self, property_id, ignore_default):
+			assert property_id == 42
+			return "https://example.com/real-target"
+
+	link = Node(name="descriptive label")
+	link.role = SimpleNamespace(name="LINK")
+	link.UIAElement = LinkElement()
+	block = Node(name="Read descriptive label", automation_id="TextBlock", children=[link])
+	monkeypatch.setitem(
+		sys.modules,
+		"UIAHandler",
+		SimpleNamespace(UIA=SimpleNamespace(UIA_HelpTextPropertyId=42)),
+	)
+
+	assert extract_message_html(Node(children=[block])) == (
+		'<p>Read <a href="https://example.com/real-target">descriptive label</a></p>'
+	)
+
+
+def test_does_not_create_about_blank_link_without_a_real_target():
+	link = Node(name="label without URL")
+	link.role = SimpleNamespace(name="LINK")
+	block = Node(name="Read label without URL", automation_id="TextBlock", children=[link])
+
+	assert extract_message_html(Node(children=[block])) == "<p>Read label without URL</p>"
+
+
 def test_extracts_layout_children_as_separate_markdown_blocks():
 	layout = Node(
 		automation_id="LayoutRoot",

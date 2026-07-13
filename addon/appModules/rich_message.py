@@ -222,11 +222,30 @@ def _is_link(node):
 
 
 def _link_url(node):
-	for attribute in ("value", "description"):
+	label = _clean_text(_safe_attr(node, "name", ""))
+	if label.startswith(("https://", "http://", "tg://", "mailto:")):
+		return label
+	if label.startswith("www."):
+		return "https://" + label
+	for attribute in ("value", "description", "helpText", "UIAHelpText"):
 		value = _clean_text(_safe_attr(node, attribute, ""))
 		if value.startswith(("https://", "http://", "tg://", "mailto:")):
 			return value
-	return "#"
+	try:
+		import UIAHandler
+
+		element = _safe_attr(node, "UIAElement", None)
+		if element is not None:
+			value = element.GetCurrentPropertyValueEx(
+				UIAHandler.UIA.UIA_HelpTextPropertyId,
+				True,
+			)
+			value = _clean_text(value)
+			if value.startswith(("https://", "http://", "tg://", "mailto:")):
+				return value
+	except Exception:
+		pass
+	return None
 
 
 def _text_with_links_to_html(text, links):
@@ -257,7 +276,9 @@ def extract_message_html(message):
 			label = _clean_text(_safe_attr(descendant, "name", ""))
 			if not label:
 				continue
-			links.append((label, _link_url(descendant)))
+			url = _link_url(descendant)
+			if url:
+				links.append((label, url))
 		content = _text_with_links_to_html(text, links)
 		blocks.append("<p>%s</p>" % content)
 	return "".join(blocks)
