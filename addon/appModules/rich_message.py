@@ -250,21 +250,38 @@ def _link_url(node):
 
 def _text_with_links_to_html(text, links):
 	parts = []
+	actions = {}
+	unmatched = []
 	position = 0
-	for label, url in links:
+	for label, url, action in links:
 		index = text.find(label, position)
 		if index < 0:
+			unmatched.append((label, url, action))
 			continue
 		parts.append(escape(text[position:index]))
 		parts.append('<a href="%s">%s</a>' % (escape(url, quote=True), escape(label)))
+		if action:
+			actions[action[0]] = action[1]
 		position = index + len(label)
 	parts.append(escape(text[position:]))
-	return "".join(parts).replace("\n", "<br>")
+	for label, url, action in unmatched:
+		parts.append('<br><a href="%s">%s</a>' % (escape(url, quote=True), escape(label)))
+		if action:
+			actions[action[0]] = action[1]
+	return "".join(parts).replace("\n", "<br>"), actions
 
 
-def extract_message_html(message):
-	"""Build safe semantic HTML from flattened text blocks and their UIA links."""
+def extract_message_html_and_actions(message):
+	"""Build safe HTML and UIA actions for links whose URL is not exposed.
+
+	Unigram's UIA provider exposes some links as actionable controls without a
+	URL property.  Those links use NVDA's internal action URL and retain the
+	original UIA object so the browse-mode dialog can delegate activation back
+	to Unigram.
+	"""
 	blocks = []
+	actions = {}
+	next_action = 0
 	for node in _message_text_nodes(message):
 		text = _clean_text(_safe_attr(node, "name", ""))
 		if not text:
@@ -277,11 +294,27 @@ def extract_message_html(message):
 			if not label:
 				continue
 			url = _link_url(descendant)
-			if url:
-				links.append((label, url))
-		content = _text_with_links_to_html(text, links)
+			if url and url.startswith(("https://", "http://")):
+				links.append((label, url, None))
+			else:
+				action_name = "unigram-link-%d" % next_action
+				next_action += 1
+				links.append(
+					(
+						label,
+						"nvda-action://%s" % action_name,
+						(action_name, descendant),
+					)
+				)
+		content, block_actions = _text_with_links_to_html(text, links)
+		actions.update(block_actions)
 		blocks.append("<p>%s</p>" % content)
-	return "".join(blocks)
+	return "".join(blocks), actions
+
+
+def extract_message_html(message):
+	"""Build safe semantic HTML from flattened text blocks and their UIA links."""
+	return extract_message_html_and_actions(message)[0]
 
 
 def _clean_text(value):

@@ -1,7 +1,8 @@
 import ast
+import importlib
 from pathlib import Path
 import sys
-from types import SimpleNamespace
+from types import ModuleType, SimpleNamespace
 import warnings
 
 
@@ -9,6 +10,7 @@ sys.path.insert(0, str(Path(__file__).parents[1] / "addon" / "appModules"))
 
 from rich_message import (  # noqa: E402
 	extract_message_html,
+	extract_message_html_and_actions,
 	extract_message_text,
 	extract_rich_message_text,
 	find_rich_message_root,
@@ -144,10 +146,13 @@ def test_builds_browseable_html_with_links():
 	second_link.value = "https://openai.com/second"
 	block = Node(name="Visit OpenAI and OpenAI", automation_id="TextBlock", children=[first_link, second_link])
 
-	assert extract_message_html(Node(children=[block])) == (
+	html, actions = extract_message_html_and_actions(Node(children=[block]))
+
+	assert html == (
 		'<p>Visit <a href="https://openai.com/first">OpenAI</a> and '
 		'<a href="https://openai.com/second">OpenAI</a></p>'
 	)
+	assert actions == {}
 
 
 def test_reads_text_url_from_uia_help_text(monkeypatch):
@@ -171,12 +176,83 @@ def test_reads_text_url_from_uia_help_text(monkeypatch):
 	)
 
 
-def test_does_not_create_about_blank_link_without_a_real_target():
+def test_delegates_a_link_when_uia_does_not_expose_its_real_target():
 	link = Node(name="label without URL")
 	link.role = SimpleNamespace(name="LINK")
 	block = Node(name="Read label without URL", automation_id="TextBlock", children=[link])
 
-	assert extract_message_html(Node(children=[block])) == "<p>Read label without URL</p>"
+	html, actions = extract_message_html_and_actions(Node(children=[block]))
+
+	assert html == (
+		'<p>Read <a href="nvda-action://unigram-link-0">label without URL</a></p>'
+	)
+	assert actions == {"unigram-link-0": link}
+
+
+def test_action_link_activates_the_original_unigram_uia_object(monkeypatch, tmp_path):
+	opened = []
+	state = SimpleNamespace(dialog=None, activated=False)
+
+	class Dialog:
+		def __init__(self, parent, document, title, buttons):
+			self.document = document
+			self.actions = {}
+			self.closed = False
+			state.dialog = self
+
+		def registerAction(self, name, handler):
+			self.actions[name] = handler
+
+		def Show(self):
+			opened.append("show")
+
+		def Close(self):
+			self.closed = True
+
+	class Link:
+		def doAction(self):
+			state.activated = True
+
+	template = tmp_path / "message.html"
+	template.write_text("<title>{{TITLE}}</title>{{MESSAGE}}", encoding="utf-8")
+	ui_module = ModuleType("ui")
+	ui_module.browseableMessage = lambda *args, **kwargs: opened.append((args, kwargs))
+	global_vars_module = ModuleType("globalVars")
+	global_vars_module.appDir = str(tmp_path)
+	gui_module = ModuleType("gui")
+	gui_module.mainFrame = SimpleNamespace(
+		prePopup=lambda: opened.append("pre"),
+		postPopup=lambda: opened.append("post"),
+	)
+	gui_message_module = ModuleType("gui.message")
+	gui_message_module.HtmlMessageDialog = Dialog
+	security_module = ModuleType("utils.security")
+	security_module.isRunningOnSecureDesktop = lambda: False
+	wx_module = ModuleType("wx")
+	wx_module.CallAfter = lambda function, *args: function(*args)
+
+	for name, module in {
+		"ui": ui_module,
+		"globalVars": global_vars_module,
+		"gui": gui_module,
+		"gui.message": gui_message_module,
+		"utils.security": security_module,
+		"wx": wx_module,
+	}.items():
+		monkeypatch.setitem(sys.modules, name, module)
+	dialog_module = importlib.import_module("rich_message_dialog")
+
+	dialog_module.show_browseable_message(
+		'<p><a href="nvda-action://unigram-link-0">Open</a></p>',
+		"Rich message",
+		{"unigram-link-0": Link()},
+	)
+	state.dialog.actions["unigram-link-0"]()
+
+	assert opened == ["pre", "show", "post"]
+	assert state.dialog.closed
+	assert state.activated
+	assert "nvda-action://unigram-link-0" in state.dialog.document
 
 
 def test_extracts_layout_children_as_separate_markdown_blocks():
@@ -265,11 +341,12 @@ def test_all_message_text_uses_browse_mode_when_rich_content_is_empty_or_absent(
 		namespace = {
 			"find_rich_message_root": lambda obj, result=rich_root: result,
 			"extract_rich_message_text": lambda root, position: "",
-			"extract_message_html": extract_message_html,
+			"extract_message_html_and_actions": extract_message_html_and_actions,
 			"extract_message_text": extract_message_text,
 			"textInfos": SimpleNamespace(POSITION_ALL="all"),
 			"log": SimpleNamespace(debug=lambda text: None),
 			"browseableMessage": lambda *args, **kwargs: opened.append(("browse", args, kwargs)),
+			"show_browseable_message": lambda *args: opened.append(("browseHtml", args)),
 			"message": lambda text: opened.append(("message", text)),
 			"_": lambda text: text,
 		}
@@ -279,7 +356,7 @@ def test_all_message_text_uses_browse_mode_when_rich_content_is_empty_or_absent(
 
 		title = "Rich message" if rich_root else "message text"
 		html = "<p>Ordinary text</p><p>Recognized text</p>"
-		assert opened == [("browse", (html, title), {"isHtml": True})]
+		assert opened == [("browseHtml", (html, title, {}))]
 
 
 def test_focus_hint_uses_the_message_overlay_keywords():
