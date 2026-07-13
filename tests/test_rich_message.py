@@ -1,5 +1,8 @@
+import ast
 from pathlib import Path
 import sys
+from types import SimpleNamespace
+import warnings
 
 
 sys.path.insert(0, str(Path(__file__).parents[1] / "addon" / "appModules"))
@@ -73,3 +76,44 @@ def test_text_info_fallback_handles_flattened_provider():
 	rich = FlatRichNode(class_name="InstantContent")
 
 	assert extract_rich_message_text(rich, "all") == "Fallback rich text"
+
+
+def test_empty_rich_content_falls_back_to_ordinary_message_text():
+	"""Exercise the actual Alt+C method body without importing NVDA."""
+	source = (Path(__file__).parents[1] / "addon" / "appModules" / "unigram.py").read_text(encoding="utf-8")
+	with warnings.catch_warnings():
+		# unigram.py contains legacy replacement strings such as "\g<1>" outside
+		# this method. Parsing the full module can warn about those unrelated lines.
+		warnings.simplefilter("ignore", SyntaxWarning)
+		module = ast.parse(source)
+	message_class = next(node for node in module.body if isinstance(node, ast.ClassDef) and node.name == "Message_list_item")
+	method = next(
+		node
+		for node in message_class.body
+		if isinstance(node, ast.FunctionDef) and node.name == "script_show_text_message"
+	)
+	method.decorator_list = []
+
+	opened = []
+	namespace = {
+		"find_rich_message_root": lambda obj: object(),
+		"extract_rich_message_text": lambda root, position: "",
+		"textInfos": SimpleNamespace(POSITION_ALL="all"),
+		"browseableMessage": lambda *args: opened.append(("browse", args)),
+		"message": lambda text: opened.append(("message", text)),
+		"TextWindow": lambda *args, **kwargs: opened.append(("window", args, kwargs)),
+		"_": lambda text: text,
+	}
+	exec(compile(ast.Module(body=[method], type_ignores=[]), "unigram.py", "exec"), namespace)
+	message_item = SimpleNamespace(
+		children=[
+			SimpleNamespace(UIAAutomationId="TextBlock", name="Ordinary text"),
+			SimpleNamespace(UIAAutomationId="RecognizedText", name="Recognized text"),
+		]
+	)
+
+	namespace["script_show_text_message"](message_item, None)
+
+	assert opened == [
+		("window", ("Ordinary text\n\nRecognized text", "message text"), {"readOnly": False})
+	]

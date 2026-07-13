@@ -444,9 +444,7 @@ class Message_list_item(ListItem):
 			if text:
 				# Translators: Title of the NVDA browse-mode window containing a rich message.
 				browseableMessage(text, _("Rich message"))
-			else:
-				message(_("This message does not contain text"))
-			return
+				return
 		text_message = next((item.name for item in self.children if item.UIAAutomationId in ("TextBlock", "Message", "Question", "QuestionText")), "")
 		recognized_text = next((item.name for item in self.children if item.UIAAutomationId == "RecognizedText"), "")
 		if not text_message and not recognized_text:
