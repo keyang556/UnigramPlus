@@ -8,8 +8,11 @@ ROOT = Path(__file__).parents[1]
 sys.path.insert(0, str(ROOT / "addon" / "appModules"))
 
 from voice_recording import (  # noqa: E402
+	VoiceRecordingOutcome,
 	VoiceRecordingState,
+	is_recorded_message,
 	is_recording_button,
+	message_marker,
 	recording_button_state,
 )
 
@@ -49,14 +52,14 @@ def test_native_recording_shortcuts_are_not_bound_or_intercepted_by_unigramplus(
 	assert "control+d" not in serialized
 
 
-def test_native_recording_ui_events_produce_one_start_and_one_end():
+def test_native_recording_ui_events_produce_one_start_and_one_stop():
 	state = VoiceRecordingState()
 
 	assert state.shown() == "start"
 	assert state.elapsedChanged("0:00,00") is None
 	assert state.elapsedChanged("0:00.10") is None
 	assert state.elapsedChanged("0:01.25") is None
-	assert state.elapsedChanged("0:00,0") == "end"
+	assert state.elapsedChanged("0:00,0") == "stopped"
 	assert state.hidden() is None
 	assert state.elapsedChanged("0:00,0") is None
 
@@ -65,16 +68,64 @@ def test_name_changes_work_when_uia_show_event_is_missing():
 	state = VoiceRecordingState()
 
 	assert state.elapsedChanged("0:00.10") == "start"
-	assert state.elapsedChanged("0:00.00") == "end"
+	assert state.elapsedChanged("0:00.00") == "stopped"
 
 
-def test_hiding_timer_after_native_cancel_does_not_announce_message_sent():
+def test_hiding_timer_defers_the_send_or_cancel_outcome():
 	state = VoiceRecordingState()
 
 	assert state.shown() == "start"
 	assert state.elapsedChanged("0:01.25") is None
-	assert state.hidden() is None
+	assert state.hidden() == "stopped"
 	assert not state.active
+
+
+def test_recorded_message_templates_and_message_markers_are_detected():
+	voice = SimpleNamespace(
+		UIAAutomationId="Message_item",
+		children=[SimpleNamespace(UIAAutomationId="Recognize", children=[])],
+	)
+	voice_without_transcription = SimpleNamespace(
+		UIAAutomationId="Message_item",
+		children=[SimpleNamespace(UIAAutomationId="Subtitle", name="00:00 / 00:03", children=[])],
+	)
+	video = SimpleNamespace(
+		UIAAutomationId="Message_item",
+		children=[
+			SimpleNamespace(UIAAutomationId="Player", children=[]),
+			SimpleNamespace(UIAAutomationId="Subtitle", children=[]),
+		],
+	)
+	text = SimpleNamespace(UIAAutomationId="Message_item", children=[])
+	positioned = SimpleNamespace(positionInfo={"indexInGroup": 12, "similarItemsInGroup": 12})
+
+	assert is_recorded_message(voice)
+	assert is_recorded_message(voice_without_transcription)
+	assert not is_recorded_message(text)
+	assert is_recorded_message(video, video=True)
+	assert not is_recorded_message(voice, video=True)
+	assert message_marker(positioned) == ("position", 12)
+
+
+def test_stopped_recording_is_sent_only_after_a_new_recorded_message_appears():
+	outcome = VoiceRecordingOutcome(poll_limit=3)
+	outcome.started(("position", 8))
+	outcome.stopped()
+
+	assert outcome.observe(("position", 8), is_recorded=True) is None
+	assert outcome.observe(("position", 9), is_recorded=False) is None
+	assert outcome.observe(("position", 9), is_recorded=True) == "sent"
+	assert not outcome.pending
+
+
+def test_stopped_recording_without_a_new_recorded_message_is_canceled():
+	outcome = VoiceRecordingOutcome(poll_limit=2)
+	outcome.started(("position", 8))
+	outcome.stopped()
+
+	assert outcome.observe(("position", 8), is_recorded=False) is None
+	assert outcome.observe(("position", 8), is_recorded=False) == "canceled"
+	assert not outcome.pending
 
 
 def test_recording_state_uses_the_same_elapsed_sibling_as_the_button_label():
@@ -150,13 +201,59 @@ def test_recording_monitor_schedules_on_nvda_main_loop_without_timer_threads(mon
 	assert scheduled == [(200, instance._pollVoiceRecordingState)]
 
 
-def test_polling_native_ui_announces_manual_or_keyboard_recording_once():
+def test_app_transition_handler_captures_baseline_before_resolving_outcome():
 	announcements = []
-	scheduled = []
+	button = SimpleNamespace(states=set())
+	outcome = VoiceRecordingOutcome(poll_limit=2)
+	instance = SimpleNamespace(
+		_voiceRecordingButton=button,
+		_voiceRecordingOutcome=outcome,
+		_getVoiceRecordingLastMessage=lambda: (("position", 5), object()),
+		_announceVoiceRecordingTransition=announcements.append,
+	)
+	namespace = {"State": SimpleNamespace(PRESSED="pressed")}
+	method = _load_method("_handleVoiceRecordingTransition", namespace)
 
-	def announce(transition):
-		if transition:
-			announcements.append(transition)
+	method(instance, "start")
+	method(instance, "stopped")
+
+	assert outcome.baseline == ("position", 5)
+	assert outcome.pending
+	assert not outcome.video
+	assert announcements == ["start"]
+
+
+def test_app_outcome_poll_announces_new_voice_message_as_sent():
+	announcements = []
+	logs = []
+	voice = SimpleNamespace(
+		UIAAutomationId="Message_item",
+		children=[SimpleNamespace(UIAAutomationId="Recognize", children=[])],
+	)
+	outcome = VoiceRecordingOutcome(poll_limit=2)
+	outcome.started(("position", 5))
+	outcome.stopped()
+	instance = SimpleNamespace(
+		_voiceRecordingOutcome=outcome,
+		_getVoiceRecordingLastMessage=lambda: (("position", 6), voice),
+		_announceVoiceRecordingTransition=announcements.append,
+	)
+	namespace = {
+		"is_recorded_message": is_recorded_message,
+		"log": SimpleNamespace(info=logs.append),
+	}
+	method = _load_method("_pollVoiceRecordingOutcome", namespace)
+
+	method(instance)
+
+	assert announcements == ["sent"]
+	assert logs and logs[0].endswith("sent")
+	assert not outcome.pending
+
+
+def test_polling_native_ui_announces_manual_or_keyboard_recording_once():
+	transitions = []
+	scheduled = []
 
 	button = SimpleNamespace(
 		UIAAutomationId="btnVoiceMessage",
@@ -167,7 +264,8 @@ def test_polling_native_ui_announces_manual_or_keyboard_recording_once():
 		_voiceRecordingState=VoiceRecordingState(),
 		_voiceRecordingButton=button,
 		_getVoiceRecordingButton=lambda focus: button,
-		_announceVoiceRecordingTransition=announce,
+		_pollVoiceRecordingOutcome=lambda: None,
+		_handleVoiceRecordingTransition=lambda transition: transitions.append(transition) if transition else None,
 		_scheduleVoiceRecordingPoll=lambda: scheduled.append(True),
 	)
 	focus = SimpleNamespace(appModule=instance)
@@ -183,7 +281,7 @@ def test_polling_native_ui_announces_manual_or_keyboard_recording_once():
 	button.next = SimpleNamespace(UIAAutomationId="SomeOtherControl")
 	method(instance)
 
-	assert announcements == ["start"]
+	assert transitions == ["start", "stopped"]
 	assert scheduled == [True, True, True]
 	assert not instance._voiceRecordingState.active
 
@@ -215,11 +313,14 @@ def test_recording_transitions_keep_text_and_audio_notifications():
 	instance = SimpleNamespace(_voiceRecordingButton=button)
 
 	method(instance, "start")
-	method(instance, "end")
+	method(instance, "sent")
+	method(instance, "canceled")
 	settings["indicator"] = "audio"
 	method(instance, "start")
-	method(instance, "end")
+	method(instance, "sent")
+	method(instance, "canceled")
 
-	assert announcements == ["Audio", "Record sent"]
+	assert announcements == ["Audio", "Record sent", "Recording canceled"]
 	assert sounds[0][0].endswith("start_recording_voice_message.wav")
 	assert sounds[1][0].endswith("send_voice_message.wav")
+	assert sounds[2][0].endswith("cancel_voice_message_recording.wav")

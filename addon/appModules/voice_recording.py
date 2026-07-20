@@ -3,6 +3,9 @@
 
 RECORDING_BUTTON_AUTOMATION_ID = "btnVoiceMessage"
 ELAPSED_LABEL_AUTOMATION_ID = "ElapsedLabel"
+VOICE_MESSAGE_AUTOMATION_ID = "Recognize"
+VIDEO_MESSAGE_AUTOMATION_IDS = frozenset(("Player", "Subtitle"))
+EMPTY_MESSAGE_MARKER = ("empty",)
 
 
 def _is_zero_elapsed_label(value):
@@ -34,6 +37,90 @@ def recording_button_state(button):
 		return bool(next_element and next_element.UIAAutomationId == ELAPSED_LABEL_AUTOMATION_ID)
 	except Exception:
 		return None
+
+
+def message_marker(obj):
+	"""Build a stable marker for the last item in Unigram's message list."""
+	if obj is None:
+		return EMPTY_MESSAGE_MARKER
+	try:
+		position = obj.positionInfo
+		index = position.get("indexInGroup")
+		if index is not None:
+			return ("position", index)
+	except Exception:
+		pass
+	try:
+		return ("runtime", tuple(obj.UIAElement.GetRuntimeId()))
+	except Exception:
+		return ("object", id(obj))
+
+
+def is_recorded_message(obj, video=False, max_elements=64):
+	"""Identify a voice/video message by controls fixed in Unigram's templates."""
+	if obj is None:
+		return False
+	stack = [obj]
+	automation_ids = set()
+	for _ in range(max_elements):
+		if not stack:
+			break
+		current = stack.pop()
+		try:
+			automation_id = current.UIAAutomationId
+			automation_ids.add(automation_id)
+		except Exception:
+			automation_id = ""
+		if not video and VOICE_MESSAGE_AUTOMATION_ID in automation_ids:
+			return True
+		if not video and automation_id == "Subtitle":
+			try:
+				subtitle = current.name or ""
+				if len(subtitle) < 15 and " / " in subtitle:
+					return True
+			except Exception:
+				pass
+		try:
+			stack.extend(reversed(current.children or ()))
+		except Exception:
+			continue
+	return VIDEO_MESSAGE_AUTOMATION_IDS.issubset(automation_ids) if video else False
+
+
+class VoiceRecordingOutcome:
+	"""Resolve a stopped recording as sent or canceled without observing keys."""
+
+	def __init__(self, poll_limit=8):
+		self.poll_limit = poll_limit
+		self.pending = False
+		self.baseline = None
+		self.video = False
+		self._pollsRemaining = 0
+
+	def started(self, baseline, video=False):
+		self.pending = False
+		self.baseline = baseline
+		self.video = video
+		self._pollsRemaining = 0
+
+	def stopped(self):
+		self.pending = True
+		self._pollsRemaining = self.poll_limit
+
+	def observe(self, marker, is_recorded):
+		if not self.pending:
+			return None
+		if self.baseline is not None and marker != self.baseline and is_recorded:
+			return self._finish("sent")
+		self._pollsRemaining -= 1
+		if self._pollsRemaining <= 0:
+			return self._finish("canceled")
+		return None
+
+	def _finish(self, transition):
+		self.pending = False
+		self._pollsRemaining = 0
+		return transition
 
 
 class VoiceRecordingState:
@@ -69,11 +156,9 @@ class VoiceRecordingState:
 	def hidden(self):
 		if not self.active:
 			return None
-		# Hiding alone cannot distinguish a native Ctrl+D cancellation from a
-		# completed send. Only the elapsed timer returning to zero signals "end".
 		self.active = False
 		self._seenProgress = False
-		return None
+		return "stopped"
 
 	def visibilityChanged(self, visible):
 		return self.shown() if visible else self.hidden()
@@ -81,4 +166,4 @@ class VoiceRecordingState:
 	def _finish(self):
 		self.active = False
 		self._seenProgress = False
-		return "end"
+		return "stopped"

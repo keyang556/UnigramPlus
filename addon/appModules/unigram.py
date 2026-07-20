@@ -43,8 +43,11 @@ from .rich_message import (  # noqa: E402
 )
 from .rich_message_dialog import show_browseable_message  # noqa: E402
 from .voice_recording import (  # noqa: E402
+	VoiceRecordingOutcome,
 	VoiceRecordingState,
+	is_recorded_message,
 	is_recording_button,
+	message_marker,
 	recording_button_state,
 )
 
@@ -812,6 +815,7 @@ class AppModule(appModuleHandler.AppModule):
 		super().__init__(*args, **kwargs)
 		self.isUnigramWindow = is_unigram_app_module(self)
 		self._voiceRecordingState = VoiceRecordingState()
+		self._voiceRecordingOutcome = VoiceRecordingOutcome()
 		self._voiceRecordingMonitorRunning = False
 		self._voiceRecordingButton = None
 		self._voiceRecordingDiscoveryFocus = None
@@ -1524,11 +1528,22 @@ class AppModule(appModuleHandler.AppModule):
 		indicator = conf.get("voiceMessageRecordingIndicator")
 		if not transition or indicator == "none":
 			return
-		if transition == "end":
+		if transition == "sent":
 			if indicator == "audio":
 				winsound.PlaySound(baseDir+"send_voice_message.wav", winsound.SND_ASYNC | winsound.SND_NOSTOP)
 			else:
 				message(_("Record sent"))
+			return
+		if transition == "canceled":
+			if indicator == "audio":
+				winsound.PlaySound(
+					baseDir+"cancel_voice_message_recording.wav",
+					winsound.SND_ASYNC | winsound.SND_NOSTOP,
+				)
+			else:
+				message(_("Recording canceled"))
+			return
+		if transition != "start":
 			return
 
 		# The monitor already holds the record button. Do not rescan Unigram's UIA
@@ -1569,6 +1584,45 @@ class AppModule(appModuleHandler.AppModule):
 			self._voiceRecordingButton = button
 		return button
 
+	def _getVoiceRecordingLastMessage(self):
+		try:
+			messages = self.getMessagesElement()
+			if not messages:
+				return None, None
+			lastMessage = messages.lastChild
+			return message_marker(lastMessage), lastMessage
+		except Exception:
+			return None, None
+
+	def _handleVoiceRecordingTransition(self, transition):
+		if transition == "start":
+			try:
+				button = self._voiceRecordingButton
+				isVideo = bool(button and State.PRESSED in button.states)
+			except Exception:
+				isVideo = False
+			baseline, _lastMessage = self._getVoiceRecordingLastMessage()
+			self._voiceRecordingOutcome.started(baseline, isVideo)
+			self._announceVoiceRecordingTransition("start")
+		elif transition == "stopped":
+			self._voiceRecordingOutcome.stopped()
+
+	def _pollVoiceRecordingOutcome(self):
+		if not self._voiceRecordingOutcome.pending:
+			return
+		marker, lastMessage = self._getVoiceRecordingLastMessage()
+		markerChanged = (
+			self._voiceRecordingOutcome.baseline is not None
+			and marker != self._voiceRecordingOutcome.baseline
+		)
+		transition = self._voiceRecordingOutcome.observe(
+			marker,
+			markerChanged and is_recorded_message(lastMessage, self._voiceRecordingOutcome.video),
+		)
+		if transition:
+			log.info("Unigram voice-message recording outcome: %s" % transition)
+			self._announceVoiceRecordingTransition(transition)
+
 	def _pollVoiceRecordingState(self):
 		if not self._voiceRecordingMonitorRunning:
 			return
@@ -1576,6 +1630,7 @@ class AppModule(appModuleHandler.AppModule):
 			focus = api.getFocusObject()
 			if getattr(focus, "appModule", None) is not self:
 				return
+			self._pollVoiceRecordingOutcome()
 			button = self._getVoiceRecordingButton(focus)
 			active = recording_button_state(button)
 			if button is not None and active is None:
@@ -1591,7 +1646,7 @@ class AppModule(appModuleHandler.AppModule):
 			transition = self._voiceRecordingState.visibilityChanged(active)
 			if transition:
 				log.info("Unigram voice-message recording transition: %s" % transition)
-			self._announceVoiceRecordingTransition(transition)
+			self._handleVoiceRecordingTransition(transition)
 		except Exception as error:
 			log.debug("Could not monitor Unigram voice-message recording UI: %r" % error)
 		finally:
@@ -1747,7 +1802,7 @@ class AppModule(appModuleHandler.AppModule):
 				self._voiceRecordingDiscoveryFocus = None
 			elif getattr(self, "isUnigramWindow", False) and obj.UIAAutomationId == "ElapsedLabel":
 				transition = self._voiceRecordingState.elapsedChanged(obj.name)
-				self._announceVoiceRecordingTransition(transition)
+				self._handleVoiceRecordingTransition(transition)
 		finally:
 			nextHandler()
 
@@ -1755,7 +1810,7 @@ class AppModule(appModuleHandler.AppModule):
 		try:
 			if getattr(self, "isUnigramWindow", False) and obj.UIAAutomationId == "ElapsedLabel":
 				transition = self._voiceRecordingState.elapsedChanged(obj.name)
-				self._announceVoiceRecordingTransition(transition)
+				self._handleVoiceRecordingTransition(transition)
 		finally:
 			nextHandler()
 
@@ -1769,7 +1824,7 @@ class AppModule(appModuleHandler.AppModule):
 				self._voiceRecordingButton = None
 				self._voiceRecordingDiscoveryFocus = None
 			elif getattr(self, "isUnigramWindow", False) and obj.UIAAutomationId == "ElapsedLabel":
-				self._announceVoiceRecordingTransition(self._voiceRecordingState.hidden())
+				self._handleVoiceRecordingTransition(self._voiceRecordingState.hidden())
 		finally:
 			nextHandler()
 
