@@ -9,9 +9,8 @@ sys.path.insert(0, str(ROOT / "addon" / "appModules"))
 
 from voice_recording import (  # noqa: E402
 	VoiceRecordingState,
-	get_raw_uia_process_root,
-	is_recording_button_active,
-	is_recording_raw_uia_visible,
+	is_recording_button,
+	recording_button_state,
 )
 
 
@@ -78,169 +77,77 @@ def test_hiding_timer_after_native_cancel_does_not_announce_message_sent():
 	assert not state.active
 
 
-def test_native_recording_bar_is_found_in_raw_uia_view():
-	class Client:
-		def createPropertyCondition(self, property_id, value):
-			return ("property", property_id, value)
-
-		def createOrConditionFromArray(self, conditions):
-			return ("or", tuple(conditions))
-
-		def createAndConditionFromArray(self, conditions):
-			return ("and", tuple(conditions))
-
-	class Root:
-		def __init__(self, result):
-			self.result = result
-			self.query = None
-
-		def findFirst(self, scope, condition):
-			self.query = (scope, condition)
-			return self.result
-
-	client = Client()
-	uia = SimpleNamespace(
-		UIA_AutomationIdPropertyId="automationId",
-		UIA_IsOffscreenPropertyId="offscreen",
+def test_recording_state_uses_the_same_elapsed_sibling_as_the_button_label():
+	idle_button = SimpleNamespace(
+		UIAAutomationId="btnVoiceMessage",
+		next=SimpleNamespace(UIAAutomationId="SomeOtherControl"),
 	)
-	root = Root(result=object())
-
-	assert is_recording_raw_uia_visible(root, client, uia, "descendants")
-	assert root.query[0] == "descendants"
-	assert ("property", "automationId", "ChatRecord") in root.query[1][1][0][1]
-	assert ("property", "automationId", "ElapsedLabel") in root.query[1][1][0][1]
-	assert ("property", "offscreen", False) in root.query[1][1]
-	assert not is_recording_raw_uia_visible(Root(result=None), client, uia, "descendants")
-
-
-def test_recording_button_empty_provider_name_is_the_active_state():
-	class Client:
-		def createPropertyCondition(self, property_id, value):
-			return ("property", property_id, value)
-
-		def createAndConditionFromArray(self, conditions):
-			return ("and", tuple(conditions))
-
-	class Button:
-		def __init__(self, name=None, error=None):
-			self.name = name
-			self.error = error
-
-		def GetCurrentPropertyValueEx(self, property_id, ignore_default):
-			if self.error:
-				raise self.error
-			assert property_id == "name"
-			assert ignore_default is True
-			return self.name
-
-	class Root:
-		def __init__(self, button):
-			self.button = button
-			self.query = None
-
-		def findFirst(self, scope, condition):
-			self.query = (scope, condition)
-			return self.button
-
-	client = Client()
-	uia = SimpleNamespace(
-		UIA_AutomationIdPropertyId="automationId",
-		UIA_IsOffscreenPropertyId="offscreen",
-		UIA_NamePropertyId="name",
-	)
-	recording_root = Root(Button(""))
-
-	assert is_recording_button_active(recording_root, client, uia, "descendants")
-	assert recording_root.query[0] == "descendants"
-	assert ("property", "automationId", "btnVoiceMessage") in recording_root.query[1][1]
-	assert ("property", "offscreen", False) in recording_root.query[1][1]
-	assert not is_recording_button_active(Root(Button("Record voice message")), client, uia, "descendants")
-	assert not is_recording_button_active(Root(None), client, uia, "descendants")
-	assert not is_recording_button_active(
-		Root(Button(error=RuntimeError("stale UIA element"))),
-		client,
-		uia,
-		"descendants",
+	recording_button = SimpleNamespace(
+		UIAAutomationId="btnVoiceMessage",
+		next=SimpleNamespace(UIAAutomationId="ElapsedLabel"),
 	)
 
-
-def test_raw_uia_root_stays_inside_the_focused_process():
-	class Element:
-		def __init__(self, name, process_id):
-			self.name = name
-			self.CurrentProcessId = process_id
-
-	class Walker:
-		def __init__(self, parents):
-			self.parents = parents
-
-		def GetParentElement(self, element):
-			return self.parents.get(element)
-
-	desktop = Element("desktop", 0)
-	process_root = Element("window", 42)
-	container = Element("container", 42)
-	focus = Element("record button", 42)
-	walker = Walker({focus: container, container: process_root, process_root: desktop})
-
-	assert get_raw_uia_process_root(focus, walker) is process_root
-	assert get_raw_uia_process_root(None, walker) is None
+	assert is_recording_button(idle_button)
+	assert recording_button_state(idle_button) is False
+	assert recording_button_state(recording_button) is True
+	assert recording_button_state(SimpleNamespace(UIAAutomationId="SendButton")) is None
 
 
-def test_monitor_reads_from_focused_uia_tree_without_a_process_handle(monkeypatch):
-	class Element:
-		def __init__(self, process_id):
-			self.CurrentProcessId = process_id
+def test_unreadable_cached_button_is_rediscovered_instead_of_misdetected():
+	class StaleButton:
+		UIAAutomationId = "btnVoiceMessage"
 
-	class Button:
-		def GetCurrentPropertyValueEx(self, property_id, ignore_default):
-			return ""
+		@property
+		def next(self):
+			raise RuntimeError("stale UIA object")
 
-	class Root(Element):
-		def findFirst(self, scope, condition):
-			return Button()
+	assert recording_button_state(StaleButton()) is None
 
-	class Walker:
-		def __init__(self, parents):
-			self.parents = parents
 
-		def GetParentElement(self, element):
-			return self.parents.get(element)
-
-	class Client:
-		def __init__(self, walker):
-			self.RawViewWalker = walker
-
-		def createPropertyCondition(self, property_id, value):
-			return (property_id, value)
-
-		def createAndConditionFromArray(self, conditions):
-			return tuple(conditions)
-
-	focus_element = Element(42)
-	process_root = Root(42)
-	desktop = Element(0)
-	walker = Walker({focus_element: process_root, process_root: desktop})
-	client = Client(walker)
-	uia_handler = SimpleNamespace(
-		handler=SimpleNamespace(clientObject=client),
-		UIA=SimpleNamespace(
-			UIA_AutomationIdPropertyId="automationId",
-			UIA_IsOffscreenPropertyId="offscreen",
-			UIA_NamePropertyId="name",
-		),
-		TreeScope_Descendants="descendants",
+def test_cached_recording_button_avoids_repeated_ui_tree_searches():
+	button = SimpleNamespace(UIAAutomationId="btnVoiceMessage")
+	focus = SimpleNamespace(UIAAutomationId="TextField")
+	instance = SimpleNamespace(
+		_voiceRecordingButton=button,
+		_voiceRecordingDiscoveryFocus=None,
+		getElements=lambda: (_ for _ in ()).throw(AssertionError("unexpected UI tree scan")),
 	)
-	monkeypatch.setitem(sys.modules, "UIAHandler", uia_handler)
-	namespace = {
-		"get_raw_uia_process_root": get_raw_uia_process_root,
-		"is_recording_button_active": is_recording_button_active,
-		"is_recording_raw_uia_visible": is_recording_raw_uia_visible,
-	}
-	method = _load_method("_isVoiceRecordingUIVisible", namespace)
-	focus = SimpleNamespace(UIAElement=focus_element)
+	namespace = {"is_recording_button": is_recording_button}
+	method = _load_method("_getVoiceRecordingButton", namespace)
 
-	assert method(SimpleNamespace(), focus)
+	assert method(instance, focus) is button
+
+
+def test_recording_button_discovery_runs_only_once_for_the_same_focus():
+	focus = SimpleNamespace(UIAAutomationId="TextField")
+	searches = []
+	instance = SimpleNamespace(
+		_voiceRecordingButton=None,
+		_voiceRecordingDiscoveryFocus=None,
+		getElements=lambda: searches.append(True) or [],
+	)
+	namespace = {"is_recording_button": is_recording_button}
+	method = _load_method("_getVoiceRecordingButton", namespace)
+
+	assert method(instance, focus) is None
+	assert method(instance, focus) is None
+	assert searches == [True]
+
+
+def test_recording_monitor_schedules_on_nvda_main_loop_without_timer_threads(monkeypatch):
+	scheduled = []
+	core = SimpleNamespace(callLater=lambda delay, callback: scheduled.append((delay, callback)))
+	monkeypatch.setitem(sys.modules, "core", core)
+	instance = SimpleNamespace(
+		_voiceRecordingMonitorRunning=True,
+		_pollVoiceRecordingState=lambda: None,
+	)
+	namespace = {"_VOICE_RECORDING_POLL_INTERVAL": 0.2}
+	method = _load_method("_scheduleVoiceRecordingPoll", namespace)
+
+	method(instance)
+
+	assert scheduled == [(200, instance._pollVoiceRecordingState)]
 
 
 def test_polling_native_ui_announces_manual_or_keyboard_recording_once():
@@ -251,27 +158,29 @@ def test_polling_native_ui_announces_manual_or_keyboard_recording_once():
 		if transition:
 			announcements.append(transition)
 
-	recording_element = SimpleNamespace(
-		UIAAutomationId="ElapsedLabel",
-		location=SimpleNamespace(width=64, height=20),
+	button = SimpleNamespace(
+		UIAAutomationId="btnVoiceMessage",
+		next=SimpleNamespace(UIAAutomationId="ElapsedLabel"),
 	)
 	instance = SimpleNamespace(
 		_voiceRecordingMonitorRunning=True,
 		_voiceRecordingState=VoiceRecordingState(),
-		_isVoiceRecordingUIVisible=lambda focus: recording_element.location.width > 0,
+		_voiceRecordingButton=button,
+		_getVoiceRecordingButton=lambda focus: button,
 		_announceVoiceRecordingTransition=announce,
 		_scheduleVoiceRecordingPoll=lambda: scheduled.append(True),
 	)
 	focus = SimpleNamespace(appModule=instance)
 	namespace = {
 		"api": SimpleNamespace(getFocusObject=lambda: focus),
+		"recording_button_state": recording_button_state,
 		"log": SimpleNamespace(debug=lambda text: None, info=lambda text: None),
 	}
 	method = _load_method("_pollVoiceRecordingState", namespace)
 
 	method(instance)
 	method(instance)
-	recording_element.location.width = 0
+	button.next = SimpleNamespace(UIAAutomationId="SomeOtherControl")
 	method(instance)
 
 	assert announcements == ["start"]
@@ -303,7 +212,7 @@ def test_recording_transitions_keep_text_and_audio_notifications():
 		"_": lambda text: text,
 	}
 	method = _load_method("_announceVoiceRecordingTransition", namespace)
-	instance = SimpleNamespace(getElements=lambda: [button])
+	instance = SimpleNamespace(_voiceRecordingButton=button)
 
 	method(instance, "start")
 	method(instance, "end")

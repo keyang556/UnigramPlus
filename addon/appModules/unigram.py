@@ -44,10 +44,8 @@ from .rich_message import (  # noqa: E402
 from .rich_message_dialog import show_browseable_message  # noqa: E402
 from .voice_recording import (  # noqa: E402
 	VoiceRecordingState,
-	get_raw_uia_process_root,
-	is_recording_button_active,
-	is_recording_raw_uia_visible,
-	is_recording_ui_element,
+	is_recording_button,
+	recording_button_state,
 )
 
 baseDir = os.path.join(os.path.dirname(__file__), "media\\")
@@ -815,7 +813,8 @@ class AppModule(appModuleHandler.AppModule):
 		self.isUnigramWindow = is_unigram_app_module(self)
 		self._voiceRecordingState = VoiceRecordingState()
 		self._voiceRecordingMonitorRunning = False
-		self._voiceRecordingTimer = None
+		self._voiceRecordingButton = None
+		self._voiceRecordingDiscoveryFocus = None
 		if not self.isUnigramWindow:
 			self._fallbackAppModule = None
 			fallbackClass = _load_telegram_desktop_fallback_class()
@@ -847,10 +846,6 @@ class AppModule(appModuleHandler.AppModule):
 
 	def terminate(self):
 		self._voiceRecordingMonitorRunning = False
-		timer = getattr(self, "_voiceRecordingTimer", None)
-		if timer:
-			timer.cancel()
-		self._voiceRecordingTimer = None
 		super().terminate()
 
 	def getScript(self, gesture):
@@ -1536,17 +1531,10 @@ class AppModule(appModuleHandler.AppModule):
 				message(_("Record sent"))
 			return
 
-		# Read the voice/video mode only after Unigram has started recording. This
-		# UIA lookup can no longer delay or swallow the native Ctrl+R shortcut.
+		# The monitor already holds the record button. Do not rescan Unigram's UIA
+		# tree here, because doing so blocks NVDA while recording begins.
 		try:
-			button = next(
-				(
-					item
-					for item in reversed(self.getElements())
-					if item.role == Role.TOGGLEBUTTON and item.UIAAutomationId == "btnVoiceMessage"
-				),
-				None,
-			)
+			button = self._voiceRecordingButton
 			isVideo = bool(button and State.PRESSED in button.states)
 		except Exception as error:
 			log.debug("Could not inspect Unigram voice-message recording mode: %r" % error)
@@ -1560,15 +1548,26 @@ class AppModule(appModuleHandler.AppModule):
 	def _scheduleVoiceRecordingPoll(self):
 		if not self._voiceRecordingMonitorRunning:
 			return
-		timer = Timer(_VOICE_RECORDING_POLL_INTERVAL, self._queueVoiceRecordingPoll)
-		timer.daemon = True
-		self._voiceRecordingTimer = timer
-		timer.start()
+		import core
 
-	def _queueVoiceRecordingPoll(self):
-		self._voiceRecordingTimer = None
-		if self._voiceRecordingMonitorRunning:
-			queueHandler.queueFunction(queueHandler.eventQueue, self._pollVoiceRecordingState)
+		core.callLater(round(_VOICE_RECORDING_POLL_INTERVAL * 1000), self._pollVoiceRecordingState)
+
+	def _getVoiceRecordingButton(self, focus):
+		button = self._voiceRecordingButton
+		if is_recording_button(button):
+			return button
+		if is_recording_button(focus):
+			self._voiceRecordingButton = focus
+			return focus
+		# getElements is comparatively cheap but can fail while a packaged app is
+		# starting. Try it only once per focused object, never on every poll.
+		if focus is self._voiceRecordingDiscoveryFocus:
+			return None
+		self._voiceRecordingDiscoveryFocus = focus
+		button = next((item for item in self.getElements() if is_recording_button(item)), None)
+		if button:
+			self._voiceRecordingButton = button
+		return button
 
 	def _pollVoiceRecordingState(self):
 		if not self._voiceRecordingMonitorRunning:
@@ -1577,8 +1576,19 @@ class AppModule(appModuleHandler.AppModule):
 			focus = api.getFocusObject()
 			if getattr(focus, "appModule", None) is not self:
 				return
-			visible = self._isVoiceRecordingUIVisible(focus)
-			transition = self._voiceRecordingState.visibilityChanged(visible)
+			button = self._getVoiceRecordingButton(focus)
+			active = recording_button_state(button)
+			if button is not None and active is None:
+				# A chat change can detach the cached UIA object. Rediscover once for
+				# this focus; a second failure is not retried on every poll.
+				self._voiceRecordingButton = None
+				self._voiceRecordingDiscoveryFocus = None
+				button = self._getVoiceRecordingButton(focus)
+				active = recording_button_state(button)
+			if active is None:
+				self._voiceRecordingButton = None
+				return
+			transition = self._voiceRecordingState.visibilityChanged(active)
 			if transition:
 				log.info("Unigram voice-message recording transition: %s" % transition)
 			self._announceVoiceRecordingTransition(transition)
@@ -1586,32 +1596,6 @@ class AppModule(appModuleHandler.AppModule):
 			log.debug("Could not monitor Unigram voice-message recording UI: %r" % error)
 		finally:
 			self._scheduleVoiceRecordingPoll()
-
-	def _isVoiceRecordingUIVisible(self, focus):
-		# Start from NVDA's focused UIA element and stay inside the Telegram
-		# process. This avoids HWND-to-process lookup failures on packaged apps.
-		import UIAHandler
-
-		client = UIAHandler.handler.clientObject
-		rootElement = get_raw_uia_process_root(
-			getattr(focus, "UIAElement", None),
-			client.RawViewWalker,
-		)
-		if rootElement is None:
-			return False
-		if is_recording_button_active(
-			rootElement,
-			client,
-			UIAHandler.UIA,
-			UIAHandler.TreeScope_Descendants,
-		):
-			return True
-		return is_recording_raw_uia_visible(
-			rootElement,
-			client,
-			UIAHandler.UIA,
-			UIAHandler.TreeScope_Descendants,
-		)
 
 	# Processing the message that got into focus
 	def action_message_focus(self, obj):
@@ -1758,8 +1742,12 @@ class AppModule(appModuleHandler.AppModule):
 
 	def event_show(self, obj, nextHandler):
 		try:
-			if getattr(self, "isUnigramWindow", False) and is_recording_ui_element(obj):
-				self._announceVoiceRecordingTransition(self._voiceRecordingState.shown())
+			if getattr(self, "isUnigramWindow", False) and is_recording_button(obj):
+				self._voiceRecordingButton = obj
+				self._voiceRecordingDiscoveryFocus = None
+			elif getattr(self, "isUnigramWindow", False) and obj.UIAAutomationId == "ElapsedLabel":
+				transition = self._voiceRecordingState.elapsedChanged(obj.name)
+				self._announceVoiceRecordingTransition(transition)
 		finally:
 			nextHandler()
 
@@ -1773,13 +1761,22 @@ class AppModule(appModuleHandler.AppModule):
 
 	def event_hide(self, obj, nextHandler):
 		try:
-			if getattr(self, "isUnigramWindow", False) and is_recording_ui_element(obj):
+			if (
+				getattr(self, "isUnigramWindow", False)
+				and is_recording_button(obj)
+				and obj is self._voiceRecordingButton
+			):
+				self._voiceRecordingButton = None
+				self._voiceRecordingDiscoveryFocus = None
+			elif getattr(self, "isUnigramWindow", False) and obj.UIAAutomationId == "ElapsedLabel":
 				self._announceVoiceRecordingTransition(self._voiceRecordingState.hidden())
 		finally:
 			nextHandler()
 
 	# Focus change tracking
 	def event_gainFocus(self, obj, nextHandler):
+		if is_recording_button(obj):
+			self._voiceRecordingButton = obj
 		if not getattr(self, "isUnigramWindow", False):
 			fallback = getattr(self, "_fallbackAppModule", None)
 			if fallback and hasattr(fallback, "event_gainFocus"):
@@ -1953,6 +1950,8 @@ class AppModule(appModuleHandler.AppModule):
 				except Exception: pass
 			return
 		try:
+			if is_recording_button(obj):
+				self._voiceRecordingButton = obj
 			if obj.role == Role.LISTITEM and  obj.name and obj.isFocusable:
 				parent = obj.parent
 				if parent.UIAAutomationId == "ChatFolders":
