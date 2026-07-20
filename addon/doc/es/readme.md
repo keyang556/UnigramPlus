@@ -141,7 +141,6 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 | **Ctrl+R (again)** | Unigram | Send recorded |
 | **Ctrl+D** | Unigram | Stop recording |
 | **Space (while recording) / Ctrl+P** | Unigram | Pause recording |
-| **Ctrl+R** | UnigramPlus | Start or stop recording a voice message |
 | **Ctrl+D** | UnigramPlus | Press once to cancel voice-message recording; press twice to change the recording notification type |
 
 ### Llamadas
@@ -178,6 +177,12 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 <!-- shortcut-table-end -->
 
 ##Lista de cambios:
+
+### Versión 5.6.0
+
+* Se corrigió la detección de mensajes enriquecidos para que los mensajes con stickers y emojis ya no se anuncien incorrectamente como mensajes enriquecidos.
+* Ctrl+R ahora utiliza el comportamiento nativo de Unigram para grabar y enviar mensajes de voz, conservando las notificaciones de inicio y fin de grabación de UnigramPlus.
+* Se actualizaron las traducciones.
 
 ### Versión 5.5.9
 

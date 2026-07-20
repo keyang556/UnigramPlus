@@ -14,7 +14,9 @@ from rich_message import (  # noqa: E402
 	extract_message_text,
 	extract_rich_message_text,
 	find_rich_message_root,
+	has_empty_rich_message_summary,
 	insert_hint_before_status,
+	is_rich_message,
 	merge_message_html_and_rich_text,
 )
 
@@ -28,23 +30,119 @@ class Node:
 
 
 def test_finds_namespaced_instant_content_below_message():
-	rich = Node(class_name="Telegram.Controls.Messages.Content.InstantContent")
-	message = Node(children=[Node(children=[rich])])
+	rich = Node(
+		class_name="Telegram.Controls.Messages.Content.InstantContent",
+		children=[Node(automation_id="LayoutRoot", children=[Node(name="Rich block")])],
+	)
+	message = Node(name="Rich block, Received at 18:17", children=[Node(children=[rich])])
 
 	assert find_rich_message_root(message) is rich
 
 
-def test_finds_distinct_rich_content_alongside_a_plain_caption():
+def test_rejects_instant_content_alongside_a_plain_caption():
 	rich = Node(
 		class_name="InstantContent",
 		children=[Node(automation_id="LayoutRoot", children=[Node(name="Rich block")])],
 	)
 	message = Node(
-		name="Caption, Received at 18:17",
+		name="Caption, Rich block, Received at 18:17",
 		children=[Node(name="Caption", automation_id="TextBlock"), rich],
 	)
 
+	assert find_rich_message_root(message) is None
+
+
+def test_accepts_sophie_style_rich_content_alongside_an_empty_uia_message_node():
+	rich = Node(
+		class_name="InstantContent",
+		children=[Node(automation_id="LayoutRoot")],
+	)
+	message = Node(
+		name="Sophie ✨\r\n, Administrator.\r\nReply to Ken.\r\n, Received at 18:17",
+		children=[Node(name="", automation_id="Message"), rich],
+	)
+
 	assert find_rich_message_root(message) is rich
+	assert is_rich_message(message)
+
+
+def test_detects_sophie_style_summary_when_instant_content_is_not_exposed():
+	message = Node(
+		name="Sophie ✨\r\n, Administrator.\r\nReply to Ken.\r\n, Received at 18:17",
+		children=[Node(name="provider-generated child text", automation_id="Message")],
+	)
+
+	assert find_rich_message_root(message) is None
+	assert is_rich_message(message)
+
+
+def test_does_not_treat_ordinary_comma_prefixed_text_as_an_empty_rich_message():
+	message = Node(
+		name=", ordinary text, Received at 18:17",
+		children=[Node(name=", ordinary text", automation_id="Message")],
+	)
+	assert not is_rich_message(message)
+
+
+def test_accepts_one_line_comma_summary_without_localized_keywords():
+	rich = Node(class_name="InstantContent", children=[Node(automation_id="LayoutRoot")])
+	message = Node(name=", Received at 18:17", children=[rich])
+
+	assert find_rich_message_root(message) is rich
+	assert is_rich_message(message)
+
+
+def test_detects_one_line_empty_rich_summary_in_different_languages():
+	for summary in (
+		", Received at 17:59",
+		", 已收到 下午 05:59",
+		", Empfangen um 17:59",
+		", Получено в 17:59",
+		", تم التسليم الساعة 17:59",
+	):
+		message = Node(
+			name=summary,
+			children=[Node(name="provider-generated localized status", automation_id="Message")],
+		)
+
+		assert has_empty_rich_message_summary(message), summary
+		assert is_rich_message(message), summary
+
+
+def test_rejects_empty_recycled_rich_content_on_replied_media_summary():
+	stale_rich = Node(class_name="InstantContent", children=[Node(automation_id="LayoutRoot")])
+	message = Node(
+		name="😀 Sticker\r\nReply to Ken.\r\n, Received at 18:17",
+		children=[stale_rich],
+	)
+
+	assert find_rich_message_root(message) is None
+
+
+def test_rejects_recycled_rich_content_on_a_sticker_or_animated_emoji():
+	stale_rich = Node(
+		class_name="InstantContent",
+		children=[Node(automation_id="LayoutRoot", children=[Node(name="Old rich block")])],
+	)
+	message = Node(
+		name="😀 Sticker, Received at 18:17",
+		children=[Node(class_name="Telegram.Controls.Messages.Content.StickerContent"), stale_rich],
+	)
+
+	assert find_rich_message_root(message) is None
+
+
+def test_rejects_recycled_rich_content_that_is_not_in_the_current_message_summary():
+	stale_rich = Node(
+		class_name="InstantContent",
+		children=[Node(automation_id="LayoutRoot", children=[Node(name="Old rich block")])],
+	)
+	message = Node(
+		name="😀, Received at 18:17",
+		children=[Node(name="😀", automation_id="TextBlock"), stale_rich],
+	)
+
+	assert find_rich_message_root(message) is None
 
 
 def test_does_not_misclassify_an_unrelated_layout_root():
@@ -103,15 +201,21 @@ def test_finds_and_extracts_instant_content_from_raw_uia_view(monkeypatch):
 		def GetNextSiblingElement(self, element):
 			return siblings.get(id(element))
 
+		def GetParentElement(self, element):
+			return parents.get(id(element))
+
 	first_text = Element(text_pattern_text="First raw block")
 	second_text = Element(text_pattern_text="Second raw block")
 	layout = Element(automation_id="LayoutRoot", children=[first_text, second_text])
 	rich = Element(class_name="InstantContent", children=[layout])
+	media = Element(children=[rich])
 	siblings = {id(first_text): second_text}
+	parents = {id(rich): media}
 	client = SimpleNamespace(
 		RawViewWalker=Walker(),
 		CreatePropertyCondition=lambda property_id, value: (property_id, value),
 		createAndConditionFromArray=lambda conditions: tuple(conditions),
+		CompareElements=lambda first, second: first is second,
 	)
 	fake_uia_handler = SimpleNamespace(
 		handler=SimpleNamespace(clientObject=client),
@@ -121,7 +225,7 @@ def test_finds_and_extracts_instant_content_from_raw_uia_view(monkeypatch):
 		TreeScope_Descendants="descendants",
 	)
 	monkeypatch.setitem(sys.modules, "UIAHandler", fake_uia_handler)
-	message_element = Element()
+	message_element = Element(children=[media])
 	message_element.find_result = rich
 	message = SimpleNamespace(UIAElement=message_element)
 
@@ -129,22 +233,41 @@ def test_finds_and_extracts_instant_content_from_raw_uia_view(monkeypatch):
 
 	assert root.UIAClassName == "InstantContent"
 	assert extract_rich_message_text(root) == "First raw block\n\nSecond raw block"
-	assert (5, False) in message_element.find_condition
+	caption = Element(name="Caption", automation_id="TextBlock")
 	mixed = SimpleNamespace(
-		name="Caption, Sent at 18:17",
+		name="Caption, First raw block, Second raw block, Sent at 18:17",
 		children=[Node(name="Caption", automation_id="TextBlock")],
 		UIAElement=message_element,
 	)
-	assert find_rich_message_root(mixed).UIAClassName == "InstantContent"
+	assert find_rich_message_root(mixed) is None
 
 	empty_layout = Element(automation_id="LayoutRoot")
-	message_element.find_result = Element(class_name="InstantContent", children=[empty_layout])
+	empty_rich = Element(class_name="InstantContent", children=[empty_layout])
+	ordinary_text = Element(name="Ordinary text", automation_id="TextBlock")
 	ordinary = SimpleNamespace(
 		name="Ordinary text, Sent at 18:17",
 		children=[Node(name="Ordinary text", automation_id="TextBlock")],
 		UIAElement=message_element,
 	)
 	assert find_rich_message_root(ordinary) is None
+
+	sticker_content = Element(class_name="StickerContent")
+	media.children = [sticker_content, rich]
+	siblings[id(sticker_content)] = rich
+	parents[id(sticker_content)] = media
+	sticker = SimpleNamespace(
+		name="😀 Sticker, Sent at 18:17",
+		children=[],
+		UIAElement=message_element,
+	)
+	assert find_rich_message_root(sticker) is None
+
+	matching_sticker = SimpleNamespace(
+		name="First raw block, Second raw block, Sent at 18:17",
+		children=[],
+		UIAElement=message_element,
+	)
+	assert find_rich_message_root(matching_sticker) is None
 
 
 def test_collects_all_flattened_message_text_controls():
@@ -388,6 +511,7 @@ def test_all_message_text_uses_browse_mode_when_rich_content_is_empty_or_absent(
 		opened = []
 		namespace = {
 			"find_rich_message_root": lambda obj, result=rich_root: result,
+			"is_rich_message": lambda obj, result=rich_root: bool(result),
 			"extract_rich_message_text": lambda root, position: "Distinct rich text" if root else "",
 			"extract_message_html_and_actions": extract_message_html_and_actions,
 			"extract_message_text": extract_message_text,
@@ -426,7 +550,7 @@ def test_focus_hint_uses_the_message_overlay_keywords():
 		if isinstance(node, ast.If)
 		and isinstance(node.test, ast.Call)
 		and isinstance(node.test.func, ast.Name)
-		and node.test.func.id == "find_rich_message_root"
+		and node.test.func.id == "is_rich_message"
 	)
 	obj = SimpleNamespace(
 		name="Content, Received at 18:17",
@@ -434,11 +558,30 @@ def test_focus_hint_uses_the_message_overlay_keywords():
 	)
 	namespace = {
 		"obj": obj,
-		"find_rich_message_root": lambda candidate: object(),
+		"is_rich_message": lambda candidate: True,
 		"insert_hint_before_status": insert_hint_before_status,
+		"log": SimpleNamespace(debug=lambda text: None),
 		"_": lambda text: text,
 	}
 
 	exec(compile(ast.Module(body=[rich_branch], type_ignores=[]), "unigram.py", "exec"), namespace)
 
 	assert obj.name == "Content. Rich message. Press Alt+C to browse, Received at 18:17"
+
+
+def test_message_overlay_selection_uses_language_independent_rich_summary():
+	source = (Path(__file__).parents[1] / "addon" / "appModules" / "unigram.py").read_text(encoding="utf-8")
+	module = ast.parse(source)
+	app_module = next(node for node in module.body if isinstance(node, ast.ClassDef) and node.name == "AppModule")
+	choose_overlay = next(
+		node
+		for node in app_module.body
+		if isinstance(node, ast.FunctionDef) and node.name == "chooseNVDAObjectOverlayClasses"
+	)
+
+	assert any(
+		isinstance(node, ast.Call)
+		and isinstance(node.func, ast.Name)
+		and node.func.id == "has_empty_rich_message_summary"
+		for node in ast.walk(choose_overlay)
+	)

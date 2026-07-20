@@ -138,7 +138,6 @@
 | **Ctrl+R (again)** | Unigram | Send recorded |
 | **Ctrl+D** | Unigram | Stop recording |
 | **Space (while recording) / Ctrl+P** | Unigram | Pause recording |
-| **Ctrl+R** | UnigramPlus | Start or stop recording a voice message |
 | **Ctrl+D** | UnigramPlus | Press once to cancel voice-message recording; press twice to change the recording notification type |
 
 ### Виклики
@@ -175,6 +174,12 @@
 <!-- shortcut-table-end -->
 
 ## Список змін:
+
+### Версія 5.6.0
+
+* Виправлено розпізнавання форматованих повідомлень: повідомлення зі стікерами та емодзі більше не оголошуються помилково як форматовані.
+* Ctrl+R тепер використовує вбудовану поведінку Unigram для запису й надсилання голосових повідомлень, зберігаючи сповіщення UnigramPlus про початок і завершення запису.
+* Оновлено переклади.
 
 ### Версія 5.5.9
 

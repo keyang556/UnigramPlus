@@ -26,7 +26,7 @@ from appModules.unigram import AppModule, baseDir
 from ui import message
 
 UPDATE_REPO = "keyang556/UnigramPlus"
-UPDATE_API_URL = "https://api.github.com/repos/%s/releases/latest" % update_repo
+UPDATE_API_URL = "https://api.github.com/repos/%s/releases/latest" % UPDATE_REPO
 
 def no_updates_dialog():
 	res = gui.messageBox(

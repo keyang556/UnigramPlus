@@ -140,7 +140,6 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 | **Ctrl+R (again)** | Unigram | Send recorded |
 | **Ctrl+D** | Unigram | Stop recording |
 | **Space (while recording) / Ctrl+P** | Unigram | Pause recording |
-| **Ctrl+R** | UnigramPlus | Start or stop recording a voice message |
 | **Ctrl+D** | UnigramPlus | Press once to cancel voice-message recording; press twice to change the recording notification type |
 
 ### Apeluri
@@ -177,6 +176,12 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 <!-- shortcut-table-end -->
 
 ##Lista de modificări:
+
+### Versiunea 5.6.0
+
+* A fost corectată detectarea mesajelor îmbogățite, astfel încât mesajele cu stickere și emoji să nu mai fie anunțate incorect ca mesaje îmbogățite.
+* Ctrl+R folosește acum comportamentul nativ Unigram pentru înregistrarea și trimiterea mesajelor vocale, păstrând notificările UnigramPlus pentru începutul și sfârșitul înregistrării.
+* Au fost actualizate traducerile.
 
 ### Versiunea 5.5.9
 

@@ -140,7 +140,6 @@
 | **Ctrl+R (again)** | Unigram | Send recorded |
 | **Ctrl+D** | Unigram | Stop recording |
 | **Space (while recording) / Ctrl+P** | Unigram | Pause recording |
-| **Ctrl+R** | UnigramPlus | Start or stop recording a voice message |
 | **Ctrl+D** | UnigramPlus | Press once to cancel voice-message recording; press twice to change the recording notification type |
 
 ### تماس‌ها
@@ -393,6 +392,12 @@
 بومی سازی ترکی اضافه شد.
 
 
+
+### نسخه 5.6.0
+
+* تشخیص پیام‌های غنی اصلاح شد تا پیام‌های دارای برچسب و شکلک دیگر به‌اشتباه به‌عنوان پیام غنی اعلام نشوند.
+* کلید Ctrl+R اکنون از رفتار رسمی Unigram برای ضبط و ارسال پیام صوتی استفاده می‌کند و اعلان‌های شروع و پایان ضبط UnigramPlus را حفظ می‌کند.
+* ترجمه‌ها به‌روزرسانی شدند.
 
 ### نسخه 5.5.9
 

@@ -139,7 +139,6 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 | **Ctrl+R (again)** | Unigram | 发送录制内容 |
 | **Ctrl+D** | Unigram | 停止录制 |
 | **Space (while recording) / Ctrl+P** | Unigram | 暂停录制 |
-| **Ctrl+R** | UnigramPlus | 开始或停止录制语音消息 |
 | **Ctrl+D** | UnigramPlus | 按一次取消语音消息录制；按两次更改录制通知方式 |
 
 ### 通话
@@ -176,6 +175,12 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 <!-- shortcut-table-end -->
 
 ## 版本变更
+
+### 版本 5.6.0
+
+* 修复富消息识别，贴纸和表情符号消息不再被错误地朗读为富消息。
+* Ctrl+R 现使用 Unigram 原生的语音消息录制和发送行为，同时保留 UnigramPlus 的录制开始与结束提示。
+* 更新本地化翻译。
 
 ### 版本 5.5.9
 

@@ -142,7 +142,6 @@
 | **Ctrl+R (again)** | Unigram | Send recorded |
 | **Ctrl+D** | Unigram | Stop recording |
 | **Space (while recording) / Ctrl+P** | Unigram | Pause recording |
-| **Ctrl+R** | UnigramPlus | Start or stop recording a voice message |
 | **Ctrl+D** | UnigramPlus | Press once to cancel voice-message recording; press twice to change the recording notification type |
 
 ### المكالمات
@@ -179,6 +178,12 @@
 <!-- shortcut-table-end -->
 
 ## قائمة التغييرات:
+
+### الإصدار 5.6.0
+
+* تم إصلاح اكتشاف الرسائل المنسقة بحيث لم تعد رسائل الملصقات والرموز التعبيرية تُصنّف خطأً كرسائل منسقة.
+* يستخدم Ctrl+R الآن سلوك Unigram الرسمي لتسجيل الرسائل الصوتية وإرسالها، مع الإبقاء على إشعارات بدء التسجيل وانتهائه في UnigramPlus.
+* تم تحديث الترجمات.
 
 ### الإصدار 5.5.9
 

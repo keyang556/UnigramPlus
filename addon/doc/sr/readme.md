@@ -144,7 +144,6 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će neko sigurno po
 | **Ctrl+R (again)** | Unigram | Send recorded |
 | **Ctrl+D** | Unigram | Stop recording |
 | **Space (while recording) / Ctrl+P** | Unigram | Pause recording |
-| **Ctrl+R** | UnigramPlus | Start or stop recording a voice message |
 | **Ctrl+D** | UnigramPlus | Press once to cancel voice-message recording; press twice to change the recording notification type |
 
 ### Pozivi
@@ -451,6 +450,12 @@ This update adds a combination that press "Instant View" button in the message, 
 Added Turkish localization
 
 
+
+### Verzija 5.6.0
+
+* Ispravljeno je prepoznavanje obogaćenih poruka, pa se poruke sa nalepnicama i emodžijima više ne izgovaraju pogrešno kao obogaćene poruke.
+* Ctrl+R sada koristi izvorno ponašanje Unigrama za snimanje i slanje glasovnih poruka, uz zadržavanje UnigramPlus obaveštenja o početku i završetku snimanja.
+* Prevodi su ažurirani.
 
 ### Verzija 5.5.9
 

@@ -142,7 +142,6 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 | **Ctrl+R (again)** | Unigram | Send recorded |
 | **Ctrl+D** | Unigram | Stop recording |
 | **Space (while recording) / Ctrl+P** | Unigram | Pause recording |
-| **Ctrl+R** | UnigramPlus | Start or stop recording a voice message |
 | **Ctrl+D** | UnigramPlus | Press once to cancel voice-message recording; press twice to change the recording notification type |
 
 ### Pozivi
@@ -179,6 +178,12 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 <!-- shortcut-table-end -->
 
 ##Popis promjena:
+
+### Verzija 5.6.0
+
+* Ispravljeno je prepoznavanje obogaćenih poruka tako da se poruke s naljepnicama i emotikonima više pogrešno ne izgovaraju kao obogaćene poruke.
+* Ctrl+R sada koristi izvorno Unigramovo ponašanje za snimanje i slanje glasovnih poruka, uz zadržavanje UnigramPlus obavijesti o početku i završetku snimanja.
+* Ažurirani su prijevodi.
 
 ### Verzija 5.5.9
 
