@@ -1538,38 +1538,6 @@ class AppModule(appModuleHandler.AppModule):
 		else:
 			message(_("Video") if isVideo else _("Audio"))
 
-	# Voice message discard function
-	# @script(gesture="kb:control+D")
-	def script_cancelVoiceMessageRecording(self, gesture):
-		if scriptHandler.getLastScriptRepeatCount() == 1:
-			if conf.get("voiceMessageRecordingIndicator") == "none":
-				conf.set("voiceMessageRecordingIndicator", "text")
-				message(_("Voice recording notifications set to text"))
-			elif conf.get("voiceMessageRecordingIndicator") == "text":
-				conf.set("voiceMessageRecordingIndicator", "audio")
-				message(_("Voice recording notifications set to sounds"))
-			elif conf.get("voiceMessageRecordingIndicator") == "audio":
-				conf.set("voiceMessageRecordingIndicator", "none")
-				message(_("Recording voice messages has standard behavior"))
-			return
-		if conf.get("voiceMessageRecordingIndicator") == "none":
-			gesture.send()
-			return
-		obj = next((item for item in reversed(self.getElements()) if (item.UIAAutomationId == "ElapsedLabel") or (item.role == Role.BUTTON and item.UIAAutomationId == "ComposerHeaderCancel")), False)
-		lastFocus = api.getFocusObject()
-		if obj and obj.UIAAutomationId == "ComposerHeaderCancel":
-			obj.doAction()
-			lastFocus.setFocus()
-			if obj.previous.name == "\uea4a": message(_("Reply canceled"))
-			else: message(_("Edit canceled"))
-		elif obj and obj.UIAAutomationId == "ElapsedLabel":
-			self._voiceRecordingState.cancel()
-			if conf.get("voiceMessageRecordingIndicator") == "audio": winsound.PlaySound(baseDir+"cancel_voice_message_recording.wav", winsound.SND_ASYNC | winsound.SND_NOSTOP)
-			else: message(_("Recording canceled"))
-		gesture.send()
-		lastFocus.setFocus()
-		lastFocus.setFocus()
-
 	# Processing the message that got into focus
 	def action_message_focus(self, obj):
 		keywords = obj.keywords
@@ -2032,7 +2000,6 @@ class AppModule(appModuleHandler.AppModule):
 	__gestures = {
 		"kb:escape": "action_escape_key",
 		"kb:space": "actionMediaInMessage",
-		"kb:control+D": "cancelVoiceMessageRecording",
 	}
 
 	def startDeleteMessage(self, isCompleteDeletion = False):

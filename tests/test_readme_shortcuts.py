@@ -90,7 +90,7 @@ def test_all_readmes_have_complete_integrated_shortcut_tables():
 		assert text.count("<!-- shortcut-table-end -->") == 1, readme
 		assert text.count("|---|---|---|") == 9, readme
 		assert text.count("| Unigram |") == 42, readme
-		assert text.count("| UnigramPlus |") == 52, readme
+		assert text.count("| UnigramPlus |") == 51, readme
 		assert "5.6.0" in text, readme
 
 

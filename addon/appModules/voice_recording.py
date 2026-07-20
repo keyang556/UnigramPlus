@@ -11,7 +11,6 @@ class VoiceRecordingState:
 
 	def __init__(self):
 		self.active = False
-		self._suppressNextEnd = False
 		self._seenProgress = False
 
 	def shown(self):
@@ -34,18 +33,15 @@ class VoiceRecordingState:
 		return None
 
 	def hidden(self):
-		return self._finish() if self.active else None
-
-	def cancel(self):
-		# Ctrl+D is still augmented by UnigramPlus with its dedicated cancel
-		# notification. Suppress the generic end/sent notification that follows.
-		self.active = True
-		self._suppressNextEnd = True
+		if not self.active:
+			return None
+		# Hiding alone cannot distinguish a native Ctrl+D cancellation from a
+		# completed send. Only the elapsed timer returning to zero signals "end".
+		self.active = False
+		self._seenProgress = False
+		return None
 
 	def _finish(self):
 		self.active = False
 		self._seenProgress = False
-		if self._suppressNextEnd:
-			self._suppressNextEnd = False
-			return None
 		return "end"

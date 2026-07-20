@@ -139,7 +139,6 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 | **Ctrl+R (again)** | Unigram | 发送录制内容 |
 | **Ctrl+D** | Unigram | 停止录制 |
 | **Space (while recording) / Ctrl+P** | Unigram | 暂停录制 |
-| **Ctrl+D** | UnigramPlus | 按一次取消语音消息录制；按两次更改录制通知方式 |
 
 ### 通话
 

@@ -139,7 +139,6 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 | **Ctrl+R (again)** | Unigram | 傳送錄製內容 |
 | **Ctrl+D** | Unigram | 停止錄製 |
 | **Space (while recording) / Ctrl+P** | Unigram | 暫停錄製 |
-| **Ctrl+D** | UnigramPlus | 按一次取消語音訊息錄製；按兩次變更錄製通知方式 |
 
 ### 通話
 

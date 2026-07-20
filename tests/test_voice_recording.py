@@ -27,17 +27,22 @@ def _load_method(name, namespace):
 	return namespace[name]
 
 
-def test_control_r_is_not_bound_or_intercepted_by_unigramplus():
+def test_native_recording_shortcuts_are_not_bound_or_intercepted_by_unigramplus():
 	app_module = _app_module_ast()
-	recording_scripts = [
-		node
+	legacy_scripts = {
+		"script_recordingVoiceMessage",
+		"script_cancelVoiceMessageRecording",
+	}
+	recording_scripts = {
+		node.name
 		for node in app_module.body
-		if isinstance(node, ast.FunctionDef) and node.name == "script_recordingVoiceMessage"
-	]
+		if isinstance(node, ast.FunctionDef) and node.name in legacy_scripts
+	}
 	serialized = ast.dump(app_module).casefold()
 
-	assert recording_scripts == []
+	assert recording_scripts == set()
 	assert "control+r" not in serialized
+	assert "control+d" not in serialized
 
 
 def test_native_recording_ui_events_produce_one_start_and_one_end():
@@ -51,19 +56,18 @@ def test_native_recording_ui_events_produce_one_start_and_one_end():
 	assert state.hidden() is None
 
 
-def test_name_changes_work_when_uia_show_and_hide_events_are_missing():
+def test_name_changes_work_when_uia_show_event_is_missing():
 	state = VoiceRecordingState()
 
 	assert state.elapsedChanged("0:00.10") == "start"
-	assert state.hidden() == "end"
+	assert state.elapsedChanged("0:00.00") == "end"
 
 
-def test_cancel_suppresses_the_generic_sent_notification():
+def test_hiding_timer_after_native_cancel_does_not_announce_message_sent():
 	state = VoiceRecordingState()
+
 	assert state.shown() == "start"
-
-	state.cancel()
-
+	assert state.elapsedChanged("0:01.25") is None
 	assert state.hidden() is None
 	assert not state.active
 
