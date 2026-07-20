@@ -84,6 +84,16 @@ def test_does_not_treat_ordinary_comma_prefixed_text_as_an_empty_rich_message():
 	assert not is_rich_message(message)
 
 
+def test_does_not_treat_group_text_starting_with_comma_as_rich_message():
+	message = Node(
+		name="Alice\r\n, hello, Received at 18:17",
+		children=[Node(name=", hello", automation_id="Message")],
+	)
+
+	assert not has_empty_rich_message_summary(message)
+	assert not is_rich_message(message)
+
+
 def test_accepts_one_line_comma_summary_without_localized_keywords():
 	rich = Node(class_name="InstantContent", children=[Node(automation_id="LayoutRoot")])
 	message = Node(name=", Received at 18:17", children=[rich])

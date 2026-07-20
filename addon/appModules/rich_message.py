@@ -315,7 +315,7 @@ def has_empty_rich_message_summary(message):
 	"""
 	lines = [line.strip() for line in _clean_text(_safe_attr(message, "name", "")).split("\n")]
 	if len(lines) > 1:
-		return lines[1].startswith(",")
+		return lines[1].startswith(",") and lines[1].count(",") == 1
 	return bool(lines[0]) and lines[0].startswith(",") and lines[0].count(",") == 1
 
 
