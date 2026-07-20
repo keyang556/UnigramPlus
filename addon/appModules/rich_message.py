@@ -213,8 +213,11 @@ def _find_raw_rich_message_root(message):
 
 	Returns ``(available, result)``. ``FindFirst`` is used because InstantContent
 	can be deeper than NVDA's exposed control view. Only competing controls under
-	the same ``Media`` parent are relevant; matching controls in a reply preview or
-	inside the rich page must not suppress the real rich message.
+	the same ``Media`` parent are relevant. The main ``Message`` text control is a
+	sibling of ``Media`` in MessageBubble.xaml; when it is visible and populated,
+	the InstantContent subtree belongs to a recycled bubble rather than the current
+	plain-text message. Matching controls in a reply preview or inside the rich
+	page must not suppress the real rich message.
 	"""
 	element = _safe_attr(message, "UIAElement", None)
 	if element is None:
@@ -256,6 +259,41 @@ def _find_raw_rich_message_root(message):
 						except Exception:
 							return True, None
 				sibling = walker.GetNextSiblingElement(sibling)
+
+		# Plain MessageText is rendered by the Message control next to Media, not
+		# inside it. A recycled InstantContent can therefore be the only child of
+		# Media while the same bubble is visibly showing ordinary text. Walk up to
+		# that specific Media border and inspect only its panel siblings, avoiding
+		# unrelated Message controls in reply previews and rich page blocks.
+		ancestor = result
+		media = None
+		for _depth in range(8):
+			ancestor = walker.GetParentElement(ancestor)
+			if ancestor is None:
+				break
+			ancestor_node = _RawUIANode(ancestor, walker, UIAHandler.UIA)
+			if ancestor_node.UIAAutomationId == "Media":
+				media = ancestor
+				break
+		if media is not None:
+			panel = walker.GetParentElement(media)
+			if panel is not None:
+				sibling = walker.GetFirstChildElement(panel)
+				while sibling is not None:
+					node = _RawUIANode(
+						sibling,
+						walker,
+						UIAHandler.UIA,
+						UIAHandler.UIA_TextPatternId,
+						UIAHandler.IUIAutomationTextPattern,
+					)
+					if (
+						not node.isOffscreen
+						and node.UIAAutomationId in _MESSAGE_TEXT_AUTOMATION_IDS
+						and _clean_text(node.name).strip(" ,，")
+					):
+						return True, None
+					sibling = walker.GetNextSiblingElement(sibling)
 
 		return True, _RawUIANode(
 			result,
@@ -306,16 +344,19 @@ def has_empty_rich_message_summary(message):
 	"""Recognize Unigram's empty MessageRichMessage summary.
 
 	``Automation.GetSummary`` returns ``ToPlainText() + ", "`` for a rich
-	message. In the Sophie-style group layout the first line is the sender and the
-	second line starts with that otherwise empty content comma. In a direct chat,
-	the single line starts with the same comma and contains no second comma before
-	the status. Ordinary comma-prefixed text has another comma separating its real
-	content from the status. These signatures do not depend on localized strings
-	or provider-generated child names.
+	message. In the multi-line group layout, the empty content/author line and the
+	final status line both start with a single comma. Requiring both distinguishes
+	the signature from ordinary replied text (only the author line starts with a
+	comma) and replied media (only the status line does). In a direct chat, the
+	single line starts with the same comma and contains no second comma before the
+	status. Ordinary comma-prefixed text has another comma separating its real
+	content from the status. These signatures do not depend on localized strings or
+	provider-generated child names.
 	"""
 	lines = [line.strip() for line in _clean_text(_safe_attr(message, "name", "")).split("\n")]
 	if len(lines) > 1:
-		return lines[1].startswith(",") and lines[1].count(",") == 1
+		comma_lines = [line for line in lines if line.startswith(",") and line.count(",") == 1]
+		return len(comma_lines) >= 2 and lines[-1] in comma_lines
 	return bool(lines[0]) and lines[0].startswith(",") and lines[0].count(",") == 1
 
 

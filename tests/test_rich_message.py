@@ -94,6 +94,21 @@ def test_does_not_treat_group_text_starting_with_comma_as_rich_message():
 	assert not is_rich_message(message)
 
 
+def test_does_not_treat_author_label_before_replied_plain_text_as_rich_message():
+	message = Node(
+		name=(
+			"ticker fastcode\r\n"
+			", Administrator.\r\n"
+			"Reply to Ken.\r\n"
+			"Ordinary incoming text, Received at 12:57"
+		),
+		children=[Node(name="Ordinary incoming text", automation_id="Message")],
+	)
+
+	assert not has_empty_rich_message_summary(message)
+	assert not is_rich_message(message)
+
+
 def test_accepts_one_line_comma_summary_without_localized_keywords():
 	rich = Node(class_name="InstantContent", children=[Node(automation_id="LayoutRoot")])
 	message = Node(name=", Received at 18:17", children=[rich])
@@ -219,8 +234,10 @@ def test_finds_and_extracts_instant_content_from_raw_uia_view(monkeypatch):
 	layout = Element(automation_id="LayoutRoot", children=[first_text, second_text])
 	rich = Element(class_name="InstantContent", children=[layout])
 	media = Element(children=[rich])
+	media.properties[3] = "Media"
+	panel = Element(automation_id="Panel", children=[media])
 	siblings = {id(first_text): second_text}
-	parents = {id(rich): media}
+	parents = {id(rich): media, id(media): panel}
 	client = SimpleNamespace(
 		RawViewWalker=Walker(),
 		CreatePropertyCondition=lambda property_id, value: (property_id, value),
@@ -235,7 +252,7 @@ def test_finds_and_extracts_instant_content_from_raw_uia_view(monkeypatch):
 		TreeScope_Descendants="descendants",
 	)
 	monkeypatch.setitem(sys.modules, "UIAHandler", fake_uia_handler)
-	message_element = Element(children=[media])
+	message_element = Element(children=[panel])
 	message_element.find_result = rich
 	message = SimpleNamespace(UIAElement=message_element)
 
@@ -243,7 +260,30 @@ def test_finds_and_extracts_instant_content_from_raw_uia_view(monkeypatch):
 
 	assert root.UIAClassName == "InstantContent"
 	assert extract_rich_message_text(root) == "First raw block\n\nSecond raw block"
-	caption = Element(name="Caption", automation_id="TextBlock")
+
+	# Message and Media are siblings in MessageBubble.xaml. A populated main
+	# Message control proves a matching InstantContent is stale, even when NVDA's
+	# control-view children do not expose the plain text node.
+	stale_text = Element(text_pattern_text="Ordinary raw text")
+	stale_layout = Element(automation_id="LayoutRoot", children=[stale_text])
+	stale_rich = Element(class_name="InstantContent", children=[stale_layout])
+	plain_text = Element(automation_id="Message", text_pattern_text="Ordinary raw text")
+	media.children = [stale_rich]
+	panel.children = [plain_text, media]
+	siblings[id(plain_text)] = media
+	parents[id(plain_text)] = panel
+	parents[id(stale_rich)] = media
+	message_element.find_result = stale_rich
+	plain = SimpleNamespace(
+		name="Ordinary raw text, Sent at 18:17",
+		children=[],
+		UIAElement=message_element,
+	)
+	assert find_rich_message_root(plain) is None
+
+	media.children = [rich]
+	panel.children = [media]
+	message_element.find_result = rich
 	mixed = SimpleNamespace(
 		name="Caption, First raw block, Second raw block, Sent at 18:17",
 		children=[Node(name="Caption", automation_id="TextBlock")],
@@ -251,9 +291,6 @@ def test_finds_and_extracts_instant_content_from_raw_uia_view(monkeypatch):
 	)
 	assert find_rich_message_root(mixed) is None
 
-	empty_layout = Element(automation_id="LayoutRoot")
-	empty_rich = Element(class_name="InstantContent", children=[empty_layout])
-	ordinary_text = Element(name="Ordinary text", automation_id="TextBlock")
 	ordinary = SimpleNamespace(
 		name="Ordinary text, Sent at 18:17",
 		children=[Node(name="Ordinary text", automation_id="TextBlock")],
