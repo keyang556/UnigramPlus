@@ -1,13 +1,37 @@
 """State transitions for Unigram's native voice/video recording UI."""
 
 
+RECORDING_UI_AUTOMATION_IDS = frozenset(("ChatRecord", "ElapsedLabel"))
+
+
 def _is_zero_elapsed_label(value):
 	digits = "".join(character for character in str(value or "") if character.isdigit())
 	return bool(digits) and not any(character != "0" for character in digits)
 
 
+def is_recording_ui_element(obj):
+	try:
+		return obj.UIAAutomationId in RECORDING_UI_AUTOMATION_IDS
+	except Exception:
+		return False
+
+
+def is_recording_ui_visible(elements):
+	"""Return whether Unigram's native ChatRecord bar is currently visible."""
+	for obj in elements or ():
+		if not is_recording_ui_element(obj):
+			continue
+		try:
+			location = obj.location
+			if location and location.width > 0 and location.height > 0:
+				return True
+		except Exception:
+			continue
+	return False
+
+
 class VoiceRecordingState:
-	"""Convert UIA show/name/hide events into stable recording transitions."""
+	"""Convert native recording UI visibility into stable transitions."""
 
 	def __init__(self):
 		self.active = False
@@ -22,8 +46,12 @@ class VoiceRecordingState:
 
 	def elapsedChanged(self, value):
 		if not self.active:
+			# Unigram resets the label after collapsing ChatRecord. That terminal
+			# zero must not be mistaken for a new recording.
+			if _is_zero_elapsed_label(value):
+				return None
 			self.active = True
-			self._seenProgress = not _is_zero_elapsed_label(value)
+			self._seenProgress = True
 			return "start"
 		if _is_zero_elapsed_label(value):
 			# Unigram can emit the initial zero value just after showing the bar.
@@ -40,6 +68,9 @@ class VoiceRecordingState:
 		self.active = False
 		self._seenProgress = False
 		return None
+
+	def visibilityChanged(self, visible):
+		return self.shown() if visible else self.hidden()
 
 	def _finish(self):
 		self.active = False

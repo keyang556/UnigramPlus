@@ -42,13 +42,18 @@ from .rich_message import (  # noqa: E402
 	merge_message_html_and_rich_text,
 )
 from .rich_message_dialog import show_browseable_message  # noqa: E402
-from .voice_recording import VoiceRecordingState  # noqa: E402
+from .voice_recording import (  # noqa: E402
+	VoiceRecordingState,
+	is_recording_ui_element,
+	is_recording_ui_visible,
+)
 
 baseDir = os.path.join(os.path.dirname(__file__), "media\\")
 _telegramDesktopFallbackClass = None
 _telegramDesktopFallbackLoadAttempted = False
 
 _APP_MODULE_NAME_IGNORED_CHARS = str.maketrans("", "", "\u200e\u200f\u2066\u2067\u2068\u2069")
+_VOICE_RECORDING_POLL_INTERVAL = .2
 
 
 def _normalized_text(text):
@@ -807,6 +812,8 @@ class AppModule(appModuleHandler.AppModule):
 		super().__init__(*args, **kwargs)
 		self.isUnigramWindow = is_unigram_app_module(self)
 		self._voiceRecordingState = VoiceRecordingState()
+		self._voiceRecordingMonitorRunning = False
+		self._voiceRecordingTimer = None
 		if not self.isUnigramWindow:
 			self._fallbackAppModule = None
 			fallbackClass = _load_telegram_desktop_fallback_class()
@@ -833,6 +840,16 @@ class AppModule(appModuleHandler.AppModule):
 		# for i in range(10): self.bindGesture("kb:control+ALT+%d" % i, "rewind_voice_message")
 		# Binding reactions to the corresponding hotkeys
 		# for i in range(1,8): self.bindGesture("kb:NVDA+ALT+%d" % i, "set_reaction")
+		self._voiceRecordingMonitorRunning = True
+		self._scheduleVoiceRecordingPoll()
+
+	def terminate(self):
+		self._voiceRecordingMonitorRunning = False
+		timer = getattr(self, "_voiceRecordingTimer", None)
+		if timer:
+			timer.cancel()
+		self._voiceRecordingTimer = None
+		super().terminate()
 
 	def getScript(self, gesture):
 		if not getattr(self, "isUnigramWindow", False):
@@ -1538,6 +1555,34 @@ class AppModule(appModuleHandler.AppModule):
 		else:
 			message(_("Video") if isVideo else _("Audio"))
 
+	def _scheduleVoiceRecordingPoll(self):
+		if not self._voiceRecordingMonitorRunning:
+			return
+		timer = Timer(_VOICE_RECORDING_POLL_INTERVAL, self._queueVoiceRecordingPoll)
+		timer.daemon = True
+		self._voiceRecordingTimer = timer
+		timer.start()
+
+	def _queueVoiceRecordingPoll(self):
+		self._voiceRecordingTimer = None
+		if self._voiceRecordingMonitorRunning:
+			queueHandler.queueFunction(queueHandler.eventQueue, self._pollVoiceRecordingState)
+
+	def _pollVoiceRecordingState(self):
+		if not self._voiceRecordingMonitorRunning:
+			return
+		try:
+			foreground = api.getForegroundObject()
+			if getattr(foreground, "appModule", None) is not self:
+				return
+			visible = is_recording_ui_visible(self.getElements())
+			transition = self._voiceRecordingState.visibilityChanged(visible)
+			self._announceVoiceRecordingTransition(transition)
+		except Exception as error:
+			log.debug("Could not monitor Unigram voice-message recording UI: %r" % error)
+		finally:
+			self._scheduleVoiceRecordingPoll()
+
 	# Processing the message that got into focus
 	def action_message_focus(self, obj):
 		keywords = obj.keywords
@@ -1683,7 +1728,7 @@ class AppModule(appModuleHandler.AppModule):
 
 	def event_show(self, obj, nextHandler):
 		try:
-			if getattr(self, "isUnigramWindow", False) and obj.UIAAutomationId == "ElapsedLabel":
+			if getattr(self, "isUnigramWindow", False) and is_recording_ui_element(obj):
 				self._announceVoiceRecordingTransition(self._voiceRecordingState.shown())
 		finally:
 			nextHandler()
@@ -1698,7 +1743,7 @@ class AppModule(appModuleHandler.AppModule):
 
 	def event_hide(self, obj, nextHandler):
 		try:
-			if getattr(self, "isUnigramWindow", False) and obj.UIAAutomationId == "ElapsedLabel":
+			if getattr(self, "isUnigramWindow", False) and is_recording_ui_element(obj):
 				self._announceVoiceRecordingTransition(self._voiceRecordingState.hidden())
 		finally:
 			nextHandler()

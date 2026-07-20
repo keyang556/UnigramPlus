@@ -7,7 +7,7 @@ from types import SimpleNamespace
 ROOT = Path(__file__).parents[1]
 sys.path.insert(0, str(ROOT / "addon" / "appModules"))
 
-from voice_recording import VoiceRecordingState  # noqa: E402
+from voice_recording import VoiceRecordingState, is_recording_ui_visible  # noqa: E402
 
 
 def _app_module_ast():
@@ -54,6 +54,7 @@ def test_native_recording_ui_events_produce_one_start_and_one_end():
 	assert state.elapsedChanged("0:01.25") is None
 	assert state.elapsedChanged("0:00,0") == "end"
 	assert state.hidden() is None
+	assert state.elapsedChanged("0:00,0") is None
 
 
 def test_name_changes_work_when_uia_show_event_is_missing():
@@ -70,6 +71,57 @@ def test_hiding_timer_after_native_cancel_does_not_announce_message_sent():
 	assert state.elapsedChanged("0:01.25") is None
 	assert state.hidden() is None
 	assert not state.active
+
+
+def test_native_recording_bar_visibility_is_detected_without_a_keyboard_gesture():
+	hidden_bar = SimpleNamespace(
+		UIAAutomationId="ChatRecord",
+		location=SimpleNamespace(width=0, height=0),
+	)
+	visible_timer = SimpleNamespace(
+		UIAAutomationId="ElapsedLabel",
+		location=SimpleNamespace(width=64, height=20),
+	)
+
+	assert not is_recording_ui_visible([hidden_bar])
+	assert is_recording_ui_visible([hidden_bar, visible_timer])
+
+
+def test_polling_native_ui_announces_manual_or_keyboard_recording_once():
+	announcements = []
+	scheduled = []
+
+	def announce(transition):
+		if transition:
+			announcements.append(transition)
+
+	recording_element = SimpleNamespace(
+		UIAAutomationId="ElapsedLabel",
+		location=SimpleNamespace(width=64, height=20),
+	)
+	instance = SimpleNamespace(
+		_voiceRecordingMonitorRunning=True,
+		_voiceRecordingState=VoiceRecordingState(),
+		getElements=lambda: [recording_element],
+		_announceVoiceRecordingTransition=announce,
+		_scheduleVoiceRecordingPoll=lambda: scheduled.append(True),
+	)
+	foreground = SimpleNamespace(appModule=instance)
+	namespace = {
+		"api": SimpleNamespace(getForegroundObject=lambda: foreground),
+		"is_recording_ui_visible": is_recording_ui_visible,
+		"log": SimpleNamespace(debug=lambda text: None),
+	}
+	method = _load_method("_pollVoiceRecordingState", namespace)
+
+	method(instance)
+	method(instance)
+	recording_element.location.width = 0
+	method(instance)
+
+	assert announcements == ["start"]
+	assert scheduled == [True, True, True]
+	assert not instance._voiceRecordingState.active
 
 
 def test_recording_transitions_keep_text_and_audio_notifications():

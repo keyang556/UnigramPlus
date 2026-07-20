@@ -2,6 +2,8 @@
 def _(t): return t
 
 value = _(
+	"- Restored voice and video recording start notifications by monitoring Unigram's native recording UI, including recordings started manually."
+) + "\n" + _(
 	"- Ctrl+D now passes directly to Unigram for native voice-message cancellation, matching Ctrl+R."
 ) + "\n" + _(
 	"- Fixed rich-message detection so sticker and emoji messages are no longer incorrectly announced as rich messages."
