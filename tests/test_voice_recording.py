@@ -128,6 +128,16 @@ def test_stopped_recording_without_a_new_recorded_message_is_canceled():
 	assert not outcome.pending
 
 
+def test_default_outcome_window_allows_slow_recording_finalization():
+	outcome = VoiceRecordingOutcome(poll_limit=25)
+	outcome.started(("position", 8))
+	outcome.stopped()
+
+	for _ in range(24):
+		assert outcome.observe(("position", 8), is_recorded=False) is None
+	assert outcome.observe(("position", 8), is_recorded=False) == "canceled"
+
+
 def test_recording_state_uses_the_same_elapsed_sibling_as_the_button_label():
 	idle_button = SimpleNamespace(
 		UIAAutomationId="btnVoiceMessage",

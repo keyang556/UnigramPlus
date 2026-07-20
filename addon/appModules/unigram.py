@@ -57,6 +57,9 @@ _telegramDesktopFallbackLoadAttempted = False
 
 _APP_MODULE_NAME_IGNORED_CHARS = str.maketrans("", "", "\u200e\u200f\u2066\u2067\u2068\u2069")
 _VOICE_RECORDING_POLL_INTERVAL = .2
+# Allow Unigram time to finalize the recording and insert its outgoing message.
+# A sent message is still reported immediately; only cancellation waits this long.
+_VOICE_RECORDING_OUTCOME_POLL_LIMIT = 25  # 5 seconds at the interval above.
 
 
 def _normalized_text(text):
@@ -815,7 +818,7 @@ class AppModule(appModuleHandler.AppModule):
 		super().__init__(*args, **kwargs)
 		self.isUnigramWindow = is_unigram_app_module(self)
 		self._voiceRecordingState = VoiceRecordingState()
-		self._voiceRecordingOutcome = VoiceRecordingOutcome()
+		self._voiceRecordingOutcome = VoiceRecordingOutcome(_VOICE_RECORDING_OUTCOME_POLL_LIMIT)
 		self._voiceRecordingMonitorRunning = False
 		self._voiceRecordingButton = None
 		self._voiceRecordingDiscoveryFocus = None
