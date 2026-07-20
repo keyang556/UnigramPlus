@@ -44,9 +44,10 @@ from .rich_message import (  # noqa: E402
 from .rich_message_dialog import show_browseable_message  # noqa: E402
 from .voice_recording import (  # noqa: E402
 	VoiceRecordingState,
+	get_raw_uia_process_root,
+	is_recording_button_active,
 	is_recording_raw_uia_visible,
 	is_recording_ui_element,
-	is_recording_ui_visible,
 )
 
 baseDir = os.path.join(os.path.dirname(__file__), "media\\")
@@ -1573,11 +1574,10 @@ class AppModule(appModuleHandler.AppModule):
 		if not self._voiceRecordingMonitorRunning:
 			return
 		try:
-			foreground = api.getForegroundObject()
-			foregroundApp = getattr(foreground, "appModule", None)
-			if foregroundApp is not self and not is_unigram_app_module(foregroundApp):
+			focus = api.getFocusObject()
+			if getattr(focus, "appModule", None) is not self:
 				return
-			visible = self._isVoiceRecordingUIVisible(foreground)
+			visible = self._isVoiceRecordingUIVisible(focus)
 			transition = self._voiceRecordingState.visibilityChanged(visible)
 			if transition:
 				log.info("Unigram voice-message recording transition: %s" % transition)
@@ -1587,22 +1587,25 @@ class AppModule(appModuleHandler.AppModule):
 		finally:
 			self._scheduleVoiceRecordingPoll()
 
-	def _isVoiceRecordingUIVisible(self, foreground):
-		# The control view is cheap and worked in older Unigram releases.
-		if is_recording_ui_visible(self.getElements()):
-			return True
-
-		# ChatRecord is a XAML Grid. WinUI usually filters it out of NVDA's
-		# control view, but it remains available in the raw UIA tree.
+	def _isVoiceRecordingUIVisible(self, focus):
+		# Start from NVDA's focused UIA element and stay inside the Telegram
+		# process. This avoids HWND-to-process lookup failures on packaged apps.
 		import UIAHandler
 
 		client = UIAHandler.handler.clientObject
-		rootElement = getattr(foreground, "UIAElement", None)
+		rootElement = get_raw_uia_process_root(
+			getattr(focus, "UIAElement", None),
+			client.RawViewWalker,
+		)
 		if rootElement is None:
-			windowHandle = getattr(foreground, "windowHandle", None)
-			if not windowHandle:
-				return False
-			rootElement = client.elementFromHandle(windowHandle)
+			return False
+		if is_recording_button_active(
+			rootElement,
+			client,
+			UIAHandler.UIA,
+			UIAHandler.TreeScope_Descendants,
+		):
+			return True
 		return is_recording_raw_uia_visible(
 			rootElement,
 			client,

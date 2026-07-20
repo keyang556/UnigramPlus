@@ -9,8 +9,9 @@ sys.path.insert(0, str(ROOT / "addon" / "appModules"))
 
 from voice_recording import (  # noqa: E402
 	VoiceRecordingState,
+	get_raw_uia_process_root,
+	is_recording_button_active,
 	is_recording_raw_uia_visible,
-	is_recording_ui_visible,
 )
 
 
@@ -77,20 +78,6 @@ def test_hiding_timer_after_native_cancel_does_not_announce_message_sent():
 	assert not state.active
 
 
-def test_native_recording_bar_visibility_is_detected_without_a_keyboard_gesture():
-	hidden_bar = SimpleNamespace(
-		UIAAutomationId="ChatRecord",
-		location=SimpleNamespace(width=0, height=0),
-	)
-	visible_timer = SimpleNamespace(
-		UIAAutomationId="ElapsedLabel",
-		location=SimpleNamespace(width=64, height=20),
-	)
-
-	assert not is_recording_ui_visible([hidden_bar])
-	assert is_recording_ui_visible([hidden_bar, visible_timer])
-
-
 def test_native_recording_bar_is_found_in_raw_uia_view():
 	class Client:
 		def createPropertyCondition(self, property_id, value):
@@ -126,6 +113,136 @@ def test_native_recording_bar_is_found_in_raw_uia_view():
 	assert not is_recording_raw_uia_visible(Root(result=None), client, uia, "descendants")
 
 
+def test_recording_button_empty_provider_name_is_the_active_state():
+	class Client:
+		def createPropertyCondition(self, property_id, value):
+			return ("property", property_id, value)
+
+		def createAndConditionFromArray(self, conditions):
+			return ("and", tuple(conditions))
+
+	class Button:
+		def __init__(self, name=None, error=None):
+			self.name = name
+			self.error = error
+
+		def GetCurrentPropertyValueEx(self, property_id, ignore_default):
+			if self.error:
+				raise self.error
+			assert property_id == "name"
+			assert ignore_default is True
+			return self.name
+
+	class Root:
+		def __init__(self, button):
+			self.button = button
+			self.query = None
+
+		def findFirst(self, scope, condition):
+			self.query = (scope, condition)
+			return self.button
+
+	client = Client()
+	uia = SimpleNamespace(
+		UIA_AutomationIdPropertyId="automationId",
+		UIA_IsOffscreenPropertyId="offscreen",
+		UIA_NamePropertyId="name",
+	)
+	recording_root = Root(Button(""))
+
+	assert is_recording_button_active(recording_root, client, uia, "descendants")
+	assert recording_root.query[0] == "descendants"
+	assert ("property", "automationId", "btnVoiceMessage") in recording_root.query[1][1]
+	assert ("property", "offscreen", False) in recording_root.query[1][1]
+	assert not is_recording_button_active(Root(Button("Record voice message")), client, uia, "descendants")
+	assert not is_recording_button_active(Root(None), client, uia, "descendants")
+	assert not is_recording_button_active(
+		Root(Button(error=RuntimeError("stale UIA element"))),
+		client,
+		uia,
+		"descendants",
+	)
+
+
+def test_raw_uia_root_stays_inside_the_focused_process():
+	class Element:
+		def __init__(self, name, process_id):
+			self.name = name
+			self.CurrentProcessId = process_id
+
+	class Walker:
+		def __init__(self, parents):
+			self.parents = parents
+
+		def GetParentElement(self, element):
+			return self.parents.get(element)
+
+	desktop = Element("desktop", 0)
+	process_root = Element("window", 42)
+	container = Element("container", 42)
+	focus = Element("record button", 42)
+	walker = Walker({focus: container, container: process_root, process_root: desktop})
+
+	assert get_raw_uia_process_root(focus, walker) is process_root
+	assert get_raw_uia_process_root(None, walker) is None
+
+
+def test_monitor_reads_from_focused_uia_tree_without_a_process_handle(monkeypatch):
+	class Element:
+		def __init__(self, process_id):
+			self.CurrentProcessId = process_id
+
+	class Button:
+		def GetCurrentPropertyValueEx(self, property_id, ignore_default):
+			return ""
+
+	class Root(Element):
+		def findFirst(self, scope, condition):
+			return Button()
+
+	class Walker:
+		def __init__(self, parents):
+			self.parents = parents
+
+		def GetParentElement(self, element):
+			return self.parents.get(element)
+
+	class Client:
+		def __init__(self, walker):
+			self.RawViewWalker = walker
+
+		def createPropertyCondition(self, property_id, value):
+			return (property_id, value)
+
+		def createAndConditionFromArray(self, conditions):
+			return tuple(conditions)
+
+	focus_element = Element(42)
+	process_root = Root(42)
+	desktop = Element(0)
+	walker = Walker({focus_element: process_root, process_root: desktop})
+	client = Client(walker)
+	uia_handler = SimpleNamespace(
+		handler=SimpleNamespace(clientObject=client),
+		UIA=SimpleNamespace(
+			UIA_AutomationIdPropertyId="automationId",
+			UIA_IsOffscreenPropertyId="offscreen",
+			UIA_NamePropertyId="name",
+		),
+		TreeScope_Descendants="descendants",
+	)
+	monkeypatch.setitem(sys.modules, "UIAHandler", uia_handler)
+	namespace = {
+		"get_raw_uia_process_root": get_raw_uia_process_root,
+		"is_recording_button_active": is_recording_button_active,
+		"is_recording_raw_uia_visible": is_recording_raw_uia_visible,
+	}
+	method = _load_method("_isVoiceRecordingUIVisible", namespace)
+	focus = SimpleNamespace(UIAElement=focus_element)
+
+	assert method(SimpleNamespace(), focus)
+
+
 def test_polling_native_ui_announces_manual_or_keyboard_recording_once():
 	announcements = []
 	scheduled = []
@@ -141,14 +258,13 @@ def test_polling_native_ui_announces_manual_or_keyboard_recording_once():
 	instance = SimpleNamespace(
 		_voiceRecordingMonitorRunning=True,
 		_voiceRecordingState=VoiceRecordingState(),
-		_isVoiceRecordingUIVisible=lambda foreground: recording_element.location.width > 0,
+		_isVoiceRecordingUIVisible=lambda focus: recording_element.location.width > 0,
 		_announceVoiceRecordingTransition=announce,
 		_scheduleVoiceRecordingPoll=lambda: scheduled.append(True),
 	)
-	foreground = SimpleNamespace(appModule=instance)
+	focus = SimpleNamespace(appModule=instance)
 	namespace = {
-		"api": SimpleNamespace(getForegroundObject=lambda: foreground),
-		"is_unigram_app_module": lambda appModule: appModule is instance,
+		"api": SimpleNamespace(getFocusObject=lambda: focus),
 		"log": SimpleNamespace(debug=lambda text: None, info=lambda text: None),
 	}
 	method = _load_method("_pollVoiceRecordingState", namespace)
