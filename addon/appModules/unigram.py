@@ -44,6 +44,7 @@ from .rich_message import (  # noqa: E402
 from .rich_message_dialog import show_browseable_message  # noqa: E402
 from .voice_recording import (  # noqa: E402
 	VoiceRecordingState,
+	is_recording_raw_uia_visible,
 	is_recording_ui_element,
 	is_recording_ui_visible,
 )
@@ -1573,15 +1574,41 @@ class AppModule(appModuleHandler.AppModule):
 			return
 		try:
 			foreground = api.getForegroundObject()
-			if getattr(foreground, "appModule", None) is not self:
+			foregroundApp = getattr(foreground, "appModule", None)
+			if foregroundApp is not self and not is_unigram_app_module(foregroundApp):
 				return
-			visible = is_recording_ui_visible(self.getElements())
+			visible = self._isVoiceRecordingUIVisible(foreground)
 			transition = self._voiceRecordingState.visibilityChanged(visible)
+			if transition:
+				log.info("Unigram voice-message recording transition: %s" % transition)
 			self._announceVoiceRecordingTransition(transition)
 		except Exception as error:
 			log.debug("Could not monitor Unigram voice-message recording UI: %r" % error)
 		finally:
 			self._scheduleVoiceRecordingPoll()
+
+	def _isVoiceRecordingUIVisible(self, foreground):
+		# The control view is cheap and worked in older Unigram releases.
+		if is_recording_ui_visible(self.getElements()):
+			return True
+
+		# ChatRecord is a XAML Grid. WinUI usually filters it out of NVDA's
+		# control view, but it remains available in the raw UIA tree.
+		import UIAHandler
+
+		client = UIAHandler.handler.clientObject
+		rootElement = getattr(foreground, "UIAElement", None)
+		if rootElement is None:
+			windowHandle = getattr(foreground, "windowHandle", None)
+			if not windowHandle:
+				return False
+			rootElement = client.elementFromHandle(windowHandle)
+		return is_recording_raw_uia_visible(
+			rootElement,
+			client,
+			UIAHandler.UIA,
+			UIAHandler.TreeScope_Descendants,
+		)
 
 	# Processing the message that got into focus
 	def action_message_focus(self, obj):

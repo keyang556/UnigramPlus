@@ -7,7 +7,11 @@ from types import SimpleNamespace
 ROOT = Path(__file__).parents[1]
 sys.path.insert(0, str(ROOT / "addon" / "appModules"))
 
-from voice_recording import VoiceRecordingState, is_recording_ui_visible  # noqa: E402
+from voice_recording import (  # noqa: E402
+	VoiceRecordingState,
+	is_recording_raw_uia_visible,
+	is_recording_ui_visible,
+)
 
 
 def _app_module_ast():
@@ -87,6 +91,41 @@ def test_native_recording_bar_visibility_is_detected_without_a_keyboard_gesture(
 	assert is_recording_ui_visible([hidden_bar, visible_timer])
 
 
+def test_native_recording_bar_is_found_in_raw_uia_view():
+	class Client:
+		def createPropertyCondition(self, property_id, value):
+			return ("property", property_id, value)
+
+		def createOrConditionFromArray(self, conditions):
+			return ("or", tuple(conditions))
+
+		def createAndConditionFromArray(self, conditions):
+			return ("and", tuple(conditions))
+
+	class Root:
+		def __init__(self, result):
+			self.result = result
+			self.query = None
+
+		def findFirst(self, scope, condition):
+			self.query = (scope, condition)
+			return self.result
+
+	client = Client()
+	uia = SimpleNamespace(
+		UIA_AutomationIdPropertyId="automationId",
+		UIA_IsOffscreenPropertyId="offscreen",
+	)
+	root = Root(result=object())
+
+	assert is_recording_raw_uia_visible(root, client, uia, "descendants")
+	assert root.query[0] == "descendants"
+	assert ("property", "automationId", "ChatRecord") in root.query[1][1][0][1]
+	assert ("property", "automationId", "ElapsedLabel") in root.query[1][1][0][1]
+	assert ("property", "offscreen", False) in root.query[1][1]
+	assert not is_recording_raw_uia_visible(Root(result=None), client, uia, "descendants")
+
+
 def test_polling_native_ui_announces_manual_or_keyboard_recording_once():
 	announcements = []
 	scheduled = []
@@ -102,15 +141,15 @@ def test_polling_native_ui_announces_manual_or_keyboard_recording_once():
 	instance = SimpleNamespace(
 		_voiceRecordingMonitorRunning=True,
 		_voiceRecordingState=VoiceRecordingState(),
-		getElements=lambda: [recording_element],
+		_isVoiceRecordingUIVisible=lambda foreground: recording_element.location.width > 0,
 		_announceVoiceRecordingTransition=announce,
 		_scheduleVoiceRecordingPoll=lambda: scheduled.append(True),
 	)
 	foreground = SimpleNamespace(appModule=instance)
 	namespace = {
 		"api": SimpleNamespace(getForegroundObject=lambda: foreground),
-		"is_recording_ui_visible": is_recording_ui_visible,
-		"log": SimpleNamespace(debug=lambda text: None),
+		"is_unigram_app_module": lambda appModule: appModule is instance,
+		"log": SimpleNamespace(debug=lambda text: None, info=lambda text: None),
 	}
 	method = _load_method("_pollVoiceRecordingState", namespace)
 

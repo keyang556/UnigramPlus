@@ -30,6 +30,20 @@ def is_recording_ui_visible(elements):
 	return False
 
 
+def is_recording_raw_uia_visible(root_element, client, uia, descendant_scope):
+	"""Search the raw UIA tree for a visible native recording control."""
+	if root_element is None:
+		return False
+	id_conditions = [
+		client.createPropertyCondition(uia.UIA_AutomationIdPropertyId, automation_id)
+		for automation_id in RECORDING_UI_AUTOMATION_IDS
+	]
+	id_condition = client.createOrConditionFromArray(id_conditions)
+	visible_condition = client.createPropertyCondition(uia.UIA_IsOffscreenPropertyId, False)
+	condition = client.createAndConditionFromArray([id_condition, visible_condition])
+	return root_element.findFirst(descendant_scope, condition) is not None
+
+
 class VoiceRecordingState:
 	"""Convert native recording UI visibility into stable transitions."""
 
