@@ -138,7 +138,6 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 | **Ctrl+R (again)** | Unigram | Send recorded |
 | **Ctrl+D** | Unigram | Stop recording |
 | **Space (while recording) / Ctrl+P** | Unigram | Pause recording |
-| **Ctrl+R** | UnigramPlus | Start or stop recording a voice message |
 | **Ctrl+D** | UnigramPlus | Press once to cancel voice-message recording; press twice to change the recording notification type |
 
 ### Aramalar
@@ -175,6 +174,12 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 <!-- shortcut-table-end -->
 
 ##Değişiklik listesi:
+
+### Sürüm 5.6.0
+
+* Zengin ileti algılama düzeltildi; çıkartma ve emoji iletileri artık yanlışlıkla zengin ileti olarak duyurulmuyor.
+* Ctrl+R artık sesli iletileri kaydetmek ve göndermek için Unigram'ın yerel davranışını kullanırken UnigramPlus'ın kayıt başlangıç ve bitiş bildirimlerini koruyor.
+* Çeviriler güncellendi.
 
 ### Sürüm 5.5.9
 

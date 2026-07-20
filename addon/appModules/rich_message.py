@@ -8,9 +8,46 @@ tree handling straightforward to regression test.
 
 from collections import deque
 from html import escape
+import unicodedata
 
 
 _RICH_MESSAGE_CLASS = "instantcontent"
+_NON_RICH_PRIMARY_CONTENT_CLASSES = (
+	# Keep this list aligned with MessageBubble.UpdateMessageContentControl in
+	# Unigram. InstantContent is reserved exclusively for MessageRichMessage;
+	# every other non-text message type uses one of these controls.
+	"WebPageContent",
+	"AlbumContent",
+	"PaidMediaContent",
+	"AnimationContent",
+	"AudioContent",
+	"CallContent",
+	"ContactContent",
+	"DiceContent",
+	"DocumentContent",
+	"GameContent",
+	"PhotoContent",
+	"InvoicePreviewContent",
+	"InvoicePhotoContent",
+	"InvoiceContent",
+	"LiveLocationContent",
+	"LocationContent",
+	"PollContent",
+	"ChecklistContent",
+	"StickerContent",
+	"StakeDiceContent",
+	"VenueContent",
+	"VideoContent",
+	"VideoNoteContent",
+	"VoiceNoteContent",
+	"GiveawayContent",
+	"AspectView",
+	"SponsoredContent",
+	"UnsupportedContent",
+)
+_NON_RICH_PRIMARY_CONTENT_CLASS_KEYS = frozenset(
+	class_name.casefold() for class_name in _NON_RICH_PRIMARY_CONTENT_CLASSES
+)
 _LAYOUT_ROOT_AUTOMATION_ID = "LayoutRoot"
 _DEFAULT_MAX_DEPTH = 12
 _DEFAULT_MAX_NODES = 1000
@@ -32,9 +69,13 @@ def _children(obj):
 		return ()
 
 
-def _is_instant_content(obj):
+def _class_name(obj):
 	class_name = str(_safe_attr(obj, "UIAClassName", "") or "")
-	return class_name.replace(":", ".").rsplit(".", 1)[-1].casefold() == _RICH_MESSAGE_CLASS
+	return class_name.replace(":", ".").rsplit(".", 1)[-1].casefold()
+
+
+def _is_instant_content(obj):
+	return _class_name(obj) == _RICH_MESSAGE_CLASS
 
 
 def _message_text_nodes(message):
@@ -45,16 +86,63 @@ def _message_text_nodes(message):
 	)
 
 
-def _surface_has_message_text(message):
-	"""Whether Unigram's unprocessed item summary already contains normal message text."""
-	surface = _clean_text(_safe_attr(message, "name", "")).casefold()
-	if not surface:
-		return False
+def _has_meaningful_message_text(message):
+	"""Whether a direct text control contains more than the rich empty comma."""
 	for node in _message_text_nodes(message):
-		text = _clean_text(_safe_attr(node, "name", "")).casefold()
-		if text and text in surface:
+		text = _clean_text(_safe_attr(node, "name", ""))
+		if text.strip(" ,，"):
 			return True
 	return False
+
+
+def _node_identity(node):
+	"""Return a stable identity for NVDA objects and raw-UIA wrappers."""
+	element = _safe_attr(node, "_element", None)
+	return id(element) if element is not None else id(node)
+
+
+def _find_only_rich_content(message, max_depth=_DEFAULT_MAX_DEPTH, max_nodes=_DEFAULT_MAX_NODES):
+	"""Find InstantContent only when it is the message's sole primary content.
+
+	Unigram recycles message bubbles. A stale ``InstantContent`` subtree may
+	therefore coexist briefly with the current sticker, animated emoji, media, or
+	text control. The C# ``UpdateMessageContentControl`` switch makes the active
+	controls mutually exclusive, so any such sibling proves this is not a
+	``MessageRichMessage``. Empty Message/TextBlock nodes are deliberately ignored:
+	they are present in the Sophie-style rich-message UIA tree reported by NVDA.
+	"""
+	queue = deque((child, 1) for child in _children(message))
+	seen = {_node_identity(message)}
+	visited = 0
+	rich_root = None
+	while queue and visited < max_nodes:
+		node, depth = queue.popleft()
+		identity = _node_identity(node)
+		if identity in seen:
+			continue
+		seen.add(identity)
+		visited += 1
+		if bool(_safe_attr(node, "isOffscreen", False)):
+			continue
+		if _is_instant_content(node):
+			# Two visible InstantContent trees are ambiguous and most likely a
+			# recycled template in transition. Do not announce either one.
+			if rich_root is not None:
+				return None
+			rich_root = node
+			# Rich page blocks may use controls whose class names overlap with
+			# ordinary media. They belong to this root, so do not classify them.
+			continue
+		if _class_name(node) in _NON_RICH_PRIMARY_CONTENT_CLASS_KEYS:
+			return None
+		if (
+			_safe_attr(node, "UIAAutomationId", "") in _MESSAGE_TEXT_AUTOMATION_IDS
+			and _clean_text(_safe_attr(node, "name", ""))
+		):
+			return None
+		if depth < max_depth:
+			queue.extend((child, depth + 1) for child in _children(node))
+	return rich_root
 
 
 class _RawUIANode:
@@ -96,6 +184,10 @@ class _RawUIANode:
 		return self._property(self._uia.UIA_AutomationIdPropertyId)
 
 	@property
+	def isOffscreen(self):
+		return bool(self._property(self._uia.UIA_IsOffscreenPropertyId))
+
+	@property
 	def children(self):
 		children = []
 		try:
@@ -119,9 +211,10 @@ class _RawUIANode:
 def _find_raw_rich_message_root(message):
 	"""Search the raw UIA view, where non-control containers are still visible.
 
-	Returns ``(available, result)``. If raw UIA is available, callers should trust
-	the native query even when no result was found instead of repeating an
-	expensive Python walk of the same provider tree.
+	Returns ``(available, result)``. ``FindFirst`` is used because InstantContent
+	can be deeper than NVDA's exposed control view. Only competing controls under
+	the same ``Media`` parent are relevant; matching controls in a reply preview or
+	inside the rich page must not suppress the real rich message.
 	"""
 	element = _safe_attr(message, "UIAElement", None)
 	if element is None:
@@ -131,18 +224,39 @@ def _find_raw_rich_message_root(message):
 
 		handler = UIAHandler.handler
 		client = handler.clientObject
-		condition = client.CreatePropertyCondition(
-			UIAHandler.UIA.UIA_ClassNamePropertyId,
-			"InstantContent",
-		)
 		visible_condition = client.CreatePropertyCondition(
 			UIAHandler.UIA.UIA_IsOffscreenPropertyId,
 			False,
 		)
-		condition = client.createAndConditionFromArray([condition, visible_condition])
+		class_condition = client.CreatePropertyCondition(
+			UIAHandler.UIA.UIA_ClassNamePropertyId,
+			"InstantContent",
+		)
+		condition = client.createAndConditionFromArray([class_condition, visible_condition])
 		result = element.findFirst(UIAHandler.TreeScope_Descendants, condition)
 		if result is None:
 			return True, None
+
+		# MessageBubble.xaml hosts the mutually exclusive content control inside
+		# the Media border. A sticker/media sibling means InstantContent is stale.
+		walker = client.RawViewWalker
+		parent = walker.GetParentElement(result)
+		if parent is not None:
+			sibling = walker.GetFirstChildElement(parent)
+			while sibling is not None:
+				node = _RawUIANode(sibling, walker, UIAHandler.UIA)
+				if not node.isOffscreen:
+					class_name = _class_name(node)
+					if class_name in _NON_RICH_PRIMARY_CONTENT_CLASS_KEYS:
+						return True, None
+					if class_name == _RICH_MESSAGE_CLASS and sibling is not result:
+						try:
+							if not client.CompareElements(sibling, result):
+								return True, None
+						except Exception:
+							return True, None
+				sibling = walker.GetNextSiblingElement(sibling)
+
 		return True, _RawUIANode(
 			result,
 			client.RawViewWalker,
@@ -157,11 +271,11 @@ def _find_raw_rich_message_root(message):
 def _walk_descendants(root, max_depth=_DEFAULT_MAX_DEPTH, max_nodes=_DEFAULT_MAX_NODES):
 	"""Yield a bounded breadth-first walk, tolerating stale and cyclic UIA nodes."""
 	queue = deque((child, 1) for child in _children(root))
-	seen = {id(root)}
+	seen = {_node_identity(root)}
 	visited = 0
 	while queue and visited < max_nodes:
 		node, depth = queue.popleft()
-		identity = id(node)
+		identity = _node_identity(node)
 		if identity in seen:
 			continue
 		seen.add(identity)
@@ -171,13 +285,59 @@ def _walk_descendants(root, max_depth=_DEFAULT_MAX_DEPTH, max_nodes=_DEFAULT_MAX
 			queue.extend((child, depth + 1) for child in _children(node))
 
 
-def _rich_content_is_distinct(message, root):
-	"""Whether a rich root contributes text not already exposed by the message."""
+def _rich_content_matches_message(message, root):
+	"""Whether readable rich text, when present, belongs to this message."""
 	rich_text = _clean_text(extract_rich_message_text(root))
 	if not rich_text:
+		# Some MessageRichMessage page blocks have no UIA text. Unigram then
+		# contributes only `", "` to the accessible summary, producing the
+		# Sophie-style comma/blank content described in the NVDA log.
+		return has_empty_rich_message_summary(message)
+
+	# MessageRichMessage is summarized by Unigram with RichMessage.ToPlainText.
+	# Require the active message's accessible surface to corroborate the root so
+	# a populated InstantContent left by a recycled message cannot be mistaken for
+	# the new sticker, animated emoji, big emoji, or ordinary text message.
+	surface = _text_for_surface_comparison(_safe_attr(message, "name", ""))
+	return not surface or _text_for_surface_comparison(rich_text) in surface
+
+
+def has_empty_rich_message_summary(message):
+	"""Recognize Unigram's empty MessageRichMessage summary.
+
+	``Automation.GetSummary`` returns ``ToPlainText() + ", "`` for a rich
+	message. In the Sophie-style group layout the first line is the sender and the
+	second line starts with that otherwise empty content comma. In a direct chat,
+	the single line starts with the same comma and contains no second comma before
+	the status. Ordinary comma-prefixed text has another comma separating its real
+	content from the status. These signatures do not depend on localized strings
+	or provider-generated child names.
+	"""
+	lines = [line.strip() for line in _clean_text(_safe_attr(message, "name", "")).split("\n")]
+	if len(lines) > 1:
+		return lines[1].startswith(",") and lines[1].count(",") == 1
+	return bool(lines[0]) and lines[0].startswith(",") and lines[0].count(",") == 1
+
+
+def is_rich_message(message):
+	"""Whether a message has either the official rich summary or rich UIA root.
+
+	Empty rich pages do not consistently expose ``InstantContent`` through NVDA,
+	but their accessible name remains unambiguous: Unigram's
+	``Automation.GetSummary`` emits ``ToPlainText() + ", "``. Some UIA provider
+	versions also expose that comma as the Message control's name, so the official
+	summary signature must take precedence over the normal text-control guard.
+	"""
+	if message is None:
 		return False
-	message_text = _clean_text(extract_message_text(message))
-	return not message_text or _text_for_comparison(rich_text) not in _text_for_comparison(message_text)
+	if has_empty_rich_message_summary(message):
+		# This visible summary is the authoritative MessageRichMessage signature
+		# in current Unigram. Provider-generated child text must not override it.
+		return True
+	has_meaningful_text = _has_meaningful_message_text(message)
+	if has_meaningful_text:
+		return False
+	return find_rich_message_root(message) is not None
 
 
 def find_rich_message_root(message):
@@ -186,21 +346,21 @@ def find_rich_message_root(message):
 		return None
 	if _is_instant_content(message):
 		return message
-	has_surface_text = _surface_has_message_text(message)
+	# UpdateMessageText explicitly excludes MessageRichMessage. Any populated
+	# direct text control therefore belongs to another message type.
+	if _has_meaningful_message_text(message):
+		return None
 	raw_available, raw_root = _find_raw_rich_message_root(message)
 	if raw_available:
 		if raw_root is None:
 			return None
-		# Ordinary cells can retain an empty, visible InstantContent from a
-		# recycled template. Mixed rich messages are valid when their root adds
-		# content beyond the caption or other flattened message text.
-		if not has_surface_text or _rich_content_is_distinct(message, raw_root):
+		if _rich_content_matches_message(message, raw_root):
 			return raw_root
 		return None
-	root = next((node for node in _walk_descendants(message) if _is_instant_content(node)), None)
+	root = _find_only_rich_content(message)
 	if root is None:
 		return None
-	if not has_surface_text or _rich_content_is_distinct(message, root):
+	if _rich_content_matches_message(message, root):
 		return root
 	return None
 
@@ -373,6 +533,17 @@ def _clean_text(value):
 def _text_for_comparison(value):
 	"""Normalize case and whitespace when checking whether content is duplicated."""
 	return " ".join(_clean_text(value).casefold().split())
+
+
+def _text_for_surface_comparison(value):
+	"""Also collapse punctuation inserted by Unigram's accessible summary."""
+	text = _clean_text(value).casefold()
+	return " ".join(
+		"".join(
+			" " if char.isspace() or unicodedata.category(char).startswith(("P", "Z")) else char
+			for char in text
+		).split()
+	)
 
 
 def _text_for_block(block):

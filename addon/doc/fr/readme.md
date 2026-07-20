@@ -139,7 +139,6 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 | **Ctrl+R (again)** | Unigram | Send recorded |
 | **Ctrl+D** | Unigram | Stop recording |
 | **Space (while recording) / Ctrl+P** | Unigram | Pause recording |
-| **Ctrl+R** | UnigramPlus | Start or stop recording a voice message |
 | **Ctrl+D** | UnigramPlus | Press once to cancel voice-message recording; press twice to change the recording notification type |
 
 ### Appels
@@ -176,6 +175,12 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 <!-- shortcut-table-end -->
 
 ##Liste des changements :
+
+### Version 5.6.0
+
+* Correction de la détection des messages enrichis afin que les messages contenant des autocollants ou des émojis ne soient plus annoncés à tort comme des messages enrichis.
+* Ctrl+R utilise désormais le comportement natif d’Unigram pour enregistrer et envoyer les messages vocaux, tout en conservant les notifications de début et de fin d’enregistrement d’UnigramPlus.
+* Mise à jour des traductions.
 
 ### Version 5.5.9
 

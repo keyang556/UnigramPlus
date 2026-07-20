@@ -141,7 +141,6 @@ And remember that everyone who read this line thought that someone will definite
 | **Ctrl+R (again)** | Unigram | Send recorded |
 | **Ctrl+D** | Unigram | Stop recording |
 | **Space (while recording) / Ctrl+P** | Unigram | Pause recording |
-| **Ctrl+R** | UnigramPlus | Start or stop recording a voice message |
 | **Ctrl+D** | UnigramPlus | Press once to cancel voice-message recording; press twice to change the recording notification type |
 
 ### Calls
@@ -178,6 +177,12 @@ And remember that everyone who read this line thought that someone will definite
 <!-- shortcut-table-end -->
 
 ## List of changes:
+
+### Version 5.6.0
+
+* Fixed rich-message detection so sticker and emoji messages are no longer incorrectly announced as rich messages.
+* Ctrl+R now uses Unigram's native voice-message recording and sending behavior while retaining UnigramPlus recording start and end notifications.
+* Updated localizations.
 
 ### Version 5.5.9
 

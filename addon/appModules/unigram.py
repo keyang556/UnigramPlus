@@ -36,10 +36,13 @@ from .rich_message import (  # noqa: E402
 	extract_message_text,
 	extract_rich_message_text,
 	find_rich_message_root,
+	has_empty_rich_message_summary,
 	insert_hint_before_status,
+	is_rich_message,
 	merge_message_html_and_rich_text,
 )
 from .rich_message_dialog import show_browseable_message  # noqa: E402
+from .voice_recording import VoiceRecordingState  # noqa: E402
 
 baseDir = os.path.join(os.path.dirname(__file__), "media\\")
 _telegramDesktopFallbackClass = None
@@ -447,10 +450,11 @@ class Message_list_item(ListItem):
 	@script(description=_("Show message text in popup window"), gesture="kb:ALT+C")
 	def script_show_text_message(self, gesture):
 		rich_message = find_rich_message_root(self)
+		rich_detected = bool(rich_message) or is_rich_message(self)
 		html, link_actions = extract_message_html_and_actions(self)
 		message_text = extract_message_text(self)
-		if rich_message:
-			text = extract_rich_message_text(rich_message, textInfos.POSITION_ALL)
+		if rich_detected:
+			text = extract_rich_message_text(rich_message, textInfos.POSITION_ALL) if rich_message else ""
 			log.debug("Rich message extraction returned %d characters" % len(text))
 			html = merge_message_html_and_rich_text(html, message_text, text)
 			if html:
@@ -521,10 +525,17 @@ class Message_list_item(ListItem):
 		self.states.discard(State.SELECTABLE)
 		keywords = keywordsInMessages.get(conf.get("lang"), keywordsInMessages["en"])
 		self.keywords = keywords
-		index = self.name.find(keywords[2])
-		index = index if index != -1 else self.name.find(keywords[3])
-		self.index_last_part_in_message = index
-		self.last_part_in_message = self.name[index:]
+		positions = [self.name.find(marker) for marker in keywords[2:4]]
+		positions = [position for position in positions if position >= 0]
+		if positions:
+			index = min(positions)
+			self.index_last_part_in_message = index
+			self.last_part_in_message = self.name[index:]
+		else:
+			# The Unigram display language can differ from the add-on language.
+			# Avoid the legacy [-1:] slice and keep empty-rich summaries usable.
+			self.index_last_part_in_message = 0
+			self.last_part_in_message = self.name if has_empty_rich_message_summary(self) else ""
 		
 		if conf.get("action_when_pressing_up_arrow_in_text_field") == "to_messages":
 			self.bindGesture("kb:downArrow", "next_message")
@@ -795,6 +806,7 @@ class AppModule(appModuleHandler.AppModule):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		self.isUnigramWindow = is_unigram_app_module(self)
+		self._voiceRecordingState = VoiceRecordingState()
 		if not self.isUnigramWindow:
 			self._fallbackAppModule = None
 			fallbackClass = _load_telegram_desktop_fallback_class()
@@ -1494,57 +1506,37 @@ class AppModule(appModuleHandler.AppModule):
 		else:
 			message(_("No open chat"))
 
-	# Function of recording and sending a voice message
-	@script(gesture="kb:control+R")
-	def script_recordingVoiceMessage(self, gesture):
-		lastFocus = api.getFocusObject()
-		if conf.get("voiceMessageRecordingIndicator") == "none":
-			gesture.send()
+	def _announceVoiceRecordingTransition(self, transition):
+		indicator = conf.get("voiceMessageRecordingIndicator")
+		if not transition or indicator == "none":
 			return
-		obj = False
-		log.debug("We got into the voice message recording function")
-		lastFocus.setFocus()
-		for item in reversed(self.getElements()):
-			if item.role == Role.TOGGLEBUTTON and item.UIAAutomationId == "btnVoiceMessage":
-				log.debug("Record voice message button found")
-				obj = item
-				break
-			elif item.role == Role.BUTTON and item.UIAAutomationId in ("btnSendMessage", "btnEdit"):
-				message(_("Recording a voice message will not be available until the edit field is empty"))
-				return
-		if not obj: return
-		if obj.next and obj.next.UIAAutomationId == "ElapsedLabel":
-			log.debug("Second press of the record voice message button")
-			if conf.get("voiceMessageRecordingIndicator") == "audio":
+		if transition == "end":
+			if indicator == "audio":
 				winsound.PlaySound(baseDir+"send_voice_message.wav", winsound.SND_ASYNC | winsound.SND_NOSTOP)
-				# Timer(.1, winsound.PlaySound, (baseDir+"send_voice_message.wav", winsound.SND_ASYNC | winsound.SND_NOSTOP)).start()
 			else:
 				message(_("Record sent"))
-				# Timer(.1, message, (_("Voice message sent"),)).start()
+			return
+
+		# Read the voice/video mode only after Unigram has started recording. This
+		# UIA lookup can no longer delay or swallow the native Ctrl+R shortcut.
+		try:
+			button = next(
+				(
+					item
+					for item in reversed(self.getElements())
+					if item.role == Role.TOGGLEBUTTON and item.UIAAutomationId == "btnVoiceMessage"
+				),
+				None,
+			)
+			isVideo = bool(button and State.PRESSED in button.states)
+		except Exception as error:
+			log.debug("Could not inspect Unigram voice-message recording mode: %r" % error)
+			isVideo = False
+		if indicator == "audio":
+			filename = "start_recording_video_message.wav" if isVideo else "start_recording_voice_message.wav"
+			winsound.PlaySound(baseDir+filename, winsound.SND_ASYNC)
 		else:
-			log.debug("First press of the record voice message button")
-			if conf.get("voiceMessageRecordingIndicator") == "audio" and State.PRESSED in obj.states:
-				winsound.PlaySound(baseDir+"start_recording_video_message.wav", winsound.SND_ASYNC)
-				# Timer(.05, winsound.PlaySound, (baseDir+"start_recording_voice_message.wav", winsound.SND_ASYNC)).start()
-			elif conf.get("voiceMessageRecordingIndicator") == "audio":
-				winsound.PlaySound(baseDir+"start_recording_voice_message.wav", winsound.SND_ASYNC)
-				# Timer(.05, winsound.PlaySound, (baseDir+"start_recording_voice_message.wav", winsound.SND_ASYNC)).start()
-			elif conf.get("voiceMessageRecordingIndicator") == "text" and State.PRESSED in obj.states:
-				message(_("Video"))
-				# Timer(.05, message, (_("Recording voice messages"),)).start()
-			else:
-				message(_("Audio"))
-				# Timer(.05, message, (_("Recording voice messages"),)).start()
-		if conf.get("isFixedToggleButton"):
-			log.debug("Standard button press")
-			# self.isRecord = lastFocus
-			self.isSkipName = 1
-			gesture.send()
-		else:
-			# self.isSkipName = 2
-			# gesture.send()
-			obj.doAction()
-			lastFocus.setFocus()
+			message(_("Video") if isVideo else _("Audio"))
 
 	# Voice message discard function
 	# @script(gesture="kb:control+D")
@@ -1571,6 +1563,7 @@ class AppModule(appModuleHandler.AppModule):
 			if obj.previous.name == "\uea4a": message(_("Reply canceled"))
 			else: message(_("Edit canceled"))
 		elif obj and obj.UIAAutomationId == "ElapsedLabel":
+			self._voiceRecordingState.cancel()
 			if conf.get("voiceMessageRecordingIndicator") == "audio": winsound.PlaySound(baseDir+"cancel_voice_message_recording.wav", winsound.SND_ASYNC | winsound.SND_NOSTOP)
 			else: message(_("Recording canceled"))
 		gesture.send()
@@ -1607,7 +1600,7 @@ class AppModule(appModuleHandler.AppModule):
 				# We escape all symbols \
 				description = description.replace("\\", "").replace("http:\\", "\\\\")
 				obj.name =re.sub(r"[.,]?{}|{}".format(keywords[3], keywords[2]), r". \n{}\g<0>".format(description), obj.name)
-				obj.name =re.sub(r"(https?://\S+)\?[^\s,]+", "\g<1>", obj.name)
+				obj.name =re.sub(r"(https?://\S+)\?[^\s,]+", r"\g<1>", obj.name)
 			elif item.UIAAutomationId == "Subtitle" and len(item.name) < 15 and " / " in item.name:
 				# Checking if a message is a voice message
 				obj.name = item.name+", "+obj.name.replace(item.name[-5:], "")
@@ -1720,6 +1713,28 @@ class AppModule(appModuleHandler.AppModule):
 			return
 
 
+	def event_show(self, obj, nextHandler):
+		try:
+			if getattr(self, "isUnigramWindow", False) and obj.UIAAutomationId == "ElapsedLabel":
+				self._announceVoiceRecordingTransition(self._voiceRecordingState.shown())
+		finally:
+			nextHandler()
+
+	def event_nameChange(self, obj, nextHandler):
+		try:
+			if getattr(self, "isUnigramWindow", False) and obj.UIAAutomationId == "ElapsedLabel":
+				transition = self._voiceRecordingState.elapsedChanged(obj.name)
+				self._announceVoiceRecordingTransition(transition)
+		finally:
+			nextHandler()
+
+	def event_hide(self, obj, nextHandler):
+		try:
+			if getattr(self, "isUnigramWindow", False) and obj.UIAAutomationId == "ElapsedLabel":
+				self._announceVoiceRecordingTransition(self._voiceRecordingState.hidden())
+		finally:
+			nextHandler()
+
 	# Focus change tracking
 	def event_gainFocus(self, obj, nextHandler):
 		if not getattr(self, "isUnigramWindow", False):
@@ -1770,7 +1785,8 @@ class AppModule(appModuleHandler.AppModule):
 			if self.is_message_object(obj):
 				self.saved_items.save("last focus object", obj)
 				obj.name = self.action_message_focus(obj)
-				if find_rich_message_root(obj):
+				if is_rich_message(obj):
+					log.debug("Rich message detected from Unigram's accessible summary or UIA content")
 					# Translators: Announced after the content of a rich message when it receives focus.
 					hint = _("Rich message. Press Alt+C to browse")
 					obj.name = insert_hint_before_status(obj.name, hint, obj.keywords[2:4])
@@ -1852,7 +1868,7 @@ class AppModule(appModuleHandler.AppModule):
 				else:
 					# Checking if a toggle button is an answer option in a vote
 					if "reactionTypeEmoji {" in obj.name:
-						obj.name = re.sub(r"^(.+)reactionTypeEmoji.+\"(.)\".+", "\g<1>\g<2>", obj.name, flags=re.S)
+						obj.name = re.sub(r"^(.+)reactionTypeEmoji.+\"(.)\".+", r"\g<1>\g<2>", obj.name, flags=re.S)
 					if obj.firstChild.UIAAutomationId == "Loading"  and obj.lastChild.UIAAutomationId == "Votes" and obj.childCount == 3: obj.name = self.processing_of_answer_options_in_surveys(obj)
 			except: pass
 		# In the profile-page header, the verified-badge button (IdentityRoot) is the next
@@ -1910,7 +1926,11 @@ class AppModule(appModuleHandler.AppModule):
 				name = obj.name[-200:]
 				self.sender_message = "received" if keywords[3] in name else "send" if keywords[2] in name else ""
 				self.end_text = name
-				if self.sender_message or (parent.role == Role.LISTITEM and parent.location.width > 800):
+				if (
+					self.sender_message
+					or has_empty_rich_message_summary(obj)
+					or (parent.role == Role.LISTITEM and parent.location.width > 800)
+				):
 					clsList.insert(0, Message_list_item)
 			elif conf.get("action_when_pressing_up_arrow_in_text_field") != "normal" and obj.role == Role.EDITABLETEXT and obj.UIAAutomationId == "TextField":
 				# Add processing for pressing the up arrow key to the message input field

@@ -139,7 +139,6 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 | **Ctrl+R (again)** | Unigram | 傳送錄製內容 |
 | **Ctrl+D** | Unigram | 停止錄製 |
 | **Space (while recording) / Ctrl+P** | Unigram | 暫停錄製 |
-| **Ctrl+R** | UnigramPlus | 開始或停止錄製語音訊息 |
 | **Ctrl+D** | UnigramPlus | 按一次取消語音訊息錄製；按兩次變更錄製通知方式 |
 
 ### 通話
@@ -176,6 +175,12 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 <!-- shortcut-table-end -->
 
 ## 版本變更
+
+### 版本 5.6.0
+
+* 修正 rich message 判斷，貼圖與表情符號訊息不再被錯誤朗讀為 rich message。
+* Ctrl+R 現在使用 Unigram 官方的語音訊息錄製與傳送行為，同時保留 UnigramPlus 的錄製開始與結束提示。
+* 更新本地化翻譯。
 
 ### 版本 5.5.9
 

@@ -141,7 +141,6 @@
 | **Ctrl+R (again)** | Unigram | Send recorded |
 | **Ctrl+D** | Unigram | Stop recording |
 | **Space (while recording) / Ctrl+P** | Unigram | Pause recording |
-| **Ctrl+R** | UnigramPlus | Start or stop recording a voice message |
 | **Ctrl+D** | UnigramPlus | Press once to cancel voice-message recording; press twice to change the recording notification type |
 
 ### Звонки
@@ -465,6 +464,12 @@
 Добавлена Турецкая локализация.
 
 
+
+### Версия 5.6.0
+
+* Исправлено распознавание форматированных сообщений: сообщения со стикерами и эмодзи больше не объявляются ошибочно как форматированные.
+* Ctrl+R теперь использует встроенное поведение Unigram для записи и отправки голосовых сообщений, сохраняя уведомления UnigramPlus о начале и завершении записи.
+* Обновлены переводы.
 
 ### Версия 5.5.9
 

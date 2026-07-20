@@ -63,12 +63,21 @@ def test_required_strings_are_translated_in_every_locale():
 		assert not missing, f"{locale_dir.name} has missing translations: {missing}"
 
 
-def test_every_localized_manual_has_559_and_updated_558_changelogs():
+def test_release_version_is_560():
+	build_vars = (ROOT / "buildVars.py").read_text(encoding="utf-8")
+	assert 'addon_version="5.6.0"' in build_vars
+
+
+def test_every_localized_manual_has_560_559_and_updated_558_changelogs():
 	manuals = [ROOT / "readme.md", *sorted(DOC_DIR.glob("*/readme.md"))]
 	assert len(manuals) == 17
 	for manual in manuals:
 		text = manual.read_text(encoding="utf-8")
-		version_559 = text.index("5.5.9")
+		version_560 = text.index("5.6.0")
+		version_559 = text.index("5.5.9", version_560)
 		version_558 = text.index("5.5.8", version_559)
+		section_560 = text[version_560:version_559]
+		assert "Ctrl+R" in section_560, manual
+		assert section_560.count("\n* ") == 3, manual
 		assert "Alt+C" in text[version_559:version_558], manual
 		assert "GitHub" in text[version_558:text.find("5.5.7", version_558)], manual

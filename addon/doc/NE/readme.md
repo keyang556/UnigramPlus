@@ -139,7 +139,6 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 | **Ctrl+R (again)** | Unigram | Send recorded |
 | **Ctrl+D** | Unigram | Stop recording |
 | **Space (while recording) / Ctrl+P** | Unigram | Pause recording |
-| **Ctrl+R** | UnigramPlus | Start or stop recording a voice message |
 | **Ctrl+D** | UnigramPlus | Press once to cancel voice-message recording; press twice to change the recording notification type |
 
 ### कलहरू
@@ -397,6 +396,12 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 ###संस्करण १.१.७
 
 टर्की स्थानीयकरण थपियो।
+
+### Version 5.6.0
+
+* रिच सन्देश पहिचान सुधार गरिएको छ, जसले गर्दा स्टिकर र इमोजी सन्देशहरूलाई अब गलत रूपमा रिच सन्देश भनेर घोषणा गरिँदैन।
+* Ctrl+R ले अब Unigram को मौलिक आवाज सन्देश रेकर्डिङ र पठाउने व्यवहार प्रयोग गर्छ, साथै UnigramPlus का रेकर्डिङ सुरु र अन्त्य सूचनाहरू कायम राख्छ।
+* स्थानीयकरणहरू अद्यावधिक गरियो।
 
 ### Version 5.5.9
 

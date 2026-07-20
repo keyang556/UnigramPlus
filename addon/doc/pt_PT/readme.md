@@ -139,7 +139,6 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 | **Ctrl+R (again)** | Unigram | Send recorded |
 | **Ctrl+D** | Unigram | Stop recording |
 | **Space (while recording) / Ctrl+P** | Unigram | Pause recording |
-| **Ctrl+R** | UnigramPlus | Start or stop recording a voice message |
 | **Ctrl+D** | UnigramPlus | Press once to cancel voice-message recording; press twice to change the recording notification type |
 
 ### Chamadas
@@ -176,6 +175,12 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 <!-- shortcut-table-end -->
 
 ## Lista de alterações:
+
+### Versão 5.6.0
+
+* Corrigida a deteção de mensagens enriquecidas para que as mensagens com autocolantes e emojis deixem de ser anunciadas incorretamente como mensagens enriquecidas.
+* Ctrl+R passa a utilizar o comportamento nativo do Unigram para gravar e enviar mensagens de voz, mantendo as notificações de início e fim da gravação do UnigramPlus.
+* Traduções atualizadas.
 
 ### Versão 5.5.9
 
