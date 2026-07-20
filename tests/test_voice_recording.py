@@ -98,13 +98,15 @@ def test_recorded_message_templates_and_message_markers_are_detected():
 	)
 	text = SimpleNamespace(UIAAutomationId="Message_item", children=[])
 	positioned = SimpleNamespace(positionInfo={"indexInGroup": 12, "similarItemsInGroup": 12})
+	recycled_position = SimpleNamespace(positionInfo={"indexInGroup": 12, "similarItemsInGroup": 13})
 
 	assert is_recorded_message(voice)
 	assert is_recorded_message(voice_without_transcription)
 	assert not is_recorded_message(text)
 	assert is_recorded_message(video, video=True)
 	assert not is_recorded_message(voice, video=True)
-	assert message_marker(positioned) == ("position", 12)
+	assert message_marker(positioned) == ("position", 12, 12)
+	assert message_marker(recycled_position) != message_marker(positioned)
 
 
 def test_stopped_recording_is_sent_only_after_a_new_recorded_message_appears():
@@ -116,6 +118,26 @@ def test_stopped_recording_is_sent_only_after_a_new_recorded_message_appears():
 	assert outcome.observe(("position", 9), is_recorded=False) is None
 	assert outcome.observe(("position", 9), is_recorded=True) == "sent"
 	assert not outcome.pending
+
+
+def test_new_message_is_sent_when_unigram_delays_its_voice_controls():
+	outcome = VoiceRecordingOutcome(poll_limit=4)
+	outcome.started(("position", 8, 8))
+	outcome.stopped()
+
+	assert outcome.observe(("position", 9, 9), is_recorded=False) is None
+	assert outcome.observe(("position", 9, 9), is_recorded=False) == "sent"
+	assert not outcome.pending
+
+
+def test_transient_message_list_read_failure_is_not_treated_as_sent():
+	outcome = VoiceRecordingOutcome(poll_limit=3)
+	outcome.started(("position", 8, 8))
+	outcome.stopped()
+
+	assert outcome.observe(None, is_recorded=False) is None
+	assert outcome.observe(("position", 8, 8), is_recorded=False) is None
+	assert outcome.observe(("position", 8, 8), is_recorded=False) == "canceled"
 
 
 def test_stopped_recording_without_a_new_recorded_message_is_canceled():

@@ -46,8 +46,12 @@ def message_marker(obj):
 	try:
 		position = obj.positionInfo
 		index = position.get("indexInGroup")
-		if index is not None:
-			return ("position", index)
+		total = position.get("similarItemsInGroup")
+		if index is not None or total is not None:
+			# Unigram virtualizes the message list and can reuse the last item's
+			# index while appending an outgoing message. The total still changes,
+			# so both values are needed to distinguish the replacement.
+			return ("position", index, total)
 	except Exception:
 		pass
 	try:
@@ -90,28 +94,44 @@ def is_recorded_message(obj, video=False, max_elements=64):
 class VoiceRecordingOutcome:
 	"""Resolve a stopped recording as sent or canceled without observing keys."""
 
+	_UNRECOGNIZED_MESSAGE_POLLS = 2
+
 	def __init__(self, poll_limit=8):
 		self.poll_limit = poll_limit
 		self.pending = False
 		self.baseline = None
 		self.video = False
 		self._pollsRemaining = 0
+		self._changedMessagePolls = 0
 
 	def started(self, baseline, video=False):
 		self.pending = False
 		self.baseline = baseline
 		self.video = video
 		self._pollsRemaining = 0
+		self._changedMessagePolls = 0
 
 	def stopped(self):
 		self.pending = True
 		self._pollsRemaining = self.poll_limit
+		self._changedMessagePolls = 0
 
 	def observe(self, marker, is_recorded):
 		if not self.pending:
 			return None
-		if self.baseline is not None and marker != self.baseline and is_recorded:
-			return self._finish("sent")
+		marker_changed = self.baseline is not None and marker is not None and marker != self.baseline
+		if marker_changed:
+			if is_recorded:
+				return self._finish("sent")
+			# During encoding/upload Unigram can append the outgoing item before
+			# its Recognize/Subtitle controls enter the UIA tree. A persistent new
+			# last item is therefore sufficient evidence of sending; requiring the
+			# finished voice-note template produced false cancellation reports.
+			self._changedMessagePolls += 1
+			if self._changedMessagePolls >= self._UNRECOGNIZED_MESSAGE_POLLS:
+				return self._finish("sent")
+		else:
+			self._changedMessagePolls = 0
 		self._pollsRemaining -= 1
 		if self._pollsRemaining <= 0:
 			return self._finish("canceled")
@@ -120,6 +140,7 @@ class VoiceRecordingOutcome:
 	def _finish(self, transition):
 		self.pending = False
 		self._pollsRemaining = 0
+		self._changedMessagePolls = 0
 		return transition
 
 
