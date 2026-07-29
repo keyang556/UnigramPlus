@@ -1036,5 +1036,32 @@ msgstr "تمت إضافة دعم الرسائل المنسّقة. يُعلَن �
 msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
 msgstr "تُحفظ الروابط والمحتويات المختلطة في الرسائل المنسّقة، ويمكن تنشيط الروابط من النافذة القابلة للتصفح."
 
+msgid "Automatically move focus to the chat list when Unigram starts"
+msgstr "نقل التركيز تلقائيًا إلى قائمة الدردشات عند بدء تشغيل Unigram"
+
+msgid ""
+"- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle.\n"
+"- When Unigram opens, focus now moves automatically to the chat list.\n"
+"- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr ""
+"- تم إصلاح تتبع تقدم نقل الملفات بحيث يتوقف عند 100% ولا ينشئ سلسلة تنفيذ جديدة في كل دورة تحقق.\n"
+"- عند فتح Unigram، ينتقل التركيز الآن تلقائيًا إلى قائمة الدردشات.\n"
+"- تمت إضافة Ctrl+Alt+Up/Down للتنقل بين الدردشات التي تحتوي على إشارات غير مقروءة."
+
+msgid "Move to the next or previous chat with unread mentions"
+msgstr "الانتقال إلى الدردشة التالية أو السابقة التي تحتوي على إشارات غير مقروءة"
+
+msgid "No more chats with unread mentions in this direction"
+msgstr "لا توجد دردشات أخرى تحتوي على إشارات غير مقروءة في هذا الاتجاه"
+
+msgid "- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle."
+msgstr "- تم إصلاح تتبع تقدم نقل الملفات بحيث يتوقف عند 100% ولا ينشئ سلسلة تنفيذ جديدة في كل دورة تحقق."
+
+msgid "- When Unigram opens, focus now moves automatically to the chat list."
+msgstr "- عند فتح Unigram، ينتقل التركيز الآن تلقائيًا إلى قائمة الدردشات."
+
+msgid "- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr "- تمت إضافة Ctrl+Alt+Up/Down للتنقل بين الدردشات التي تحتوي على إشارات غير مقروءة."
+
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "تم إصلاح التحديثات التلقائية: تُجلب الإصدارات الآن بأمان من GitHub، ويُتحقق من الإضافة التي تم تنزيلها قبل تثبيتها."

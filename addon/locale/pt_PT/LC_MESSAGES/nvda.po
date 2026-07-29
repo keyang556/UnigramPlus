@@ -808,5 +808,32 @@ msgstr "Adicionado suporte a mensagens enriquecidas. São agora anunciadas quand
 msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
 msgstr "As ligações e o conteúdo misto das mensagens enriquecidas são preservados, e as ligações podem ser ativadas a partir da janela navegável."
 
+msgid "Automatically move focus to the chat list when Unigram starts"
+msgstr "Mover automaticamente o foco para a lista de conversas ao iniciar o Unigram"
+
+msgid ""
+"- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle.\n"
+"- When Unigram opens, focus now moves automatically to the chat list.\n"
+"- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr ""
+"- Corrigido o acompanhamento do progresso da transferência de ficheiros para parar nos 100% e deixar de criar uma nova thread em cada ciclo de verificação.\n"
+"- Ao abrir o Unigram, o foco passa agora automaticamente para a lista de conversas.\n"
+"- Adicionado Ctrl+Alt+Up/Down para percorrer conversas com menções não lidas."
+
+msgid "Move to the next or previous chat with unread mentions"
+msgstr "Ir para a conversa seguinte ou anterior com menções não lidas"
+
+msgid "No more chats with unread mentions in this direction"
+msgstr "Não há mais conversas com menções não lidas nesta direção"
+
+msgid "- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle."
+msgstr "- Corrigido o acompanhamento do progresso da transferência de ficheiros para parar nos 100% e deixar de criar uma nova thread em cada ciclo de verificação."
+
+msgid "- When Unigram opens, focus now moves automatically to the chat list."
+msgstr "- Ao abrir o Unigram, o foco passa agora automaticamente para a lista de conversas."
+
+msgid "- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr "- Adicionado Ctrl+Alt+Up/Down para percorrer conversas com menções não lidas."
+
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "Corrigidas as atualizações automáticas: as versões são agora obtidas de forma segura do GitHub e o extra transferido é validado antes da instalação."

@@ -19,7 +19,7 @@ addon_info = AddonInfo(
 		"""This add-on adds a lot of hotkeys for quick navigation through the main elements of the Unigram application, convenient interaction with Chat messages, and also adds many small improvements that make working in Unigram much easier""",
 	),
 	# version
-	addon_version="5.6.0",
+	addon_version="5.6.1",
 	# Brief changelog for this version
 	# Translators: what's new content for the add-on version to be shown in the add-on store.
 	# Note: Edit changelog.py instead of this.
@@ -62,8 +62,9 @@ i18nSources: list[str] = pythonSources + ["buildVars.py", "changelog.py"]
 # Files that will be ignored when building the nvda-addon file
 # Paths are relative to the addon directory, not to the root directory of your addon sources.
 # You can either list every file (using ""/") as a path separator,
-# or use glob expressions.
-excludedFiles: list[str] = []
+# or use glob expressions. NVDA compiles Python sources for its own interpreter,
+# so developer-machine bytecode caches must not be shipped.
+excludedFiles: list[str] = ["**/__pycache__/*", "**/*.pyc"]
 
 # Base language for the NVDA add-on
 # If your add-on is written in a language other than english, modify this variable.

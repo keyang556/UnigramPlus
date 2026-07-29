@@ -42,6 +42,7 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **Ctrl+Alt+Up/Down** | UnigramPlus | Ir al chat siguiente o anterior con menciones sin leer |
 | **ALT+1** | UnigramPlus | Mover el foco a la lista de chats |
 | **ALT+2** | UnigramPlus | Mover el foco al último mensaje en el chat actual |
 | **ALT+3** | UnigramPlus | Mover el foco a la etiqueta mensajes no leídos |
@@ -176,6 +177,12 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 <!-- shortcut-table-end -->
 
 ##Lista de cambios:
+
+### Versión 5.6.1
+
+* Se corrigió el seguimiento del progreso de transferencia de archivos para que se detenga al 100% y deje de crear un hilo nuevo en cada ciclo de sondeo.
+* Al abrir Unigram, el foco ahora se mueve automáticamente a la lista de chats.
+* Se añadió Ctrl+Alt+Up/Down para recorrer los chats con menciones sin leer.
 
 ### Versión 5.6.0
 

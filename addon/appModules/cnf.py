@@ -44,6 +44,7 @@ lang = getDefaultLang()
 spec = (
 	f"lang = string(default={lang if lang in listLanguages else 'en'})",
 	"voiceTypeAfterChatName = string(default=beforeName)",
+	"autoFocusChatList = boolean(default=True)",
 	"unreadBeforeMessageContent = boolean(default=True)",
 	"voiceFolderNames = boolean(default=True)",
 	"voiceMessageRecordingIndicator = string(default=audio)",

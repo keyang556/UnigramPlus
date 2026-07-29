@@ -1030,5 +1030,32 @@ msgstr "Dodata je podrška za obogaćene poruke. One se sada izgovaraju kada dob
 msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
 msgstr "Linkovi i mešoviti sadržaj u obogaćenim porukama se čuvaju, a linkovi se mogu aktivirati iz prozora za pregledanje."
 
+msgid "Automatically move focus to the chat list when Unigram starts"
+msgstr "Automatski premesti fokus na listu ćaskanja pri pokretanju Unigrama"
+
+msgid ""
+"- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle.\n"
+"- When Unigram opens, focus now moves automatically to the chat list.\n"
+"- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr ""
+"- Ispravljeno je praćenje napretka prenosa datoteka tako da se zaustavlja na 100% i više ne pravi novu nit pri svakom ciklusu provere.\n"
+"- Kada se Unigram otvori, fokus se sada automatski premešta na listu ćaskanja.\n"
+"- Dodat je Ctrl+Alt+Up/Down za kretanje kroz ćaskanja sa nepročitanim pominjanjima."
+
+msgid "Move to the next or previous chat with unread mentions"
+msgstr "Prelazak na sledeće ili prethodno ćaskanje sa nepročitanim pominjanjima"
+
+msgid "No more chats with unread mentions in this direction"
+msgstr "Nema više ćaskanja sa nepročitanim pominjanjima u ovom smeru"
+
+msgid "- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle."
+msgstr "- Ispravljeno je praćenje napretka prenosa datoteka tako da se zaustavlja na 100% i više ne pravi novu nit pri svakom ciklusu provere."
+
+msgid "- When Unigram opens, focus now moves automatically to the chat list."
+msgstr "- Kada se Unigram otvori, fokus se sada automatski premešta na listu ćaskanja."
+
+msgid "- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr "- Dodat je Ctrl+Alt+Up/Down za kretanje kroz ćaskanja sa nepročitanim pominjanjima."
+
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "Ispravljeno je automatsko ažuriranje: izdanja se sada bezbedno preuzimaju sa GitHuba, a preuzeti dodatak se proverava pre instalacije."

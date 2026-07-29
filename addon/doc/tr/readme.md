@@ -39,6 +39,7 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **Ctrl+Alt+Up/Down** | UnigramPlus | Okunmamış bahsetmeleri olan sonraki veya önceki sohbete git |
 | **ALT+1** | UnigramPlus | Odağı sohbet listesine taşı |
 | **ALT+2** | UnigramPlus | Odağı sohbetteki son mesaja taşı |
 | **ALT+3** | UnigramPlus | Odağı "okunmamış mesajlar" etiketine taşı" |
@@ -173,6 +174,12 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 <!-- shortcut-table-end -->
 
 ##Değişiklik listesi:
+
+### Sürüm 5.6.1
+
+* Dosya aktarım ilerlemesi takibi %100’de duracak ve her yoklama döngüsünde yeni bir iş parçacığı oluşturmayacak şekilde düzeltildi.
+* Unigram açıldığında odak artık otomatik olarak sohbet listesine taşınıyor.
+* Okunmamış bahsetmeleri olan sohbetler arasında dolaşmak için Ctrl+Alt+Up/Down eklendi.
 
 ### Sürüm 5.6.0
 

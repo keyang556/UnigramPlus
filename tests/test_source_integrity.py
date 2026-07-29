@@ -35,3 +35,10 @@ def test_python_sources_compile_without_syntax_warnings():
 		warnings.simplefilter("error", SyntaxWarning)
 		for path in paths:
 			compile(path.read_text(encoding="utf-8-sig"), str(path), "exec")
+
+
+def test_release_bundle_excludes_python_bytecode_caches():
+	build_vars = (ROOT / "buildVars.py").read_text(encoding="utf-8")
+
+	assert '"**/__pycache__/*"' in build_vars
+	assert '"**/*.pyc"' in build_vars

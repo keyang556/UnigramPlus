@@ -765,5 +765,32 @@ msgstr "Dodano obsługę wiadomości z formatowaniem. Są teraz oznajmiane po uz
 msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
 msgstr "Łącza i mieszana treść wiadomości z formatowaniem są zachowywane, a łącza można aktywować z okna przeglądania."
 
+msgid "Automatically move focus to the chat list when Unigram starts"
+msgstr "Automatycznie przenieś fokus na listę czatów po uruchomieniu Unigramu"
+
+msgid ""
+"- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle.\n"
+"- When Unigram opens, focus now moves automatically to the chat list.\n"
+"- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr ""
+"- Naprawiono śledzenie postępu przesyłania plików, aby zatrzymywało się przy 100% i nie tworzyło nowego wątku w każdym cyklu odpytywania.\n"
+"- Po otwarciu Unigramu fokus automatycznie przenosi się na listę czatów.\n"
+"- Dodano Ctrl+Alt+Up/Down do poruszania się po czatach z nieprzeczytanymi wzmiankami."
+
+msgid "Move to the next or previous chat with unread mentions"
+msgstr "Przejdź do następnego lub poprzedniego czatu z nieprzeczytanymi wzmiankami"
+
+msgid "No more chats with unread mentions in this direction"
+msgstr "W tym kierunku nie ma więcej czatów z nieprzeczytanymi wzmiankami"
+
+msgid "- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle."
+msgstr "- Naprawiono śledzenie postępu przesyłania plików, aby zatrzymywało się przy 100% i nie tworzyło nowego wątku w każdym cyklu odpytywania."
+
+msgid "- When Unigram opens, focus now moves automatically to the chat list."
+msgstr "- Po otwarciu Unigramu fokus automatycznie przenosi się na listę czatów."
+
+msgid "- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr "- Dodano Ctrl+Alt+Up/Down do poruszania się po czatach z nieprzeczytanymi wzmiankami."
+
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "Naprawiono automatyczne aktualizacje: wydania są teraz bezpiecznie pobierane z GitHuba, a pobrany dodatek jest sprawdzany przed instalacją."

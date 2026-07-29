@@ -994,5 +994,32 @@ msgstr "Ajout de la prise en charge des messages enrichis. Ils sont désormais a
 msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
 msgstr "Les liens et le contenu mixte des messages enrichis sont préservés, et les liens peuvent être activés depuis la fenêtre navigable."
 
+msgid "Automatically move focus to the chat list when Unigram starts"
+msgstr "Placer automatiquement le focus dans la liste des échanges au démarrage d’Unigram"
+
+msgid ""
+"- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle.\n"
+"- When Unigram opens, focus now moves automatically to the chat list.\n"
+"- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr ""
+"- Correction du suivi de la progression des transferts de fichiers : il s’arrête désormais à 100 % et ne crée plus de nouveau thread à chaque cycle d’interrogation.\n"
+"- À l’ouverture d’Unigram, le focus est désormais placé automatiquement dans la liste des échanges.\n"
+"- Ajout de Ctrl+Alt+Up/Down pour parcourir les échanges contenant des mentions non lues."
+
+msgid "Move to the next or previous chat with unread mentions"
+msgstr "Aller à l’échange suivant ou précédent contenant des mentions non lues"
+
+msgid "No more chats with unread mentions in this direction"
+msgstr "Aucun autre échange avec des mentions non lues dans cette direction"
+
+msgid "- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle."
+msgstr "- Correction du suivi de la progression des transferts de fichiers : il s’arrête désormais à 100 % et ne crée plus de nouveau thread à chaque cycle d’interrogation."
+
+msgid "- When Unigram opens, focus now moves automatically to the chat list."
+msgstr "- À l’ouverture d’Unigram, le focus est désormais placé automatiquement dans la liste des échanges."
+
+msgid "- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr "- Ajout de Ctrl+Alt+Up/Down pour parcourir les échanges contenant des mentions non lues."
+
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "Correction des mises à jour automatiques : les versions sont désormais récupérées de manière sécurisée depuis GitHub et l'extension téléchargée est validée avant son installation."

@@ -933,5 +933,32 @@ msgstr "پشتیبانی از پیام‌های غنی افزوده شد. این
 msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
 msgstr "پیوندها و محتوای ترکیبی در پیام‌های غنی حفظ می‌شوند و پیوندها را می‌توان از پنجره قابل مرور فعال کرد."
 
+msgid "Automatically move focus to the chat list when Unigram starts"
+msgstr "انتقال خودکار مکان‌نما به فهرست گفت‌وگوها هنگام شروع Unigram"
+
+msgid ""
+"- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle.\n"
+"- When Unigram opens, focus now moves automatically to the chat list.\n"
+"- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr ""
+"- ردیابی پیشرفت انتقال فایل اصلاح شد تا در 100% متوقف شود و در هر چرخهٔ بررسی یک رشتهٔ جدید ایجاد نکند.\n"
+"- هنگام باز شدن Unigram، مکان‌نما اکنون به‌طور خودکار به فهرست گفت‌وگوها منتقل می‌شود.\n"
+"- کلید Ctrl+Alt+Up/Down برای حرکت میان گفت‌وگوهای دارای اشارهٔ خوانده‌نشده افزوده شد."
+
+msgid "Move to the next or previous chat with unread mentions"
+msgstr "رفتن به گفت‌وگوی بعدی یا قبلی دارای اشارهٔ خوانده‌نشده"
+
+msgid "No more chats with unread mentions in this direction"
+msgstr "در این جهت گفت‌وگوی دیگری با اشارهٔ خوانده‌نشده وجود ندارد"
+
+msgid "- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle."
+msgstr "- ردیابی پیشرفت انتقال فایل اصلاح شد تا در 100% متوقف شود و در هر چرخهٔ بررسی یک رشتهٔ جدید ایجاد نکند."
+
+msgid "- When Unigram opens, focus now moves automatically to the chat list."
+msgstr "- هنگام باز شدن Unigram، مکان‌نما اکنون به‌طور خودکار به فهرست گفت‌وگوها منتقل می‌شود."
+
+msgid "- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr "- کلید Ctrl+Alt+Up/Down برای حرکت میان گفت‌وگوهای دارای اشارهٔ خوانده‌نشده افزوده شد."
+
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "به‌روزرسانی خودکار اصلاح شد: نسخه‌ها اکنون به‌صورت امن از GitHub دریافت و افزونه دانلودشده پیش از نصب اعتبارسنجی می‌شود."

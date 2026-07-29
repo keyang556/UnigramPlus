@@ -1055,5 +1055,32 @@ msgstr "Zengin ileti desteği eklendi. Zengin iletiler artık odaklandığında 
 msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
 msgstr "Zengin iletilerdeki bağlantılar ve karma içerik korunur; bağlantılar göz atılabilir pencereden etkinleştirilebilir."
 
+msgid "Automatically move focus to the chat list when Unigram starts"
+msgstr "Unigram başladığında odağı otomatik olarak sohbet listesine taşı"
+
+msgid ""
+"- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle.\n"
+"- When Unigram opens, focus now moves automatically to the chat list.\n"
+"- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr ""
+"- Dosya aktarım ilerlemesi takibi %100’de duracak ve her yoklama döngüsünde yeni bir iş parçacığı oluşturmayacak şekilde düzeltildi.\n"
+"- Unigram açıldığında odak artık otomatik olarak sohbet listesine taşınıyor.\n"
+"- Okunmamış bahsetmeleri olan sohbetler arasında dolaşmak için Ctrl+Alt+Up/Down eklendi."
+
+msgid "Move to the next or previous chat with unread mentions"
+msgstr "Okunmamış bahsetmeleri olan sonraki veya önceki sohbete git"
+
+msgid "No more chats with unread mentions in this direction"
+msgstr "Bu yönde okunmamış bahsetmeleri olan başka sohbet yok"
+
+msgid "- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle."
+msgstr "- Dosya aktarım ilerlemesi takibi %100’de duracak ve her yoklama döngüsünde yeni bir iş parçacığı oluşturmayacak şekilde düzeltildi."
+
+msgid "- When Unigram opens, focus now moves automatically to the chat list."
+msgstr "- Unigram açıldığında odak artık otomatik olarak sohbet listesine taşınıyor."
+
+msgid "- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr "- Okunmamış bahsetmeleri olan sohbetler arasında dolaşmak için Ctrl+Alt+Up/Down eklendi."
+
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "Otomatik güncellemeler düzeltildi: sürümler artık GitHub'dan güvenli bir şekilde alınıyor ve indirilen eklenti kurulumdan önce doğrulanıyor."

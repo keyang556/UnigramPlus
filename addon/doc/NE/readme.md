@@ -40,6 +40,7 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **Ctrl+Alt+Up/Down** | UnigramPlus | नपढिएका उल्लेख भएको अर्को वा अघिल्लो च्याटमा जानुहोस् |
 | **ALT+1** | UnigramPlus | फोकस लाई च्याट सूचीमा लैजानुहोस |
 | **ALT+2** | UnigramPlus | हाल चलिरहेको च्याटमा फोकसलाई लैजानुहोस |
 | **ALT+3** | UnigramPlus | 'नपढिएका सन्देशहरू' लेबलमा फोकस सार्नुहोस् |
@@ -395,6 +396,12 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 ###संस्करण १.१.७
 
 टर्की स्थानीयकरण थपियो।
+
+### Version 5.6.1
+
+* फाइल स्थानान्तरण प्रगति ट्र्याकिङलाई 100% मा रोक्न र प्रत्येक जाँच चक्रमा नयाँ थ्रेड नबनाउन सुधार गरियो।
+* Unigram खोल्दा फोकस अब स्वतः च्याट सूचीमा सर्छ।
+* नपढिएका उल्लेख भएका च्याटहरूमा जान Ctrl+Alt+Up/Down थपियो।
 
 ### Version 5.6.0
 

@@ -42,6 +42,7 @@ And remember that everyone who read this line thought that someone will definite
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **Ctrl+Alt+Up/Down** | UnigramPlus | Move to the next or previous chat with unread mentions |
 | **ALT+1** | UnigramPlus | Move focus to chat list |
 | **ALT+2** | UnigramPlus | Move focus to the last message in an open chat |
 | **ALT+3** | UnigramPlus | Move focus to 'unread messages' label |
@@ -176,6 +177,12 @@ And remember that everyone who read this line thought that someone will definite
 <!-- shortcut-table-end -->
 
 ## List of changes:
+
+### Version 5.6.1
+
+* Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle.
+* When Unigram opens, focus now moves automatically to the chat list.
+* Added Ctrl+Alt+Up/Down to move through chats with unread mentions.
 
 ### Version 5.6.0
 

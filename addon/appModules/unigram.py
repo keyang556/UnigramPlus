@@ -60,6 +60,8 @@ _VOICE_RECORDING_POLL_INTERVAL = .2
 # Allow Unigram time to finalize the recording and insert its outgoing message.
 # A sent message is still reported immediately; only cancellation waits this long.
 _VOICE_RECORDING_OUTCOME_POLL_LIMIT = 25  # 5 seconds at the interval above.
+_AUTO_FOCUS_CHAT_LIST_DELAY_MS = 300
+_AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT = 10
 
 
 def _normalized_text(text):
@@ -129,10 +131,14 @@ class File_transfer_progress_tracking:
 	# Unigram 12.7 exposes file transfer progress on FileButton's UIA Value
 	# pattern while the control type is Button, not ProgressBar. Handle value
 	# changes directly and keep a focused-message polling fallback for cases where
-	# Unigram does not raise a fresh event.
+	# Unigram does not raise a fresh event. Poll on NVDA's main event loop: using
+	# threading.Timer here creates a fresh native thread for every sample.
 	active = False
 	interval = .35
 	app = None
+	_timer = None
+	_scheduled = False
+	_generation = 0
 	_step = 10
 	_last_value = {}  # key -> (percentage, fresh_val_str)
 	_last_logged_id = None
@@ -356,6 +362,10 @@ class File_transfer_progress_tracking:
 			try: log.info("File_transfer_progress_tracking: announcing %d%%" % percentage)
 			except: pass
 			queueHandler.queueFunction(queueHandler.eventQueue, speech.speakMessage, cls._format_percentage(percentage))
+		if percentage == 100:
+			# A completed transfer is terminal for this polling session. A future
+			# transfer starts a new session from its value-change or focus event.
+			cls.stop()
 		return True
 
 	@classmethod
@@ -363,20 +373,17 @@ class File_transfer_progress_tracking:
 		if not cls.active: return
 		try:
 			obj = api.getFocusObject()
-			if obj is None:
-				Timer(cls.interval, cls.tick).start(); return
+			if obj is None: return
 			if not cls._is_unigram_object(obj):
 				cls._last_logged_id = None
-				Timer(cls.interval, cls.tick).start(); return
+				return
 			if not cls._is_in_foreground(obj):
 				cls._last_logged_id = None
-				Timer(cls.interval, cls.tick).start(); return
-			if conf.get("voicingPerformanceIndicators") == "none":
-				Timer(cls.interval, cls.tick).start(); return
+				return
+			if conf.get("voicingPerformanceIndicators") == "none": return
 			# Search the focused message subtree for Unigram FileButton progress.
 			obj = cls._find_transfer_button(obj)
-			if not obj:
-				Timer(cls.interval, cls.tick).start(); return
+			if not obj: return
 			# Log once per focused object so we can verify detection without spam.
 			obj_id = id(obj)
 			if cls._last_logged_id != obj_id:
@@ -391,21 +398,57 @@ class File_transfer_progress_tracking:
 		except Exception as e:
 			try: log.debug("File_transfer_progress_tracking error: %r" % e)
 			except: pass
-		Timer(cls.interval, cls.tick).start()
+		finally:
+			cls._schedule_next()
+
+	@classmethod
+	def _scheduled_tick(cls, generation):
+		if generation != cls._generation:
+			return
+		cls._scheduled = False
+		cls._timer = None
+		cls.tick()
+
+	@classmethod
+	def _schedule_next(cls):
+		if not cls.active or cls._scheduled:
+			return
+		try:
+			import core
+			generation = cls._generation
+			cls._scheduled = True
+			cls._timer = core.callLater(
+				round(cls.interval * 1000),
+				lambda: cls._scheduled_tick(generation),
+			)
+		except Exception as e:
+			cls._scheduled = False
+			cls._timer = None
+			cls.active = False
+			try: log.debug("Could not schedule file-transfer progress tracking: %r" % e)
+			except Exception: pass
 
 	@classmethod
 	def start(cls):
 		if cls.active: return
+		cls._generation += 1
 		cls.active = True
 		cls._last_value = {}
 		cls._last_logged_id = None
 		try: log.info("File_transfer_progress_tracking started (mode=%s)" % conf.get("voicingPerformanceIndicators"))
 		except Exception: pass
-		Timer(cls.interval, cls.tick).start()
+		cls._schedule_next()
 
 	@classmethod
 	def stop(cls):
 		cls.active = False
+		cls._generation += 1
+		timer = cls._timer
+		cls._timer = None
+		cls._scheduled = False
+		if timer is not None:
+			try: timer.Stop()
+			except Exception: pass
 		cls._last_value = {}
 		cls._last_logged_id = None
 
@@ -414,6 +457,11 @@ class File_transfer_progress_button:
 	def event_valueChange(self):
 		if conf.get("voicingPerformanceIndicators") == "none":
 			return
+		percentage = File_transfer_progress_tracking._parse_percentage(
+			File_transfer_progress_tracking._read_fresh_value(self)
+		)
+		if percentage is not None and percentage < 100 and not File_transfer_progress_tracking.active:
+			File_transfer_progress_tracking.start()
 		if File_transfer_progress_tracking.handle_progress(self, speak_first=True):
 			return
 		return super().event_valueChange()
@@ -812,6 +860,62 @@ class EditableText(editableText.EditableText):
 		return super().script_caret_moveByLine(gesture)
 
 
+class ChatListItem(ListItem):
+	# Current Unigram uses EB00 for a chat mention. E986 is retained for older
+	# ChatCell templates whose default XAML glyph is still exposed through UIA.
+	_MENTION_GLYPHS = {"\ueb00", "\ue986"}
+	_MAX_BADGE_SEARCH_DEPTH = 6
+
+	@classmethod
+	def _has_unread_mentions(cls, obj):
+		queue = [(obj, 0)]
+		seen = set()
+		while queue:
+			node, depth = queue.pop(0)
+			node_id = id(node)
+			if node_id in seen:
+				continue
+			seen.add(node_id)
+			try: automation_id = node.UIAAutomationId
+			except Exception: automation_id = ""
+			if automation_id == "UnreadMentionsLabel":
+				try: glyph = (node.name or node.value or "").strip()
+				except Exception: glyph = ""
+				if glyph in cls._MENTION_GLYPHS:
+					return True
+			if depth >= cls._MAX_BADGE_SEARCH_DEPTH:
+				continue
+			try: children = node.children
+			except Exception: children = ()
+			for child in children:
+				queue.append((child, depth + 1))
+		return False
+
+	def _move_to_chat_with_unread_mentions(self, forward):
+		try: candidate = self.next if forward else self.previous
+		except Exception: candidate = None
+		visited = set()
+		while candidate and id(candidate) not in visited:
+			visited.add(id(candidate))
+			if self._has_unread_mentions(candidate):
+				candidate.setFocus()
+				return True
+			try: candidate = candidate.next if forward else candidate.previous
+			except Exception: candidate = None
+		message(_("No more chats with unread mentions in this direction"))
+		return False
+
+	# Translators: Input gesture description for Ctrl+Alt+Up/Down in the chat list.
+	@script(
+		description=_("Move to the next or previous chat with unread mentions"),
+		gestures=["kb:control+alt+downArrow", "kb:control+alt+upArrow"],
+	)
+	def script_moveToChatWithUnreadMentions(self, gesture):
+		try: identifier = gesture.identifiers[0].casefold()
+		except Exception: identifier = ""
+		self._move_to_chat_with_unread_mentions("downarrow" in identifier)
+
+
 class AppModule(appModuleHandler.AppModule):
 	
 	def __init__(self, *args, **kwargs):
@@ -822,6 +926,10 @@ class AppModule(appModuleHandler.AppModule):
 		self._voiceRecordingMonitorRunning = False
 		self._voiceRecordingButton = None
 		self._voiceRecordingDiscoveryFocus = None
+		self._autoFocusChatListDone = False
+		self._autoFocusChatListScheduled = False
+		self._autoFocusChatListAttempts = 0
+		self._autoFocusChatListGeneration = 0
 		if not self.isUnigramWindow:
 			self._fallbackAppModule = None
 			fallbackClass = _load_telegram_desktop_fallback_class()
@@ -836,10 +944,10 @@ class AppModule(appModuleHandler.AppModule):
 		if conf.get("automatically announce new messages") and not Chat_update.active: Chat_update.restore(self)
 		if conf.get("automatically announce activity in chats") and not Title_change_tracking.active: Title_change_tracking.restore(self.saved_items)
 		if conf.get("play_typing_sound") and not Typing_sound_tracking.active: Typing_sound_tracking.restore(self.saved_items)
-		# Always start the file-transfer progress tracker. The polling tick checks
-		# the current voicingPerformanceIndicators value itself, so users can toggle
-		# the announcement on and off without restarting Unigram or NVDA.
-		if not File_transfer_progress_tracking.active:
+		if (
+			conf.get("voicingPerformanceIndicators") != "none"
+			and not File_transfer_progress_tracking.active
+		):
 			File_transfer_progress_tracking.start()
 		self.app_version = self.productVersion
 		# assign hotkeys for the function of reading messages by numbering
@@ -853,7 +961,72 @@ class AppModule(appModuleHandler.AppModule):
 
 	def terminate(self):
 		self._voiceRecordingMonitorRunning = False
+		self._autoFocusChatListGeneration += 1
+		self._autoFocusChatListScheduled = False
+		if getattr(self, "isUnigramWindow", False):
+			File_transfer_progress_tracking.stop()
 		super().terminate()
+
+	def event_appModule_gainFocus(self):
+		if not getattr(self, "isUnigramWindow", False):
+			return
+		self._autoFocusChatListAttempts = 0
+		self._scheduleAutoFocusChatList()
+
+	def _scheduleAutoFocusChatList(self):
+		if (
+			self._autoFocusChatListDone
+			or self._autoFocusChatListScheduled
+			or not conf.get("autoFocusChatList")
+		):
+			return
+		try:
+			import core
+			generation = self._autoFocusChatListGeneration
+			self._autoFocusChatListScheduled = True
+			core.callLater(
+				_AUTO_FOCUS_CHAT_LIST_DELAY_MS,
+				self._autoFocusChatListTick,
+				generation,
+			)
+		except Exception as e:
+			self._autoFocusChatListScheduled = False
+			try: log.debug("Could not schedule automatic chat-list focus: %r" % e)
+			except Exception: pass
+
+	def _autoFocusChatListTick(self, generation):
+		if generation != self._autoFocusChatListGeneration:
+			return
+		self._autoFocusChatListScheduled = False
+		if self._autoFocusChatListDone or not conf.get("autoFocusChatList"):
+			return
+		try:
+			focus = api.getFocusObject()
+			if (
+				not focus
+				or getattr(focus, "appModule", None) is not self
+				or not focus.isInForeground
+			):
+				return
+			if (
+				focus.role == Role.LISTITEM
+				and getattr(getattr(focus, "parent", None), "UIAAutomationId", "") == "ChatsList"
+			):
+				self._autoFocusChatListDone = True
+				return
+			# Mark first to prevent the focus event raised by setFocus() from
+			# scheduling a duplicate callback. Restore it if the list is not ready.
+			self._autoFocusChatListDone = True
+			if self.script_toChatList(None, arg=True):
+				return
+			self._autoFocusChatListDone = False
+		except Exception as e:
+			self._autoFocusChatListDone = False
+			try: log.debug("Could not focus the chat list automatically: %r" % e)
+			except Exception: pass
+		self._autoFocusChatListAttempts += 1
+		if self._autoFocusChatListAttempts < _AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT:
+			self._scheduleAutoFocusChatList()
 
 	def getScript(self, gesture):
 		if not getattr(self, "isUnigramWindow", False):
@@ -1035,7 +1208,7 @@ class AppModule(appModuleHandler.AppModule):
 		if lastFocusChatElement and lastFocusChatElement.location and lastFocusChatElement.location.width:
 			if obj == lastFocusChatElement: message(obj.name)
 			else: lastFocusChatElement.setFocus()
-			return
+			return True
 		try: targetList = self.getChatsListElement()
 		except: targetList = None
 		if not targetList:
@@ -1054,8 +1227,9 @@ class AppModule(appModuleHandler.AppModule):
 			if targetList.role == Role.BUTTON and targetList.next: targetList =  targetList.next
 			if targetList.role and targetList.role == Role.LISTITEM:
 				targetList.setFocus()
-				return
+				return True
 		if not arg: message(_("Chat list is empty"))
+		return False
 
 	# Go to the last message in the chat
 	@script(description=_("Move focus to the last message in an open chat"), gesture="kb:ALT+2")
@@ -1845,6 +2019,7 @@ class AppModule(appModuleHandler.AppModule):
 					pass
 			nextHandler()
 			return
+		self._scheduleAutoFocusChatList()
 		if conf.get("automatically announce new messages") and Chat_update.pouse:
 			# Since the timer is suspended when the program window is minimized, it needs to be restored as soon as the focus is set on some element in the window
 			Chat_update.restore(self)
@@ -1853,6 +2028,16 @@ class AppModule(appModuleHandler.AppModule):
 			Title_change_tracking.restore(self.saved_items)
 		if conf.get("play_typing_sound") and Typing_sound_tracking.pouse:
 			Typing_sound_tracking.restore(self.saved_items)
+		if not File_transfer_progress_tracking.active:
+			try:
+				transfer = File_transfer_progress_tracking._find_transfer_button(obj)
+				percentage = File_transfer_progress_tracking._parse_percentage(
+					File_transfer_progress_tracking._read_fresh_value(transfer)
+				) if transfer else None
+				if percentage is not None and percentage < 100:
+					File_transfer_progress_tracking.start()
+			except Exception:
+				pass
 		if self.isSkipName:
 			speech.cancelSpeech()
 			self.isSkipName -= 1
@@ -2019,7 +2204,10 @@ class AppModule(appModuleHandler.AppModule):
 				elif parent.UIAAutomationId == "Navigation":
 					clsList.insert(0, SettingsPanelListItem)
 					return True
-				elif parent.UIAAutomationId in ("ChatsList", "TopicList"): return
+				elif parent.UIAAutomationId == "ChatsList":
+					clsList.insert(0, ChatListItem)
+					return
+				elif parent.UIAAutomationId == "TopicList": return
 				elif obj.name.startswith("forumTopic {"): return
 				# We check whether the element contains phrases that will help us identify it as a message
 				keywords = keywordsInMessages.get(conf.get("lang"), keywordsInMessages["en"])

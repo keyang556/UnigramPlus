@@ -269,6 +269,11 @@ class UnigramPlusSettings(SettingsPanel):
 		# self.lang = settingsSizerHelper.addLabeledControl(_("Interface language in Unigram:"), wx.Choice, choices=[listLanguages[item] for item in listLanguages])
 		self.lang = settingsSizerHelper.addLabeledControl(_("Interface language in Unigram:"), wx.Choice, choices=list(listLanguages.values()))
 		self.lang.SetStringSelection(listLanguages[conf.get("lang")])
+		# Move focus to the chat list after Unigram's main UI finishes loading
+		self.autoFocusChatList = settingsSizerHelper.addItem(
+			wx.CheckBox(self, label=_("Automatically move focus to the chat list when Unigram starts"))
+		)
+		self.autoFocusChatList.SetValue(conf.get("autoFocusChatList"))
 		# Chat type announce mode
 		self.voiceTypeAfterChatName = settingsSizerHelper.addLabeledControl(_("Speak the type of chat in the chat list:"), wx.Choice, choices=[self.listVoiceTypeAfterChatName[item] for item in self.listVoiceTypeAfterChatName])
 		self.voiceTypeAfterChatName.SetStringSelection(self.listVoiceTypeAfterChatName[conf.get("voiceTypeAfterChatName")])
@@ -342,6 +347,7 @@ class UnigramPlusSettings(SettingsPanel):
 
 	def onSave(self):
 		conf.set("voiceTypeAfterChatName", self.get_key(self.listVoiceTypeAfterChatName, self.voiceTypeAfterChatName.GetStringSelection()))
+		conf.set("autoFocusChatList", self.autoFocusChatList.IsChecked())
 		conf.set("saySenderName", self.get_key(self.listSaySenderName, self.saySenderName.GetStringSelection()))
 		conf.set("unreadBeforeMessageContent", self.unreadBeforeMessageContent.IsChecked())
 		conf.set("notify administrators in messages",

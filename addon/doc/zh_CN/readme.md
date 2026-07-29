@@ -40,6 +40,7 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | 下一个聊天 |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | 上一个聊天 |
+| **Ctrl+Alt+Up/Down** | UnigramPlus | 移到下一个或上一个含未读提及的聊天 |
 | **ALT+1** | UnigramPlus | 将焦点移到聊天列表 |
 | **ALT+2** | UnigramPlus | 将焦点移到已打开聊天中的最后一条消息 |
 | **ALT+3** | UnigramPlus | 将焦点移到“未读消息”标签 |
@@ -174,6 +175,12 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 <!-- shortcut-table-end -->
 
 ## 版本变更
+
+### 版本 5.6.1
+
+* 修复文件传输进度跟踪：进度达到 100% 时停止，并且不再于每次轮询时创建新线程。
+* 打开 Unigram 时，焦点现在会自动移到聊天列表。
+* 新增 Ctrl+Alt+Up/Down，用于在含未读提及的聊天之间移动。
 
 ### 版本 5.6.0
 

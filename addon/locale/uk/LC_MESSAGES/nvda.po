@@ -953,5 +953,32 @@ msgstr "Додано підтримку форматованих повідом�
 msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
 msgstr "Посилання та змішаний вміст форматованих повідомлень зберігаються, а посилання можна активувати з вікна перегляду."
 
+msgid "Automatically move focus to the chat list when Unigram starts"
+msgstr "Автоматично переміщувати фокус до списку чатів під час запуску Unigram"
+
+msgid ""
+"- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle.\n"
+"- When Unigram opens, focus now moves automatically to the chat list.\n"
+"- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr ""
+"- Виправлено відстеження прогресу передавання файлів: воно зупиняється на 100% і більше не створює новий потік під час кожного циклу опитування.\n"
+"- Під час відкриття Unigram фокус тепер автоматично переміщується до списку чатів.\n"
+"- Додано Ctrl+Alt+Up/Down для переходу чатами з непрочитаними згадками."
+
+msgid "Move to the next or previous chat with unread mentions"
+msgstr "Перейти до наступного або попереднього чату з непрочитаними згадками"
+
+msgid "No more chats with unread mentions in this direction"
+msgstr "У цьому напрямку більше немає чатів із непрочитаними згадками"
+
+msgid "- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle."
+msgstr "- Виправлено відстеження прогресу передавання файлів: воно зупиняється на 100% і більше не створює новий потік під час кожного циклу опитування."
+
+msgid "- When Unigram opens, focus now moves automatically to the chat list."
+msgstr "- Під час відкриття Unigram фокус тепер автоматично переміщується до списку чатів."
+
+msgid "- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr "- Додано Ctrl+Alt+Up/Down для переходу чатами з непрочитаними згадками."
+
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "Виправлено автоматичне оновлення: випуски тепер безпечно завантажуються з GitHub, а завантажений додаток перевіряється перед встановленням."

@@ -45,6 +45,7 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će neko sigurno po
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **Ctrl+Alt+Up/Down** | UnigramPlus | Prelazak na sledeće ili prethodno ćaskanje sa nepročitanim pominjanjima |
 | **ALT+1** | UnigramPlus | Pomeranje fokusa u listu ćaskanja |
 | **ALT+2** | UnigramPlus | Pomeranje fokusa na poslednju poruku u ćaskanju |
 | **ALT+3** | UnigramPlus | Premeštanje fokusa na oznaku nepročitane poruke |
@@ -449,6 +450,12 @@ This update adds a combination that press "Instant View" button in the message, 
 Added Turkish localization
 
 
+
+### Verzija 5.6.1
+
+* Ispravljeno je praćenje napretka prenosa datoteka tako da se zaustavlja na 100% i više ne pravi novu nit pri svakom ciklusu provere.
+* Kada se Unigram otvori, fokus se sada automatski premešta na listu ćaskanja.
+* Dodat je Ctrl+Alt+Up/Down za kretanje kroz ćaskanja sa nepročitanim pominjanjima.
 
 ### Verzija 5.6.0
 

@@ -769,5 +769,32 @@ msgstr "Byla přidána podpora formátovaných zpráv. Tyto zprávy jsou nyní p
 msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
 msgstr "Odkazy a smíšený obsah ve formátovaných zprávách jsou zachovány a odkazy lze aktivovat z okna pro procházení."
 
+msgid "Automatically move focus to the chat list when Unigram starts"
+msgstr "Automaticky přesunout fokus do seznamu chatů při spuštění Unigramu"
+
+msgid ""
+"- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle.\n"
+"- When Unigram opens, focus now moves automatically to the chat list.\n"
+"- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr ""
+"- Opraveno sledování průběhu přenosu souborů, aby se zastavilo na 100 % a při každém cyklu kontroly již nevytvářelo nové vlákno.\n"
+"- Po otevření Unigramu se fokus automaticky přesune do seznamu chatů.\n"
+"- Přidáno Ctrl+Alt+Up/Down pro pohyb mezi chaty s nepřečtenými zmínkami."
+
+msgid "Move to the next or previous chat with unread mentions"
+msgstr "Přejít na další nebo předchozí chat s nepřečtenými zmínkami"
+
+msgid "No more chats with unread mentions in this direction"
+msgstr "V tomto směru již nejsou žádné chaty s nepřečtenými zmínkami"
+
+msgid "- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle."
+msgstr "- Opraveno sledování průběhu přenosu souborů, aby se zastavilo na 100 % a při každém cyklu kontroly již nevytvářelo nové vlákno."
+
+msgid "- When Unigram opens, focus now moves automatically to the chat list."
+msgstr "- Po otevření Unigramu se fokus automaticky přesune do seznamu chatů."
+
+msgid "- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr "- Přidáno Ctrl+Alt+Up/Down pro pohyb mezi chaty s nepřečtenými zmínkami."
+
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "Automatické aktualizace byly opraveny: vydání jsou nyní bezpečně získávána z GitHubu a stažený doplněk je před instalací ověřen."

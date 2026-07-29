@@ -43,6 +43,7 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **Ctrl+Alt+Up/Down** | UnigramPlus | Premješta se na sljedeći ili prethodni razgovor s nepročitanim spominjanjima |
 | **ALT+1** | UnigramPlus | Premješta fokus na popis razgovora |
 | **ALT+2** | UnigramPlus | Premješta fokus na posljednju poruku u otvorenom razgovoru |
 | **ALT+3** | UnigramPlus | Premješta fokus na oznaku "nepročitane poruke" |
@@ -177,6 +178,12 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 <!-- shortcut-table-end -->
 
 ##Popis promjena:
+
+### Verzija 5.6.1
+
+* Ispravljeno je praćenje napretka prijenosa datoteka tako da se zaustavlja na 100% i više ne stvara novu dretvu u svakom ciklusu provjere.
+* Pri otvaranju Unigrama fokus se sada automatski premješta na popis razgovora.
+* Dodan je Ctrl+Alt+Up/Down za kretanje kroz razgovore s nepročitanim spominjanjima.
 
 ### Verzija 5.6.0
 

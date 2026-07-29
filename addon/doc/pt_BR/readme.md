@@ -40,6 +40,7 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **Ctrl+Alt+Up/Down** | UnigramPlus | Ir para a conversa seguinte ou anterior com menções não lidas |
 | **ALT+1** | UnigramPlus | Mover o foco para a lista de conversação |
 | **ALT+2** | UnigramPlus | Move focus to the last message in an open chat |
 | **ALT+3** | UnigramPlus | Mover o foco para o rótulo de 'mensagens não lidas |
@@ -174,6 +175,12 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 <!-- shortcut-table-end -->
 
 ## Lista de alterações:
+
+### Versão 5.6.1
+
+* Corrigido o acompanhamento do progresso de transferência de arquivos para parar em 100% e não criar mais uma nova thread a cada ciclo de verificação.
+* Ao abrir o Unigram, o foco agora é movido automaticamente para a lista de conversas.
+* Adicionado Ctrl+Alt+Up/Down para percorrer conversas com menções não lidas.
 
 ### Versão 5.6.0
 

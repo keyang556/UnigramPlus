@@ -944,5 +944,32 @@ msgid "Links and mixed content in rich messages are preserved, and links can be 
 msgstr "ကြွယ်ဝသောစာများတွင် လင့်ခ်များနှင့် ရောနှောထားသော အကြောင်းအရာများကို ထိန်းသိမ်းထားပြီး လင့်ခ်များကို ရှာဖွေနိုင်သော ဝင်းဒိုးမှ စတင်အသုံးပြုနိုင်ပါသည်။"
 
 #: changelog.py:9
+msgid "Automatically move focus to the chat list when Unigram starts"
+msgstr "Unigram စတင်သည့်အခါ focus ကို ချတ်စာရင်းသို့ အလိုအလျောက် ရွှေ့ပါ"
+
+msgid ""
+"- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle.\n"
+"- When Unigram opens, focus now moves automatically to the chat list.\n"
+"- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr ""
+"- ဖိုင်လွှဲပြောင်းမှု တိုးတက်မှုခြေရာခံခြင်းကို 100% တွင် ရပ်ပြီး စစ်ဆေးမှုတစ်ကြိမ်စီ၌ thread အသစ် မဖန်တီးတော့အောင် ပြင်ဆင်ထားသည်။\n"
+"- Unigram ဖွင့်သည့်အခါ focus သည် ချတ်စာရင်းသို့ အလိုအလျောက် ရွှေ့သွားသည်။\n"
+"- မဖတ်ရသေးသော ဖော်ပြချက်များပါသည့် ချတ်များအကြား ရွှေ့ရန် Ctrl+Alt+Up/Down ကို ထည့်သွင်းထားသည်။"
+
+msgid "Move to the next or previous chat with unread mentions"
+msgstr "မဖတ်ရသေးသော ဖော်ပြချက်များပါသည့် နောက် သို့မဟုတ် ယခင် ချတ်သို့ ရွှေ့ပါ"
+
+msgid "No more chats with unread mentions in this direction"
+msgstr "ဤဦးတည်ချက်တွင် မဖတ်ရသေးသော ဖော်ပြချက်များပါသည့် ချတ်များ မရှိတော့ပါ"
+
+msgid "- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle."
+msgstr "- ဖိုင်လွှဲပြောင်းမှု တိုးတက်မှုခြေရာခံခြင်းကို 100% တွင် ရပ်ပြီး စစ်ဆေးမှုတစ်ကြိမ်စီ၌ thread အသစ် မဖန်တီးတော့အောင် ပြင်ဆင်ထားသည်။"
+
+msgid "- When Unigram opens, focus now moves automatically to the chat list."
+msgstr "- Unigram ဖွင့်သည့်အခါ focus သည် ချတ်စာရင်းသို့ အလိုအလျောက် ရွှေ့သွားသည်။"
+
+msgid "- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr "- မဖတ်ရသေးသော ဖော်ပြချက်များပါသည့် ချတ်များအကြား ရွှေ့ရန် Ctrl+Alt+Up/Down ကို ထည့်သွင်းထားသည်။"
+
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "အလိုအလျောက် အပ်ဒိတ်များကို ပြင်ဆင်ထားသည်။ ထုတ်ဝေမှုများကို ယခု GitHub မှ လုံခြုံစွာ ရယူပြီး ဒေါင်းလုဒ်လုပ်ထားသော အပိုပရိုဂရမ်ကို မထည့်သွင်းမီ စစ်ဆေးအတည်ပြုသည်။"

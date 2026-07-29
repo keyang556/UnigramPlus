@@ -40,6 +40,7 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **Ctrl+Alt+Up/Down** | UnigramPlus | Aller à l’échange suivant ou précédent contenant des mentions non lues |
 | **ALT+1** | UnigramPlus | Déplacer le focus vers la liste des échanges |
 | **ALT+2** | UnigramPlus | Déplace le focus au dernier message d'un échange ouvert |
 | **ALT+3** | UnigramPlus | Déplacer le focus à l'indicateur de messages non lus |
@@ -174,6 +175,12 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 <!-- shortcut-table-end -->
 
 ##Liste des changements :
+
+### Version 5.6.1
+
+* Correction du suivi de la progression des transferts de fichiers : il s’arrête désormais à 100 % et ne crée plus de nouveau thread à chaque cycle d’interrogation.
+* À l’ouverture d’Unigram, le focus est désormais placé automatiquement dans la liste des échanges.
+* Ajout de Ctrl+Alt+Up/Down pour parcourir les échanges contenant des mentions non lues.
 
 ### Version 5.6.0
 

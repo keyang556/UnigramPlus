@@ -958,5 +958,32 @@ msgstr "新增豐富訊息支援。豐富訊息取得焦點時會被朗讀，並
 msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
 msgstr "豐富訊息中的連結與混合內容會被保留，且可在可瀏覽視窗中啟用連結。"
 
+msgid "Automatically move focus to the chat list when Unigram starts"
+msgstr "Unigram 啟動時自動將焦點移到聊天清單"
+
+msgid ""
+"- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle.\n"
+"- When Unigram opens, focus now moves automatically to the chat list.\n"
+"- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr ""
+"- 修正檔案傳輸進度追蹤：進度到達 100% 時停止，且不再於每次輪詢建立新的執行緒。\n"
+"- 開啟 Unigram 時，焦點現在會自動移到聊天清單。\n"
+"- 新增 Ctrl+Alt+Up/Down，用於瀏覽含未讀提及的聊天室。"
+
+msgid "Move to the next or previous chat with unread mentions"
+msgstr "移到下一個或上一個含未讀提及的聊天"
+
+msgid "No more chats with unread mentions in this direction"
+msgstr "此方向沒有更多含未讀提及的聊天"
+
+msgid "- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle."
+msgstr "- 修正檔案傳輸進度追蹤：進度到達 100% 時停止，且不再於每次輪詢建立新的執行緒。"
+
+msgid "- When Unigram opens, focus now moves automatically to the chat list."
+msgstr "- 開啟 Unigram 時，焦點現在會自動移到聊天清單。"
+
+msgid "- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr "- 新增 Ctrl+Alt+Up/Down，用於瀏覽含未讀提及的聊天室。"
+
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "修正自動更新：現在會從 GitHub 安全取得版本，並在安裝前驗證下載的附加元件。"

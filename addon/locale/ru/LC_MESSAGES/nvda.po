@@ -1000,5 +1000,32 @@ msgstr "Добавлена поддержка форматированных с�
 msgid "Links and mixed content in rich messages are preserved, and links can be activated from the browseable window."
 msgstr "Ссылки и смешанное содержимое форматированных сообщений сохраняются, а ссылки можно активировать из окна просмотра."
 
+msgid "Automatically move focus to the chat list when Unigram starts"
+msgstr "Автоматически перемещать фокус в список чатов при запуске Unigram"
+
+msgid ""
+"- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle.\n"
+"- When Unigram opens, focus now moves automatically to the chat list.\n"
+"- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr ""
+"- Исправлено отслеживание прогресса передачи файлов: оно останавливается на 100% и больше не создаёт новый поток при каждом цикле опроса.\n"
+"- При открытии Unigram фокус теперь автоматически перемещается в список чатов.\n"
+"- Добавлено Ctrl+Alt+Up/Down для перехода по чатам с непрочитанными упоминаниями."
+
+msgid "Move to the next or previous chat with unread mentions"
+msgstr "Перейти к следующему или предыдущему чату с непрочитанными упоминаниями"
+
+msgid "No more chats with unread mentions in this direction"
+msgstr "В этом направлении больше нет чатов с непрочитанными упоминаниями"
+
+msgid "- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle."
+msgstr "- Исправлено отслеживание прогресса передачи файлов: оно останавливается на 100% и больше не создаёт новый поток при каждом цикле опроса."
+
+msgid "- When Unigram opens, focus now moves automatically to the chat list."
+msgstr "- При открытии Unigram фокус теперь автоматически перемещается в список чатов."
+
+msgid "- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+msgstr "- Добавлено Ctrl+Alt+Up/Down для перехода по чатам с непрочитанными упоминаниями."
+
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "Исправлено автоматическое обновление: выпуски теперь безопасно загружаются с GitHub, а загруженное дополнение проверяется перед установкой."

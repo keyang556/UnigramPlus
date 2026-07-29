@@ -9,6 +9,7 @@ DOC_DIR = ROOT / "addon" / "doc"
 REQUIRED_TRANSLATIONS = {
 	"Interface language in Unigram:",
 	"Speak the type of chat in the chat list:",
+	"Automatically move focus to the chat list when Unigram starts",
 	"Say the sender's name in:",
 	"Set voice message recording notification method as:",
 	"Select the progress bar notification level:",
@@ -18,6 +19,13 @@ REQUIRED_TRANSLATIONS = {
 	"Added support for rich messages. Rich messages are now announced when focused and can be opened with Alt+C in a browseable window.",
 	"Links and mixed content in rich messages are preserved, and links can be activated from the browseable window.",
 	"Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation.",
+	"Move to the next or previous chat with unread mentions",
+	"No more chats with unread mentions in this direction",
+	(
+		"- Fixed file-transfer progress tracking so it stops at 100% and no longer creates a new thread on every polling cycle.\n"
+		"- When Unigram opens, focus now moves automatically to the chat list.\n"
+		"- Added Ctrl+Alt+Up/Down to move through chats with unread mentions."
+	),
 }
 
 
@@ -63,20 +71,29 @@ def test_required_strings_are_translated_in_every_locale():
 		assert not missing, f"{locale_dir.name} has missing translations: {missing}"
 
 
-def test_release_version_is_560():
+def test_release_version_is_561():
 	build_vars = (ROOT / "buildVars.py").read_text(encoding="utf-8")
-	assert 'addon_version="5.6.0"' in build_vars
+	manifest = (ROOT / "addon" / "manifest.ini").read_text(encoding="utf-8")
+	pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+
+	assert 'addon_version="5.6.1"' in build_vars
+	assert "version = 5.6.1" in manifest
+	assert 'version = "5.6.1"' in pyproject
 
 
-def test_every_localized_manual_has_560_559_and_updated_558_changelogs():
+def test_every_localized_manual_has_561_560_559_and_updated_558_changelogs():
 	manuals = [ROOT / "readme.md", *sorted(DOC_DIR.glob("*/readme.md"))]
 	assert len(manuals) == 17
 	for manual in manuals:
 		text = manual.read_text(encoding="utf-8")
-		version_560 = text.index("5.6.0")
+		version_561 = text.index("5.6.1")
+		version_560 = text.index("5.6.0", version_561)
 		version_559 = text.index("5.5.9", version_560)
 		version_558 = text.index("5.5.8", version_559)
+		section_561 = text[version_561:version_560]
 		section_560 = text[version_560:version_559]
+		assert "Ctrl+Alt+Up/Down" in section_561, manual
+		assert section_561.count("\n* ") == 3, manual
 		assert "Ctrl+R" in section_560, manual
 		assert section_560.count("\n* ") == 3, manual
 		assert "Alt+C" in text[version_559:version_558], manual

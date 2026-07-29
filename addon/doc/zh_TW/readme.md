@@ -40,6 +40,7 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | 下一個聊天 |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | 上一個聊天 |
+| **Ctrl+Alt+Up/Down** | UnigramPlus | 移到下一個或上一個含未讀提及的聊天 |
 | **ALT+1** | UnigramPlus | 將焦點移到聊天清單 |
 | **ALT+2** | UnigramPlus | 將焦點移到已開啟聊天中的最後一則訊息 |
 | **ALT+3** | UnigramPlus | 將焦點移到「未讀訊息」標籤 |
@@ -174,6 +175,12 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 <!-- shortcut-table-end -->
 
 ## 版本變更
+
+### 版本 5.6.1
+
+* 修正檔案傳輸進度追蹤：進度到達 100% 時停止，且不再於每次輪詢建立新的執行緒。
+* 開啟 Unigram 時，焦點現在會自動移到聊天清單。
+* 新增 Ctrl+Alt+Up/Down，用於瀏覽含未讀提及的聊天室。
 
 ### 版本 5.6.0
 

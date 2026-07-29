@@ -41,6 +41,7 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **Ctrl+Alt+Up/Down** | UnigramPlus | Mergi la chatul următor sau anterior cu mențiuni necitite |
 | **ALT+1** | UnigramPlus | Mută focalizarea pe lista chat-urilor |
 | **ALT+2** | UnigramPlus | Mută focalizarea la ultimul mesaj dintr-un chat deschis |
 | **ALT+3** | UnigramPlus | Mută focalizarea pe eticheta "Mesaje necitite" |
@@ -175,6 +176,12 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 <!-- shortcut-table-end -->
 
 ##Lista de modificări:
+
+### Versiunea 5.6.1
+
+* A fost corectată urmărirea progresului transferului de fișiere, astfel încât să se oprească la 100% și să nu mai creeze un fir nou la fiecare ciclu de verificare.
+* La deschiderea Unigram, focalizarea se mută acum automat pe lista de chat-uri.
+* A fost adăugat Ctrl+Alt+Up/Down pentru deplasarea prin chat-urile cu mențiuni necitite.
 
 ### Versiunea 5.6.0
 
