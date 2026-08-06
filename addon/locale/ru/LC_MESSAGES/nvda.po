@@ -1029,3 +1029,24 @@ msgstr "- Добавлено Ctrl+Alt+Up/Down для перехода по ча�
 
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "Исправлено автоматическое обновление: выпуски теперь безопасно загружаются с GitHub, а загруженное дополнение проверяется перед установкой."
+
+msgid "Toggle whether message headers are announced before or after the message content"
+msgstr "Переключить озвучивание заголовков сообщений до или после содержимого сообщения"
+
+msgid "Message headers will be announced after the message content"
+msgstr "Заголовки сообщений будут произноситься после содержимого сообщения"
+
+msgid "Message headers will be announced before the message content"
+msgstr "Заголовки сообщений будут произноситься перед содержимым сообщения"
+
+msgid "No search results"
+msgstr "Нет результатов поиска"
+
+msgid ""
+"- Fixed Ctrl+Alt+Left/Right so they seek the current voice message playback again.\n"
+"- Fixed Alt+I so it moves to Unigram's inline chat search results list.\n"
+"- Added Alt+[ to announce message headers after the content, so file names can be announced before sender names in profile media sections."
+msgstr ""
+"- Исправлены Ctrl+Alt+Стрелка влево/вправо: они снова перематывают голосовое сообщение, которое сейчас воспроизводится.\n"
+"- Исправлен Alt+I: теперь он перемещает фокус во встроенный список результатов поиска в чате Unigram.\n"
+"- Добавлен Alt+[, который озвучивает заголовки сообщений после содержимого, благодаря чему в разделах медиа профиля имена файлов могут произноситься перед именами отправителей."

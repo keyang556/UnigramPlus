@@ -114,6 +114,7 @@
 | **Right Arrow** | UnigramPlus | Move to the next media attachment in the focused message |
 | **ALT+C** | UnigramPlus | متن پیام را در پنجره نمایش بده. |
 | **ALT+W** | UnigramPlus | Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information. |
+| **ALT+[** | UnigramPlus | تغییر محل خواندن سرآیندهای پیام به پیش یا پس از محتوای پیام |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | فشار دادن دکمه "ضمیمه کردن رسانه" |
 | **Ctrl+N** | UnigramPlus | فشار دادن دکمه "گفتگوی جدید " |
@@ -392,6 +393,12 @@
 بومی سازی ترکی اضافه شد.
 
 
+
+### نسخه 5.6.2
+
+* عملکرد Ctrl+Alt+Left/Right Arrow برای عقب و جلو رفتن در پیام صوتی هنگام پخش اصلاح شد.
+* میانبر Alt+I اصلاح شد تا به فهرست درون‌خطی نتایج جست‌وجوی گفت‌وگو برود.
+* میانبر Alt+[ برای خواندن سرآیندهای پیام پیش یا پس از محتوای پیام افزوده شد. وقتی سرآیندها پس از محتوا قرار می‌گیرند، در بخش‌های فایل ابتدا نام فایل‌ها خوانده می‌شود.
 
 ### نسخه 5.6.1
 

@@ -1084,3 +1084,24 @@ msgstr "- Okunmamış bahsetmeleri olan sohbetler arasında dolaşmak için Ctrl
 
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "Otomatik güncellemeler düzeltildi: sürümler artık GitHub'dan güvenli bir şekilde alınıyor ve indirilen eklenti kurulumdan önce doğrulanıyor."
+
+msgid "Toggle whether message headers are announced before or after the message content"
+msgstr "Mesaj başlıklarının mesaj içeriğinden önce mi sonra mı seslendirileceğini değiştir"
+
+msgid "Message headers will be announced after the message content"
+msgstr "Mesaj başlıkları mesaj içeriğinden sonra seslendirilecek"
+
+msgid "Message headers will be announced before the message content"
+msgstr "Mesaj başlıkları mesaj içeriğinden önce seslendirilecek"
+
+msgid "No search results"
+msgstr "Arama sonucu yok"
+
+msgid ""
+"- Fixed Ctrl+Alt+Left/Right so they seek the current voice message playback again.\n"
+"- Fixed Alt+I so it moves to Unigram's inline chat search results list.\n"
+"- Added Alt+[ to announce message headers after the content, so file names can be announced before sender names in profile media sections."
+msgstr ""
+"- Ctrl+Alt+Sol/Sağ, oynatılmakta olan sesli mesajda yeniden ileri veya geri saracak şekilde düzeltildi.\n"
+"- Alt+I, odağı Unigram'ın sohbet içi arama sonuçları listesine taşıyacak şekilde düzeltildi.\n"
+"- Mesaj başlıklarını içerikten sonra seslendirmek için Alt+[ eklendi; böylece profil medya bölümlerinde dosya adları gönderen adlarından önce seslendirilebilir."

@@ -1065,3 +1065,24 @@ msgstr "- تمت إضافة Ctrl+Alt+Up/Down للتنقل بين الدردشا�
 
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "تم إصلاح التحديثات التلقائية: تُجلب الإصدارات الآن بأمان من GitHub، ويُتحقق من الإضافة التي تم تنزيلها قبل تثبيتها."
+
+msgid "Toggle whether message headers are announced before or after the message content"
+msgstr "تبديل الإعلان عن رؤوس الرسائل قبل محتوى الرسالة أو بعده"
+
+msgid "Message headers will be announced after the message content"
+msgstr "سيتم الإعلان عن رؤوس الرسائل بعد محتوى الرسالة"
+
+msgid "Message headers will be announced before the message content"
+msgstr "سيتم الإعلان عن رؤوس الرسائل قبل محتوى الرسالة"
+
+msgid "No search results"
+msgstr "لا توجد نتائج بحث"
+
+msgid ""
+"- Fixed Ctrl+Alt+Left/Right so they seek the current voice message playback again.\n"
+"- Fixed Alt+I so it moves to Unigram's inline chat search results list.\n"
+"- Added Alt+[ to announce message headers after the content, so file names can be announced before sender names in profile media sections."
+msgstr ""
+"- أُصلح Ctrl+Alt+Left/Right ليعود إلى تغيير موضع تشغيل الرسالة الصوتية الحالية.\n"
+"- أُصلح Alt+I لينتقل إلى قائمة نتائج البحث المضمّنة في دردشة Unigram.\n"
+"- أُضيف Alt+[ للإعلان عن رؤوس الرسائل بعد المحتوى، بحيث يمكن الإعلان عن أسماء الملفات قبل أسماء المرسلين في أقسام الوسائط بالملف الشخصي."

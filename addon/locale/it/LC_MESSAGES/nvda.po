@@ -1131,3 +1131,24 @@ msgstr "- Aggiunto Ctrl+Alt+Up/Down per spostarsi tra le chat con menzioni non l
 
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "Corretti gli aggiornamenti automatici: le versioni ora vengono recuperate in modo sicuro da GitHub e il componente aggiuntivo scaricato viene convalidato prima dell'installazione."
+
+msgid "Toggle whether message headers are announced before or after the message content"
+msgstr "Alterna l'annuncio delle intestazioni dei messaggi prima o dopo il contenuto del messaggio"
+
+msgid "Message headers will be announced after the message content"
+msgstr "Le intestazioni dei messaggi verranno annunciate dopo il contenuto del messaggio"
+
+msgid "Message headers will be announced before the message content"
+msgstr "Le intestazioni dei messaggi verranno annunciate prima del contenuto del messaggio"
+
+msgid "No search results"
+msgstr "Nessun risultato di ricerca"
+
+msgid ""
+"- Fixed Ctrl+Alt+Left/Right so they seek the current voice message playback again.\n"
+"- Fixed Alt+I so it moves to Unigram's inline chat search results list.\n"
+"- Added Alt+[ to announce message headers after the content, so file names can be announced before sender names in profile media sections."
+msgstr ""
+"- Corretti Ctrl+Alt+Sinistra/Destra affinché tornino a spostare la posizione di riproduzione del messaggio vocale corrente.\n"
+"- Corretto Alt+I affinché sposti il focus sull'elenco integrato dei risultati di ricerca nella chat di Unigram.\n"
+"- Aggiunto Alt+[ per annunciare le intestazioni dei messaggi dopo il contenuto, così che nelle sezioni multimediali del profilo i nomi dei file possano essere annunciati prima dei nomi dei mittenti."

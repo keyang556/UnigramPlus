@@ -1023,3 +1023,24 @@ msgstr "- Ajout de Ctrl+Alt+Up/Down pour parcourir les échanges contenant des m
 
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "Correction des mises à jour automatiques : les versions sont désormais récupérées de manière sécurisée depuis GitHub et l'extension téléchargée est validée avant son installation."
+
+msgid "Toggle whether message headers are announced before or after the message content"
+msgstr "Basculer l’annonce des en-têtes de messages avant ou après le contenu du message"
+
+msgid "Message headers will be announced after the message content"
+msgstr "Les en-têtes des messages seront annoncés après le contenu du message"
+
+msgid "Message headers will be announced before the message content"
+msgstr "Les en-têtes des messages seront annoncés avant le contenu du message"
+
+msgid "No search results"
+msgstr "Aucun résultat de recherche"
+
+msgid ""
+"- Fixed Ctrl+Alt+Left/Right so they seek the current voice message playback again.\n"
+"- Fixed Alt+I so it moves to Unigram's inline chat search results list.\n"
+"- Added Alt+[ to announce message headers after the content, so file names can be announced before sender names in profile media sections."
+msgstr ""
+"- Correction de Ctrl+Alt+Gauche/Droite afin de pouvoir à nouveau avancer ou reculer dans la lecture du message vocal en cours.\n"
+"- Correction de Alt+I afin de déplacer le focus vers la liste intégrée des résultats de recherche dans le chat d’Unigram.\n"
+"- Ajout de Alt+[ pour annoncer les en-têtes des messages après le contenu, afin que les noms de fichiers puissent être annoncés avant les noms des expéditeurs dans les sections multimédias du profil."

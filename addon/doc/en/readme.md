@@ -115,6 +115,7 @@ And remember that everyone who read this line thought that someone will definite
 | **Right Arrow** | UnigramPlus | Move to the next media attachment in the focused message |
 | **ALT+C** | UnigramPlus | Show message text in popup window |
 | **ALT+W** | UnigramPlus | Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information. |
+| **ALT+[** | UnigramPlus | Toggle whether message headers are announced before or after the message content |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | Press "Attach file" button |
 | **Ctrl+N** | UnigramPlus | Press "New conversation" button |
@@ -177,6 +178,12 @@ And remember that everyone who read this line thought that someone will definite
 <!-- shortcut-table-end -->
 
 ## List of changes:
+
+### Version 5.6.2
+
+* Fixed Ctrl+Alt+Left/Right so they seek the current voice message playback again.
+* Fixed Alt+I so it moves to Unigram's inline chat search results list.
+* Added Alt+[ to announce message headers after the content, so file names can be announced before sender names in profile media sections.
 
 ### Version 5.6.1
 

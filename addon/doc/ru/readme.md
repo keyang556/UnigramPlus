@@ -115,6 +115,7 @@
 | **Right Arrow** | UnigramPlus | Move to the next media attachment in the focused message |
 | **ALT+C** | UnigramPlus | Показать текст сообщения во всплывающем окне |
 | **ALT+W** | UnigramPlus | Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information. |
+| **ALT+[** | UnigramPlus | Переключить озвучивание заголовков сообщений до или после содержимого сообщения |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | Нажать кнопку "Прикрепить файл" |
 | **Ctrl+N** | UnigramPlus | Нажать кнопку "Новая беседа" |
@@ -464,6 +465,12 @@
 Добавлена Турецкая локализация.
 
 
+
+### Версия 5.6.2
+
+* Исправлена перемотка воспроизводимого голосового сообщения назад и вперёд с помощью Ctrl+Alt+Left/Right Arrow.
+* Исправлено сочетание Alt+I: теперь оно переходит к встроенному списку результатов поиска в чате.
+* Добавлено сочетание Alt+[ для переключения озвучивания заголовков до или после содержимого сообщения. Если заголовки озвучиваются после содержимого, в разделах с файлами сначала читаются имена файлов.
 
 ### Версия 5.6.1
 

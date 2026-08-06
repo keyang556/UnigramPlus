@@ -987,3 +987,24 @@ msgstr "- 新增 Ctrl+Alt+Up/Down，用於瀏覽含未讀提及的聊天室。"
 
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "修正自動更新：現在會從 GitHub 安全取得版本，並在安裝前驗證下載的附加元件。"
+
+msgid "Toggle whether message headers are announced before or after the message content"
+msgstr "切換在訊息內容之前或之後讀出訊息標頭"
+
+msgid "Message headers will be announced after the message content"
+msgstr "將在訊息內容之後讀出訊息標頭"
+
+msgid "Message headers will be announced before the message content"
+msgstr "將在訊息內容之前讀出訊息標頭"
+
+msgid "No search results"
+msgstr "沒有搜尋結果"
+
+msgid ""
+"- Fixed Ctrl+Alt+Left/Right so they seek the current voice message playback again.\n"
+"- Fixed Alt+I so it moves to Unigram's inline chat search results list.\n"
+"- Added Alt+[ to announce message headers after the content, so file names can be announced before sender names in profile media sections."
+msgstr ""
+"- 修正 Ctrl+Alt+Left/Right，使其可再次在目前播放的語音訊息中倒轉或快轉。\n"
+"- 修正 Alt+I，使其將焦點移到 Unigram 的聊天內嵌搜尋結果清單。\n"
+"- 新增 Alt+[，用於在內容之後讀出訊息標頭，讓個人資料的媒體區段可以先讀出檔名，再讀出寄件者名稱。"

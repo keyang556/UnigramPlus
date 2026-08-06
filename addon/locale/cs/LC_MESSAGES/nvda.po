@@ -798,3 +798,24 @@ msgstr "- Přidáno Ctrl+Alt+Up/Down pro pohyb mezi chaty s nepřečtenými zmí
 
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "Automatické aktualizace byly opraveny: vydání jsou nyní bezpečně získávána z GitHubu a stažený doplněk je před instalací ověřen."
+
+msgid "Toggle whether message headers are announced before or after the message content"
+msgstr "Přepnout, zda se mají záhlaví zpráv oznamovat před obsahem zprávy, nebo po něm"
+
+msgid "Message headers will be announced after the message content"
+msgstr "Záhlaví zpráv budou oznamována po obsahu zprávy"
+
+msgid "Message headers will be announced before the message content"
+msgstr "Záhlaví zpráv budou oznamována před obsahem zprávy"
+
+msgid "No search results"
+msgstr "Žádné výsledky vyhledávání"
+
+msgid ""
+"- Fixed Ctrl+Alt+Left/Right so they seek the current voice message playback again.\n"
+"- Fixed Alt+I so it moves to Unigram's inline chat search results list.\n"
+"- Added Alt+[ to announce message headers after the content, so file names can be announced before sender names in profile media sections."
+msgstr ""
+"- Opraveny zkratky Ctrl+Alt+Left/Right, které nyní opět přetáčejí právě přehrávanou hlasovou zprávu.\n"
+"- Opravena zkratka Alt+I, aby přesouvala fokus do vloženého seznamu výsledků vyhledávání v chatu Unigramu.\n"
+"- Přidána zkratka Alt+[, která oznamuje záhlaví zpráv až po obsahu, takže v sekcích médií profilu lze názvy souborů oznamovat před jmény odesílatelů."

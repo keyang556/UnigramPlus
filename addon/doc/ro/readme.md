@@ -114,6 +114,7 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 | **Right Arrow** | UnigramPlus | Move to the next media attachment in the focused message |
 | **ALT+C** | UnigramPlus | Afișează textul mesajului într-o fereastră popup |
 | **ALT+W** | UnigramPlus | Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information. |
+| **ALT+[** | UnigramPlus | Comută anunțarea anteturilor mesajelor înainte sau după conținutul mesajului |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | Apasă butonul de atașare |
 | **Ctrl+N** | UnigramPlus | Apasă butonul de chat nou |
@@ -176,6 +177,12 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 <!-- shortcut-table-end -->
 
 ##Lista de modificări:
+
+### Versiunea 5.6.2
+
+* A fost corectat Ctrl+Alt+Left/Right Arrow pentru derularea înapoi și înainte într-un mesaj vocal aflat în redare.
+* A fost corectat Alt+I pentru a accesa lista integrată cu rezultatele căutării din chat.
+* A fost adăugat Alt+[ pentru a comuta anunțarea anteturilor înainte sau după conținutul mesajului. Când anteturile sunt plasate după conținut, numele fișierelor sunt anunțate primele în secțiunile de fișiere.
 
 ### Versiunea 5.6.1
 

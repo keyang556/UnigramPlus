@@ -31,6 +31,10 @@ from .data import *
 from .text_window import *
 from .cnf import conf, lang
 from .readme_shortcuts import extractShortcutText  # noqa: E402
+from .message_header import (  # noqa: E402
+	move_message_header_after_content,
+	move_profile_header_after_content,
+)
 from .rich_message import (  # noqa: E402
 	extract_message_html_and_actions,
 	extract_message_text,
@@ -62,6 +66,8 @@ _VOICE_RECORDING_POLL_INTERVAL = .2
 _VOICE_RECORDING_OUTCOME_POLL_LIMIT = 25  # 5 seconds at the interval above.
 _AUTO_FOCUS_CHAT_LIST_DELAY_MS = 300
 _AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT = 10
+_SEARCH_RESULT_COUNTER_RE = re.compile(r"^\s*(\d+)\s*/\s*(\d+)\s*$")
+_SEARCH_RESULT_COUNTER_SIBLING_LIMIT = 6
 
 
 def _normalized_text(text):
@@ -79,6 +85,18 @@ def is_unigram_app_module(appModule):
 		getattr(appModule, "appPath", ""),
 	)
 	return any("unigram" in _normalized_text(value) for value in values)
+
+
+def _parse_search_result_counter(obj):
+	"""Return ``(current, total)`` for Unigram's search counter UIA object."""
+	try:
+		text = obj.name or obj.value or ""
+	except Exception:
+		return None
+	match = _SEARCH_RESULT_COUNTER_RE.fullmatch(str(text))
+	if not match:
+		return None
+	return tuple(map(int, match.groups()))
 
 
 def _load_telegram_desktop_fallback_class():
@@ -1906,8 +1924,13 @@ class AppModule(appModuleHandler.AppModule):
 
 
 		obj.name = sender+obj.name
+		if conf.get("messageHeaderAtTheEnd"):
+			content_anchor = extract_message_text(obj)
+			if content_anchor:
+				obj.name = move_message_header_after_content(obj.name, content_anchor)
 		# Check if a message is selected
-		if State.SELECTED in obj.states: obj.name = _("Selected")+". "+obj.name
+		selected_prefix = _("Selected")+". "
+		if State.SELECTED in obj.states and not obj.name.startswith(selected_prefix): obj.name = selected_prefix+obj.name
 		return obj.name
 
 	# Processing the focused element from the list of chats
@@ -2077,6 +2100,10 @@ class AppModule(appModuleHandler.AppModule):
 				self.saved_items.save("last focused chat", obj)
 				obj.name = self.actionChatElementInFocus(obj)
 			elif obj.parent.UIAAutomationId == "ScrollingHost":
+				if conf.get("messageHeaderAtTheEnd"):
+					content_anchor = self._profile_media_content_anchor(obj)
+					if content_anchor is not None:
+						obj.name = move_profile_header_after_content(obj.name, content_anchor)
 				if obj.name.startswith("forumTopic {\n  info = forumTopicInfo {"):
 					obj.name = self._format_forum_topic_name(obj)
 				elif obj.name == "" and obj.childCount != 0:
@@ -2236,7 +2263,7 @@ class AppModule(appModuleHandler.AppModule):
 				except: pass
 			# elif obj.role == Role.BUTTON and obj.UIAAutomationId == "Explanation":
 				# clsList.insert(0, ExplanationCorrectAnswerInQuiz)
-			elif obj.role == Role.SLIDER and obj.UIAAutomationId == "Slider":
+			elif obj.UIAAutomationId == "Slider" and (obj.name == "Seek" or obj.role == Role.SLIDER):
 				self.saved_items.save("slider", obj)
 			elif (
 				File_transfer_progress_tracking._is_transfer_button(obj)
@@ -2395,25 +2422,86 @@ class AppModule(appModuleHandler.AppModule):
 		message(text_message)
 
 
-	def rewind_voice_message(self, direction):
+	def _is_visible_playback_slider(self, obj):
+		try:
+			location = obj.location
+			return bool(
+				obj.UIAAutomationId == "Slider"
+				and (obj.name == "Seek" or obj.role == Role.SLIDER)
+				and location
+				and location.width > 0
+			)
+		except Exception:
+			# UIA objects become stale whenever Unigram rebuilds the playback header.
+			return False
+
+	def _get_playback_slider(self):
 		slider = self.saved_items.get("slider")
-		if not slider or slider.location.width == 0:
+		if self._is_visible_playback_slider(slider):
+			return slider
+		queue_list = [(candidate, 0) for candidate in self.getElements()]
+		visited = set()
+		while queue_list and len(visited) < 500:
+			candidate, depth = queue_list.pop(0)
+			candidate_id = id(candidate)
+			if candidate_id in visited:
+				continue
+			visited.add(candidate_id)
+			if not self._is_visible_playback_slider(candidate):
+				if depth >= 12:
+					continue
+				try:
+					children = tuple(candidate.children or ())
+				except Exception:
+					children = ()
+				try:
+					child = candidate.firstChild
+					while child:
+						children += (child,)
+						child = child.next
+				except Exception:
+					pass
+				queue_list.extend((child, depth + 1) for child in children)
+				continue
+			self.saved_items.save("slider", candidate)
+			return candidate
+		return None
+
+	def rewind_voice_message(self, direction):
+		slider = self._get_playback_slider()
+		if not slider:
 			message(_("Nothing is playing right now"))
 			return False
-		self.script_pauseVoiceMessage(None)
 		obj = api.getFocusObject()
-		slider.setFocus()
-		KeyboardInputGesture.fromName(direction).send()
-		self.script_pauseVoiceMessage(None)
-		obj.setFocus()
+		succeeded = False
+		try:
+			slider.setFocus()
+			KeyboardInputGesture.fromName(direction).send()
+			succeeded = True
+		except Exception as error:
+			log.debug("Could not seek Unigram voice-message playback: %r" % error)
+		finally:
+			if obj:
+				try:
+					obj.setFocus()
+				except Exception:
+					pass
+		if not succeeded:
+			message(_("Nothing is playing right now"))
+			return False
 		speech.cancelSpeech()
-		obj.setFocus()
+		if obj:
+			try:
+				obj.setFocus()
+			except Exception:
+				pass
+		return True
 
 	def script_rewind_voice_message(self, gesture):
 		try: index = int(gesture.mainKeyName[-1])
 		except (AttributeError, ValueError): return
-		slider = self.saved_items.get("slider")
-		if not slider or slider.location.width == 0:
+		slider = self._get_playback_slider()
+		if not slider:
 			message(_("Nothing is playing right now"))
 			return False
 		obj = api.getFocusObject()
@@ -2497,6 +2585,20 @@ class AppModule(appModuleHandler.AppModule):
 	def script_toggle_live_chat(self, gesture):
 		if Chat_update.toggle(self): message(_("Automatic reading of messages is enabled"))
 		else: message(_("Automatic reading of new messages is disabled"))
+
+	# Translators: Input gesture description for Alt+[ (or Alt+Х on a Russian layout).
+	@script(
+		description=_("Toggle whether message headers are announced before or after the message content"),
+		gestures=["kb:ALT+[", "kb:ALT+Х"],
+	)
+	def script_toggleMessageHeaderAtTheEnd(self, gesture):
+		enabled = not conf.get("messageHeaderAtTheEnd")
+		conf.set("messageHeaderAtTheEnd", enabled)
+		if enabled:
+			message(_("Message headers will be announced after the message content"))
+		else:
+			message(_("Message headers will be announced before the message content"))
+		return enabled
 	
 	@script(description=_("Show a list of all UnigramPlus shortcuts"), gesture="kb:ALT+H")
 	def script_help(self, gesture):
@@ -2523,12 +2625,124 @@ class AppModule(appModuleHandler.AppModule):
 
 	@script(description=_("Go to the list with search results"), gesture="kb:ALT+I")
 	def script_go_to_list_search_results(self, gesture):
-		obj = api.getFocusObject()
-		btn = next((element.next for element in self.getElements()
-			if element.role == Role.EDITABLETEXT and element.UIAAutomationId == "Field" and "/" in element.next.name and element.next.role == Role.BUTTON), None)
-		if btn:
-			btn.doAction()
-		else: message(_("Button not found"))
+		# Older Unigram versions exposed the result counter as a button. Current
+		# versions expose a ListAutocomplete through the search field's UIA
+		# ControllerFor relation. The list is collapsed until the field receives
+		# focus, so its location and sibling position cannot be used to find it.
+		elements = tuple(self.getElements())
+		found_search_field = False
+		for field in elements:
+			try:
+				if field.UIAAutomationId != "Field":
+					continue
+				location = field.location
+				if location and (location.width <= 0 or location.height <= 0):
+					continue
+			except Exception:
+				continue
+			found_search_field = True
+			try:
+				controlled = tuple(field.controllerFor or ())
+			except Exception:
+				controlled = ()
+			results_list = next((item for item in controlled
+				if getattr(item, "UIAAutomationId", "") == "ListAutocomplete"), None)
+			if results_list is None:
+				# Some older UIA providers omit ControllerFor. Keep a bounded local
+				# sibling fallback and a flat-tree fallback for those versions.
+				results_list = next((item for item in elements
+					if getattr(item, "UIAAutomationId", "") == "ListAutocomplete"), None)
+			counter = field
+			count = None
+			for _step in range(_SEARCH_RESULT_COUNTER_SIBLING_LIMIT):
+				try:
+					counter = counter.next
+				except Exception:
+					counter = None
+				if not counter:
+					break
+				count = _parse_search_result_counter(counter)
+				if count is None:
+					continue
+				try:
+					role = counter.role
+				except Exception:
+					role = None
+				if role == Role.BUTTON:
+					try:
+						counter.doAction()
+						return True
+					except Exception:
+						break
+				if count[1] <= 0:
+					message(_("No search results"))
+					return False
+				break
+			if results_list is not None or count is not None:
+				try:
+					field.setFocus()
+				except Exception:
+					continue
+				queueHandler.queueFunction(
+					queueHandler.eventQueue,
+					self.keys["downArrow"].send,
+				)
+				return True
+		message(_("No search results") if found_search_field else _("Button not found"))
+		return False
+
+	def _profile_media_content_anchor(self, obj):
+		"""Return a content anchor for a profile media row, or ``None`` otherwise."""
+		try:
+			if obj.parent.UIAAutomationId != "ScrollingHost":
+				return None
+		except Exception:
+			return None
+		inside_profile_context = False
+		ancestor = obj.parent
+		for _depth in range(10):
+			if not ancestor:
+				break
+			try:
+				class_name = str(getattr(ancestor, "UIAClassName", "") or "").casefold()
+				automation_id = str(getattr(ancestor, "UIAAutomationId", "") or "").casefold()
+				if "profile" in class_name or automation_id in ("profile", "profilepage"):
+					inside_profile_context = True
+				parent = ancestor.parent
+			except Exception:
+				break
+			if not parent or parent is ancestor:
+				break
+			ancestor = parent
+		if not inside_profile_context:
+			# RussianMod's working profile-media signature follows the UIA control
+			# tree exposed by NVDA: a Title in the surrounding profile tab and a
+			# VerticalScrollBar immediately after its ScrollingHost. XAML Page class
+			# names are not exposed as UIA ancestors on every Unigram/NVDA version.
+			try:
+				tab_title = obj.parent.parent.firstChild.next.next
+				scrollbar = obj.parent.next
+				inside_profile_context = (
+					tab_title.UIAAutomationId == "Title"
+					and scrollbar.UIAAutomationId == "VerticalScrollBar"
+				)
+			except Exception:
+				pass
+		if not inside_profile_context:
+			return None
+		title = self._find_descendant(obj, automation_id="Title", max_depth=5)
+		# Require the distinctive shared file/audio cell signature even inside a
+		# profile page. MediaFrame is also used by unrelated search and settings UI.
+		subtitle = self._find_descendant(obj, automation_id="Subtitle", max_depth=5)
+		file_button = self._find_descendant(
+			obj, automation_id="Download", max_depth=5
+		) or self._find_descendant(obj, automation_id="Button", max_depth=5)
+		if not title or not subtitle or not file_button:
+			return None
+		try:
+			return title.name or "" if title else ""
+		except Exception:
+			return ""
 	
 	@script(description=_("Go to the next search result"), gesture="kb:F3")
 	def script_go_to_previous_search_result(self, gesture):

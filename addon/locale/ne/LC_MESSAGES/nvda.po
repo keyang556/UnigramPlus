@@ -915,3 +915,24 @@ msgstr "- नपढिएका उल्लेख भएका च्याट�
 
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "स्वचालित अद्यावधिक सुधारियो: संस्करणहरू अब GitHub बाट सुरक्षित रूपमा प्राप्त हुन्छन् र डाउनलोड गरिएको एड-अन स्थापना गर्नुअघि प्रमाणीकरण गरिन्छ।"
+
+msgid "Toggle whether message headers are announced before or after the message content"
+msgstr "सन्देश हेडरहरूलाई सन्देशको सामग्री अघि वा पछि घोषणा गर्ने विकल्प टगल गर्नुहोस्"
+
+msgid "Message headers will be announced after the message content"
+msgstr "सन्देश हेडरहरू सन्देशको सामग्रीपछि घोषणा गरिनेछन्"
+
+msgid "Message headers will be announced before the message content"
+msgstr "सन्देश हेडरहरू सन्देशको सामग्रीअघि घोषणा गरिनेछन्"
+
+msgid "No search results"
+msgstr "खोज परिणामहरू छैनन्"
+
+msgid ""
+"- Fixed Ctrl+Alt+Left/Right so they seek the current voice message playback again.\n"
+"- Fixed Alt+I so it moves to Unigram's inline chat search results list.\n"
+"- Added Alt+[ to announce message headers after the content, so file names can be announced before sender names in profile media sections."
+msgstr ""
+"- हाल बजिरहेको आवाज सन्देशमा फेरि अगाडि वा पछाडि जान सक्ने गरी Ctrl+Alt+Left/Right सुधारियो।\n"
+"- Unigram को च्याटमा रहेको इनलाइन खोज परिणाम सूचीमा फोकस सार्ने गरी Alt+I सुधारियो।\n"
+"- सामग्रीपछि सन्देश हेडरहरू घोषणा गर्न Alt+[ थपियो, जसले प्रोफाइलका मिडिया खण्डहरूमा प्रेषकका नामभन्दा पहिले फाइलका नाम घोषणा गर्न दिन्छ।"

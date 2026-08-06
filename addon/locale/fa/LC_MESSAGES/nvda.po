@@ -962,3 +962,24 @@ msgstr "- کلید Ctrl+Alt+Up/Down برای حرکت میان گفت‌وگوه
 
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "به‌روزرسانی خودکار اصلاح شد: نسخه‌ها اکنون به‌صورت امن از GitHub دریافت و افزونه دانلودشده پیش از نصب اعتبارسنجی می‌شود."
+
+msgid "Toggle whether message headers are announced before or after the message content"
+msgstr "تغییر وضعیت اعلام سرآیندهای پیام بین پیش و پس از محتوای پیام"
+
+msgid "Message headers will be announced after the message content"
+msgstr "سرآیندهای پیام پس از محتوای پیام اعلام خواهند شد"
+
+msgid "Message headers will be announced before the message content"
+msgstr "سرآیندهای پیام پیش از محتوای پیام اعلام خواهند شد"
+
+msgid "No search results"
+msgstr "هیچ نتیجه‌ای برای جستجو وجود ندارد"
+
+msgid ""
+"- Fixed Ctrl+Alt+Left/Right so they seek the current voice message playback again.\n"
+"- Fixed Alt+I so it moves to Unigram's inline chat search results list.\n"
+"- Added Alt+[ to announce message headers after the content, so file names can be announced before sender names in profile media sections."
+msgstr ""
+"- میانبرهای Ctrl+Alt+Left/Right اصلاح شدند تا دوباره پخش پیام صوتی جاری را جلو یا عقب ببرند.\n"
+"- میانبر Alt+I اصلاح شد تا به فهرست تعبیه‌شدهٔ نتایج جستجوی گفتگوی Unigram منتقل شود.\n"
+"- میانبر Alt+[ برای اعلام سرآیندهای پیام پس از محتوا افزوده شد تا در بخش‌های رسانه‌ای نمایه، نام فایل‌ها پیش از نام فرستندگان اعلام شوند."

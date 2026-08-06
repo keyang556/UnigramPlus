@@ -113,6 +113,7 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 | **Right Arrow** | UnigramPlus | 移到焦點訊息中的下一個媒體附件 |
 | **ALT+C** | UnigramPlus | 在快顯視窗顯示訊息文字 |
 | **ALT+W** | UnigramPlus | 讀出訊息的傳送或接收時間，以及反應清單。連按兩次可切換是否讀出此資訊。 |
+| **ALT+[** | UnigramPlus | 切換在訊息內容之前或之後讀出訊息標頭 |
 | **NVDA+Ctrl+0-9** | UnigramPlus | 讀出最近十則訊息之一；1 是最新訊息，0 是第十則訊息 |
 | **Ctrl+Shift+A** | UnigramPlus | 按下「附加檔案」按鈕 |
 | **Ctrl+N** | UnigramPlus | 按下「新增對話」按鈕 |
@@ -175,6 +176,12 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 <!-- shortcut-table-end -->
 
 ## 版本變更
+
+### 版本 5.6.2
+
+* 修正 Ctrl+Alt+Left/Right Arrow 在語音訊息播放期間無法倒轉或快轉的問題。
+* 修正 Alt+I，使其可前往聊天搜尋結果的內嵌清單。
+* 新增 Alt+[，用於切換在訊息內容之前或之後讀出訊息標頭。將標頭置於內容之後時，「檔案」區段會先讀出檔名。
 
 ### 版本 5.6.1
 

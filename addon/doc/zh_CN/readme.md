@@ -113,6 +113,7 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 | **Right Arrow** | UnigramPlus | 移到焦点消息中的下一个媒体附件 |
 | **ALT+C** | UnigramPlus | 在弹出窗口中显示消息文本 |
 | **ALT+W** | UnigramPlus | 读出消息的发送或接收时间，以及回应列表。连按两次可切换是否读出此信息。 |
+| **ALT+[** | UnigramPlus | 切换在消息内容之前或之后读出消息标头 |
 | **NVDA+Ctrl+0-9** | UnigramPlus | 读出最近十条消息之一；1 是最新消息，0 是第十条消息 |
 | **Ctrl+Shift+A** | UnigramPlus | 按下“附加文件”按钮 |
 | **Ctrl+N** | UnigramPlus | 按下“新建对话”按钮 |
@@ -175,6 +176,12 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 <!-- shortcut-table-end -->
 
 ## 版本变更
+
+### 版本 5.6.2
+
+* 修复 Ctrl+Alt+Left/Right Arrow 在语音消息播放期间无法倒回或快进的问题。
+* 修复 Alt+I，使其可转到聊天搜索结果的内嵌列表。
+* 新增 Alt+[，用于切换在消息内容之前或之后读出消息标头。将标头置于内容之后时，“文件”分区会先读出文件名。
 
 ### 版本 5.6.1
 

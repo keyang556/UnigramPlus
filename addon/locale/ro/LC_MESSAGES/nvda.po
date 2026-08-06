@@ -1024,3 +1024,24 @@ msgstr "- A fost adăugat Ctrl+Alt+Up/Down pentru deplasarea prin chat-urile cu 
 
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "Au fost corectate actualizările automate: versiunile sunt acum preluate în siguranță de pe GitHub, iar suplimentul descărcat este validat înainte de instalare."
+
+msgid "Toggle whether message headers are announced before or after the message content"
+msgstr "Comută anunțarea antetelor mesajelor înainte sau după conținutul mesajului"
+
+msgid "Message headers will be announced after the message content"
+msgstr "Antetele mesajelor vor fi anunțate după conținutul mesajului"
+
+msgid "Message headers will be announced before the message content"
+msgstr "Antetele mesajelor vor fi anunțate înainte de conținutul mesajului"
+
+msgid "No search results"
+msgstr "Niciun rezultat al căutării"
+
+msgid ""
+"- Fixed Ctrl+Alt+Left/Right so they seek the current voice message playback again.\n"
+"- Fixed Alt+I so it moves to Unigram's inline chat search results list.\n"
+"- Added Alt+[ to announce message headers after the content, so file names can be announced before sender names in profile media sections."
+msgstr ""
+"- S-a remediat Ctrl+Alt+Stânga/Dreapta pentru a deplasa din nou poziția de redare a mesajului vocal curent.\n"
+"- S-a remediat Alt+I pentru a muta focalizarea la lista integrată cu rezultatele căutării din conversația Unigram.\n"
+"- S-a adăugat Alt+[ pentru a anunța antetele mesajelor după conținut, astfel încât numele fișierelor să poată fi anunțate înaintea numelor expeditorilor în secțiunile media ale profilului."

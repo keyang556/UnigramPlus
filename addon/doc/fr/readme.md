@@ -113,6 +113,7 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 | **Right Arrow** | UnigramPlus | Move to the next media attachment in the focused message |
 | **ALT+C** | UnigramPlus | Montrer le message dans une fenêtre virtuelle |
 | **ALT+W** | UnigramPlus | Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information. |
+| **ALT+[** | UnigramPlus | Basculer l’annonce des en-têtes de message avant ou après le contenu du message |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | Activer le bouton "joindre un fichier" |
 | **Ctrl+N** | UnigramPlus | Activer le bouton "nouvel échange" |
@@ -175,6 +176,12 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 <!-- shortcut-table-end -->
 
 ##Liste des changements :
+
+### Version 5.6.2
+
+* Correction du raccourci Ctrl+Alt+Left/Right Arrow pour reculer et avancer dans un message vocal en cours de lecture.
+* Correction du raccourci Alt+I : il permet désormais d’accéder à la liste intégrée des résultats de recherche de l’échange.
+* Ajout de Alt+[ pour basculer l’annonce des en-têtes avant ou après le contenu du message. Lorsque les en-têtes sont placés après le contenu, les noms de fichiers sont annoncés en premier dans les sections de fichiers.
 
 ### Version 5.6.1
 

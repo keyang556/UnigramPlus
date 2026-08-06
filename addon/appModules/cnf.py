@@ -38,7 +38,6 @@ def getDefaultLang():
 		return lang
 	baseLang = lang.split("_")[0]
 	return baseLang if baseLang in listLanguages else "en"
-
 lang = getDefaultLang()
 
 spec = (
@@ -61,6 +60,7 @@ spec = (
 	"is_automatically_check_for_updates = boolean(default=True)",
 	"isFixedToggleButton = boolean(default=False)",
 	"saySenderName = string(default=none)",
+	"messageHeaderAtTheEnd = boolean(default=False)",
 	"voice_the_presence_of_a_reaction = boolean(default=True)",
 	"report premium accounts = boolean(default=True)",
 	"automatically announce new messages = boolean(default=False)",

@@ -112,6 +112,7 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 | **Right Arrow** | UnigramPlus | Move to the next media attachment in the focused message |
 | **ALT+C** | UnigramPlus | Açılır pencerede mesaj metnini göster |
 | **ALT+W** | UnigramPlus | Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information. |
+| **ALT+[** | UnigramPlus | Mesaj başlıklarının mesaj içeriğinden önce veya sonra seslendirilmesini değiştir |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | "Dosya ekle" düğmesine basın |
 | **Ctrl+N** | UnigramPlus | "Yeni sohbet" düğmesine basın |
@@ -174,6 +175,12 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 <!-- shortcut-table-end -->
 
 ##Değişiklik listesi:
+
+### Sürüm 5.6.2
+
+* Oynatılan bir sesli mesajda geri ve ileri sarmak için kullanılan Ctrl+Alt+Left/Right Arrow düzeltildi.
+* Alt+I, sohbet arama sonuçlarının satır içi listesine gidecek şekilde düzeltildi.
+* Mesaj başlıklarının içerikten önce veya sonra seslendirilmesini değiştirmek için Alt+[ eklendi. Başlıklar içerikten sonra olduğunda dosya bölümlerinde önce dosya adları seslendirilir.
 
 ### Sürüm 5.6.1
 

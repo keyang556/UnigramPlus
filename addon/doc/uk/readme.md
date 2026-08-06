@@ -112,6 +112,7 @@
 | **Right Arrow** | UnigramPlus | Move to the next media attachment in the focused message |
 | **ALT+C** | UnigramPlus | Показати текст повідомлення у спливаючому вікні |
 | **ALT+W** | UnigramPlus | Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information. |
+| **ALT+[** | UnigramPlus | Перемкнути озвучення заголовків повідомлень до або після вмісту повідомлення |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | Натиснути кнопку «Прикріпити файл» |
 | **Ctrl+N** | UnigramPlus | Натиснути кнопку «Новий чат» |
@@ -174,6 +175,12 @@
 <!-- shortcut-table-end -->
 
 ## Список змін:
+
+### Версія 5.6.2
+
+* Виправлено перемотування голосового повідомлення, що відтворюється, назад і вперед за допомогою Ctrl+Alt+Left/Right Arrow.
+* Виправлено Alt+I: тепер це сполучення переходить до вбудованого списку результатів пошуку в чаті.
+* Додано Alt+[ для перемикання озвучення заголовків до або після вмісту повідомлення. Якщо заголовки озвучуються після вмісту, у розділах із файлами спочатку читаються назви файлів.
 
 ### Версія 5.6.1
 

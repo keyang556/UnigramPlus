@@ -1059,3 +1059,24 @@ msgstr "- Dodat je Ctrl+Alt+Up/Down za kretanje kroz ćaskanja sa nepročitanim 
 
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "Ispravljeno je automatsko ažuriranje: izdanja se sada bezbedno preuzimaju sa GitHuba, a preuzeti dodatak se proverava pre instalacije."
+
+msgid "Toggle whether message headers are announced before or after the message content"
+msgstr "Prebaci izgovaranje zaglavlja poruka pre ili posle sadržaja poruke"
+
+msgid "Message headers will be announced after the message content"
+msgstr "Zaglavlja poruka će se izgovarati posle sadržaja poruke"
+
+msgid "Message headers will be announced before the message content"
+msgstr "Zaglavlja poruka će se izgovarati pre sadržaja poruke"
+
+msgid "No search results"
+msgstr "Nema rezultata pretrage"
+
+msgid ""
+"- Fixed Ctrl+Alt+Left/Right so they seek the current voice message playback again.\n"
+"- Fixed Alt+I so it moves to Unigram's inline chat search results list.\n"
+"- Added Alt+[ to announce message headers after the content, so file names can be announced before sender names in profile media sections."
+msgstr ""
+"- Ispravljeni su Ctrl+Alt+Levo/Desno tako da ponovo premotavaju glasovnu poruku koja se trenutno reprodukuje.\n"
+"- Ispravljen je Alt+I tako da premešta fokus na ugrađenu listu rezultata pretrage u Unigram ćaskanju.\n"
+"- Dodat je Alt+[ za izgovaranje zaglavlja poruka posle sadržaja, kako bi se u medijskim odeljcima profila nazivi datoteka mogli izgovoriti pre imena pošiljalaca."

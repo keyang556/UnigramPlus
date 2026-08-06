@@ -116,6 +116,7 @@
 | **Right Arrow** | UnigramPlus | Move to the next media attachment in the focused message |
 | **ALT+C** | UnigramPlus | إظهار نص الرسالة في نافذة منبثقة |
 | **ALT+W** | UnigramPlus | Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information. |
+| **ALT+[** | UnigramPlus | التبديل بين الإعلان عن رؤوس الرسائل قبل محتوى الرسالة أو بعده |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | الضغط على زر "إرفاق ملف" |
 | **Ctrl+N** | UnigramPlus | الضغط على زر "محادثة جديدة" |
@@ -178,6 +179,12 @@
 <!-- shortcut-table-end -->
 
 ## قائمة التغييرات:
+
+### الإصدار 5.6.2
+
+* تم إصلاح Ctrl+Alt+Left/Right Arrow للترجيع والتقديم داخل رسالة صوتية أثناء تشغيلها.
+* تم إصلاح Alt+I لينتقل إلى القائمة المضمّنة لنتائج البحث في الدردشة.
+* تمت إضافة Alt+[ للتبديل بين إعلان رؤوس الرسائل قبل محتوى الرسالة أو بعده. وعند وضع الرؤوس بعد المحتوى، تُعلن أسماء الملفات أولاً في أقسام الملفات.
 
 ### الإصدار 5.6.1
 

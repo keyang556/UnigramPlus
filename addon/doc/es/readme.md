@@ -115,6 +115,7 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 | **Right Arrow** | UnigramPlus | Move to the next media attachment in the focused message |
 | **ALT+C** | UnigramPlus | Mostrar texto del mensaje en ventana emergente |
 | **ALT+W** | UnigramPlus | Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information. |
+| **ALT+[** | UnigramPlus | Alternar si los encabezados de los mensajes se anuncian antes o después del contenido del mensaje |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | Presionar el botón "adjuntar |
 | **Ctrl+N** | UnigramPlus | Presionar el botón "nuevo chat" |
@@ -177,6 +178,12 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 <!-- shortcut-table-end -->
 
 ##Lista de cambios:
+
+### Versión 5.6.2
+
+* Se corrigió Ctrl+Alt+Left/Right Arrow para retroceder y avanzar en un mensaje de voz mientras se reproduce.
+* Se corrigió Alt+I para que vaya a la lista integrada de resultados de búsqueda del chat.
+* Se añadió Alt+[ para alternar el anuncio de los encabezados antes o después del contenido del mensaje. Cuando los encabezados se colocan después del contenido, los nombres de archivo se anuncian primero en las secciones de archivos.
 
 ### Versión 5.6.1
 

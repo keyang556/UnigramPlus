@@ -988,3 +988,24 @@ msgstr "- 新增 Ctrl+Alt+Up/Down，用于在含未读提及的聊天之间移�
 
 msgid "Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation."
 msgstr "修复自动更新：现在会从 GitHub 安全获取版本，并在安装前验证下载的插件。"
+
+msgid "Toggle whether message headers are announced before or after the message content"
+msgstr "切换在消息内容之前或之后读出消息标头"
+
+msgid "Message headers will be announced after the message content"
+msgstr "将在消息内容之后读出消息标头"
+
+msgid "Message headers will be announced before the message content"
+msgstr "将在消息内容之前读出消息标头"
+
+msgid "No search results"
+msgstr "没有搜索结果"
+
+msgid ""
+"- Fixed Ctrl+Alt+Left/Right so they seek the current voice message playback again.\n"
+"- Fixed Alt+I so it moves to Unigram's inline chat search results list.\n"
+"- Added Alt+[ to announce message headers after the content, so file names can be announced before sender names in profile media sections."
+msgstr ""
+"- 修复 Ctrl+Alt+Left/Right，使其可再次在当前播放的语音消息中倒回或快进。\n"
+"- 修复 Alt+I，使其将焦点移到 Unigram 的聊天内嵌搜索结果列表。\n"
+"- 新增 Alt+[，用于在内容之后读出消息标头，从而可在个人资料的媒体部分中先读出文件名，再读出发送者名称。"

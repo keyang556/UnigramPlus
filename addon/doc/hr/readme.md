@@ -116,6 +116,7 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 | **Right Arrow** | UnigramPlus | Move to the next media attachment in the focused message |
 | **ALT+C** | UnigramPlus | Prikazuje poruku u skočnom prozoru |
 | **ALT+W** | UnigramPlus | Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information. |
+| **ALT+[** | UnigramPlus | Prebacuje izgovaranje zaglavlja poruka prije ili nakon sadržaja poruke |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | Pritišće gumb "Priloži datoteku" |
 | **Ctrl+N** | UnigramPlus | Pritišće gumb "Novi razgovor" |
@@ -178,6 +179,12 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 <!-- shortcut-table-end -->
 
 ##Popis promjena:
+
+### Verzija 5.6.2
+
+* Ispravljen je Ctrl+Alt+Left/Right Arrow za premotavanje unatrag i unaprijed unutar glasovne poruke koja se reproducira.
+* Ispravljen je Alt+I tako da otvara ugrađeni popis rezultata pretraživanja razgovora.
+* Dodan je Alt+[ za prebacivanje izgovaranja zaglavlja prije ili nakon sadržaja poruke. Kada su zaglavlja nakon sadržaja, nazivi datoteka izgovaraju se prvi u odjeljcima s datotekama.
 
 ### Verzija 5.6.1
 

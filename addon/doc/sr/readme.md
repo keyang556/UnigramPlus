@@ -118,6 +118,7 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će neko sigurno po
 | **Right Arrow** | UnigramPlus | Move to the next media attachment in the focused message |
 | **ALT+C** | UnigramPlus | Prikaži tekst poruke u iskačućem prozoru |
 | **ALT+W** | UnigramPlus | Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information. |
+| **ALT+[** | UnigramPlus | Prebacuje izgovaranje zaglavlja poruka pre ili posle sadržaja poruke |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | Pritisni priloži datoteku dugme |
 | **Ctrl+N** | UnigramPlus | Pritisni novi razgovor dugme |
@@ -450,6 +451,12 @@ This update adds a combination that press "Instant View" button in the message, 
 Added Turkish localization
 
 
+
+### Verzija 5.6.2
+
+* Ispravljen je Ctrl+Alt+Left/Right Arrow za premotavanje unazad i unapred unutar glasovne poruke koja se reprodukuje.
+* Ispravljen je Alt+I tako da prelazi na ugrađenu listu rezultata pretrage u ćaskanju.
+* Dodat je Alt+[ za prebacivanje izgovaranja zaglavlja pre ili posle sadržaja poruke. Kada su zaglavlja posle sadržaja, nazivi datoteka se prvi izgovaraju u odeljcima sa datotekama.
 
 ### Verzija 5.6.1
 

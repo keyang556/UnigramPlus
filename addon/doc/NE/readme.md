@@ -113,6 +113,7 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 | **Right Arrow** | UnigramPlus | Move to the next media attachment in the focused message |
 | **ALT+C** | UnigramPlus | पपअप विन्डोमा लिखित शन्देश देखाउनुहोस् |
 | **ALT+W** | UnigramPlus | Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information. |
+| **ALT+[** | UnigramPlus | सन्देश हेडरहरू सन्देशको सामग्रीभन्दा अघि वा पछि पढिने क्रम बदल्नुहोस् |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | "फाइल संलग्न गर्नुहोस्" बटन थिच्नुहोस् |
 | **Ctrl+N** | UnigramPlus | "नयाँ कुराकानी" बटन थिच्नुहोस् |
@@ -396,6 +397,12 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 ###संस्करण १.१.७
 
 टर्की स्थानीयकरण थपियो।
+
+### Version 5.6.2
+
+* बजिरहेको आवाज सन्देशमा पछाडि वा अगाडि जान Ctrl+Alt+Left/Right Arrow को कार्य सुधारियो।
+* च्याट खोज परिणामहरूको इनलाइन सूचीमा जान Alt+I सुधारियो।
+* सन्देश हेडरहरू सामग्रीभन्दा अघि वा पछि पढिने क्रम बदल्न Alt+[ थपियो। हेडरहरू सामग्रीपछि राख्दा फाइल खण्डहरूमा फाइलका नामहरू पहिले पढिन्छन्।
 
 ### Version 5.6.1
 
