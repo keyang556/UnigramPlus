@@ -69,6 +69,7 @@ _VOICE_RECORDING_POLL_INTERVAL = .2
 _VOICE_RECORDING_OUTCOME_POLL_LIMIT = 25  # 5 seconds at the interval above.
 _AUTO_FOCUS_CHAT_LIST_DELAY_MS = 300
 _AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT = 10
+_END_OF_CHAT_PROBE_DELAY_MS = 50
 _SEARCH_RESULT_COUNTER_RE = re.compile(r"^\s*(\d+)\s*/\s*(\d+)\s*$")
 _SEARCH_RESULT_COUNTER_SIBLING_LIMIT = 6
 
@@ -92,11 +93,14 @@ def _get_end_of_chat_sound_path():
 def play_end_of_chat_sound():
 	"""Play the optional notification that indicates the last chat message."""
 	if not conf.get("play_end_of_chat_sound"):
+		log.debug("End-of-chat sound is disabled in UnigramPlus settings")
 		return False
 	try:
-		# Do not use winsound here. Typing_sound_tracking uses it for its looping
-		# notification; PlaySound would replace that loop and leave it muted.
-		playWaveFile(_get_end_of_chat_sound_path())
+		sound_path = _get_end_of_chat_sound_path()
+		log.debug("Playing end-of-chat sound from %r", sound_path)
+		# Match RussianMod's proven playback path. NVDA's global file wave player
+		# can be preempted by speech-related sounds before this short cue is heard.
+		winsound.PlaySound(sound_path, winsound.SND_FILENAME | winsound.SND_ASYNC)
 		return True
 	except Exception:
 		log.debug("Could not play end-of-chat sound", exc_info=True)
@@ -600,17 +604,15 @@ class Message_list_item(ListItem):
 		self.appModule.activate_option_for_menu((icons_from_context_menu["reply"]), "Messages")
 
 	def script_next_message(self, gesture):
-		# ``parent.next`` describes only the currently realized UIA slice.  The
-		# Messages list is virtualized, so it cannot reliably identify the logical
-		# final message.
-		if not self.appModule._is_last_message_in_chat(self):
-			gesture.send()
-			return
-		play_end_of_chat_sound()
-		if conf.get("action_when_pressing_up_arrow_in_text_field") == "to_messages":
-			self.appModule.script_moveFocusToTextMessage(gesture)
-		else:
-			gesture.send()
+		# Deliver Down immediately. UIA tree walks here can stall the NVDA main
+		# thread while Unigram updates its virtualized history.
+		move_focus_to_text = conf.get("action_when_pressing_up_arrow_in_text_field") == "to_messages"
+		app = self.appModule
+		gesture.send()
+		if conf.get("play_end_of_chat_sound") or move_focus_to_text:
+			# The callback is tied to this source object; moving to another message
+			# makes the source/focus comparison fail before endpoint work begins.
+			app._schedule_end_of_chat_confirmation(self, move_focus_to_text)
 
 	def script_next_media(self, gesture, revers=False):
 		self.list_media = self.list_media or [item for item in self.children if item.role == Role.LISTITEM]
@@ -640,7 +642,11 @@ class Message_list_item(ListItem):
 			else: message(_("The display of message sending or receiving time and the list of installed emojis is  disabled."))
 
 	def initOverlayClass(self):
-		self.positionInfo = self.parent.positionInfo
+		try:
+			self.positionInfo = self.parent.positionInfo
+		except Exception:
+			# A recycled service-message container can briefly lack its parent.
+			pass
 		self.states.discard(State.SELECTABLE)
 		keywords = keywordsInMessages.get(conf.get("lang"), keywordsInMessages["en"])
 		self.keywords = keywords
@@ -656,11 +662,10 @@ class Message_list_item(ListItem):
 			self.index_last_part_in_message = 0
 			self.last_part_in_message = self.name if has_empty_rich_message_summary(self) else ""
 		
-		if (
-			conf.get("action_when_pressing_up_arrow_in_text_field") == "to_messages"
-			or conf.get("play_end_of_chat_sound")
-		):
-			self.bindGesture("kb:downArrow", "next_message")
+		# Bind once per overlay rather than only when it is created with the
+		# setting enabled. This makes a settings change effective immediately for
+		# an already-realized final message.
+		self.bindGesture("kb:downArrow", "next_message")
 
 	__gestures = {
 		"kb:ALT+C": "show_text_message",
@@ -993,6 +998,8 @@ class AppModule(appModuleHandler.AppModule):
 		self._autoFocusChatListScheduled = False
 		self._autoFocusChatListAttempts = 0
 		self._autoFocusChatListGeneration = 0
+		self._endOfChatProbeGeneration = 0
+		self._messagesButton = None
 		if not self.isUnigramWindow:
 			self._fallbackAppModule = None
 			fallbackClass = _load_telegram_desktop_fallback_class()
@@ -1026,6 +1033,7 @@ class AppModule(appModuleHandler.AppModule):
 		self._voiceRecordingMonitorRunning = False
 		self._autoFocusChatListGeneration += 1
 		self._autoFocusChatListScheduled = False
+		self._endOfChatProbeGeneration = getattr(self, "_endOfChatProbeGeneration", 0) + 1
 		if getattr(self, "isUnigramWindow", False):
 			File_transfer_progress_tracking.stop()
 		super().terminate()
@@ -1199,28 +1207,196 @@ class AppModule(appModuleHandler.AppModule):
 			else: return False
 		except: return False
 
-	def _is_last_message_in_chat(self, obj):
-		"""Return whether a message is logically the final item in its chat.
-
-		UIA's PositionInSet and SizeOfSet describe the complete collection, unlike
-		previous/next siblings in Unigram's virtualized Messages list.  Missing or
-		invalid metadata deliberately produces a false negative: ordinary Down
-		Arrow navigation is safer than treating a partially realized list as done.
-		"""
+	def _same_uia_element(self, first, second):
+		"""Compare UIA elements even when NVDA assigned different overlays."""
+		if first is None or second is None:
+			return False
 		try:
-			position_info = obj.positionInfo
-			index = position_info.get("indexInGroup")
-			total = position_info.get("similarItemsInGroup")
+			if first == second:
+				return True
+		except Exception:
+			pass
+		try:
+			first_id = tuple(first.UIAElement.GetRuntimeId())
+			second_id = tuple(second.UIAElement.GetRuntimeId())
+			return bool(first_id) and first_id == second_id
 		except Exception:
 			return False
-		if (
-			not isinstance(index, int)
-			or isinstance(index, bool)
-			or not isinstance(total, int)
-			or isinstance(total, bool)
-		):
+
+	def _get_current_message_row_and_list(self, obj):
+		"""Return the current row and its Messages list using only parent links.
+
+		Some Unigram message templates insert extra UIA wrappers between
+		``Message_item`` and the list row. The cached Messages object is scoped to
+		the window, not the open chat, so resolving upward from the source avoids
+		both template variance and a stale list from the previously opened chat.
+		"""
+		candidate = obj
+		for _ in range(12):
+			if candidate is None:
+				return None
+			try:
+				parent = candidate.parent
+			except Exception:
+				return None
+			if parent is None or parent is candidate:
+				return None
+			try:
+				if parent.UIAAutomationId == "Messages":
+					return candidate, parent
+			except Exception:
+				pass
+			candidate = parent
+		return None
+
+	def _remember_messages_button(self, obj):
+		"""Cache MessagesButton when NVDA has already materialized it.
+
+		Never discover this control by walking the foreground UIA tree from a
+		keyboard handler. A stale XAML element can make ``child.next`` block the
+		NVDA main thread for several seconds while Unigram updates its history.
+		"""
+		try:
+			if getattr(obj, "UIAAutomationId", "") == "MessagesButton":
+				self._messagesButton = obj
+				return True
+		except Exception:
+			pass
+		return False
+
+	def _messages_button_visibility(self):
+		"""Return cached MessagesButton visibility, or ``None`` when unavailable."""
+		button = getattr(self, "_messagesButton", None)
+		if not button:
+			return None
+		try:
+			if not getattr(button, "isInForeground", True):
+				self._messagesButton = None
+				return None
+			# A button is recreated when a chat view is rebuilt. Accessing its
+			# runtime ID turns a disconnected cached UIA object into an explicit
+			# unknown state without walking the new visual tree.
+			button.UIAElement.GetRuntimeId()
+			states = button.states
+			location = button.location
+			if State.OFFSCREEN in states:
+				return False
+			if not location or location.width <= 0 or location.height <= 0:
+				return False
+			return True
+		except Exception:
+			self._messagesButton = None
+			return None
+
+	def _get_end_of_chat_candidate(self, obj, messages=None):
+		"""Return ``(messages, row)`` when the focused row is ``lastChild``.
+
+		This matches RussianMod's working endpoint rule while using UIA runtime
+		identity first. When Unigram temporarily breaks the message ancestry,
+		fall back to RussianMod's message-text strategy rather than walking the
+		foreground UIA tree.
+		"""
+		source = obj
+		resolved = self._get_current_message_row_and_list(obj)
+		if resolved is not None:
+			row, messages = resolved
+		else:
+			if messages is None:
+				try:
+					messages = self.getMessagesElement()
+				except Exception:
+					return None
+			try:
+				row = obj.parent
+			except Exception:
+				return None
+		if not messages or row is None:
+			return None
+		try:
+			last_row = messages.lastChild
+		except Exception:
+			return None
+		if not last_row:
+			return None
+		if not self._same_uia_element(row, last_row):
+			# RussianMod compares these raw row names. Keep that fallback for
+			# recycled XAML objects whose runtime ID changes at the endpoint.
+			try:
+				row_name = row.name
+				last_row_name = last_row.name
+				if not row_name or row_name != last_row_name:
+					# Unigram occasionally exposes the focused Message_item outside its
+					# real row (logs may even report positions such as "39 of 38"). In
+					# that state RussianMod compares the message text with the realized
+					# last row. Require a substantial exact/containment match to avoid
+					# mistaking short, repeated service labels for the endpoint.
+					source_name = _normalized_text(source.name)
+					last_row_name = _normalized_text(last_row_name)
+					if not source_name or not last_row_name:
+						return None
+					shorter, longer = sorted(
+						(source_name, last_row_name),
+						key=len,
+					)
+					if len(shorter) < 32 or (shorter != longer and shorter not in longer):
+						return None
+			except Exception:
+				return None
+		return messages, row
+
+	def _get_end_of_chat_state(self, obj, messages=None):
+		"""Return the RussianMod-compatible realized-last-message state."""
+		return self._get_end_of_chat_candidate(obj, messages) is not None
+
+	def _is_last_message_in_chat(self, obj):
+		return self._get_end_of_chat_state(obj) is True
+
+	def _schedule_end_of_chat_confirmation(
+		self,
+		source,
+		move_focus_to_text=False,
+	):
+		"""Schedule a source-bound endpoint check without reading UIA immediately."""
+		self._endOfChatProbeGeneration = getattr(self, "_endOfChatProbeGeneration", 0) + 1
+		generation = self._endOfChatProbeGeneration
+		try:
+			import core
+			core.callLater(
+				_END_OF_CHAT_PROBE_DELAY_MS,
+				self._confirm_end_of_chat,
+				generation,
+				source,
+				move_focus_to_text,
+			)
+			return True
+		except Exception:
+			log.debug("Could not schedule end-of-chat confirmation", exc_info=True)
 			return False
-		return 0 < index == total
+
+	def _confirm_end_of_chat(
+		self,
+		generation,
+		source,
+		move_focus_to_text=False,
+	):
+		if generation != getattr(self, "_endOfChatProbeGeneration", 0):
+			return
+		try:
+			candidate = self._get_end_of_chat_candidate(source)
+			if candidate is None:
+				log.debug("End-of-chat probe did not match Messages.lastChild")
+				return
+		except Exception:
+			log.debug("Could not confirm end-of-chat state", exc_info=True)
+			return
+		log.debug("End-of-chat probe matched Messages.lastChild")
+		if conf.get("play_end_of_chat_sound"):
+			play_end_of_chat_sound()
+		if (
+			move_focus_to_text
+			and conf.get("action_when_pressing_up_arrow_in_text_field") == "to_messages"
+		):
+			self.script_moveFocusToTextMessage(None)
 
 	# The function of changing the playback speed of a voice message
 	@script(description=_("Increase/decrease the playback speed of voice messages"), gesture="kb:ALT+S")
@@ -1325,7 +1501,12 @@ class AppModule(appModuleHandler.AppModule):
 			if self._is_last_message_in_chat(focusObj):
 				play_end_of_chat_sound()
 				message(focusObj.name)
-			else: KeyboardInputGesture.fromName("end").send()
+			else:
+				# When the bottom-arrow fade is still in progress, a candidate final
+				# row can be temporarily inconclusive. Keep a source-bound probe while
+				# End performs its normal navigation; it cancels if a newer row appears.
+				self._schedule_end_of_chat_confirmation(focusObj)
+				KeyboardInputGesture.fromName("end").send()
 			return True
 		obj = self.getMessagesElement()
 		try:
@@ -2067,12 +2248,14 @@ class AppModule(appModuleHandler.AppModule):
 
 	def event_show(self, obj, nextHandler):
 		try:
-			if getattr(self, "isUnigramWindow", False) and is_recording_button(obj):
-				self._voiceRecordingButton = obj
-				self._voiceRecordingDiscoveryFocus = None
-			elif getattr(self, "isUnigramWindow", False) and obj.UIAAutomationId == "ElapsedLabel":
-				transition = self._voiceRecordingState.elapsedChanged(obj.name)
-				self._handleVoiceRecordingTransition(transition)
+			if getattr(self, "isUnigramWindow", False):
+				self._remember_messages_button(obj)
+				if is_recording_button(obj):
+					self._voiceRecordingButton = obj
+					self._voiceRecordingDiscoveryFocus = None
+				elif obj.UIAAutomationId == "ElapsedLabel":
+					transition = self._voiceRecordingState.elapsedChanged(obj.name)
+					self._handleVoiceRecordingTransition(transition)
 		finally:
 			nextHandler()
 
@@ -2137,6 +2320,7 @@ class AppModule(appModuleHandler.AppModule):
 					pass
 			nextHandler()
 			return
+		self._remember_messages_button(obj)
 		self._scheduleAutoFocusChatList()
 		if conf.get("automatically announce new messages") and Chat_update.pouse:
 			# Since the timer is suspended when the program window is minimized, it needs to be restored as soon as the focus is set on some element in the window
@@ -2315,9 +2499,10 @@ class AppModule(appModuleHandler.AppModule):
 				except Exception: pass
 			return
 		try:
+			self._remember_messages_button(obj)
 			if is_recording_button(obj):
 				self._voiceRecordingButton = obj
-			if obj.role == Role.LISTITEM and  obj.name and obj.isFocusable:
+			if obj.role == Role.LISTITEM and obj.isFocusable:
 				parent = obj.parent
 				if parent.UIAAutomationId == "ChatFolders":
 					self.tabs_folder_element = parent
@@ -2331,13 +2516,19 @@ class AppModule(appModuleHandler.AppModule):
 					return
 				elif parent.UIAAutomationId == "TopicList": return
 				elif obj.name.startswith("forumTopic {"): return
-				# We check whether the element contains phrases that will help us identify it as a message
+				# We check whether the element contains phrases that will help us identify it as a message.
+				# Service and blank final messages can have no accessible name, but their
+				# Message_item id and Messages-row ancestry still identify them reliably.
 				keywords = keywordsInMessages.get(conf.get("lang"), keywordsInMessages["en"])
-				name = obj.name[-200:]
+				name = (obj.name or "")[-200:]
 				self.sender_message = "received" if keywords[3] in name else "send" if keywords[2] in name else ""
 				self.end_text = name
 				if (
-					self.sender_message
+					(
+						obj.UIAAutomationId == "Message_item"
+						and getattr(getattr(parent, "parent", None), "UIAAutomationId", "") == "Messages"
+					)
+					or self.sender_message
 					or has_empty_rich_message_summary(obj)
 					or (parent.role == Role.LISTITEM and parent.location.width > 800)
 				):
@@ -2708,15 +2899,16 @@ class AppModule(appModuleHandler.AppModule):
 
 	@script(description=_("Go to the end"), gesture="kb:ALT+end")
 	def script_to_down(self, gesture):
-		# 12.7 nests the scroll-to-bottom button (MessagesButton) deep inside the Arrows overlay
-		# and hides it while already at the bottom. Walk the tree to find it; if it is not
-		# present/visible we are already at the bottom, so focus the last message instead.
-		foreground = api.getForegroundObject()
-		button = self._find_descendant(foreground, Role.BUTTON, "MessagesButton", max_depth=25) if foreground else False
-		if button and button.location and button.location.width:
-			button.doAction()
-		else:
-			self.script_toLastMessage(gesture)
+		# Use the button only if NVDA has already materialized and cached it. A
+		# synchronous foreground-tree walk can block UIA long enough to freeze NVDA.
+		button = getattr(self, "_messagesButton", None)
+		if button and self._messages_button_visibility() is True:
+			try:
+				button.doAction()
+				return True
+			except Exception:
+				pass
+		return self.script_toLastMessage(gesture)
 
 	@script(description=_("Go to the list with search results"), gesture="kb:ALT+I")
 	def script_go_to_list_search_results(self, gesture):
