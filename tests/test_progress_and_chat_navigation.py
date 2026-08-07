@@ -137,6 +137,23 @@ def test_progress_tracker_stops_and_does_not_reschedule_at_100_percent(monkeypat
 	assert len(scheduled) == 1
 
 
+def test_all_recurring_uia_pollers_use_the_nvda_main_loop():
+	for class_name in ("Title_change_tracking", "Typing_sound_tracking", "Chat_update"):
+		class_node = _class_ast(class_name)
+		assert any(
+			isinstance(base, ast.Name) and base.id == "_MainLoopPoller"
+			for base in class_node.bases
+		)
+		assert "Timer" not in {
+			node.id
+			for node in ast.walk(class_node)
+			if isinstance(node, ast.Name)
+		}
+
+	poller_source = ast.unparse(_class_ast("_MainLoopPoller"))
+	assert "core.callLater" in poller_source
+
+
 def test_chat_mention_navigation_uses_the_stable_unigram_badge_glyph():
 	chat_item = _load_chat_list_item()
 	mention = SimpleNamespace(
@@ -274,6 +291,8 @@ def test_auto_focus_waits_for_the_chat_list_then_completes():
 		_autoFocusChatListGeneration=2,
 		script_toChatList=lambda gesture, arg=False: focus_calls.append(arg) or True,
 		_scheduleAutoFocusChatList=lambda: retries.append(True),
+		_remember_main_window=lambda obj: True,
+		_is_main_window_object=lambda obj: True,
 	)
 	focus = SimpleNamespace(
 		appModule=instance,
@@ -287,7 +306,6 @@ def test_auto_focus_waits_for_the_chat_list_then_completes():
 		"Role": SimpleNamespace(LISTITEM="listItem"),
 		"log": SimpleNamespace(debug=lambda *args: None),
 		"_AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT": 10,
-		"_is_call_page_object": lambda obj: False,
 	}
 	method = _load_app_method("_autoFocusChatListTick", namespace)
 
@@ -308,6 +326,8 @@ def test_auto_focus_does_not_repeat_when_focus_is_already_in_chat_list():
 		_autoFocusChatListGeneration=1,
 		script_toChatList=lambda gesture, arg=False: focus_calls.append(True),
 		_scheduleAutoFocusChatList=lambda: None,
+		_remember_main_window=lambda obj: True,
+		_is_main_window_object=lambda obj: True,
 	)
 	parent = SimpleNamespace(UIAAutomationId="ChatsList")
 	focus = SimpleNamespace(
@@ -322,7 +342,6 @@ def test_auto_focus_does_not_repeat_when_focus_is_already_in_chat_list():
 		"Role": SimpleNamespace(LISTITEM="listItem"),
 		"log": SimpleNamespace(debug=lambda *args: None),
 		"_AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT": 10,
-		"_is_call_page_object": lambda obj: False,
 	}
 	method = _load_app_method("_autoFocusChatListTick", namespace)
 
@@ -332,7 +351,7 @@ def test_auto_focus_does_not_repeat_when_focus_is_already_in_chat_list():
 	assert focus_calls == []
 
 
-def test_auto_focus_never_moves_focus_away_from_a_call_page():
+def test_auto_focus_never_moves_focus_away_from_a_separate_call_window():
 	focus_calls = []
 	instance = SimpleNamespace(
 		_autoFocusChatListDone=False,
@@ -341,13 +360,14 @@ def test_auto_focus_never_moves_focus_away_from_a_call_page():
 		_autoFocusChatListGeneration=1,
 		script_toChatList=lambda gesture, arg=False: focus_calls.append(True),
 		_scheduleAutoFocusChatList=lambda: None,
+		_remember_main_window=lambda obj: False,
+		_is_main_window_object=lambda obj: False,
 	)
-	call_page = SimpleNamespace(UIAAutomationId="VoipPage", parent=None)
 	focus = SimpleNamespace(
 		appModule=instance,
 		isInForeground=True,
 		role="button",
-		parent=call_page,
+		windowHandle=200,
 	)
 	namespace = {
 		"api": SimpleNamespace(getFocusObject=lambda: focus),
@@ -355,10 +375,6 @@ def test_auto_focus_never_moves_focus_away_from_a_call_page():
 		"Role": SimpleNamespace(LISTITEM="listItem"),
 		"log": SimpleNamespace(debug=lambda *args: None),
 		"_AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT": 10,
-		"_is_call_page_object": _load_module_function(
-			"_is_call_page_object",
-			{"_CALL_PAGE_AUTOMATION_IDS": ("VoipPage", "GroupCallPage")},
-		),
 	}
 	method = _load_app_method("_autoFocusChatListTick", namespace)
 
@@ -377,6 +393,40 @@ def test_focus_events_do_not_restart_startup_chat_list_focusing():
 	)
 
 	assert "_scheduleAutoFocusChatList" not in ast.unparse(method)
+
+
+def test_main_chat_window_is_identified_from_stable_uia_ancestors():
+	main_marker = SimpleNamespace(UIAAutomationId="Messages", parent=None)
+	main_focus = SimpleNamespace(UIAAutomationId="Message_item", parent=main_marker, windowHandle=100)
+	call_focus = SimpleNamespace(UIAAutomationId="Mute", parent=None, windowHandle=200)
+	namespace = {
+		"_MAIN_WINDOW_AUTOMATION_IDS": frozenset(("ChatsList", "Messages", "TextField", "Navigation")),
+	}
+	namespace["_find_ancestor_by_automation_id"] = _load_module_function(
+		"_find_ancestor_by_automation_id",
+		{},
+	)
+	remember = _load_app_method("_remember_main_window", namespace)
+	is_main = _load_app_method("_is_main_window_object", namespace)
+	instance = SimpleNamespace(_mainWindowHandle=None)
+
+	assert remember(instance, main_focus)
+	assert is_main(instance, main_focus)
+	assert not remember(instance, call_focus)
+	assert not is_main(instance, call_focus)
+
+
+def test_call_control_detection_never_enumerates_siblings():
+	class Node(SimpleNamespace):
+		@property
+		def children(self):
+			raise AssertionError("call control siblings must not be materialized")
+
+	container = Node(UIAAutomationId="ActiveButtons", parent=None)
+	control = Node(UIAAutomationId="Mute", parent=container)
+	find_ancestor = _load_module_function("_find_ancestor_by_automation_id", {})
+
+	assert find_ancestor(control, ("ActiveButtons",), max_depth=4) is container
 
 
 def test_call_state_announcements_use_the_nvda_main_loop(monkeypatch):
@@ -405,6 +455,8 @@ def test_auto_focus_stops_retrying_at_the_limit():
 		_autoFocusChatListGeneration=3,
 		script_toChatList=lambda gesture, arg=False: False,
 		_scheduleAutoFocusChatList=lambda: retries.append(True),
+		_remember_main_window=lambda obj: True,
+		_is_main_window_object=lambda obj: True,
 	)
 	focus = SimpleNamespace(
 		appModule=instance,
@@ -418,7 +470,6 @@ def test_auto_focus_stops_retrying_at_the_limit():
 		"Role": SimpleNamespace(LISTITEM="listItem"),
 		"log": SimpleNamespace(debug=lambda *args: None),
 		"_AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT": 10,
-		"_is_call_page_object": lambda obj: False,
 	}
 	method = _load_app_method("_autoFocusChatListTick", namespace)
 

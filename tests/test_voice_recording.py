@@ -299,6 +299,8 @@ def test_polling_native_ui_announces_manual_or_keyboard_recording_once():
 		_pollVoiceRecordingOutcome=lambda: None,
 		_handleVoiceRecordingTransition=lambda transition: transitions.append(transition) if transition else None,
 		_scheduleVoiceRecordingPoll=lambda: scheduled.append(True),
+		_remember_main_window=lambda obj: True,
+		_is_main_window_object=lambda obj: True,
 	)
 	focus = SimpleNamespace(appModule=instance)
 	namespace = {
@@ -316,6 +318,31 @@ def test_polling_native_ui_announces_manual_or_keyboard_recording_once():
 	assert transitions == ["start", "stopped"]
 	assert scheduled == [True, True, True]
 	assert not instance._voiceRecordingState.active
+
+
+def test_recording_monitor_does_not_scan_a_separate_call_window():
+	scheduled = []
+	instance = SimpleNamespace(
+		_voiceRecordingMonitorRunning=True,
+		_voiceRecordingDiscoveryFocus=object(),
+		_remember_main_window=lambda obj: False,
+		_is_main_window_object=lambda obj: False,
+		_pollVoiceRecordingOutcome=lambda: (_ for _ in ()).throw(AssertionError("unexpected outcome scan")),
+		_getVoiceRecordingButton=lambda focus: (_ for _ in ()).throw(AssertionError("unexpected UI tree scan")),
+		_scheduleVoiceRecordingPoll=lambda: scheduled.append(True),
+	)
+	focus = SimpleNamespace(appModule=instance, windowHandle=200)
+	namespace = {
+		"api": SimpleNamespace(getFocusObject=lambda: focus),
+		"recording_button_state": recording_button_state,
+		"log": SimpleNamespace(debug=lambda text: None, info=lambda text: None),
+	}
+	method = _load_method("_pollVoiceRecordingState", namespace)
+
+	method(instance)
+
+	assert instance._voiceRecordingDiscoveryFocus is None
+	assert scheduled == [True]
 
 
 def test_recording_transitions_keep_text_and_audio_notifications():

@@ -72,7 +72,7 @@ _AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT = 10
 _END_OF_CHAT_PROBE_DELAY_MS = 50
 _SEARCH_RESULT_COUNTER_RE = re.compile(r"^\s*(\d+)\s*/\s*(\d+)\s*$")
 _SEARCH_RESULT_COUNTER_SIBLING_LIMIT = 6
-_CALL_PAGE_AUTOMATION_IDS = ("VoipPage", "GroupCallPage")
+_MAIN_WINDOW_AUTOMATION_IDS = frozenset(("ChatsList", "Messages", "TextField", "Navigation"))
 
 
 def _get_end_of_chat_sound_path():
@@ -114,24 +114,24 @@ def _normalized_text(text):
 	return str(text).translate(_APP_MODULE_NAME_IGNORED_CHARS).strip().casefold()
 
 
-def _is_call_page_object(obj):
-	"""Return whether *obj* belongs to one of Unigram's call pages."""
+def _find_ancestor_by_automation_id(obj, automation_ids, max_depth=6):
+	"""Find a named UIA ancestor without materializing any sibling subtrees."""
 	seen = set()
-	for _ in range(16):
+	for _ in range(max_depth + 1):
 		if not obj or id(obj) in seen:
-			return False
+			return None
 		seen.add(id(obj))
 		try:
 			automation_id = obj.UIAAutomationId
 		except Exception:
 			automation_id = ""
-		if automation_id in _CALL_PAGE_AUTOMATION_IDS:
-			return True
+		if automation_id in automation_ids:
+			return obj
 		try:
 			obj = obj.parent
 		except Exception:
-			return False
-	return False
+			return None
+	return None
 
 
 def _announce_call_state_later(text, delay_ms=150):
@@ -757,7 +757,55 @@ class Saved_items:
 		self._items[id][key] = obj
 
 
-class Title_change_tracking:
+class _MainLoopPoller:
+	"""Schedule UIA polling on NVDA's event loop, never a native Timer thread."""
+	_timer = None
+	_scheduled = False
+	_generation = 0
+
+	@classmethod
+	def _scheduled_poll(cls, generation):
+		if generation != cls._generation:
+			return
+		cls._scheduled = False
+		cls._timer = None
+		cls.tick()
+
+	@classmethod
+	def _schedule_poll(cls):
+		if not cls.active or cls.pouse or cls._scheduled:
+			return
+		try:
+			import core
+			generation = cls._generation
+			cls._scheduled = True
+			cls._timer = core.callLater(
+				round(cls.interval * 1000),
+				lambda: cls._scheduled_poll(generation),
+			)
+		except Exception as error:
+			cls._scheduled = False
+			cls._timer = None
+			try: log.debug("Could not schedule %s polling: %r" % (cls.__name__, error))
+			except Exception: pass
+
+	@classmethod
+	def _cancel_poll(cls):
+		cls._generation += 1
+		timer = cls._timer
+		cls._timer = None
+		cls._scheduled = False
+		if timer is not None:
+			try: timer.Stop()
+			except Exception: pass
+
+	@classmethod
+	def _restart_poll(cls):
+		cls._cancel_poll()
+		cls._schedule_poll()
+
+
+class Title_change_tracking(_MainLoopPoller):
 	active = False
 	pouse = False
 	interval = .5
@@ -765,19 +813,24 @@ class Title_change_tracking:
 	@classmethod
 	def tick(cls):
 		if not cls.active or cls.pouse: return
-		title = cls.saved_items.get("profile name")
-		if not title or not title.isInForeground:
-			cls.pouse = True
-			return False
-		last_profile_name = cls.saved_items.get("last profile name") or ("",)
-		if title.childCount > 1 and title.lastChild.name != last_profile_name[-1]:
-			if title.firstChild.name == last_profile_name[0]:
-				# Announce changes only if these changes are not related to switching to another chat
-				text = title.lastChild.name
-				queueHandler.queueFunction(queueHandler.eventQueue, message, text)
-			new_title = [item.name for item in title.children]
-			cls.saved_items.save("last profile name", new_title)
-		Timer(cls.interval, cls.tick).start()
+		try:
+			title = cls.saved_items.get("profile name")
+			if not title or not title.isInForeground:
+				cls.pouse = True
+				return False
+			last_profile_name = cls.saved_items.get("last profile name") or ("",)
+			if title.childCount > 1 and title.lastChild.name != last_profile_name[-1]:
+				if title.firstChild.name == last_profile_name[0]:
+					# Announce changes only if these changes are not related to switching to another chat
+					text = title.lastChild.name
+					queueHandler.queueFunction(queueHandler.eventQueue, message, text)
+				new_title = [item.name for item in title.children]
+				cls.saved_items.save("last profile name", new_title)
+		except Exception as error:
+			try: log.debug("Could not track chat-title changes: %r" % error)
+			except Exception: pass
+		finally:
+			cls._schedule_poll()
 	@classmethod
 	def toggle(cls, saved_items=False):
 		if not conf.get("automatically announce activity in chats") or not saved_items:
@@ -785,10 +838,11 @@ class Title_change_tracking:
 			cls.active = True
 			cls.pouse = False
 			conf.set("automatically announce activity in chats", True)
-			Timer(cls.interval, cls.tick).start()
+			cls._restart_poll()
 			return True
 		else:
 			cls.active = False
+			cls._cancel_poll()
 			conf.set("automatically announce activity in chats", False)
 			return False
 	@classmethod
@@ -797,10 +851,10 @@ class Title_change_tracking:
 		cls.active = True
 		cls.saved_items = saved_items
 		cls.saved_items.save("last profile name", None)
-		Timer(cls.interval, cls.tick).start()
+		cls._restart_poll()
 
 
-class Typing_sound_tracking:
+class Typing_sound_tracking(_MainLoopPoller):
 	# Polls the chat-title status and loops Typing.wav while the other side is typing/recording/etc.
 	active = False
 	pouse = False
@@ -862,8 +916,8 @@ class Typing_sound_tracking:
 			else: cls.stop_sound()
 		except Exception:
 			cls.stop_sound()
-		if cls.active and not cls.pouse:
-			Timer(cls.interval, cls.tick).start()
+		finally:
+			cls._schedule_poll()
 	@classmethod
 	def toggle(cls, saved_items=False):
 		if not conf.get("play_typing_sound") or not saved_items:
@@ -871,10 +925,11 @@ class Typing_sound_tracking:
 			cls.active = True
 			cls.pouse = False
 			conf.set("play_typing_sound", True)
-			Timer(cls.interval, cls.tick).start()
+			cls._restart_poll()
 			return True
 		else:
 			cls.active = False
+			cls._cancel_poll()
 			cls.stop_sound()
 			conf.set("play_typing_sound", False)
 			return False
@@ -883,10 +938,10 @@ class Typing_sound_tracking:
 		cls.pouse = False
 		cls.active = True
 		cls.saved_items = saved_items
-		Timer(cls.interval, cls.tick).start()
+		cls._restart_poll()
 
 
-class Chat_update:
+class Chat_update(_MainLoopPoller):
 	active = False
 	pouse = False
 	interval = .3
@@ -894,45 +949,51 @@ class Chat_update:
 	@classmethod
 	def tick(cls):
 		if not cls.active or cls.pouse: return
-		try : last_message = cls.app.getMessagesElement().lastChild
-		except: last_message = False
-		if not last_message or not last_message.isInForeground:
-			cls.pouse = True
-			return False
-		# The first item is the name of the chat in which the last message was recorded
-		# The second item is the message index
-		last_saved_message = cls.app.saved_items.get("last message") or ("", "")
-		# If there is a problem getting the message index, terminate the function and call the next iteration
 		try:
-			last_message.positionInfo["indexInGroup"]
-			last_message.positionInfo["similarItemsInGroup"]
-		except:
-			Timer(cls.interval, cls.tick).start()
-			return
-		if last_message.positionInfo["indexInGroup"] != last_saved_message[1] and last_message.positionInfo["indexInGroup"] == last_message.positionInfo["similarItemsInGroup"]:
+			try : last_message = cls.app.getMessagesElement().lastChild
+			except: last_message = False
+			if not last_message or not last_message.isInForeground:
+				cls.pouse = True
+				return False
+			# The first item is the name of the chat in which the last message was recorded
+			# The second item is the message index
+			last_saved_message = cls.app.saved_items.get("last message") or ("", "")
+			# If there is a problem getting the message index, terminate the function and call the next iteration
 			try:
-				title = cls.app.saved_items.get("profile name").firstChild.name
+				last_message.positionInfo["indexInGroup"]
+				last_message.positionInfo["similarItemsInGroup"]
 			except:
-				title = False
-			keywords = keywordsInMessages.get(conf.get("lang"), keywordsInMessages["en"])
-			if ((title == last_saved_message[0]) or not title) and keywords[3] in last_message.name[-60:]:
-				text = cls.app.action_message_focus(last_message.firstChild)
-				queueHandler.queueFunction(queueHandler.eventQueue, message, text)
-			try:
-				new_message = (title, last_message.positionInfo["indexInGroup"])
-				cls.app.saved_items.save("last message", new_message)
-			except: pass
-		Timer(cls.interval, cls.tick).start()
+				return
+			if last_message.positionInfo["indexInGroup"] != last_saved_message[1] and last_message.positionInfo["indexInGroup"] == last_message.positionInfo["similarItemsInGroup"]:
+				try:
+					title = cls.app.saved_items.get("profile name").firstChild.name
+				except:
+					title = False
+				keywords = keywordsInMessages.get(conf.get("lang"), keywordsInMessages["en"])
+				if ((title == last_saved_message[0]) or not title) and keywords[3] in last_message.name[-60:]:
+					text = cls.app.action_message_focus(last_message.firstChild)
+					queueHandler.queueFunction(queueHandler.eventQueue, message, text)
+				try:
+					new_message = (title, last_message.positionInfo["indexInGroup"])
+					cls.app.saved_items.save("last message", new_message)
+				except: pass
+		except Exception as error:
+			try: log.debug("Could not track new chat messages: %r" % error)
+			except Exception: pass
+		finally:
+			cls._schedule_poll()
 	@classmethod
 	def toggle(cls, app=False):
 		if not conf.get("automatically announce new messages") or not app:
 			cls.active = True
+			cls.pouse = False
 			conf.set("automatically announce new messages", True)
 			cls.app = app
-			Timer(cls.interval, cls.tick).start()
+			cls._restart_poll()
 			return True
 		else:
 			cls.active = False
+			cls._cancel_poll()
 			conf.set("automatically announce new messages", False)
 			return False
 	@classmethod
@@ -941,7 +1002,7 @@ class Chat_update:
 		cls.active = True
 		cls.app = app
 		cls.app.saved_items.save("last message", None)
-		Timer(cls.interval, cls.tick).start()
+		cls._restart_poll()
 
 
 class EditableText(editableText.EditableText):
@@ -1036,6 +1097,7 @@ class AppModule(appModuleHandler.AppModule):
 		self._autoFocusChatListGeneration = 0
 		self._endOfChatProbeGeneration = 0
 		self._messagesButton = None
+		self._mainWindowHandle = None
 		if not self.isUnigramWindow:
 			self._fallbackAppModule = None
 			fallbackClass = _load_telegram_desktop_fallback_class()
@@ -1115,10 +1177,10 @@ class AppModule(appModuleHandler.AppModule):
 				or not focus.isInForeground
 			):
 				return
-			# A Voip/GroupCall page is a separate focus surface. Moving focus to
-			# the main chat list from here leaves the call controls unreachable and
-			# can cause a UIA focus-event loop. Automatic focus is only for startup.
-			if _is_call_page_object(focus):
+			self._remember_main_window(focus)
+			# VoIP pages are separate WindowEx instances. Never move focus from a
+			# different (or not-yet-identified) window into the main chat window.
+			if not self._is_main_window_object(focus):
 				self._autoFocusChatListDone = True
 				return
 			if (
@@ -1149,6 +1211,26 @@ class AppModule(appModuleHandler.AppModule):
 				except Exception: return None
 			return None
 		return super().getScript(gesture)
+
+	def _remember_main_window(self, obj):
+		"""Remember the window hosting Unigram's chat UI from a known control."""
+		marker = _find_ancestor_by_automation_id(obj, _MAIN_WINDOW_AUTOMATION_IDS, max_depth=5)
+		if not marker:
+			return False
+		try:
+			handle = obj.windowHandle
+		except Exception:
+			return False
+		if not handle:
+			return False
+		self._mainWindowHandle = handle
+		return True
+
+	def _is_main_window_object(self, obj):
+		try:
+			return bool(self._mainWindowHandle and obj.windowHandle == self._mainWindowHandle)
+		except Exception:
+			return False
 
 
 	scriptCategory = "UnigramPlus"
@@ -1622,11 +1704,11 @@ class AppModule(appModuleHandler.AppModule):
 		# 1:1 call window. Used to tell a 1:1 call apart from a group call and from the story
 		# viewer, which has its own unrelated "Mute" button.
 		mute = self._find_descendant(foreground, automation_id="Mute", max_depth=14)
-		if not mute or not mute.parent: return None
-		try: ids = {child.UIAAutomationId for child in mute.parent.children}
-		except: return None
-		if "Camera" in ids: return mute.parent
-		return None
+		if not mute: return None
+		# VoipPage.xaml names the containing Grid "ActiveButtons". Following
+		# parents is bounded and avoids recursively constructing every sibling
+		# while NVDA is still creating the Mute object.
+		return _find_ancestor_by_automation_id(mute, ("ActiveButtons",), max_depth=4)
 
 	def _find_end_call_button(self, foreground):
 		# 12.7's 1:1 hang-up button (VoipPage) has no automation id; it sits in the same grid
@@ -2117,6 +2199,14 @@ class AppModule(appModuleHandler.AppModule):
 			focus = api.getFocusObject()
 			if getattr(focus, "appModule", None) is not self:
 				return
+			# Calls run in separate WindowEx instances. A cached chat control can
+			# become an expensive disconnected UIA object there, and getElements()
+			# would scan the call surface every 200 ms. Voice-message monitoring is
+			# meaningful only in the window that owns ChatsList/Messages/TextField.
+			self._remember_main_window(focus)
+			if not self._is_main_window_object(focus):
+				self._voiceRecordingDiscoveryFocus = None
+				return
 			self._pollVoiceRecordingOutcome()
 			button = self._getVoiceRecordingButton(focus)
 			active = recording_button_state(button)
@@ -2362,13 +2452,15 @@ class AppModule(appModuleHandler.AppModule):
 			nextHandler()
 			return
 		self._remember_messages_button(obj)
-		if conf.get("automatically announce new messages") and Chat_update.pouse:
+		self._remember_main_window(obj)
+		is_main_window = self._is_main_window_object(obj)
+		if is_main_window and conf.get("automatically announce new messages") and Chat_update.pouse:
 			# Since the timer is suspended when the program window is minimized, it needs to be restored as soon as the focus is set on some element in the window
 			Chat_update.restore(self)
-		if conf.get("automatically announce activity in chats") and Title_change_tracking.pouse:
+		if is_main_window and conf.get("automatically announce activity in chats") and Title_change_tracking.pouse:
 			# Since the timer is suspended when the program window is minimized, it needs to be restored as soon as the focus is set on some element in the window
 			Title_change_tracking.restore(self.saved_items)
-		if conf.get("play_typing_sound") and Typing_sound_tracking.pouse:
+		if is_main_window and conf.get("play_typing_sound") and Typing_sound_tracking.pouse:
 			Typing_sound_tracking.restore(self.saved_items)
 		if not File_transfer_progress_tracking.active:
 			try:
@@ -2511,8 +2603,7 @@ class AppModule(appModuleHandler.AppModule):
 		# own "Mute" button.
 		if obj.UIAAutomationId in ("Mute", "Camera"):
 			try:
-				sib = {child.UIAAutomationId for child in obj.parent.children}
-				if "Camera" in sib and ("Screen" in sib or "Mute" in sib):
+				if _find_ancestor_by_automation_id(obj, ("ActiveButtons",), max_depth=4):
 					on = State.PRESSED in obj.states or State.CHECKED in obj.states
 					if obj.UIAAutomationId == "Mute": obj.name = _("Microphone muted") if on else _("Microphone on")
 					else: obj.name = _("Camera on") if on else _("Camera off")
@@ -2540,6 +2631,7 @@ class AppModule(appModuleHandler.AppModule):
 			return
 		try:
 			self._remember_messages_button(obj)
+			self._remember_main_window(obj)
 			if is_recording_button(obj):
 				self._voiceRecordingButton = obj
 			if obj.role == Role.LISTITEM and obj.isFocusable:
@@ -2581,12 +2673,11 @@ class AppModule(appModuleHandler.AppModule):
 			elif obj.UIAAutomationId in ("Audio", "Video"):
 				clsList.insert(0, Audio_and_video_button)
 			elif obj.UIAAutomationId in ("Mute", "Camera"):
-				# 1:1 call toggles share their grid with Camera/Screen; the story viewer also has
-				# an unrelated "Mute" button, so only attach the overlay inside the call grid.
-				try:
-					sib = {child.UIAAutomationId for child in obj.parent.children}
-					if "Camera" in sib and ("Screen" in sib or "Mute" in sib): clsList.insert(0, Audio_and_video_button)
-				except: pass
+				# VoipPage.xaml puts these toggles under ActiveButtons. Do not inspect
+				# parent.children here: this hook runs while NVDA is constructing obj,
+				# and sibling enumeration can recursively re-enter object creation.
+				if _find_ancestor_by_automation_id(obj, ("ActiveButtons",), max_depth=4):
+					clsList.insert(0, Audio_and_video_button)
 			# elif obj.role == Role.BUTTON and obj.UIAAutomationId == "Explanation":
 				# clsList.insert(0, ExplanationCorrectAnswerInQuiz)
 			elif obj.UIAAutomationId == "Slider" and (obj.name == "Seek" or obj.role == Role.SLIDER):
