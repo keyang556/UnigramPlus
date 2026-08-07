@@ -21,6 +21,7 @@ import time
 import winsound
 from nvwave import playWaveFile
 import os
+import globalVars
 from logHandler import log
 import queueHandler
 import sys
@@ -56,6 +57,8 @@ from .voice_recording import (  # noqa: E402
 )
 
 baseDir = os.path.join(os.path.dirname(__file__), "media\\")
+_END_OF_CHAT_SOUND_FILENAME = "EndOfChatDefault.wav"
+_END_OF_CHAT_CUSTOM_SOUND_FILENAME = "UnigramEndOfChat.wav"
 _telegramDesktopFallbackClass = None
 _telegramDesktopFallbackLoadAttempted = False
 
@@ -68,6 +71,36 @@ _AUTO_FOCUS_CHAT_LIST_DELAY_MS = 300
 _AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT = 10
 _SEARCH_RESULT_COUNTER_RE = re.compile(r"^\s*(\d+)\s*/\s*(\d+)\s*$")
 _SEARCH_RESULT_COUNTER_SIBLING_LIMIT = 6
+
+
+def _get_end_of_chat_sound_path():
+	"""Return the user override when present, otherwise the bundled sound."""
+	try:
+		custom_sound = os.path.join(
+			globalVars.appArgs.configPath,
+			_END_OF_CHAT_CUSTOM_SOUND_FILENAME,
+		)
+		if os.path.isfile(custom_sound):
+			return custom_sound
+	except Exception:
+		# Falling back to the bundled asset keeps this non-essential notification
+		# from affecting message navigation if the configuration path is unavailable.
+		pass
+	return os.path.join(baseDir, _END_OF_CHAT_SOUND_FILENAME)
+
+
+def play_end_of_chat_sound():
+	"""Play the optional notification that indicates the last chat message."""
+	if not conf.get("play_end_of_chat_sound"):
+		return False
+	try:
+		# Do not use winsound here. Typing_sound_tracking uses it for its looping
+		# notification; PlaySound would replace that loop and leave it muted.
+		playWaveFile(_get_end_of_chat_sound_path())
+		return True
+	except Exception:
+		log.debug("Could not play end-of-chat sound", exc_info=True)
+		return False
 
 
 def _normalized_text(text):
@@ -567,8 +600,17 @@ class Message_list_item(ListItem):
 		self.appModule.activate_option_for_menu((icons_from_context_menu["reply"]), "Messages")
 
 	def script_next_message(self, gesture):
-		if self.parent.next: gesture.send()
-		else: self.appModule.script_moveFocusToTextMessage(gesture)
+		# ``parent.next`` describes only the currently realized UIA slice.  The
+		# Messages list is virtualized, so it cannot reliably identify the logical
+		# final message.
+		if not self.appModule._is_last_message_in_chat(self):
+			gesture.send()
+			return
+		play_end_of_chat_sound()
+		if conf.get("action_when_pressing_up_arrow_in_text_field") == "to_messages":
+			self.appModule.script_moveFocusToTextMessage(gesture)
+		else:
+			gesture.send()
 
 	def script_next_media(self, gesture, revers=False):
 		self.list_media = self.list_media or [item for item in self.children if item.role == Role.LISTITEM]
@@ -614,7 +656,10 @@ class Message_list_item(ListItem):
 			self.index_last_part_in_message = 0
 			self.last_part_in_message = self.name if has_empty_rich_message_summary(self) else ""
 		
-		if conf.get("action_when_pressing_up_arrow_in_text_field") == "to_messages":
+		if (
+			conf.get("action_when_pressing_up_arrow_in_text_field") == "to_messages"
+			or conf.get("play_end_of_chat_sound")
+		):
 			self.bindGesture("kb:downArrow", "next_message")
 
 	__gestures = {
@@ -1154,6 +1199,29 @@ class AppModule(appModuleHandler.AppModule):
 			else: return False
 		except: return False
 
+	def _is_last_message_in_chat(self, obj):
+		"""Return whether a message is logically the final item in its chat.
+
+		UIA's PositionInSet and SizeOfSet describe the complete collection, unlike
+		previous/next siblings in Unigram's virtualized Messages list.  Missing or
+		invalid metadata deliberately produces a false negative: ordinary Down
+		Arrow navigation is safer than treating a partially realized list as done.
+		"""
+		try:
+			position_info = obj.positionInfo
+			index = position_info.get("indexInGroup")
+			total = position_info.get("similarItemsInGroup")
+		except Exception:
+			return False
+		if (
+			not isinstance(index, int)
+			or isinstance(index, bool)
+			or not isinstance(total, int)
+			or isinstance(total, bool)
+		):
+			return False
+		return 0 < index == total
+
 	# The function of changing the playback speed of a voice message
 	@script(description=_("Increase/decrease the playback speed of voice messages"), gesture="kb:ALT+S")
 	def script_voiceMessageAcceleration(self, gesture):
@@ -1254,8 +1322,10 @@ class AppModule(appModuleHandler.AppModule):
 	def script_toLastMessage(self, gesture):
 		focusObj = api.getFocusObject()
 		if self.is_message_object(focusObj):
-			if focusObj.parent.next: KeyboardInputGesture.fromName("end").send()
-			else: message(focusObj.name)
+			if self._is_last_message_in_chat(focusObj):
+				play_end_of_chat_sound()
+				message(focusObj.name)
+			else: KeyboardInputGesture.fromName("end").send()
 			return True
 		obj = self.getMessagesElement()
 		try:
@@ -2027,6 +2097,31 @@ class AppModule(appModuleHandler.AppModule):
 				self._handleVoiceRecordingTransition(self._voiceRecordingState.hidden())
 		finally:
 			nextHandler()
+
+	def event_focusEntered(self, obj, nextHandler):
+		"""Suppress the transient Messages-list ancestor announcement.
+
+		Unigram recycles the virtualized message containers while navigating.  On
+		the affected transitions NVDA sees ``Messages`` as a newly entered list
+		ancestor and would announce "list" before the focused message.  Handle
+		that exact ancestor before NVDA's object-level event queues speech.
+		"""
+		if not getattr(self, "isUnigramWindow", False):
+			fallback = getattr(self, "_fallbackAppModule", None)
+			if fallback and hasattr(fallback, "event_focusEntered"):
+				try:
+					fallback.event_focusEntered(obj, nextHandler)
+					return
+				except Exception:
+					pass
+			nextHandler()
+			return
+		try:
+			if obj.role == Role.LIST and getattr(obj, "UIAAutomationId", "") == "Messages":
+				return
+		except Exception:
+			pass
+		nextHandler()
 
 	# Focus change tracking
 	def event_gainFocus(self, obj, nextHandler):

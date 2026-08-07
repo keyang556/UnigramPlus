@@ -179,6 +179,12 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
+### Version 5.6.3
+
+* Fixed an intermittent issue where NVDA announced "list" before a message while navigating with the Up and Down Arrow keys.
+* Added a setting for the Alt+[ behavior that announces message headers after their content; it is disabled by default.
+* Added an optional sound notification when reaching the end of a chat.
+
 ### Version 5.6.2
 
 * Fixed Ctrl+Alt+Left/Right so they seek the current voice message playback again.

@@ -177,6 +177,12 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 
 ##Liste des changements :
 
+### Version 5.6.3
+
+* Correction d’un problème intermittent où NVDA annonçait « liste » avant un message lors de la navigation avec les flèches haut et bas.
+* Ajout d’un réglage pour le comportement de Alt+[, qui annonce les en-têtes des messages après leur contenu ; il est désactivé par défaut.
+* Ajout d’une notification sonore facultative à l’arrivée à la fin d’un échange.
+
 ### Version 5.6.2
 
 * Correction du raccourci Ctrl+Alt+Left/Right Arrow pour reculer et avancer dans un message vocal en cours de lecture.

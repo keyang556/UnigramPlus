@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus\n"
+"Project-Id-Version: UnigramPlus 5.6.3\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2022-08-13 21:15+0300\n"
 "PO-Revision-Date: 2022-08-14 23:15+0430\n"
@@ -983,3 +983,18 @@ msgstr ""
 "- میانبرهای Ctrl+Alt+Left/Right اصلاح شدند تا دوباره پخش پیام صوتی جاری را جلو یا عقب ببرند.\n"
 "- میانبر Alt+I اصلاح شد تا به فهرست تعبیه‌شدهٔ نتایج جستجوی گفتگوی Unigram منتقل شود.\n"
 "- میانبر Alt+[ برای اعلام سرآیندهای پیام پس از محتوا افزوده شد تا در بخش‌های رسانه‌ای نمایه، نام فایل‌ها پیش از نام فرستندگان اعلام شوند."
+
+msgid "Announce message headers after the message content"
+msgstr "خواندن سرآیندهای پیام پس از محتوای پیام"
+
+msgid "Play a sound when reaching the end of a chat"
+msgstr "پخش صدا هنگام رسیدن به پایان یک گفت‌وگو"
+
+msgid ""
+"- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"
+"- Added a setting for the Alt+[ behavior that announces message headers after their content; it is disabled by default.\n"
+"- Added an optional sound notification when reaching the end of a chat."
+msgstr ""
+"- مشکل گاه‌به‌گاهی که NVDA هنگام پیمایش با کلیدهای پیکان بالا و پایین پیش از پیام «فهرست» را می‌خواند، برطرف شد.\n"
+"- تنظیمی برای رفتار Alt+[ که سرآیندهای پیام را پس از محتوای آن‌ها می‌خواند افزوده شد؛ این گزینه به‌طور پیش‌فرض غیرفعال است.\n"
+"- اعلان صوتی اختیاری برای رسیدن به پایان یک گفت‌وگو افزوده شد."

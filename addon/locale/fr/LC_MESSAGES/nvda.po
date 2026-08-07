@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus\n"
+"Project-Id-Version: UnigramPlus 5.6.3\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-02-12 12:42+0200\n"
 "PO-Revision-Date: 2023-02-27 09:28+0100\n"
@@ -1044,3 +1044,18 @@ msgstr ""
 "- Correction de Ctrl+Alt+Gauche/Droite afin de pouvoir à nouveau avancer ou reculer dans la lecture du message vocal en cours.\n"
 "- Correction de Alt+I afin de déplacer le focus vers la liste intégrée des résultats de recherche dans le chat d’Unigram.\n"
 "- Ajout de Alt+[ pour annoncer les en-têtes des messages après le contenu, afin que les noms de fichiers puissent être annoncés avant les noms des expéditeurs dans les sections multimédias du profil."
+
+msgid "Announce message headers after the message content"
+msgstr "Annoncer les en-têtes des messages après leur contenu"
+
+msgid "Play a sound when reaching the end of a chat"
+msgstr "Jouer un son à l’arrivée à la fin d’un échange"
+
+msgid ""
+"- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"
+"- Added a setting for the Alt+[ behavior that announces message headers after their content; it is disabled by default.\n"
+"- Added an optional sound notification when reaching the end of a chat."
+msgstr ""
+"- Correction d’un problème intermittent où NVDA annonçait « liste » avant un message lors de la navigation avec les flèches haut et bas.\n"
+"- Ajout d’un réglage pour le comportement de Alt+[, qui annonce les en-têtes des messages après leur contenu ; il est désactivé par défaut.\n"
+"- Ajout d’une notification sonore facultative à l’arrivée à la fin d’un échange."

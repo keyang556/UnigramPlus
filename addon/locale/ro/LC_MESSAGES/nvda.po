@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus\n"
+"Project-Id-Version: UnigramPlus 5.6.3\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-05-08 21:23+0300\n"
 "PO-Revision-Date: 2023-05-08 21:25+0300\n"
@@ -1045,3 +1045,18 @@ msgstr ""
 "- S-a remediat Ctrl+Alt+Stânga/Dreapta pentru a deplasa din nou poziția de redare a mesajului vocal curent.\n"
 "- S-a remediat Alt+I pentru a muta focalizarea la lista integrată cu rezultatele căutării din conversația Unigram.\n"
 "- S-a adăugat Alt+[ pentru a anunța antetele mesajelor după conținut, astfel încât numele fișierelor să poată fi anunțate înaintea numelor expeditorilor în secțiunile media ale profilului."
+
+msgid "Announce message headers after the message content"
+msgstr "Anunță anteturile mesajelor după conținutul mesajului"
+
+msgid "Play a sound when reaching the end of a chat"
+msgstr "Redă un sunet la atingerea sfârșitului unui chat"
+
+msgid ""
+"- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"
+"- Added a setting for the Alt+[ behavior that announces message headers after their content; it is disabled by default.\n"
+"- Added an optional sound notification when reaching the end of a chat."
+msgstr ""
+"- A fost remediată o problemă intermitentă în care NVDA anunța „listă” înaintea unui mesaj la navigarea cu săgețile sus și jos.\n"
+"- A fost adăugată o setare pentru comportamentul Alt+[ care anunță anteturile mesajelor după conținutul lor; este dezactivată implicit.\n"
+"- A fost adăugată o notificare sonoră opțională la atingerea sfârșitului unui chat."

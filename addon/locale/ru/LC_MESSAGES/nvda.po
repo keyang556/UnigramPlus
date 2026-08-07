@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 'unigramPlus' '5.2.0'\n"
+"Project-Id-Version: UnigramPlus 5.6.3\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-31 14:31+0400\n"
 "PO-Revision-Date: 2024-04-10 19:20+0300\n"
@@ -1050,3 +1050,18 @@ msgstr ""
 "- Исправлены Ctrl+Alt+Стрелка влево/вправо: они снова перематывают голосовое сообщение, которое сейчас воспроизводится.\n"
 "- Исправлен Alt+I: теперь он перемещает фокус во встроенный список результатов поиска в чате Unigram.\n"
 "- Добавлен Alt+[, который озвучивает заголовки сообщений после содержимого, благодаря чему в разделах медиа профиля имена файлов могут произноситься перед именами отправителей."
+
+msgid "Announce message headers after the message content"
+msgstr "Озвучивать заголовки сообщений после содержимого сообщения"
+
+msgid "Play a sound when reaching the end of a chat"
+msgstr "Воспроизводить звук при достижении конца чата"
+
+msgid ""
+"- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"
+"- Added a setting for the Alt+[ behavior that announces message headers after their content; it is disabled by default.\n"
+"- Added an optional sound notification when reaching the end of a chat."
+msgstr ""
+"- Исправлена периодически возникавшая проблема, из-за которой NVDA произносил «список» перед сообщением при навигации стрелками вверх и вниз.\n"
+"- Добавлена настройка для функции Alt+[, которая озвучивает заголовки сообщений после их содержимого; по умолчанию она отключена.\n"
+"- Добавлено необязательное звуковое уведомление при достижении конца чата."

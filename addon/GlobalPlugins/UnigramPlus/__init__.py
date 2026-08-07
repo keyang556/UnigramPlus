@@ -287,6 +287,11 @@ class UnigramPlusSettings(SettingsPanel):
 		# Report not seen before message content
 		self.unreadBeforeMessageContent = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Speak \"Not Seen\" before reading contents of a message")))
 		self.unreadBeforeMessageContent.SetValue(conf.get("unreadBeforeMessageContent"))
+		# Alt+[ toggles this setting directly; expose the persistent default-off
+		# behavior in settings as well so it can be selected without the shortcut.
+		self.messageHeaderAtTheEnd = settingsSizerHelper.addItem(wx.CheckBox(
+			self, label=_("Announce message headers after the message content")))
+		self.messageHeaderAtTheEnd.SetValue(conf.get("messageHeaderAtTheEnd"))
 		# Announce the phrases "Administrator" and "Owner" on messages in communities
 		self.notify_administrators_in_messages = settingsSizerHelper.addItem(wx.CheckBox(
 			self, label=_('Announce the phrases "Administrator" and "Owner" on messages in communities')))
@@ -328,6 +333,10 @@ class UnigramPlusSettings(SettingsPanel):
 		# Fix toggle buttons for some users
 		self.isFixedToggleButton = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Check this box if the voice message recording function or the voice message playback speed change function does not work properly")))
 		self.isFixedToggleButton.SetValue(conf.get("isFixedToggleButton"))
+		# Play an audible notification when navigating past the final message in a chat
+		self.play_end_of_chat_sound = settingsSizerHelper.addItem(wx.CheckBox(
+			self, label=_("Play a sound when reaching the end of a chat")))
+		self.play_end_of_chat_sound.SetValue(conf.get("play_end_of_chat_sound"))
 		# Play looped Typing.wav while the other side is typing/recording in the open chat
 		self.play_typing_sound = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Play a sound while the other side is typing in the open chat")))
 		self.play_typing_sound.SetValue(conf.get("play_typing_sound"))
@@ -350,6 +359,7 @@ class UnigramPlusSettings(SettingsPanel):
 		conf.set("autoFocusChatList", self.autoFocusChatList.IsChecked())
 		conf.set("saySenderName", self.get_key(self.listSaySenderName, self.saySenderName.GetStringSelection()))
 		conf.set("unreadBeforeMessageContent", self.unreadBeforeMessageContent.IsChecked())
+		conf.set("messageHeaderAtTheEnd", self.messageHeaderAtTheEnd.IsChecked())
 		conf.set("notify administrators in messages",
 		         self.notify_administrators_in_messages.IsChecked())
 		conf.set("voiceFolderNames", self.voiceFolderNames.IsChecked())
@@ -366,6 +376,7 @@ class UnigramPlusSettings(SettingsPanel):
 		# conf.set("report premium accounts", self.report_premium_accounts.IsChecked())
 		conf.set("voice_the_presence_of_a_reaction", self.voice_the_presence_of_a_reaction.IsChecked())
 		conf.set("isFixedToggleButton", self.isFixedToggleButton.IsChecked())
+		conf.set("play_end_of_chat_sound", self.play_end_of_chat_sound.IsChecked())
 		conf.set("play_typing_sound", self.play_typing_sound.IsChecked())
 		conf.set("is_automatically_check_for_updates", self.is_automatically_check_for_updates.IsChecked())
 		# Sync the typing-sound tracker with the new setting

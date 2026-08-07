@@ -179,6 +179,12 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 
 ##Lista de cambios:
 
+### Versión 5.6.3
+
+* Se corrigió un problema intermitente por el que NVDA anunciaba "lista" antes de un mensaje al navegar con las teclas de flecha arriba y abajo.
+* Se añadió un ajuste para el comportamiento de Alt+[ que anuncia los encabezados de los mensajes después de su contenido; está desactivado de forma predeterminada.
+* Se añadió una notificación sonora opcional al llegar al final de un chat.
+
 ### Versión 5.6.2
 
 * Se corrigió Ctrl+Alt+Left/Right Arrow para retroceder y avanzar en un mensaje de voz mientras se reproduce.

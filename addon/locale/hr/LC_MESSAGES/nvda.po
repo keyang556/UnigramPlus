@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 'UnigramPlus' '5.1.1'\n"
+"Project-Id-Version: UnigramPlus 5.6.3\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 17:29+0100\n"
@@ -1046,3 +1046,18 @@ msgstr ""
 "- Ispravljeni su Ctrl+Alt+Lijevo/Desno tako da ponovno premotavaju trenutačno reproduciranu glasovnu poruku.\n"
 "- Ispravljen je Alt+I tako da premješta fokus na ugrađeni popis rezultata pretraživanja čata u Unigramu.\n"
 "- Dodan je Alt+[ za izgovaranje zaglavlja poruka nakon sadržaja, kako bi se u medijskim odjeljcima profila nazivi datoteka mogli izgovoriti prije imena pošiljatelja."
+
+msgid "Announce message headers after the message content"
+msgstr "Izgovaraj zaglavlja poruka nakon sadržaja poruke"
+
+msgid "Play a sound when reaching the end of a chat"
+msgstr "Reproduciraj zvuk pri dosezanju kraja razgovora"
+
+msgid ""
+"- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"
+"- Added a setting for the Alt+[ behavior that announces message headers after their content; it is disabled by default.\n"
+"- Added an optional sound notification when reaching the end of a chat."
+msgstr ""
+"- Ispravljen je povremeni problem pri kojem je NVDA izgovarao „popis” prije poruke pri kretanju strelicama gore i dolje.\n"
+"- Dodana je postavka za ponašanje Alt+[ koja izgovara zaglavlja poruka nakon njihova sadržaja; prema zadanim postavkama je isključena.\n"
+"- Dodana je neobavezna zvučna obavijest pri dosezanju kraja razgovora."

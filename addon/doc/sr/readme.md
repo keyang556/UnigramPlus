@@ -452,6 +452,12 @@ Added Turkish localization
 
 
 
+### Verzija 5.6.3
+
+* Ispravljen je povremeni problem zbog kojeg je NVDA izgovarao „lista” pre poruke pri kretanju strelicama gore i dole.
+* Dodato je podešavanje za ponašanje Alt+[ koje izgovara zaglavlja poruka posle njihovog sadržaja; podrazumevano je isključeno.
+* Dodato je opcionalno zvučno obaveštenje pri dostizanju kraja ćaskanja.
+
 ### Verzija 5.6.2
 
 * Ispravljen je Ctrl+Alt+Left/Right Arrow za premotavanje unazad i unapred unutar glasovne poruke koja se reprodukuje.

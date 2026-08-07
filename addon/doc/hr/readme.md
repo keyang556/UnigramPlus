@@ -180,6 +180,12 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 
 ##Popis promjena:
 
+### Verzija 5.6.3
+
+* Ispravljen je povremeni problem pri kojem je NVDA izgovarao „popis” prije poruke pri kretanju strelicama gore i dolje.
+* Dodana je postavka za ponašanje Alt+[ koja izgovara zaglavlja poruka nakon njihova sadržaja; prema zadanim postavkama je isključena.
+* Dodana je neobavezna zvučna obavijest pri dosezanju kraja razgovora.
+
 ### Verzija 5.6.2
 
 * Ispravljen je Ctrl+Alt+Left/Right Arrow za premotavanje unatrag i unaprijed unutar glasovne poruke koja se reproducira.

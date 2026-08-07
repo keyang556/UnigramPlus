@@ -176,6 +176,12 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 
 ##Değişiklik listesi:
 
+### Sürüm 5.6.3
+
+* Yukarı ve aşağı ok tuşlarıyla iletiler arasında gezinirken NVDA'nın iletiden önce ara sıra “liste” demesi sorunu düzeltildi.
+* İleti başlıklarını içerikten sonra seslendiren Alt+[ davranışı için bir ayar eklendi; varsayılan olarak devre dışıdır.
+* Sohbetin sonuna ulaşıldığında isteğe bağlı bir sesli bildirim eklendi.
+
 ### Sürüm 5.6.2
 
 * Oynatılan bir sesli mesajda geri ve ileri sarmak için kullanılan Ctrl+Alt+Left/Right Arrow düzeltildi.

@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus\n"
+"Project-Id-Version: UnigramPlus 5.6.3\n"
 "POT-Creation-Date: 2022-10-07 22:33+0300\n"
 "PO-Revision-Date: 2022-10-20 12:30+0300\n"
 "Last-Translator: samrat kc <samrat.kc7@gmail.com>\n"
@@ -936,3 +936,18 @@ msgstr ""
 "- हाल बजिरहेको आवाज सन्देशमा फेरि अगाडि वा पछाडि जान सक्ने गरी Ctrl+Alt+Left/Right सुधारियो।\n"
 "- Unigram को च्याटमा रहेको इनलाइन खोज परिणाम सूचीमा फोकस सार्ने गरी Alt+I सुधारियो।\n"
 "- सामग्रीपछि सन्देश हेडरहरू घोषणा गर्न Alt+[ थपियो, जसले प्रोफाइलका मिडिया खण्डहरूमा प्रेषकका नामभन्दा पहिले फाइलका नाम घोषणा गर्न दिन्छ।"
+
+msgid "Announce message headers after the message content"
+msgstr "सन्देशको सामग्रीपछि सन्देश हेडरहरू घोषणा गर्नुहोस्"
+
+msgid "Play a sound when reaching the end of a chat"
+msgstr "च्याटको अन्त्यमा पुग्दा ध्वनि बजाउनुहोस्"
+
+msgid ""
+"- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"
+"- Added a setting for the Alt+[ behavior that announces message headers after their content; it is disabled by default.\n"
+"- Added an optional sound notification when reaching the end of a chat."
+msgstr ""
+"- माथि र तल एरो कुञ्जीबाट सन्देशहरूमा सर्दा NVDA ले सन्देशअघि कहिलेकाहीँ “सूची” पढ्ने समस्या समाधान गरियो।\n"
+"- Alt+[ को व्यवहारका लागि, जसले सन्देश हेडरलाई सामग्रीपछि पढ्छ, सेटिङ थपियो; यो पूर्वनिर्धारित रूपमा निष्क्रिय छ।\n"
+"- च्याटको अन्त्यमा पुग्दा बज्ने वैकल्पिक ध्वनि सूचना थपियो।"

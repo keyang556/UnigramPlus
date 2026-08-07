@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus\n"
+"Project-Id-Version: UnigramPlus 5.6.3\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 02:57+0300\n"
@@ -1086,3 +1086,18 @@ msgstr ""
 "- أُصلح Ctrl+Alt+Left/Right ليعود إلى تغيير موضع تشغيل الرسالة الصوتية الحالية.\n"
 "- أُصلح Alt+I لينتقل إلى قائمة نتائج البحث المضمّنة في دردشة Unigram.\n"
 "- أُضيف Alt+[ للإعلان عن رؤوس الرسائل بعد المحتوى، بحيث يمكن الإعلان عن أسماء الملفات قبل أسماء المرسلين في أقسام الوسائط بالملف الشخصي."
+
+msgid "Announce message headers after the message content"
+msgstr "نطق رؤوس الرسائل بعد محتوى الرسالة"
+
+msgid "Play a sound when reaching the end of a chat"
+msgstr "تشغيل صوت عند الوصول إلى نهاية الدردشة"
+
+msgid ""
+"- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"
+"- Added a setting for the Alt+[ behavior that announces message headers after their content; it is disabled by default.\n"
+"- Added an optional sound notification when reaching the end of a chat."
+msgstr ""
+"- تم إصلاح مشكلة متقطعة كان NVDA ينطق فيها «قائمة» قبل رسالة أثناء التنقل بمفاتيح السهمين لأعلى ولأسفل.\n"
+"- تمت إضافة إعداد لسلوك Alt+[ الذي ينطق رؤوس الرسائل بعد محتواها؛ وهو معطّل افتراضيًا.\n"
+"- تمت إضافة إشعار صوتي اختياري عند الوصول إلى نهاية الدردشة."

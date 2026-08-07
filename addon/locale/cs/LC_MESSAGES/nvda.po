@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus\n"
+"Project-Id-Version: UnigramPlus 5.6.3\n"
 "POT-Creation-Date: 2022-06-30 15:13+0300\n"
 "PO-Revision-Date: 2022-06-30 15:13+0300\n"
 "Last-Translator: Petr Řehák\n"
@@ -819,3 +819,18 @@ msgstr ""
 "- Opraveny zkratky Ctrl+Alt+Left/Right, které nyní opět přetáčejí právě přehrávanou hlasovou zprávu.\n"
 "- Opravena zkratka Alt+I, aby přesouvala fokus do vloženého seznamu výsledků vyhledávání v chatu Unigramu.\n"
 "- Přidána zkratka Alt+[, která oznamuje záhlaví zpráv až po obsahu, takže v sekcích médií profilu lze názvy souborů oznamovat před jmény odesílatelů."
+
+msgid "Announce message headers after the message content"
+msgstr "Oznamovat záhlaví zpráv po obsahu zprávy"
+
+msgid "Play a sound when reaching the end of a chat"
+msgstr "Přehrát zvuk při dosažení konce chatu"
+
+msgid ""
+"- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"
+"- Added a setting for the Alt+[ behavior that announces message headers after their content; it is disabled by default.\n"
+"- Added an optional sound notification when reaching the end of a chat."
+msgstr ""
+"- Opraven přerušovaný problém, kdy NVDA při pohybu šipkami nahoru a dolů před zprávou oznamoval „seznam“.\n"
+"- Přidáno nastavení chování Alt+[, které oznamuje záhlaví zpráv po jejich obsahu; ve výchozím nastavení je vypnuté.\n"
+"- Přidáno volitelné zvukové upozornění při dosažení konce chatu."

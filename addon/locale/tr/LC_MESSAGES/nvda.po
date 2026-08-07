@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus\n"
+"Project-Id-Version: UnigramPlus 5.6.3\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 00:48+0300\n"
@@ -1105,3 +1105,18 @@ msgstr ""
 "- Ctrl+Alt+Sol/Sağ, oynatılmakta olan sesli mesajda yeniden ileri veya geri saracak şekilde düzeltildi.\n"
 "- Alt+I, odağı Unigram'ın sohbet içi arama sonuçları listesine taşıyacak şekilde düzeltildi.\n"
 "- Mesaj başlıklarını içerikten sonra seslendirmek için Alt+[ eklendi; böylece profil medya bölümlerinde dosya adları gönderen adlarından önce seslendirilebilir."
+
+msgid "Announce message headers after the message content"
+msgstr "Mesaj başlıklarını mesaj içeriğinden sonra seslendir"
+
+msgid "Play a sound when reaching the end of a chat"
+msgstr "Sohbetin sonuna ulaşıldığında ses çal"
+
+msgid ""
+"- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"
+"- Added a setting for the Alt+[ behavior that announces message headers after their content; it is disabled by default.\n"
+"- Added an optional sound notification when reaching the end of a chat."
+msgstr ""
+"- Yukarı ve aşağı ok tuşlarıyla iletiler arasında gezinirken NVDA'nın iletiden önce ara sıra “liste” demesi sorunu düzeltildi.\n"
+"- İleti başlıklarını içerikten sonra seslendiren Alt+[ davranışı için bir ayar eklendi; varsayılan olarak devre dışıdır.\n"
+"- Sohbetin sonuna ulaşıldığında isteğe bağlı bir sesli bildirim eklendi."

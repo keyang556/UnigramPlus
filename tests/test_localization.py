@@ -25,10 +25,17 @@ REQUIRED_TRANSLATIONS = {
 	"Toggle whether message headers are announced before or after the message content",
 	"Message headers will be announced after the message content",
 	"Message headers will be announced before the message content",
+	"Announce message headers after the message content",
+	"Play a sound when reaching the end of a chat",
 	(
 		"- Fixed Ctrl+Alt+Left/Right so they seek the current voice message playback again.\n"
 		"- Fixed Alt+I so it moves to Unigram's inline chat search results list.\n"
 		"- Added Alt+[ to announce message headers after the content, so file names can be announced before sender names in profile media sections."
+	),
+	(
+		"- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"
+		"- Added a setting for the Alt+[ behavior that announces message headers after their content; it is disabled by default.\n"
+		"- Added an optional sound notification when reaching the end of a chat."
 	),
 }
 
@@ -75,29 +82,42 @@ def test_required_strings_are_translated_in_every_locale():
 		assert not missing, f"{locale_dir.name} has missing translations: {missing}"
 
 
-def test_release_version_is_562():
+def test_release_version_is_563():
 	build_vars = (ROOT / "buildVars.py").read_text(encoding="utf-8")
 	manifest = (ROOT / "addon" / "manifest.ini").read_text(encoding="utf-8")
 	pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+	lockfile = (ROOT / "uv.lock").read_text(encoding="utf-8")
 
-	assert 'addon_version="5.6.2"' in build_vars
-	assert "version = 5.6.2" in manifest
-	assert 'version = "5.6.2"' in pyproject
+	assert 'addon_version="5.6.3"' in build_vars
+	assert "version = 5.6.3" in manifest
+	assert 'version = "5.6.3"' in pyproject
+	assert 'name = "unigramplus"\nversion = "5.6.3"' in lockfile
 
 
-def test_every_localized_manual_has_562_561_560_559_and_updated_558_changelogs():
+def test_all_catalogs_identify_the_563_release():
+	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
+		catalog = (locale_dir / "LC_MESSAGES" / "nvda.po").read_text(encoding="utf-8")
+		assert '"Project-Id-Version: UnigramPlus 5.6.3\\n"' in catalog
+
+
+def test_every_localized_manual_has_563_562_561_560_559_and_updated_558_changelogs():
 	manuals = [ROOT / "readme.md", *sorted(DOC_DIR.glob("*/readme.md"))]
 	assert len(manuals) == 17
 	for manual in manuals:
 		text = manual.read_text(encoding="utf-8")
-		version_562 = text.index("5.6.2")
+		version_563 = text.index("5.6.3")
+		version_562 = text.index("5.6.2", version_563)
 		version_561 = text.index("5.6.1", version_562)
 		version_560 = text.index("5.6.0", version_561)
 		version_559 = text.index("5.5.9", version_560)
 		version_558 = text.index("5.5.8", version_559)
+		section_563 = text[version_563:version_562]
 		section_562 = text[version_562:version_561]
 		section_561 = text[version_561:version_560]
 		section_560 = text[version_560:version_559]
+		assert "NVDA" in section_563, manual
+		assert "Alt+[" in section_563, manual
+		assert section_563.count("\n* ") == 3, manual
 		assert "Ctrl+Alt+Left/Right" in section_562, manual
 		assert "Alt+I" in section_562, manual
 		assert "Alt+[" in section_562, manual

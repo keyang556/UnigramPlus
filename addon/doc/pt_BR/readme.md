@@ -177,6 +177,12 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 
 ## Lista de alterações:
 
+### Versão 5.6.3
+
+* Corrigido um problema intermitente em que o NVDA anunciava “lista” antes de uma mensagem ao navegar com as setas para cima e para baixo.
+* Adicionada uma configuração para o comportamento do Alt+[ que anuncia os cabeçalhos das mensagens após seu conteúdo; ela vem desativada por padrão.
+* Adicionada uma notificação sonora opcional ao chegar ao fim de uma conversa.
+
 ### Versão 5.6.2
 
 * Corrigido o Ctrl+Alt+Left/Right Arrow para retroceder e avançar em uma mensagem de voz durante a reprodução.

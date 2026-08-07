@@ -2,7 +2,7 @@
 def _(t): return t
 
 value = _(
-	"- Fixed Ctrl+Alt+Left/Right so they seek the current voice message playback again.\n"
-	"- Fixed Alt+I so it moves to Unigram's inline chat search results list.\n"
-	"- Added Alt+[ to announce message headers after the content, so file names can be announced before sender names in profile media sections."
+	"- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"
+	"- Added a setting for the Alt+[ behavior that announces message headers after their content; it is disabled by default.\n"
+	"- Added an optional sound notification when reaching the end of a chat."
 )

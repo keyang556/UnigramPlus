@@ -280,3 +280,14 @@ def test_header_toggle_binds_latin_and_russian_keyboard_layouts():
 	)
 
 	assert [item.value for item in gestures.elts] == ["kb:ALT+[", "kb:ALT+Х"]
+
+
+def test_header_order_setting_is_exposed_and_defaults_to_headers_first():
+	config_source = (ROOT / "addon" / "appModules" / "cnf.py").read_text(encoding="utf-8")
+	settings_source = (
+		ROOT / "addon" / "GlobalPlugins" / "UnigramPlus" / "__init__.py"
+	).read_text(encoding="utf-8-sig")
+
+	assert '"messageHeaderAtTheEnd = boolean(default=False)"' in config_source
+	assert '_("Announce message headers after the message content")' in settings_source
+	assert 'conf.set("messageHeaderAtTheEnd", self.messageHeaderAtTheEnd.IsChecked())' in settings_source

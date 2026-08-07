@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 'unigramPlus' '5.5.9'\n"
+"Project-Id-Version: UnigramPlus 5.6.3\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2026-07-13 20:21+0630\n"
 "PO-Revision-Date: 2026-07-13 21:01+0630\n"
@@ -994,3 +994,18 @@ msgstr ""
 "- လက်ရှိဖွင့်ထားသော အသံမက်ဆေ့ချ်ကို ရှေ့ သို့မဟုတ် နောက်သို့ ပြန်လည်ရွှေ့နိုင်စေရန် Ctrl+Alt+Left/Right ကို ပြင်ဆင်ထားသည်။\n"
 "- Unigram ၏ ချတ်အတွင်းရှိ ရှာဖွေမှုရလဒ်စာရင်းသို့ ရွှေ့ပေးနိုင်စေရန် Alt+I ကို ပြင်ဆင်ထားသည်။\n"
 "- ပရိုဖိုင်မီဒီယာကဏ္ဍများတွင် ပေးပို့သူအမည်များမတိုင်မီ ဖိုင်အမည်များကို ဖတ်ပြနိုင်စေရန်၊ မက်ဆေ့ချ်ခေါင်းစီးများကို အကြောင်းအရာပြီးနောက် ဖတ်ပြသည့် Alt+[ ကို ထည့်သွင်းထားသည်။"
+
+msgid "Announce message headers after the message content"
+msgstr "မက်ဆေ့ချ်အကြောင်းအရာပြီးနောက် မက်ဆေ့ချ်ခေါင်းစီးများကို ဖတ်ပြရန်"
+
+msgid "Play a sound when reaching the end of a chat"
+msgstr "ချတ်၏အဆုံးသို့ ရောက်ရှိသောအခါ အသံဖွင့်ရန်"
+
+msgid ""
+"- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"
+"- Added a setting for the Alt+[ behavior that announces message headers after their content; it is disabled by default.\n"
+"- Added an optional sound notification when reaching the end of a chat."
+msgstr ""
+"- အပေါ်နှင့်အောက် မြှားခလုတ်များဖြင့် စာတိုများကြား ရွှေ့လျားစဉ် NVDA က စာတိုမတိုင်မီ “စာရင်း” ဟု တစ်ခါတစ်ရံ ဖတ်ပြသည့် ပြဿနာကို ပြင်ဆင်ထားသည်။\n"
+"- စာတိုအကြောင်းအရာပြီးနောက် စာတိုခေါင်းစီးများကို ဖတ်ပြသည့် Alt+[ အပြုအမူအတွက် ဆက်တင်တစ်ခု ထည့်သွင်းထားသည်။ မူလအတိုင်း ပိတ်ထားသည်။\n"
+"- ချတ်၏အဆုံးသို့ ရောက်ရှိသည့်အခါ ရွေးချယ်နိုင်သော အသံအသိပေးချက်ကို ထည့်သွင်းထားသည်။"

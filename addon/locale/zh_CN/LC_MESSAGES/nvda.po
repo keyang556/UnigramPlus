@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.5.4\n"
+"Project-Id-Version: UnigramPlus 5.6.3\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2026-05-24 00:00+0800\n"
 "PO-Revision-Date: 2026-05-24 00:00+0800\n"
@@ -1009,3 +1009,18 @@ msgstr ""
 "- 修复 Ctrl+Alt+Left/Right，使其可再次在当前播放的语音消息中倒回或快进。\n"
 "- 修复 Alt+I，使其将焦点移到 Unigram 的聊天内嵌搜索结果列表。\n"
 "- 新增 Alt+[，用于在内容之后读出消息标头，从而可在个人资料的媒体部分中先读出文件名，再读出发送者名称。"
+
+msgid "Announce message headers after the message content"
+msgstr "在消息内容之后读出消息标头"
+
+msgid "Play a sound when reaching the end of a chat"
+msgstr "到达聊天末尾时播放声音"
+
+msgid ""
+"- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"
+"- Added a setting for the Alt+[ behavior that announces message headers after their content; it is disabled by default.\n"
+"- Added an optional sound notification when reaching the end of a chat."
+msgstr ""
+"- 修复了使用上、下箭头在消息间移动时，NVDA 偶尔会在消息前读出“列表”的问题。\n"
+"- 新增 Alt+[ 功能的设置：在消息内容之后读出消息标头；该功能默认关闭。\n"
+"- 新增到达聊天末尾时的可选声音提示。"

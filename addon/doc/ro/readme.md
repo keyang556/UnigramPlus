@@ -178,6 +178,12 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 ##Lista de modificări:
 
+### Versiunea 5.6.3
+
+* A fost remediată o problemă intermitentă în care NVDA anunța „listă” înaintea unui mesaj la navigarea cu săgețile sus și jos.
+* A fost adăugată o setare pentru comportamentul Alt+[ care anunță anteturile mesajelor după conținutul lor; este dezactivată implicit.
+* A fost adăugată o notificare sonoră opțională la atingerea sfârșitului unui chat.
+
 ### Versiunea 5.6.2
 
 * A fost corectat Ctrl+Alt+Left/Right Arrow pentru derularea înapoi și înainte într-un mesaj vocal aflat în redare.

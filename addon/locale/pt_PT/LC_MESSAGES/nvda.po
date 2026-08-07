@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus1.9\n"
+"Project-Id-Version: UnigramPlus 5.6.3\n"
 "POT-Creation-Date: 2022-06-19 18:49+0300\n"
 "PO-Revision-Date: 2022-06-19 18:49+0300\n"
 "Last-Translator: Ângelo Abrantes <ampa4374@gmail.com>\n"
@@ -858,3 +858,18 @@ msgstr ""
 "- Corrigido Ctrl+Alt+Esquerda/Direita para que volte a avançar ou recuar na reprodução da mensagem de voz atual.\n"
 "- Corrigido Alt+I para mover o foco para a lista integrada de resultados da pesquisa na conversa do Unigram.\n"
 "- Adicionado Alt+[ para anunciar os cabeçalhos das mensagens depois do conteúdo, permitindo que os nomes dos ficheiros sejam anunciados antes dos nomes dos remetentes nas secções de multimédia do perfil."
+
+msgid "Announce message headers after the message content"
+msgstr "Anunciar os cabeçalhos das mensagens depois do conteúdo da mensagem"
+
+msgid "Play a sound when reaching the end of a chat"
+msgstr "Reproduzir um som ao chegar ao fim de uma conversa"
+
+msgid ""
+"- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"
+"- Added a setting for the Alt+[ behavior that announces message headers after their content; it is disabled by default.\n"
+"- Added an optional sound notification when reaching the end of a chat."
+msgstr ""
+"- Corrigido um problema intermitente em que o NVDA anunciava «lista» antes de uma mensagem ao navegar com as setas para cima e para baixo.\n"
+"- Adicionada uma definição para o comportamento de Alt+[ que anuncia os cabeçalhos das mensagens após o respetivo conteúdo; está desativada por predefinição.\n"
+"- Adicionada uma notificação sonora opcional ao chegar ao fim de uma conversa."
