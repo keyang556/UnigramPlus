@@ -72,6 +72,7 @@ _AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT = 10
 _END_OF_CHAT_PROBE_DELAY_MS = 50
 _SEARCH_RESULT_COUNTER_RE = re.compile(r"^\s*(\d+)\s*/\s*(\d+)\s*$")
 _SEARCH_RESULT_COUNTER_SIBLING_LIMIT = 6
+_CALL_PAGE_AUTOMATION_IDS = ("VoipPage", "GroupCallPage")
 
 
 def _get_end_of_chat_sound_path():
@@ -111,6 +112,42 @@ def _normalized_text(text):
 	try: text = text or ""
 	except Exception: text = ""
 	return str(text).translate(_APP_MODULE_NAME_IGNORED_CHARS).strip().casefold()
+
+
+def _is_call_page_object(obj):
+	"""Return whether *obj* belongs to one of Unigram's call pages."""
+	seen = set()
+	for _ in range(16):
+		if not obj or id(obj) in seen:
+			return False
+		seen.add(id(obj))
+		try:
+			automation_id = obj.UIAAutomationId
+		except Exception:
+			automation_id = ""
+		if automation_id in _CALL_PAGE_AUTOMATION_IDS:
+			return True
+		try:
+			obj = obj.parent
+		except Exception:
+			return False
+	return False
+
+
+def _announce_call_state_later(text, delay_ms=150):
+	"""Announce a call-control state from NVDA's main event loop.
+
+	``threading.Timer`` runs callbacks on a native thread. Calling NVDA's UI and
+	speech APIs there can deadlock while Unigram is raising UIA events, which is
+	particularly likely when a call control changes state.
+	"""
+	try:
+		import core
+		core.callLater(delay_ms, message, text)
+	except Exception:
+		# This fallback still runs on the current NVDA event thread; it only keeps
+		# the control usable if the scheduler is temporarily unavailable.
+		message(text)
 
 
 def is_unigram_app_module(appModule):
@@ -533,8 +570,7 @@ class Audio_and_video_button:
 		elif self.UIAAutomationId == "Camera": new_name = _("Camera off") if toggled_on else _("Camera on")
 		elif self.UIAAutomationId == "Audio": new_name = self.next.name if self.next else self.name
 		elif self.UIAAutomationId == "Video": new_name = _("Camera on") if self.firstChild.name == "\ue964" else _("Camera off") if self.firstChild.name == "\ue963" else self.name
-		def spechState(): message(new_name)
-		thr = Timer(.1, spechState).start()
+		_announce_call_state_later(new_name, 100)
 	
 	def initOverlayClass(self):
 		self.bindGesture("kb:Enter", "enter")
@@ -1078,6 +1114,12 @@ class AppModule(appModuleHandler.AppModule):
 				or getattr(focus, "appModule", None) is not self
 				or not focus.isInForeground
 			):
+				return
+			# A Voip/GroupCall page is a separate focus surface. Moving focus to
+			# the main chat list from here leaves the call controls unreachable and
+			# can cause a UIA focus-event loop. Automatic focus is only for startup.
+			if _is_call_page_object(focus):
+				self._autoFocusChatListDone = True
 				return
 			if (
 				focus.role == Role.LISTITEM
@@ -1828,8 +1870,7 @@ class AppModule(appModuleHandler.AppModule):
 				self.fixedDoAction(mute)
 				obj.setFocus()
 				new_name = _("Microphone on") if muted else _("Microphone muted")
-				def spechState(): message(new_name)
-				Timer(.15, spechState).start()
+				_announce_call_state_later(new_name)
 				return
 		# Group voice chat (GroupCallPage): mic button x:Name="Audio", status label "AudioInfo".
 		audio = self._find_descendant(foreground, automation_id="Audio", max_depth=14) if foreground else False
@@ -1837,8 +1878,7 @@ class AppModule(appModuleHandler.AppModule):
 		if audio and info:
 			audio.doAction()
 			obj.setFocus()
-			def spechState(): message(info.name)
-			Timer(.15, spechState).start()
+			_announce_call_state_later(info.name)
 			return
 		message(_("Microphone button not found"))
 
@@ -1856,8 +1896,7 @@ class AppModule(appModuleHandler.AppModule):
 				self.fixedDoAction(camera)
 				obj.setFocus()
 				new_name = _("Camera off") if on else _("Camera on")
-				def spechState(): message(new_name)
-				Timer(.15, spechState).start()
+				_announce_call_state_later(new_name)
 				return
 		# Group voice chat (GroupCallPage): camera button x:Name="Video", status label "VideoInfo".
 		video = self._find_descendant(foreground, automation_id="Video", max_depth=14) if foreground else False
@@ -1865,11 +1904,13 @@ class AppModule(appModuleHandler.AppModule):
 		if video and info:
 			video.doAction()
 			obj.setFocus()
-			def spechState():
-				if video.firstChild and video.firstChild.name == "\ue964": message(_("Camera on"))
-				elif video.firstChild and video.firstChild.name == "\ue963": message(_("Camera off"))
-				else: message(info.name)
-			Timer(.15, spechState).start()
+			try:
+				if video.firstChild and video.firstChild.name == "\ue964": new_name = _("Camera on")
+				elif video.firstChild and video.firstChild.name == "\ue963": new_name = _("Camera off")
+				else: new_name = info.name
+			except Exception:
+				new_name = info.name
+			_announce_call_state_later(new_name)
 			return
 		message(_("Camera button not found"))
 
@@ -2321,7 +2362,6 @@ class AppModule(appModuleHandler.AppModule):
 			nextHandler()
 			return
 		self._remember_messages_button(obj)
-		self._scheduleAutoFocusChatList()
 		if conf.get("automatically announce new messages") and Chat_update.pouse:
 			# Since the timer is suspended when the program window is minimized, it needs to be restored as soon as the focus is set on some element in the window
 			Chat_update.restore(self)

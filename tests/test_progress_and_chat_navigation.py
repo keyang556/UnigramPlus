@@ -25,6 +25,17 @@ def _load_app_method(name, namespace):
 	return namespace[name]
 
 
+def _load_module_function(name, namespace):
+	module = ast.parse(SOURCE_PATH.read_text(encoding="utf-8"))
+	function = next(
+		node
+		for node in module.body
+		if isinstance(node, ast.FunctionDef) and node.name == name
+	)
+	exec(compile(ast.Module(body=[function], type_ignores=[]), str(SOURCE_PATH), "exec"), namespace)
+	return namespace[name]
+
+
 def _load_progress_tracker(monkeypatch, scheduled):
 	class ScheduledCall:
 		def __init__(self):
@@ -276,6 +287,7 @@ def test_auto_focus_waits_for_the_chat_list_then_completes():
 		"Role": SimpleNamespace(LISTITEM="listItem"),
 		"log": SimpleNamespace(debug=lambda *args: None),
 		"_AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT": 10,
+		"_is_call_page_object": lambda obj: False,
 	}
 	method = _load_app_method("_autoFocusChatListTick", namespace)
 
@@ -310,6 +322,7 @@ def test_auto_focus_does_not_repeat_when_focus_is_already_in_chat_list():
 		"Role": SimpleNamespace(LISTITEM="listItem"),
 		"log": SimpleNamespace(debug=lambda *args: None),
 		"_AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT": 10,
+		"_is_call_page_object": lambda obj: False,
 	}
 	method = _load_app_method("_autoFocusChatListTick", namespace)
 
@@ -317,6 +330,70 @@ def test_auto_focus_does_not_repeat_when_focus_is_already_in_chat_list():
 
 	assert instance._autoFocusChatListDone
 	assert focus_calls == []
+
+
+def test_auto_focus_never_moves_focus_away_from_a_call_page():
+	focus_calls = []
+	instance = SimpleNamespace(
+		_autoFocusChatListDone=False,
+		_autoFocusChatListScheduled=True,
+		_autoFocusChatListAttempts=0,
+		_autoFocusChatListGeneration=1,
+		script_toChatList=lambda gesture, arg=False: focus_calls.append(True),
+		_scheduleAutoFocusChatList=lambda: None,
+	)
+	call_page = SimpleNamespace(UIAAutomationId="VoipPage", parent=None)
+	focus = SimpleNamespace(
+		appModule=instance,
+		isInForeground=True,
+		role="button",
+		parent=call_page,
+	)
+	namespace = {
+		"api": SimpleNamespace(getFocusObject=lambda: focus),
+		"conf": SimpleNamespace(get=lambda key: True),
+		"Role": SimpleNamespace(LISTITEM="listItem"),
+		"log": SimpleNamespace(debug=lambda *args: None),
+		"_AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT": 10,
+		"_is_call_page_object": _load_module_function(
+			"_is_call_page_object",
+			{"_CALL_PAGE_AUTOMATION_IDS": ("VoipPage", "GroupCallPage")},
+		),
+	}
+	method = _load_app_method("_autoFocusChatListTick", namespace)
+
+	method(instance, 1)
+
+	assert instance._autoFocusChatListDone
+	assert focus_calls == []
+
+
+def test_focus_events_do_not_restart_startup_chat_list_focusing():
+	app_module = _class_ast("AppModule")
+	method = next(
+		node
+		for node in app_module.body
+		if isinstance(node, ast.FunctionDef) and node.name == "event_gainFocus"
+	)
+
+	assert "_scheduleAutoFocusChatList" not in ast.unparse(method)
+
+
+def test_call_state_announcements_use_the_nvda_main_loop(monkeypatch):
+	scheduled = []
+	monkeypatch.setitem(
+		sys.modules,
+		"core",
+		SimpleNamespace(callLater=lambda delay, callback, *args: scheduled.append((delay, callback, args))),
+	)
+	announcements = []
+	message = lambda text: announcements.append(text)
+	method = _load_module_function("_announce_call_state_later", {"message": message})
+
+	method("Microphone muted", 100)
+
+	assert scheduled == [(100, message, ("Microphone muted",))]
+	assert announcements == []
 
 
 def test_auto_focus_stops_retrying_at_the_limit():
@@ -341,6 +418,7 @@ def test_auto_focus_stops_retrying_at_the_limit():
 		"Role": SimpleNamespace(LISTITEM="listItem"),
 		"log": SimpleNamespace(debug=lambda *args: None),
 		"_AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT": 10,
+		"_is_call_page_object": lambda obj: False,
 	}
 	method = _load_app_method("_autoFocusChatListTick", namespace)
 
