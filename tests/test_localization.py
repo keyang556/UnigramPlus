@@ -15,7 +15,7 @@ REQUIRED_TRANSLATIONS = {
 	"Select the progress bar notification level:",
 	"File transfer progress announcement interval (percent):",
 	"Rich message",
-	"Rich message. Press Alt+C to browse",
+	"Display message text in a web view when pressing Alt+C",
 	"Added support for rich messages. Rich messages are now announced when focused and can be opened with Alt+C in a browseable window.",
 	"Links and mixed content in rich messages are preserved, and links can be activated from the browseable window.",
 	"Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation.",
@@ -36,6 +36,14 @@ REQUIRED_TRANSLATIONS = {
 		"- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"
 		"- Added a setting for the Alt+[ behavior that announces message headers after their content; it is disabled by default.\n"
 		"- Added an optional sound notification when reaching the end of a chat."
+	),
+	(
+		"- Fixed Shift+Delete by using Unigram's native Delete command and automatically confirming deletion for both sides.\n"
+		"- Alt+2 now uses Unigram's Go to bottom button first, and the duplicate Alt+End shortcut was removed.\n"
+		"- Added a setting to choose between the classic window (default) and web view when displaying message text with Alt+C.\n"
+		"- Unigram's official rich-message text is now used, with a temporary fix for unlabeled inline buttons in Unigram 12.9.\n"
+		"- Updated every localized manual with the Unigram 12.9 shortcut list.\n"
+		"- Added a temporary fix so Saved Messages topic rows announce the visible chat title instead of a TDLib type name."
 	),
 }
 
@@ -82,39 +90,46 @@ def test_required_strings_are_translated_in_every_locale():
 		assert not missing, f"{locale_dir.name} has missing translations: {missing}"
 
 
-def test_release_version_is_563():
+def test_release_version_is_564():
 	build_vars = (ROOT / "buildVars.py").read_text(encoding="utf-8")
 	manifest = (ROOT / "addon" / "manifest.ini").read_text(encoding="utf-8")
 	pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
 	lockfile = (ROOT / "uv.lock").read_text(encoding="utf-8")
 
-	assert 'addon_version="5.6.3"' in build_vars
-	assert "version = 5.6.3" in manifest
-	assert 'version = "5.6.3"' in pyproject
-	assert 'name = "unigramplus"\nversion = "5.6.3"' in lockfile
+	assert 'addon_version="5.6.4"' in build_vars
+	assert "version = 5.6.4" in manifest
+	assert 'version = "5.6.4"' in pyproject
+	assert 'name = "unigramplus"\nversion = "5.6.4"' in lockfile
 
 
-def test_all_catalogs_identify_the_563_release():
+def test_all_catalogs_identify_the_564_release():
 	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
 		catalog = (locale_dir / "LC_MESSAGES" / "nvda.po").read_text(encoding="utf-8")
-		assert '"Project-Id-Version: UnigramPlus 5.6.3\\n"' in catalog
+		assert '"Project-Id-Version: UnigramPlus 5.6.4\\n"' in catalog
 
 
-def test_every_localized_manual_has_563_562_561_560_559_and_updated_558_changelogs():
+def test_every_localized_manual_has_564_through_559_and_updated_558_changelogs():
 	manuals = [ROOT / "readme.md", *sorted(DOC_DIR.glob("*/readme.md"))]
 	assert len(manuals) == 17
 	for manual in manuals:
 		text = manual.read_text(encoding="utf-8")
-		version_563 = text.index("5.6.3")
+		version_564 = text.index("5.6.4")
+		version_563 = text.index("5.6.3", version_564)
 		version_562 = text.index("5.6.2", version_563)
 		version_561 = text.index("5.6.1", version_562)
 		version_560 = text.index("5.6.0", version_561)
 		version_559 = text.index("5.5.9", version_560)
 		version_558 = text.index("5.5.8", version_559)
+		section_564 = text[version_564:version_563]
 		section_563 = text[version_563:version_562]
 		section_562 = text[version_562:version_561]
 		section_561 = text[version_561:version_560]
 		section_560 = text[version_560:version_559]
+		assert "Shift+Delete" in section_564, manual
+		assert "Alt+2" in section_564, manual
+		assert "Alt+C" in section_564, manual
+		assert "12.9" in section_564, manual
+		assert section_564.count("\n* ") == 6, manual
 		assert "NVDA" in section_563, manual
 		assert "Alt+[" in section_563, manual
 		assert section_563.count("\n* ") == 3, manual

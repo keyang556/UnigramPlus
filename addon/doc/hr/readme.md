@@ -51,7 +51,6 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 | **ALT+5** | UnigramPlus | Premješta fokus na otvoreni profil |
 | **ALT+6** | UnigramPlus | Premješta fokus na popis niti grupe |
 | **ALT+D** | UnigramPlus | Premješta fokus na polje za uređivanje. Ako je fokus već u polju za uređivanje, tada će se nakon pritiskanja tipke prečaca pomaknuti na mjesto gdje je bio prije |
-| **ALT+End** | UnigramPlus | Idi do kraja |
 
 ### Pretraživanje
 
@@ -73,13 +72,15 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
 | **Ctrl+A** | Unigram | Select All |
+| **Ctrl+Shift+.** | Unigram | Citat |
 | **Ctrl+B** | Unigram | Bold |
 | **Ctrl+I** | Unigram | Italic |
-| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+U** | Unigram | Podcrtano |
 | **Ctrl+Shift+X** | Unigram | Strikethrough |
 | **Ctrl+Shift+M** | Unigram | Monospace |
 | **Ctrl+Shift+P** | Unigram | Spoiler |
-| **Ctrl+Shift+N** | Unigram | Null / Plain Text |
+| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+Shift+N** | Unigram | Ukloni oblikovanje (običan tekst) |
 
 ### Mape
 
@@ -179,6 +180,15 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 <!-- shortcut-table-end -->
 
 ##Popis promjena:
+
+### Verzija 5.6.4
+
+* Shift+Delete je ispravljen korištenjem Unigramove izvorne naredbe Delete i automatskom potvrdom brisanja s obje strane.
+* Alt+2 sada najprije aktivira Unigramov gumb „Idi na dno”; uklonjen je dvostruki prečac Alt+End.
+* Dodana je postavka za odabir klasičnog wx prozora (zadano) ili web-prikaza pri prikazu teksta poruke tipkom Alt+C.
+* Sada se koristi službeni pristupačni tekst obogaćenih poruka Unigrama, uz privremeni popravak neoznačenih ugrađenih gumba u Unigramu 12.9.
+* Popis prečaca ažuriran je prema službenoj dokumentaciji Unigrama 12.9.
+* Dodan je privremeni popravak kako bi retci tema Spremljenih poruka izgovarali vidljivi naslov razgovora umjesto naziva vrste TDLib.
 
 ### Verzija 5.6.3
 

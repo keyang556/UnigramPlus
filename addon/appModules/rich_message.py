@@ -87,7 +87,7 @@ def _message_text_nodes(message):
 
 
 def _has_meaningful_message_text(message):
-	"""Whether a direct text control contains more than the rich empty comma."""
+	"""Whether Unigram exposes readable text through a direct message control."""
 	for node in _message_text_nodes(message):
 		text = _clean_text(_safe_attr(node, "name", ""))
 		if text.strip(" ,，"):
@@ -327,10 +327,7 @@ def _rich_content_matches_message(message, root):
 	"""Whether readable rich text, when present, belongs to this message."""
 	rich_text = _clean_text(extract_rich_message_text(root))
 	if not rich_text:
-		# Some MessageRichMessage page blocks have no UIA text. Unigram then
-		# contributes only `", "` to the accessible summary, producing the
-		# Sophie-style comma/blank content described in the NVDA log.
-		return has_empty_rich_message_summary(message)
+		return False
 
 	# MessageRichMessage is summarized by Unigram with RichMessage.ToPlainText.
 	# Require the active message's accessible surface to corroborate the root so
@@ -338,47 +335,6 @@ def _rich_content_matches_message(message, root):
 	# the new sticker, animated emoji, big emoji, or ordinary text message.
 	surface = _text_for_surface_comparison(_safe_attr(message, "name", ""))
 	return not surface or _text_for_surface_comparison(rich_text) in surface
-
-
-def has_empty_rich_message_summary(message):
-	"""Recognize Unigram's empty MessageRichMessage summary.
-
-	``Automation.GetSummary`` returns ``ToPlainText() + ", "`` for a rich
-	message. In the multi-line group layout, the empty content/author line and the
-	final status line both start with a single comma. Requiring both distinguishes
-	the signature from ordinary replied text (only the author line starts with a
-	comma) and replied media (only the status line does). In a direct chat, the
-	single line starts with the same comma and contains no second comma before the
-	status. Ordinary comma-prefixed text has another comma separating its real
-	content from the status. These signatures do not depend on localized strings or
-	provider-generated child names.
-	"""
-	lines = [line.strip() for line in _clean_text(_safe_attr(message, "name", "")).split("\n")]
-	if len(lines) > 1:
-		comma_lines = [line for line in lines if line.startswith(",") and line.count(",") == 1]
-		return len(comma_lines) >= 2 and lines[-1] in comma_lines
-	return bool(lines[0]) and lines[0].startswith(",") and lines[0].count(",") == 1
-
-
-def is_rich_message(message):
-	"""Whether a message has either the official rich summary or rich UIA root.
-
-	Empty rich pages do not consistently expose ``InstantContent`` through NVDA,
-	but their accessible name remains unambiguous: Unigram's
-	``Automation.GetSummary`` emits ``ToPlainText() + ", "``. Some UIA provider
-	versions also expose that comma as the Message control's name, so the official
-	summary signature must take precedence over the normal text-control guard.
-	"""
-	if message is None:
-		return False
-	if has_empty_rich_message_summary(message):
-		# This visible summary is the authoritative MessageRichMessage signature
-		# in current Unigram. Provider-generated child text must not override it.
-		return True
-	has_meaningful_text = _has_meaningful_message_text(message)
-	if has_meaningful_text:
-		return False
-	return find_rich_message_root(message) is not None
 
 
 def find_rich_message_root(message):
@@ -406,22 +362,6 @@ def find_rich_message_root(message):
 	return None
 
 
-def insert_hint_before_status(name, hint, status_markers):
-	"""Insert a rich-message hint immediately before the trailing send/receive status."""
-	name = _clean_text(name)
-	hint = _clean_text(hint)
-	if not hint or hint in name:
-		return name
-	positions = [name.rfind(marker) for marker in status_markers if marker]
-	positions = [position for position in positions if position >= 0]
-	if not positions:
-		return "%s. %s" % (name.rstrip(". "), hint) if name else hint
-	position = max(positions)
-	prefix = name[:position].rstrip(". ")
-	suffix = name[position:]
-	return "%s. %s%s" % (prefix, hint, suffix) if prefix else "%s%s" % (hint, suffix)
-
-
 def extract_message_text(message):
 	"""Collect all text controls flattened into a message's control-view children."""
 	parts = []
@@ -430,6 +370,23 @@ def extract_message_text(message):
 		if text and text not in parts:
 			parts.append(text)
 	return "\n\n".join(parts)
+
+
+def merge_message_text_and_rich_text(message_text, rich_text):
+	"""Combine official message text and rich UIA text without duplication."""
+	message_text = _clean_text(message_text)
+	rich_text = _clean_text(rich_text)
+	if not message_text:
+		return rich_text
+	if not rich_text:
+		return message_text
+	message_key = _text_for_comparison(message_text)
+	rich_key = _text_for_comparison(rich_text)
+	if rich_key in message_key:
+		return message_text
+	if message_key in rich_key:
+		return rich_text
+	return "%s\n\n%s" % (message_text, rich_text)
 
 
 def merge_message_html_and_rich_text(message_html, message_text, rich_text):

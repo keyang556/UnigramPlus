@@ -420,25 +420,21 @@ def test_down_arrow_reads_settings_at_use_time_and_preserves_native_navigation()
 	assert 'self.bindGesture("kb:downArrow", "next_message")' in source
 
 
-def test_alt_end_uses_only_a_cached_messages_button():
+def test_alt_2_prioritizes_the_cached_go_to_bottom_button():
 	actions = []
-	fallbacks = []
-	method = _load_app_methods(("script_to_down",), {})["script_to_down"]
+	method = _load_app_methods(
+		("script_toLastMessage",),
+		{"api": SimpleNamespace(getFocusObject=lambda: (_ for _ in ()).throw(AssertionError("fallback")))},
+	)["script_toLastMessage"]
 	button = SimpleNamespace(doAction=lambda: actions.append(True))
 	instance = SimpleNamespace(
 		_messagesButton=button,
 		_messages_button_visibility=lambda: True,
 		_find_descendant=lambda *args: (_ for _ in ()).throw(AssertionError("tree walk")),
-		script_toLastMessage=lambda gesture: fallbacks.append(gesture),
 	)
 
 	assert method(instance, None) is True
 	assert actions == [True]
-	assert fallbacks == []
-
-	instance._messagesButton = None
-	assert method(instance, "gesture") is None
-	assert fallbacks == ["gesture"]
 
 
 def test_alt_2_at_a_confirmed_last_message_plays_the_sound():

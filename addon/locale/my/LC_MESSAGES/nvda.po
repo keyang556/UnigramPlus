@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.3\n"
+"Project-Id-Version: UnigramPlus 5.6.4\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2026-07-13 20:21+0630\n"
 "PO-Revision-Date: 2026-07-13 21:01+0630\n"
@@ -1000,6 +1000,24 @@ msgstr "မက်ဆေ့ချ်အကြောင်းအရာပြီး
 
 msgid "Play a sound when reaching the end of a chat"
 msgstr "ချတ်၏အဆုံးသို့ ရောက်ရှိသောအခါ အသံဖွင့်ရန်"
+
+msgid "Display message text in a web view when pressing Alt+C"
+msgstr "Alt+C ကိုနှိပ်သောအခါ မက်ဆေ့ချ်စာသားကို ဝဘ်မြင်ကွင်းတွင် ပြရန်"
+
+msgid ""
+"- Fixed Shift+Delete by using Unigram's native Delete command and automatically confirming deletion for both sides.\n"
+"- Alt+2 now uses Unigram's Go to bottom button first, and the duplicate Alt+End shortcut was removed.\n"
+"- Added a setting to choose between the classic window (default) and web view when displaying message text with Alt+C.\n"
+"- Unigram's official rich-message text is now used, with a temporary fix for unlabeled inline buttons in Unigram 12.9.\n"
+"- Updated every localized manual with the Unigram 12.9 shortcut list.\n"
+"- Added a temporary fix so Saved Messages topic rows announce the visible chat title instead of a TDLib type name."
+msgstr ""
+"- Unigram ၏ မူလ Delete အမိန့်ကို အသုံးပြုပြီး နှစ်ဖက်စလုံးမှ ဖျက်ခြင်းကို အလိုအလျောက် အတည်ပြုရန် Shift+Delete ကို ပြင်ဆင်ခဲ့သည်။\n"
+"- Alt+2 သည် ယခု Unigram ၏ အောက်ဆုံးသို့သွားရန် ခလုတ်ကို ဦးစွာအသုံးပြုပြီး ထပ်နေသော Alt+End ဖြတ်လမ်းကို ဖယ်ရှားခဲ့သည်။\n"
+"- Alt+C ဖြင့် မက်ဆေ့ချ်စာသားပြသရာတွင် မူလဂန္ထဝင်ဝင်းဒိုး သို့မဟုတ် ဝဘ်မြင်ကွင်းကို ရွေးချယ်နိုင်သော ဆက်တင်ကို ထည့်သွင်းခဲ့သည်။\n"
+"- ယခု Unigram ၏ တရားဝင် rich-message စာသားကို အသုံးပြုပြီး Unigram 12.9 ရှိ အမည်မပါသော inline ခလုတ်များအတွက် ယာယီပြင်ဆင်ချက် ထည့်ထားသည်။\n"
+"- ဘာသာပြန်ထားသော လက်စွဲအားလုံးကို Unigram 12.9 ဖြတ်လမ်းစာရင်းဖြင့် အပ်ဒိတ်လုပ်ခဲ့သည်။\n"
+"- သိမ်းဆည်းထားသော မက်ဆေ့ချ် အကြောင်းအရာအတန်းများက TDLib အမျိုးအစားအမည်အစား မြင်ရသော ချတ်ခေါင်းစဉ်ကို ဖတ်ပြရန် ယာယီပြင်ဆင်ချက် ထည့်ထားသည်။"
 
 msgid ""
 "- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"

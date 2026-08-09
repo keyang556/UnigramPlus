@@ -49,7 +49,6 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 | **ALT+5** | UnigramPlus | Mută focalizarea pe profilul deschis |
 | **ALT+6** | UnigramPlus | Focalizează-te pe lista cu subiectele grupului |
 | **ALT+D** | UnigramPlus | Focalizează-te în câmpul de editare. Dacă deja ești focalizat în câmpul de editare, atunci, după apăsarea acestei scurtături, te vei focaliza în locul în care erai înainte. |
-| **ALT+End** | UnigramPlus | Go to the end |
 
 ### Căutare
 
@@ -71,13 +70,15 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
 | **Ctrl+A** | Unigram | Select All |
+| **Ctrl+Shift+.** | Unigram | Citat |
 | **Ctrl+B** | Unigram | Bold |
 | **Ctrl+I** | Unigram | Italic |
-| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+U** | Unigram | Subliniat |
 | **Ctrl+Shift+X** | Unigram | Strikethrough |
 | **Ctrl+Shift+M** | Unigram | Monospace |
 | **Ctrl+Shift+P** | Unigram | Spoiler |
-| **Ctrl+Shift+N** | Unigram | Null / Plain Text |
+| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+Shift+N** | Unigram | Eliminare formatare (text obișnuit) |
 
 ### Dosare
 
@@ -177,6 +178,15 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 <!-- shortcut-table-end -->
 
 ##Lista de modificări:
+
+### Versiunea 5.6.4
+
+* Shift+Delete a fost reparat folosind comanda Delete nativă din Unigram și confirmând automat ștergerea pentru ambele părți.
+* Alt+2 activează acum mai întâi butonul „Mergi jos” din Unigram; scurtătura Alt+End duplicată a fost eliminată.
+* A fost adăugată o setare pentru alegerea ferestrei wx clasice (implicită) sau a vizualizării web la afișarea textului cu Alt+C.
+* Acum este folosit textul accesibil oficial al mesajelor îmbogățite din Unigram, cu o remediere temporară pentru butoanele în linie fără etichetă din Unigram 12.9.
+* Lista de scurtături a fost actualizată după documentația oficială Unigram 12.9.
+* A fost adăugată o remediere temporară pentru ca rândurile subiectelor Mesajelor salvate să anunțe titlul vizibil al chatului în locul unui nume de tip TDLib.
 
 ### Versiunea 5.6.3
 

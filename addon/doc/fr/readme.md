@@ -48,7 +48,6 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 | **ALT+5** | UnigramPlus | Déplace le focus au profil ouvert |
 | **ALT+6** | UnigramPlus | Déplace le focus à la liste des dossiers des échanges |
 | **ALT+D** | UnigramPlus | Déplacer le focus au champ d'édition. Si le focus y est déjà, il reviendra où il était auparavant |
-| **ALT+End** | UnigramPlus | Go to the end |
 
 ### Recherche
 
@@ -70,13 +69,15 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
 | **Ctrl+A** | Unigram | Select All |
+| **Ctrl+Shift+.** | Unigram | Citation |
 | **Ctrl+B** | Unigram | Bold |
 | **Ctrl+I** | Unigram | Italic |
-| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+U** | Unigram | Souligné |
 | **Ctrl+Shift+X** | Unigram | Strikethrough |
 | **Ctrl+Shift+M** | Unigram | Monospace |
 | **Ctrl+Shift+P** | Unigram | Spoiler |
-| **Ctrl+Shift+N** | Unigram | Null / Plain Text |
+| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+Shift+N** | Unigram | Supprimer la mise en forme (texte normal) |
 
 ### Dossiers
 
@@ -176,6 +177,15 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 <!-- shortcut-table-end -->
 
 ##Liste des changements :
+
+### Version 5.6.4
+
+* Correction de Shift+Delete en utilisant la commande Delete native d’Unigram et en confirmant automatiquement la suppression des deux côtés.
+* Alt+2 active désormais d’abord le bouton « Aller en bas » d’Unigram ; le raccourci Alt+End en double a été supprimé.
+* Ajout d’un réglage permettant de choisir la fenêtre wx classique (par défaut) ou la vue Web lors de l’affichage du texte avec Alt+C.
+* Le texte officiel accessible des messages enrichis d’Unigram est désormais utilisé, avec un correctif temporaire pour les boutons intégrés sans étiquette d’Unigram 12.9.
+* Mise à jour de la liste des raccourcis d’après la documentation officielle d’Unigram 12.9.
+* Ajout d’un correctif temporaire afin que les lignes de sujets des Messages enregistrés annoncent le titre visible de la discussion plutôt qu’un nom de type TDLib.
 
 ### Version 5.6.3
 

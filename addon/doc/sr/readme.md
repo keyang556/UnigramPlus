@@ -53,7 +53,6 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će neko sigurno po
 | **ALT+5** | UnigramPlus | pomerite fokus da otvorite profil |
 | **ALT+6** | UnigramPlus | Pomeraj fokus na listu grupnih niti |
 | **ALT+D** | UnigramPlus | Pomeri fokus u polje za uređivanje. Ako je fokus već u polju za uređivanje, nakon pritiska na interventne tastere on će biti pomeren tamo gde je bio ranije |
-| **ALT+End** | UnigramPlus | Idi do kraja |
 
 ### Pretraga
 
@@ -75,13 +74,15 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će neko sigurno po
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
 | **Ctrl+A** | Unigram | Select All |
+| **Ctrl+Shift+.** | Unigram | Citat |
 | **Ctrl+B** | Unigram | Bold |
 | **Ctrl+I** | Unigram | Italic |
-| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+U** | Unigram | Podvučeno |
 | **Ctrl+Shift+X** | Unigram | Strikethrough |
 | **Ctrl+Shift+M** | Unigram | Monospace |
 | **Ctrl+Shift+P** | Unigram | Spoiler |
-| **Ctrl+Shift+N** | Unigram | Null / Plain Text |
+| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+Shift+N** | Unigram | Ukloni formatiranje (običan tekst) |
 
 ### Fascikle
 
@@ -451,6 +452,15 @@ This update adds a combination that press "Instant View" button in the message, 
 Added Turkish localization
 
 
+
+### Verzija 5.6.4
+
+* Shift+Delete je ispravljen korišćenjem Unigramove izvorne naredbe Delete i automatskom potvrdom brisanja sa obe strane.
+* Alt+2 sada prvo aktivira Unigramovo dugme „Idi na dno”; uklonjena je duplirana prečica Alt+End.
+* Dodato je podešavanje za izbor klasičnog wx prozora (podrazumevano) ili veb-prikaza pri prikazu teksta poruke pomoću Alt+C.
+* Sada se koristi zvanični pristupačni tekst obogaćenih poruka Unigrama, uz privremenu ispravku neoznačenih ugrađenih dugmadi u Unigramu 12.9.
+* Spisak prečica je ažuriran prema zvaničnoj dokumentaciji Unigrama 12.9.
+* Dodata je privremena ispravka kako bi redovi tema Sačuvanih poruka izgovarali vidljivi naslov ćaskanja umesto naziva tipa TDLib.
 
 ### Verzija 5.6.3
 

@@ -61,6 +61,7 @@ spec = (
 	"isFixedToggleButton = boolean(default=False)",
 	"saySenderName = string(default=none)",
 	"messageHeaderAtTheEnd = boolean(default=False)",
+	"displayMessagesInWebView = boolean(default=False)",
 	"voice_the_presence_of_a_reaction = boolean(default=True)",
 	"report premium accounts = boolean(default=True)",
 	"automatically announce new messages = boolean(default=False)",

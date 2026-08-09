@@ -51,7 +51,6 @@
 | **ALT+5** | UnigramPlus | نقل التركيز لفتح الملف الشخصي |
 | **ALT+6** | UnigramPlus | نقل التركيز إلى قائمة مواضيع المجموعة |
 | **ALT+D** | UnigramPlus | نقل التركيز إلى حقل كتابة الرسائل. إذا كان التركيز موجودًا بالفعل في هذا الحقل، فبعد الضغط على مفاتيح الاختصار هذه سينتقل إلى حيث كان سابقًا |
-| **ALT+End** | UnigramPlus | الذهاب إلى التفاعل التالي |
 
 ### البحث
 
@@ -73,13 +72,15 @@
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
 | **Ctrl+A** | Unigram | Select All |
+| **Ctrl+Shift+.** | Unigram | اقتباس |
 | **Ctrl+B** | Unigram | Bold |
 | **Ctrl+I** | Unigram | Italic |
-| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+U** | Unigram | تسطير |
 | **Ctrl+Shift+X** | Unigram | Strikethrough |
 | **Ctrl+Shift+M** | Unigram | Monospace |
 | **Ctrl+Shift+P** | Unigram | Spoiler |
-| **Ctrl+Shift+N** | Unigram | Null / Plain Text |
+| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+Shift+N** | Unigram | إزالة التنسيق (نص عادي) |
 
 ### المجلدات
 
@@ -179,6 +180,15 @@
 <!-- shortcut-table-end -->
 
 ## قائمة التغييرات:
+
+### الإصدار 5.6.4
+
+* تم إصلاح Shift+Delete باستخدام أمر Delete الأصلي في Unigram وتأكيد الحذف تلقائيًا من الطرفين.
+* أصبح Alt+2 يفعّل زر «الانتقال إلى الأسفل» في Unigram أولاً، وتمت إزالة اختصار Alt+End المكرر.
+* تمت إضافة إعداد للاختيار بين نافذة wx الكلاسيكية (الافتراضية) وعرض الويب عند عرض نص الرسالة باستخدام Alt+C.
+* يُستخدم الآن نص الرسائل المنسقة الرسمي من Unigram، مع إصلاح مؤقت للأزرار المضمنة بلا تسمية في Unigram 12.9.
+* تم تحديث قائمة الاختصارات من وثائق Unigram 12.9 الرسمية.
+* تمت إضافة إصلاح مؤقت لكي تنطق صفوف موضوعات الرسائل المحفوظة عنوان المحادثة الظاهر بدلاً من اسم نوع TDLib.
 
 ### الإصدار 5.6.3
 

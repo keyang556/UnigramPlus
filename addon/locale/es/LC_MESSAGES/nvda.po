@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.3\n"
+"Project-Id-Version: UnigramPlus 5.6.4\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 03:31-0500\n"
@@ -1011,6 +1011,24 @@ msgstr "Anunciar los encabezados de los mensajes después del contenido del mens
 
 msgid "Play a sound when reaching the end of a chat"
 msgstr "Reproducir un sonido al llegar al final de un chat"
+
+msgid "Display message text in a web view when pressing Alt+C"
+msgstr "Mostrar el texto del mensaje en una vista web al pulsar Alt+C"
+
+msgid ""
+"- Fixed Shift+Delete by using Unigram's native Delete command and automatically confirming deletion for both sides.\n"
+"- Alt+2 now uses Unigram's Go to bottom button first, and the duplicate Alt+End shortcut was removed.\n"
+"- Added a setting to choose between the classic window (default) and web view when displaying message text with Alt+C.\n"
+"- Unigram's official rich-message text is now used, with a temporary fix for unlabeled inline buttons in Unigram 12.9.\n"
+"- Updated every localized manual with the Unigram 12.9 shortcut list.\n"
+"- Added a temporary fix so Saved Messages topic rows announce the visible chat title instead of a TDLib type name."
+msgstr ""
+"- Se corrigió Shift+Delete usando el comando Delete nativo de Unigram y confirmando automáticamente la eliminación para ambos lados.\n"
+"- Alt+2 ahora usa primero el botón «Ir al final» de Unigram y se eliminó el atajo duplicado Alt+End.\n"
+"- Se añadió una opción para elegir entre la ventana clásica (predeterminada) y la vista web al mostrar texto con Alt+C.\n"
+"- Ahora se usa el texto oficial de los mensajes enriquecidos de Unigram, con una corrección temporal para los botones en línea sin etiqueta de Unigram 12.9.\n"
+"- Se actualizaron todos los manuales traducidos con la lista de atajos de Unigram 12.9.\n"
+"- Se añadió una corrección temporal para que las filas de temas de Mensajes guardados anuncien el título visible del chat en vez de un nombre de tipo de TDLib."
 
 msgid ""
 "- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"

@@ -82,16 +82,31 @@ def test_preserves_escaped_pipes_in_table_cells():
 def test_all_readmes_have_complete_integrated_shortcut_tables():
 	root = Path(__file__).parents[1]
 	readmes = [root / "readme.md", *sorted((root / "addon" / "doc").glob("*/readme.md"))]
+	reference_unigram_shortcuts = None
 
 	assert len(readmes) == 17
 	for readme in readmes:
 		text = readme.read_text(encoding="utf-8")
+		shortcut_table = text.split("<!-- shortcut-table-start -->", 1)[1].split(
+			"<!-- shortcut-table-end -->", 1)[0]
+		unigram_shortcuts = [
+			line.split("|")[1].strip()
+			for line in shortcut_table.splitlines()
+			if "| Unigram |" in line
+		]
 		assert text.count("<!-- shortcut-table-start -->") == 1, readme
 		assert text.count("<!-- shortcut-table-end -->") == 1, readme
 		assert text.count("|---|---|---|") == 9, readme
-		assert text.count("| Unigram |") == 42, readme
-		assert text.count("| UnigramPlus |") == 53, readme
-		assert "5.6.3" in text, readme
+		assert text.count("| Unigram |") == 44, readme
+		assert text.count("| UnigramPlus |") == 52, readme
+		assert "| **Ctrl+Shift+.** | Unigram |" in text, readme
+		assert "| **Ctrl+U** | Unigram |" in text, readme
+		assert "| **ALT+End** |" not in text, readme
+		assert "5.6.4" in text, readme
+		if reference_unigram_shortcuts is None:
+			reference_unigram_shortcuts = unigram_shortcuts
+		else:
+			assert unigram_shortcuts == reference_unigram_shortcuts, readme
 
 
 def test_chinese_readmes_use_unigram_interface_terms():

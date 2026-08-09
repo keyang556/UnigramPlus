@@ -4,9 +4,10 @@ import winUser
 import mouseHandler
 from keyboardHandler import KeyboardInputGesture
 import appModuleHandler
+import core
 from ui import message, browseableMessage
 import api
-from controlTypes import Role, State
+from controlTypes import OutputReason, Role, State
 import scriptHandler
 from scriptHandler import script
 from NVDAObjects.UIA import UIA
@@ -41,10 +42,8 @@ from .rich_message import (  # noqa: E402
 	extract_message_text,
 	extract_rich_message_text,
 	find_rich_message_root,
-	has_empty_rich_message_summary,
-	insert_hint_before_status,
-	is_rich_message,
 	merge_message_html_and_rich_text,
+	merge_message_text_and_rich_text,
 )
 from .rich_message_dialog import show_browseable_message  # noqa: E402
 from .voice_recording import (  # noqa: E402
@@ -63,6 +62,7 @@ _telegramDesktopFallbackClass = None
 _telegramDesktopFallbackLoadAttempted = False
 
 _APP_MODULE_NAME_IGNORED_CHARS = str.maketrans("", "", "\u200e\u200f\u2066\u2067\u2068\u2069")
+_SAVED_MESSAGES_TOPIC_TYPE_NAME = "Telegram.Td.Api.SavedMessagesTopic"
 _VOICE_RECORDING_POLL_INTERVAL = .2
 # Allow Unigram time to finalize the recording and insert its outgoing message.
 # A sent message is still reported immediately; only cancellation waits this long.
@@ -112,6 +112,236 @@ def _normalized_text(text):
 	try: text = text or ""
 	except Exception: text = ""
 	return str(text).translate(_APP_MODULE_NAME_IGNORED_CHARS).strip().casefold()
+
+
+def _walk_bounded_descendants(root, max_nodes=100):
+	"""Yield a small UIA subtree without trusting provider parent/child links."""
+	try:
+		pending = list(root.children or ())
+	except Exception:
+		pending = []
+	seen = {id(root)}
+	visited = 0
+	while pending and visited < max_nodes:
+		node = pending.pop(0)
+		identity = id(node)
+		if identity in seen:
+			continue
+		seen.add(identity)
+		visited += 1
+		yield node
+		try:
+			pending.extend(node.children or ())
+		except Exception:
+			pass
+
+
+def _menu_item_has_icon(item, icons):
+	"""Match a context-menu command even when XAML inserts extra wrappers."""
+	if isinstance(icons, str):
+		icons = (icons,)
+	icons = frozenset(icons)
+	for node in (item, *_walk_bounded_descendants(item)):
+		try:
+			if node.name in icons:
+				return True
+		except Exception:
+			pass
+	return False
+
+
+def _clean_inline_button_text(text):
+	"""Remove icon-font glyphs while preserving an inline button's visible label."""
+	return "".join(
+		char
+		for char in str(text or "")
+		if not (
+			0xE000 <= ord(char) <= 0xF8FF
+			or 0xF0000 <= ord(char) <= 0xFFFFD
+			or 0x100000 <= ord(char) <= 0x10FFFD
+		)
+	).strip()
+
+
+def _is_inline_button_list_item(obj):
+	"""Recognize Unigram 12.9 inline buttons even when UIA reports generic classes."""
+	try:
+		if obj.role != Role.LISTITEM or not obj.isFocusable:
+			return False
+		parent = obj.parent
+		obj_class = str(getattr(obj, "UIAClassName", "") or "").casefold()
+		parent_class = str(getattr(parent, "UIAClassName", "") or "").casefold()
+		if obj_class == "replymarkupinlinebutton" or parent_class == "replymarkupinlinepanel":
+			return True
+		if str(getattr(obj, "name", "") or "").strip():
+			return False
+		# In 12.9 both controls can have generic class and AutomationId values, and
+		# Raw View inserts layout wrappers between the item and the element NVDA
+		# announces as a list. The stable boundary is an unnamed nested list item
+		# under a message row. Start at the parent so the message row itself is never
+		# mistaken for an inline button.
+		return _find_ancestor_by_automation_id(parent, ("Message_item",), max_depth=8) is not None
+	except Exception:
+		return False
+
+
+def _inline_button_descendant_text(obj):
+	"""Recover text that Unigram 12.9 deliberately hides in UIA's raw view."""
+	from time import perf_counter
+
+	# TODO: Remove this workaround when ReplyMarkupInlineButtonAutomationPeer
+	# exposes its content again. Generic.xaml marks every ContentPresenter child as
+	# AccessibilityView.Raw, while GetNameCore skips raw descendants. The new rich
+	# message buttons render their label in a RichTextBlock, but UIA flattens that
+	# peer and reports its class as TextBlock. Generic.xaml also appends a raw
+	# TextBlock for the button-type glyph, so the label is the first raw child and
+	# the glyph is the last. Follow the first-child path only: Unigram 12.9 returns
+	# E_POINTER from the raw walker's next-sibling API, while descendant
+	# FindFirst/FindAll blocks NVDA for seconds.
+	cache_attribute = "_unigramPlusInlineButtonName"
+	cached = getattr(obj, cache_attribute, None)
+	if cached:
+		return cached
+	text = ""
+	visited = []
+	timings = None
+	started = perf_counter()
+	try:
+		import UIAHandler
+
+		handler = UIAHandler.handler
+		walker = handler.baseTreeWalker
+		cache_request = handler.baseCacheRequest
+		element = obj.UIAElement
+		for _depth in range(10):
+			class_name = element.GetCachedPropertyValueEx(
+				UIAHandler.UIA.UIA_ClassNamePropertyId,
+				True,
+			)
+			automation_id = element.GetCachedPropertyValueEx(
+				UIAHandler.UIA.UIA_AutomationIdPropertyId,
+				True,
+			)
+			class_name = class_name if isinstance(class_name, str) else ""
+			automation_id = automation_id if isinstance(automation_id, str) else ""
+			visited.append(f"{class_name}:{automation_id}")
+			if class_name in ("TextBlock", "RichTextBlock"):
+				timings = {"locate": perf_counter() - started}
+				stage_started = perf_counter()
+				name = element.GetCachedPropertyValueEx(
+					UIAHandler.UIA.UIA_NamePropertyId,
+					True,
+				)
+				timings["name"] = perf_counter() - stage_started
+				text = name if isinstance(name, str) else ""
+				if not text:
+					stage_started = perf_counter()
+					pattern = element.GetCachedPattern(UIAHandler.UIA_TextPatternId)
+					pattern = pattern.QueryInterface(UIAHandler.IUIAutomationTextPattern)
+					timings["pattern"] = perf_counter() - stage_started
+					stage_started = perf_counter()
+					text_range = pattern.DocumentRange
+					timings["range"] = perf_counter() - stage_started
+					stage_started = perf_counter()
+					# A label is short. Asking XAML for all text with -1 can enter its
+					# expensive document-length path, which takes about three seconds in
+					# Unigram 12.9. Bound the provider request while leaving ample room
+					# for localized inline-button labels.
+					text = text_range.GetText(512) or ""
+					timings["text"] = perf_counter() - stage_started
+				text = _clean_inline_button_text(text)
+				if text:
+					break
+			element = walker.GetFirstChildElementBuildCache(element, cache_request)
+			# comtypes can wrap a null result in a false pointer object rather than
+			# returning Python's None. Accessing a property on it raises ValueError.
+			if not element:
+				break
+	except Exception:
+		log.debug("Could not read cached inline-button text; raw path: %s", visited, exc_info=True)
+	if timings is not None:
+		log.debug(
+			"Inline-button UIA timing: locate=%.3fs, name=%.3fs, pattern=%.3fs, "
+			"range=%.3fs, text=%.3fs, total=%.3fs",
+			timings.get("locate", 0.0),
+			timings.get("name", 0.0),
+			timings.get("pattern", 0.0),
+			timings.get("range", 0.0),
+			timings.get("text", 0.0),
+			perf_counter() - started,
+		)
+	text = _clean_inline_button_text(text)
+	if not text:
+		log.debug("Cached inline-button text was empty; raw path: %s", visited)
+	# Do not retain a negative result. XAML can raise the focus event before the
+	# RichTextBlock has finished materializing, and the same NVDAObject must then
+	# be allowed to retry when its name is requested for speech.
+	if text:
+		try:
+			setattr(obj, cache_attribute, text)
+		except Exception:
+			pass
+	return text
+
+
+def _queue_inline_button_text_read(obj, callback, is_current=None):
+	"""Read a slow XAML Text Pattern without blocking NVDA's main event loop."""
+	try:
+		import UIAHandler
+
+		mta_queue = UIAHandler.handler.MTAThreadQueue
+	except Exception:
+		log.debug("NVDA's UIA MTA queue is unavailable for an inline button", exc_info=True)
+		return False
+
+	def read_on_mta_thread():
+		# Direction keys can move across several buttons while an older provider
+		# call is still finishing. Drop queued stale work before it reaches XAML.
+		if is_current is not None and not is_current():
+			return
+		try:
+			text = _inline_button_descendant_text(obj)
+		except Exception:
+			log.debug("Could not read inline-button text on NVDA's UIA MTA thread", exc_info=True)
+			text = ""
+		queueHandler.queueFunction(queueHandler.eventQueue, callback, text)
+
+	try:
+		mta_queue.put_nowait(read_on_mta_thread)
+		return True
+	except Exception:
+		log.debug("Could not queue inline-button text on NVDA's UIA MTA thread", exc_info=True)
+		return False
+
+
+def _repair_saved_messages_topic_name(obj):
+	"""Temporarily replace Unigram's leaked TDLib type with the visible chat title."""
+	try:
+		name = str(obj.name or "")
+	except Exception:
+		return ""
+	if _SAVED_MESSAGES_TOPIC_TYPE_NAME not in name:
+		return name
+	# TODO: Remove when ChatCell.GetAutomationName handles _savedMessagesTopic.
+	# Ask the UIA provider for the one known element instead of recursively
+	# materializing the chat row as NVDAObjects on NVDA's main thread.
+	try:
+		import UIAHandler
+
+		client = UIAHandler.handler.clientObject
+		condition = client.CreatePropertyCondition(
+			UIAHandler.UIA.UIA_AutomationIdPropertyId,
+			"TitleLabel",
+		)
+		title = obj.UIAElement.findFirst(UIAHandler.TreeScope_Descendants, condition)
+		if title:
+			title_name = title.GetCurrentPropertyValueEx(UIAHandler.UIA.UIA_NamePropertyId, True) or ""
+			title_name = str(title_name).strip()
+			if title_name:
+				return name.replace(_SAVED_MESSAGES_TOPIC_TYPE_NAME, title_name)
+	except Exception:
+		pass
+	return name
 
 
 def _find_ancestor_by_automation_id(obj, automation_ids, max_depth=6):
@@ -577,6 +807,20 @@ class Audio_and_video_button:
 		# self.bindGesture("kb:space", "enter")
 
 
+class ReplyMarkupInlineButtonListItem:
+	"""Temporary name repair for Unigram 12.9 inline-keyboard list items."""
+
+	def _get_name(self):
+		# Do not call UIA._get_name here. It requests the current Name property,
+		# whose ReplyMarkupInlineButtonAutomationPeer.GetNameCore skips the raw
+		# label and returns empty. The bounded raw-cache path takes only a few
+		# milliseconds on Unigram 12.9 and supplies the name during normal focus.
+		# The app module retains an asynchronous fallback for the brief interval
+		# where XAML has not materialized the raw TextBlock yet.
+		name = getattr(self, "_unigramPlusInlineButtonName", "")
+		return name or _inline_button_descendant_text(self)
+
+
 class Message_list_item(ListItem):
 	selected_media = -1
 	media = None
@@ -600,20 +844,27 @@ class Message_list_item(ListItem):
 	@script(description=_("Show message text in popup window"), gesture="kb:ALT+C")
 	def script_show_text_message(self, gesture):
 		rich_message = find_rich_message_root(self)
-		rich_detected = bool(rich_message) or is_rich_message(self)
-		html, link_actions = extract_message_html_and_actions(self)
 		message_text = extract_message_text(self)
-		if rich_detected:
-			text = extract_rich_message_text(rich_message, textInfos.POSITION_ALL) if rich_message else ""
+		rich_text = extract_rich_message_text(rich_message, textInfos.POSITION_ALL) if rich_message else ""
+		title = _("Rich message") if rich_message else _("message text")
+		if not conf.get("displayMessagesInWebView"):
+			text = merge_message_text_and_rich_text(message_text, rich_text)
+			if not text:
+				message(_("This message does not contain text"))
+				return
+			TextWindow(text, title, readOnly=False)
+			return
+
+		html, link_actions = extract_message_html_and_actions(self)
+		if rich_message:
+			text = rich_text
 			log.debug("Rich message extraction returned %d characters" % len(text))
 			html = merge_message_html_and_rich_text(html, message_text, text)
 			if html:
-				# Translators: Title of the NVDA browse-mode window containing a rich message.
-				show_browseable_message(html, _("Rich message"), link_actions)
+				show_browseable_message(html, title, link_actions)
 				return
 			if text:
-				# Translators: Title of the NVDA browse-mode window containing a rich message.
-				browseableMessage(text, _("Rich message"))
+				browseableMessage(text, title)
 				return
 		if html:
 			show_browseable_message(html, _("message text"), link_actions)
@@ -694,9 +945,9 @@ class Message_list_item(ListItem):
 			self.last_part_in_message = self.name[index:]
 		else:
 			# The Unigram display language can differ from the add-on language.
-			# Avoid the legacy [-1:] slice and keep empty-rich summaries usable.
+			# Avoid the legacy [-1:] slice when no localized status marker matches.
 			self.index_last_part_in_message = 0
-			self.last_part_in_message = self.name if has_empty_rich_message_summary(self) else ""
+			self.last_part_in_message = ""
 		
 		# Bind once per overlay rather than only when it is created with the
 		# setting enabled. This makes a settings change effective immediately for
@@ -1246,6 +1497,7 @@ class AppModule(appModuleHandler.AppModule):
 		"downArrow": KeyboardInputGesture.fromName("downArrow"),
 		"fixed_downArrow": KeyboardInputGesture.fromName("shift+downArrow"),
 		"Applications": KeyboardInputGesture.fromName("Applications"),
+		"delete": KeyboardInputGesture.fromName("delete"),
 		"escape": KeyboardInputGesture.fromName("escape"),
 		"space": KeyboardInputGesture.fromName("space"),
 	}
@@ -1620,6 +1872,15 @@ class AppModule(appModuleHandler.AppModule):
 	# Go to the last message in the chat
 	@script(description=_("Move focus to the last message in an open chat"), gesture="kb:ALT+2")
 	def script_toLastMessage(self, gesture):
+		# A partially loaded long history can have a locally last realized row that
+		# is not the chat's true endpoint. Prefer Unigram's own Go to bottom action.
+		button = getattr(self, "_messagesButton", None)
+		if button and self._messages_button_visibility() is True:
+			try:
+				button.doAction()
+				return True
+			except Exception:
+				pass
 		focusObj = api.getFocusObject()
 		if self.is_message_object(focusObj):
 			if self._is_last_message_in_chat(focusObj):
@@ -2317,6 +2578,9 @@ class AppModule(appModuleHandler.AppModule):
 
 	# Processing the focused element from the list of chats
 	def actionChatElementInFocus(self, obj):
+		# TODO: Remove when Unigram's ChatCell.GetAutomationName handles
+		# _savedMessagesTopic instead of exposing Telegram.Td.Api.SavedMessagesTopic.
+		obj.name = _repair_saved_messages_topic_name(obj)
 		# If the user does not want to change the order of elements in the chat name, then we immediately terminate the function to improve the response speed
 		if conf.get("voiceTypeAfterChatName") == "beforeName": return obj.name
 		item = obj.firstChild
@@ -2438,6 +2702,29 @@ class AppModule(appModuleHandler.AppModule):
 		nextHandler()
 
 	# Focus change tracking
+	def _complete_inline_button_name(self, obj, generation, text):
+		"""Announce the latest asynchronously recovered inline-button label."""
+		if generation != getattr(self, "_inlineButtonFocusGeneration", 0):
+			return
+		try:
+			focus = api.getFocusObject()
+			if focus is not obj or getattr(focus, "appModule", None) is not self:
+				return
+		except Exception:
+			return
+		text = _clean_inline_button_text(text)
+		if text:
+			try:
+				setattr(obj, "_unigramPlusInlineButtonName", text)
+			except Exception:
+				pass
+			# NVDA may have cached the empty result for this core cycle. Override the
+			# public property so the completion announcement sees the repaired label.
+			obj.name = text
+		log.debug("Asynchronous inline-button focus fallback returned %r", text)
+		speech.cancelSpeech()
+		speech.speakObject(obj, reason=OutputReason.FOCUS)
+
 	def event_gainFocus(self, obj, nextHandler):
 		if is_recording_button(obj):
 			self._voiceRecordingButton = obj
@@ -2449,8 +2736,10 @@ class AppModule(appModuleHandler.AppModule):
 					return
 				except Exception:
 					pass
-			nextHandler()
-			return
+				nextHandler()
+				return
+		self._inlineButtonFocusGeneration = getattr(self, "_inlineButtonFocusGeneration", 0) + 1
+		inline_generation = self._inlineButtonFocusGeneration
 		self._remember_messages_button(obj)
 		self._remember_main_window(obj)
 		is_main_window = self._is_main_window_object(obj)
@@ -2483,7 +2772,12 @@ class AppModule(appModuleHandler.AppModule):
 				self.profile_panel_element = panel
 				panel.firstChild.setFocus()
 		elif self.execute_context_menu_option:
-			try: targetButton = next((item for item in obj.parent.children if item.firstChild.name in self.execute_context_menu_option), False)
+			try:
+				targetButton = next(
+					(item for item in obj.parent.children
+					if _menu_item_has_icon(item, self.execute_context_menu_option)),
+					False,
+				)
 			except: targetButton = False
 			self.execute_context_menu_option = False
 			if targetButton: targetButton.doAction()
@@ -2494,19 +2788,35 @@ class AppModule(appModuleHandler.AppModule):
 			self.isRecord = False
 			self.isSkipName = 1
 			return True
-		elif self.isDelete:
-			self.deleteMessageAndChat(obj)
+		elif self.isDelete and self.deleteMessageAndChat(obj):
 			return
 		if obj.role == Role.LISTITEM:
 			speech.cancelSpeech()
+			# Saved-message topic rows are not children of ChatsList, so the older
+			# chat-only branch never saw them.
+			if _SAVED_MESSAGES_TOPIC_TYPE_NAME in str(obj.name or ""):
+				obj.name = _repair_saved_messages_topic_name(obj)
+			elif not str(obj.name or "").strip() and _is_inline_button_list_item(obj):
+				inline_name = getattr(obj, "_unigramPlusInlineButtonName", "")
+				if not inline_name and _queue_inline_button_text_read(
+					obj,
+					lambda text: self._complete_inline_button_name(
+						obj,
+						inline_generation,
+						text,
+					),
+					lambda: inline_generation == getattr(self, "_inlineButtonFocusGeneration", 0),
+				):
+					# Suppress the empty "list item" announcement. The completion callback
+					# speaks this object only if it is still the latest Unigram focus.
+					return
+				elif not inline_name:
+					# Older NVDA releases without an MTA queue retain the working, albeit
+					# slower, synchronous compatibility path.
+					_inline_button_descendant_text(obj)
 			if self.is_message_object(obj):
 				self.saved_items.save("last focus object", obj)
 				obj.name = self.action_message_focus(obj)
-				if is_rich_message(obj):
-					log.debug("Rich message detected from Unigram's accessible summary or UIA content")
-					# Translators: Announced after the content of a rich message when it receives focus.
-					hint = _("Rich message. Press Alt+C to browse")
-					obj.name = insert_hint_before_status(obj.name, hint, obj.keywords[2:4])
 			elif obj.parent.UIAAutomationId == "ChatsList":
 				self.saved_items.save("last focused chat", obj)
 				obj.name = self.actionChatElementInFocus(obj)
@@ -2635,6 +2945,11 @@ class AppModule(appModuleHandler.AppModule):
 			if is_recording_button(obj):
 				self._voiceRecordingButton = obj
 			if obj.role == Role.LISTITEM and obj.isFocusable:
+				if _is_inline_button_list_item(obj):
+					# TODO: Remove with _inline_button_descendant_text after Unigram
+					# fixes ReplyMarkupInlineButtonAutomationPeer.GetNameCore.
+					clsList.insert(0, ReplyMarkupInlineButtonListItem)
+					return
 				parent = obj.parent
 				if parent.UIAAutomationId == "ChatFolders":
 					self.tabs_folder_element = parent
@@ -2661,7 +2976,6 @@ class AppModule(appModuleHandler.AppModule):
 						and getattr(getattr(parent, "parent", None), "UIAAutomationId", "") == "Messages"
 					)
 					or self.sender_message
-					or has_empty_rich_message_summary(obj)
 					or (parent.role == Role.LISTITEM and parent.location.width > 800)
 				):
 					clsList.insert(0, Message_list_item)
@@ -2694,34 +3008,89 @@ class AppModule(appModuleHandler.AppModule):
 		except Exception as e: pass
 
 	def deleteMessageAndChat(self, obj):
-		if not conf.get("confirmation_at_deletion"): speech.cancelSpeech()
-		if self.isDelete["state"] == 0 and obj.role == Role.MENUITEM:
+		pending = self.isDelete
+		if not pending:
+			return False
+		state = pending["state"]
+		if state == 0:
+			if obj.role != Role.MENUITEM:
+				return False
+			if not conf.get("confirmation_at_deletion"):
+				speech.cancelSpeech()
 			for item in obj.parent.children:
-				if item.firstChild.name == icons_from_context_menu["delete"]:
-					self.isDelete["state"] = 1
+				if _menu_item_has_icon(item, icons_from_context_menu["delete"]):
+					pending["state"] = 1
 					item.doAction()
 					if conf.get("confirmation_at_deletion"): self.isDelete = False
-					return
+					return True
 			self.isDelete = False
 			self.keys["escape"].send()
-		elif self.isDelete["state"] == 1 and obj.role in (Role.CHECKBOX, Role.BUTTON):
-			targetButton = next((x for x in self.isDelete["elements"] if x.location and x.location.width), False)
-			if obj.role == Role.CHECKBOX:
-				# Checking if a checkbox needs to be checked to delete on both sidyes
-				if obj.UIAAutomationId in ("CheckBox", "RevokeCheck") and ((self.isDelete["isCompleteDeletion"] and State.CHECKED not in obj.states) or (not self.isDelete["isCompleteDeletion"] and State.CHECKED in obj.states)): obj.doAction()
-				obj.parent.lastChild.previous.doAction()
-			elif obj.role == Role.BUTTON:
+			return True
+		if state == 1 and pending.get("nativeDelete", False):
+			automation_id = str(getattr(obj, "UIAAutomationId", "") or "")
+			if obj.role == Role.CHECKBOX and automation_id == "RevokeCheck":
+				if not conf.get("confirmation_at_deletion"):
+					speech.cancelSpeech()
+				checked = State.CHECKED in obj.states
+				if pending["isCompleteDeletion"] and not checked:
+					obj.doAction()
+				return True
+			if obj.role == Role.BUTTON and automation_id == "PrimaryButton":
+				if not conf.get("confirmation_at_deletion"):
+					speech.cancelSpeech()
+				obj.doAction()
+				pending["state"] = 2
+				return True
+			# Delete can take several seconds to create its popup. Do not mistake a
+			# composer, calendar, attachment, or other button for the delete action
+			# while the dialog is still loading.
+			return False
+		if state == 1:
+			automation_id = str(getattr(obj, "UIAAutomationId", "") or "")
+			is_checkbox = obj.role == Role.CHECKBOX and automation_id in ("CheckBox", "RevokeCheck")
+			is_primary_button = obj.role == Role.BUTTON and automation_id == "PrimaryButton"
+			if not (is_checkbox or is_primary_button):
+				return False
+			if not conf.get("confirmation_at_deletion"):
+				speech.cancelSpeech()
+			targetButton = next(
+				(x for x in pending["elements"] if x.location and x.location.width),
+				False,
+			)
+			if is_checkbox:
+				# Check whether deletion for both sides must be toggled.
+				checked = State.CHECKED in obj.states
+				if obj.UIAAutomationId in ("CheckBox", "RevokeCheck") and (
+					(pending["isCompleteDeletion"] and not checked)
+					or (not pending["isCompleteDeletion"] and checked)
+				):
+					obj.doAction()
+				# DeleteChatPopup intentionally focuses its checkbox. Its stable legacy
+				# template path is constant-time and avoids scanning any popup subtree.
+				try: obj.parent.lastChild.previous.doAction()
+				except Exception:
+					self.isDelete = False
+					return True
+			else:
 				obj.doAction()
 			if targetButton: targetButton.setFocus()
-			elif self.isDelete["list"] == "messages": self.script_toLastMessage(False)
-			elif self.isDelete["list"] == "chats": self.script_toChatList(False)
-			self.isDelete["state"] = 2
-		elif self.isDelete["state"] != 1:
-			if self.isDelete["message"] == "audio": winsound.PlaySound(baseDir+"delete.wav", winsound.SND_ASYNC)
-			else: message(self.isDelete["message"])
+			elif pending["list"] == "messages": self.script_toLastMessage(False)
+			elif pending["list"] == "chats": self.script_toChatList(False)
+			pending["state"] = 2
+			return True
+		if state != 1:
+			if pending["message"] == "audio": winsound.PlaySound(baseDir+"delete.wav", winsound.SND_ASYNC)
+			else: message(pending["message"])
 			# if self.isDelete["list"] == "messages": message(self.action_message_focus(obj))
-			if self.isDelete["list"] == "messages": message(obj.name)
-			elif self.isDelete["list"] == "chats": message(self.actionChatElementInFocus(obj))
+			if pending["list"] == "messages": message(obj.name)
+			elif pending["list"] == "chats": message(self.actionChatElementInFocus(obj))
+			self.isDelete = False
+			return True
+		return False
+
+	def _expire_native_delete(self, pending):
+		"""Discard a native Delete request if Unigram never completes its popup flow."""
+		if self.isDelete is pending:
 			self.isDelete = False
 
 	@script(description=_("Delete a message or chat"), gesture="kb:ALT+delete")
@@ -2729,7 +3098,7 @@ class AppModule(appModuleHandler.AppModule):
 		if not self.isDelete and not self.startDeleteMessage(False): gesture.send()
 	@script(description=_("Delete message or chat from both sides"), gesture="kb:shift+delete")
 	def script_completeDeletion(self, gesture):
-		if not self.isDelete and not self.startDeleteMessage(True): gesture.send()
+		if not self.isDelete and not self.startDeleteMessage(True, useNativeDelete=True): gesture.send()
 	@script(description=_("Switch to selection mode"), gesture="kb:control+space")
 	def script_selectMessage(self, gesture):
 		self.activate_option_for_menu((icons_from_context_menu["select"]), "Messages")
@@ -2766,11 +3135,23 @@ class AppModule(appModuleHandler.AppModule):
 		"kb:space": "actionMediaInMessage",
 	}
 
-	def startDeleteMessage(self, isCompleteDeletion = False):
+	def startDeleteMessage(self, isCompleteDeletion = False, useNativeDelete = False):
 		obj = api.getFocusObject()
-		if self.is_message_object(obj) or obj.parent.UIAAutomationId == "ChatsList":
-			self.isDelete = {"isCompleteDeletion": isCompleteDeletion, "elements": [], "message": "", "list": "", "state": 0}
-			if self.is_message_object(obj):
+		isMessage = self.is_message_object(obj)
+		if isMessage or obj.parent.UIAAutomationId == "ChatsList":
+			# Unigram's native Delete command is implemented by ChatView for messages.
+			# Keep the context-menu fallback for chat rows, where no native Delete
+			# handler exists.
+			useNativeDelete = useNativeDelete and isMessage
+			self.isDelete = {
+				"isCompleteDeletion": isCompleteDeletion,
+				"elements": [],
+				"message": "",
+				"list": "",
+				"state": 1 if useNativeDelete else 0,
+				"nativeDelete": useNativeDelete,
+			}
+			if isMessage:
 				self.isDelete["list"] = "messages"
 				if self.isDelete["isCompleteDeletion"]: self.isDelete["message"] = _("Message deleted on both sides")
 				else: self.isDelete["message"] = _("Message deleted")
@@ -2783,12 +3164,20 @@ class AppModule(appModuleHandler.AppModule):
 				elif self.isDelete["isCompleteDeletion"]: self.isDelete["message"] = _("Chat deleted on both sides")
 				else: self.isDelete["message"] = _("Chat deleted")
 			if conf.get("audioPlaybackWhenDeleted"): self.isDelete["message"] = "audio"
-			if obj.parent.role == Role.LISTITEM: obj = obj.parent
-			if obj.next and obj.next.role == Role.LISTITEM and obj.next.childCount > 1: self.isDelete["elements"].append(obj.next.firstChild)
-			if obj.previous and obj.previous.role == Role.LISTITEM and obj.previous.childCount > 1: self.isDelete["elements"].append(obj.previous.firstChild)
-			if obj.previous and obj.previous.previous and obj.previous.previous.role == Role.LISTITEM and obj.previous.previous.childCount > 1: self.isDelete["elements"].append(obj.previous.previous.firstChild)
-			if obj.next and obj.next.next and obj.next.next.role == Role.LISTITEM and obj.next.next.childCount > 1: self.isDelete["elements"].append(obj.next.next.firstChild)
-			self.keys["Applications"].send()
+			# The native command lets Unigram move focus after deletion. Building an
+			# adjacent-item cache here performs extra synchronous UIA calls before the
+			# dialog opens and is unnecessary for Shift+Delete.
+			if not useNativeDelete:
+				if obj.parent.role == Role.LISTITEM: obj = obj.parent
+				if obj.next and obj.next.role == Role.LISTITEM and obj.next.childCount > 1: self.isDelete["elements"].append(obj.next.firstChild)
+				if obj.previous and obj.previous.role == Role.LISTITEM and obj.previous.childCount > 1: self.isDelete["elements"].append(obj.previous.firstChild)
+				if obj.previous and obj.previous.previous and obj.previous.previous.role == Role.LISTITEM and obj.previous.previous.childCount > 1: self.isDelete["elements"].append(obj.previous.previous.firstChild)
+				if obj.next and obj.next.next and obj.next.next.role == Role.LISTITEM and obj.next.next.childCount > 1: self.isDelete["elements"].append(obj.next.next.firstChild)
+			self.keys["delete" if useNativeDelete else "Applications"].send()
+			if useNativeDelete and conf.get("confirmation_at_deletion"):
+				self.isDelete = False
+			elif useNativeDelete:
+				core.callLater(20000, self._expire_native_delete, self.isDelete)
 			return True
 		else: return False
 
@@ -3026,20 +3415,6 @@ class AppModule(appModuleHandler.AppModule):
 		with open(a, "r", encoding="utf-8") as file:
 			text = extractShortcutText(file.read())
 		TextWindow(text.strip(), _("List of shortcuts"), readOnly=True)
-
-
-	@script(description=_("Go to the end"), gesture="kb:ALT+end")
-	def script_to_down(self, gesture):
-		# Use the button only if NVDA has already materialized and cached it. A
-		# synchronous foreground-tree walk can block UIA long enough to freeze NVDA.
-		button = getattr(self, "_messagesButton", None)
-		if button and self._messages_button_visibility() is True:
-			try:
-				button.doAction()
-				return True
-			except Exception:
-				pass
-		return self.script_toLastMessage(gesture)
 
 	@script(description=_("Go to the list with search results"), gesture="kb:ALT+I")
 	def script_go_to_list_search_results(self, gesture):

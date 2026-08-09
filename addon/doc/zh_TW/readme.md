@@ -48,7 +48,6 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 | **ALT+5** | UnigramPlus | 將焦點移到已開啟的個人資料 |
 | **ALT+6** | UnigramPlus | 將焦點移到群組主題清單 |
 | **ALT+D** | UnigramPlus | 將焦點移到編輯欄位。若焦點已在編輯欄位中，按下快速鍵後會移回先前所在的位置 |
-| **ALT+End** | UnigramPlus | 移至結尾 |
 
 ### 搜尋
 
@@ -70,12 +69,14 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 | **Ctrl+C** | Unigram | 複製 |
 | **Ctrl+V** | Unigram | 貼上 |
 | **Ctrl+A** | Unigram | 全選 |
+| **Ctrl+Shift+.** | Unigram | 引用 |
 | **Ctrl+B** | Unigram | 粗體 |
 | **Ctrl+I** | Unigram | 斜體 |
-| **Ctrl+K** | Unigram | 建立連結 |
+| **Ctrl+U** | Unigram | 底線 |
 | **Ctrl+Shift+X** | Unigram | 刪除線 |
 | **Ctrl+Shift+M** | Unigram | 等寬 |
 | **Ctrl+Shift+P** | Unigram | 防劇透 |
+| **Ctrl+K** | Unigram | 建立連結 |
 | **Ctrl+Shift+N** | Unigram | 清除格式 |
 
 ### 聊天資料夾
@@ -176,6 +177,15 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 <!-- shortcut-table-end -->
 
 ## 版本變更
+
+### 版本 5.6.4
+
+* 修正 Shift+Delete：現在使用 Unigram 原生 Delete 命令，並自動確認從雙方刪除。
+* Alt+2 現在會優先啟動 Unigram 的「跳轉到底部」按鈕；已移除重複的 Alt+End 快速鍵。
+* 新增設定，可選擇在按 Alt+C 顯示訊息文字時使用傳統 wx 視窗（預設）或 Web 檢視。
+* 現在使用 Unigram 官方提供的 Rich 訊息無障礙文字，並為 Unigram 12.9 中沒有標籤的行內按鈕加入暫時修正。
+* 依據 Unigram 12.9 官方文件更新快速鍵清單。
+* 加入暫時修正，使「我的收藏」主題列朗讀畫面上顯示的聊天標題，而不是 TDLib 型別名稱。
 
 ### 版本 5.6.3
 

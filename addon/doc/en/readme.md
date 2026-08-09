@@ -50,7 +50,6 @@ And remember that everyone who read this line thought that someone will definite
 | **ALT+5** | UnigramPlus | Move focus to open profile |
 | **ALT+6** | UnigramPlus | Move focus to the list of group threads |
 | **ALT+D** | UnigramPlus | Move the focus to the edit field. If the focus is already in the edit field, then after pressing the hotkey, it will move to where it was before |
-| **ALT+End** | UnigramPlus | Go to the end |
 
 ### Search
 
@@ -72,13 +71,15 @@ And remember that everyone who read this line thought that someone will definite
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
 | **Ctrl+A** | Unigram | Select All |
+| **Ctrl+Shift+.** | Unigram | Quote |
 | **Ctrl+B** | Unigram | Bold |
 | **Ctrl+I** | Unigram | Italic |
-| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+U** | Unigram | Underline |
 | **Ctrl+Shift+X** | Unigram | Strikethrough |
 | **Ctrl+Shift+M** | Unigram | Monospace |
 | **Ctrl+Shift+P** | Unigram | Spoiler |
-| **Ctrl+Shift+N** | Unigram | Null / Plain Text |
+| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+Shift+N** | Unigram | Remove formatting (Regular text) |
 
 ### Folders
 
@@ -178,6 +179,15 @@ And remember that everyone who read this line thought that someone will definite
 <!-- shortcut-table-end -->
 
 ## List of changes:
+
+### Version 5.6.4
+
+* Fixed Shift+Delete by using Unigram's native Delete command and automatically confirming deletion for both sides.
+* Alt+2 now activates Unigram's Go to bottom button first; the duplicate Alt+End shortcut was removed.
+* Added a setting to choose between the classic wx window (default) and web view when displaying message text with Alt+C.
+* Unigram's official rich-message text is now used, with a temporary fix for unlabeled inline buttons in Unigram 12.9.
+* Updated the shortcut list from the official Unigram 12.9 documentation.
+* Added a temporary fix so Saved Messages topic rows announce the visible chat title instead of a TDLib type name.
 
 ### Version 5.6.3
 

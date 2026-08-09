@@ -48,7 +48,6 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 | **ALT+5** | UnigramPlus | हाल खोलिएको च्याट प्रोफाइलमा फोकस सार्नुहोस । |
 | **ALT+6** | UnigramPlus | Move focus to the list of group threads |
 | **ALT+D** | UnigramPlus | सम्पादन बाकसमा फोकस सार्नुहोस्। यदि फोकस पहिले नै सम्पादन बाकसमा छ भने, हटकी थिचेपछि, यो पहिलेकै स्थानमा सर्नेछ। |
-| **ALT+End** | UnigramPlus | Go to the end |
 
 ### खोज
 
@@ -70,13 +69,15 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
 | **Ctrl+A** | Unigram | Select All |
+| **Ctrl+Shift+.** | Unigram | उद्धरण |
 | **Ctrl+B** | Unigram | Bold |
 | **Ctrl+I** | Unigram | Italic |
-| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+U** | Unigram | रेखाङ्कन |
 | **Ctrl+Shift+X** | Unigram | Strikethrough |
 | **Ctrl+Shift+M** | Unigram | Monospace |
 | **Ctrl+Shift+P** | Unigram | Spoiler |
-| **Ctrl+Shift+N** | Unigram | Null / Plain Text |
+| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+Shift+N** | Unigram | ढाँचा हटाउनुहोस् (साधारण पाठ) |
 
 ### फोल्डरहरू
 
@@ -397,6 +398,15 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 ###संस्करण १.१.७
 
 टर्की स्थानीयकरण थपियो।
+
+### Version 5.6.4
+
+* Unigram को मूल Delete आदेश प्रयोग गरेर र दुवैतर्फको मेटाइ स्वचालित रूपमा पुष्टि गरेर Shift+Delete सुधार गरियो।
+* Alt+2 ले अब पहिले Unigram को “तल जानुहोस्” बटन सक्रिय गर्छ; दोहोरिएको Alt+End सर्टकट हटाइयो।
+* Alt+C बाट सन्देश पाठ देखाउँदा क्लासिक wx सञ्झ्याल (पूर्वनिर्धारित) वा वेब दृश्य छान्ने सेटिङ थपियो।
+* अब Unigram को आधिकारिक पहुँचयोग्य रिच-सन्देश पाठ प्रयोग हुन्छ, र Unigram 12.9 का लेबलविहीन इनलाइन बटनका लागि अस्थायी सुधार थपियो।
+* आधिकारिक Unigram 12.9 कागजातअनुसार सर्टकट सूची अद्यावधिक गरियो।
+* सुरक्षित सन्देशका विषय पङ्क्तिले TDLib प्रकारको नामको सट्टा देखिने च्याट शीर्षक बोल्ने अस्थायी सुधार थपियो।
 
 ### Version 5.6.3
 

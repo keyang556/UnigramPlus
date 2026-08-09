@@ -47,7 +47,6 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 | **ALT+5** | UnigramPlus | Odağı açık profile taşı |
 | **ALT+6** | UnigramPlus | Odağı grup konuları listesine taşı |
 | **ALT+D** | UnigramPlus | Odağı metin alanına taşıyın. Odak zaten metin alanındaysa, kısayol tuşlarına bastıktan sonra daha önce olduğu yere taşınır |
-| **ALT+End** | UnigramPlus | Sonuna git |
 
 ### Arama
 
@@ -69,13 +68,15 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
 | **Ctrl+A** | Unigram | Select All |
+| **Ctrl+Shift+.** | Unigram | Alıntı |
 | **Ctrl+B** | Unigram | Bold |
 | **Ctrl+I** | Unigram | Italic |
-| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+U** | Unigram | Altı çizili |
 | **Ctrl+Shift+X** | Unigram | Strikethrough |
 | **Ctrl+Shift+M** | Unigram | Monospace |
 | **Ctrl+Shift+P** | Unigram | Spoiler |
-| **Ctrl+Shift+N** | Unigram | Null / Plain Text |
+| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+Shift+N** | Unigram | Biçimlendirmeyi kaldır (normal metin) |
 
 ### Klasörler
 
@@ -175,6 +176,15 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 <!-- shortcut-table-end -->
 
 ##Değişiklik listesi:
+
+### Sürüm 5.6.4
+
+* Shift+Delete, Unigram'ın yerel Delete komutu kullanılarak ve her iki taraf için silme otomatik onaylanarak düzeltildi.
+* Alt+2 artık önce Unigram'ın “En alta git” düğmesini etkinleştiriyor; yinelenen Alt+End kısayolu kaldırıldı.
+* Alt+C ile ileti metni gösterilirken klasik wx penceresi (varsayılan) veya web görünümü arasında seçim yapma ayarı eklendi.
+* Artık Unigram'ın resmi erişilebilir zengin ileti metni kullanılıyor; Unigram 12.9'daki etiketsiz satır içi düğmeler için geçici bir düzeltme eklendi.
+* Kısayol listesi resmi Unigram 12.9 belgelerine göre güncellendi.
+* Kayıtlı Mesajlar konu satırlarının TDLib tür adı yerine görünen sohbet başlığını duyurması için geçici bir düzeltme eklendi.
 
 ### Sürüm 5.6.3
 

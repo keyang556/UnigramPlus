@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.3\n"
+"Project-Id-Version: UnigramPlus 5.6.4\n"
 "POT-Creation-Date: 2022-10-07 22:33+0300\n"
 "PO-Revision-Date: 2022-10-20 12:30+0300\n"
 "Last-Translator: samrat kc <samrat.kc7@gmail.com>\n"
@@ -942,6 +942,24 @@ msgstr "सन्देशको सामग्रीपछि सन्दे�
 
 msgid "Play a sound when reaching the end of a chat"
 msgstr "च्याटको अन्त्यमा पुग्दा ध्वनि बजाउनुहोस्"
+
+msgid "Display message text in a web view when pressing Alt+C"
+msgstr "Alt+C थिच्दा सन्देश पाठ वेब दृश्यमा देखाउनुहोस्"
+
+msgid ""
+"- Fixed Shift+Delete by using Unigram's native Delete command and automatically confirming deletion for both sides.\n"
+"- Alt+2 now uses Unigram's Go to bottom button first, and the duplicate Alt+End shortcut was removed.\n"
+"- Added a setting to choose between the classic window (default) and web view when displaying message text with Alt+C.\n"
+"- Unigram's official rich-message text is now used, with a temporary fix for unlabeled inline buttons in Unigram 12.9.\n"
+"- Updated every localized manual with the Unigram 12.9 shortcut list.\n"
+"- Added a temporary fix so Saved Messages topic rows announce the visible chat title instead of a TDLib type name."
+msgstr ""
+"- Unigram को मूल Delete आदेश प्रयोग गरेर र दुवैतर्फको मेटाइ स्वचालित रूपमा पुष्टि गरेर Shift+Delete सुधार गरियो।\n"
+"- Alt+2 ले अब पहिले Unigram को तल जानुहोस् बटन प्रयोग गर्छ र दोहोरिएको Alt+End सर्टकट हटाइयो।\n"
+"- Alt+C बाट सन्देश पाठ देखाउँदा क्लासिक सञ्झ्याल (पूर्वनिर्धारित) वा वेब दृश्य छान्ने सेटिङ थपियो।\n"
+"- अब Unigram को आधिकारिक रिच-सन्देश पाठ प्रयोग हुन्छ र Unigram 12.9 का लेबलविहीन इनलाइन बटनका लागि अस्थायी सुधार थपियो।\n"
+"- सबै स्थानीयकृत पुस्तिकाहरू Unigram 12.9 सर्टकट सूचीसहित अद्यावधिक गरिए।\n"
+"- सुरक्षित सन्देशका विषय पङ्क्तिले TDLib प्रकारको नामको सट्टा देखिने च्याट शीर्षक बोल्ने अस्थायी सुधार थपियो।"
 
 msgid ""
 "- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"

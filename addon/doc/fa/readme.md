@@ -49,7 +49,6 @@
 | **ALT+5** | UnigramPlus | قرار دادن مکان نما بر روی پنجره ی پروفایل باز شده |
 | **ALT+6** | UnigramPlus | Move focus to the list of group threads |
 | **ALT+D** | UnigramPlus | بردن مکان نما به کادر ویرایش. اگر مکان نما بر روی کادر ویرایش باشد با فشار دادن کلیدهای میانبر مکان نما به همان جایی که بود برمیگردد. |
-| **ALT+End** | UnigramPlus | Go to the end |
 
 ### جستجو
 
@@ -71,13 +70,15 @@
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
 | **Ctrl+A** | Unigram | Select All |
+| **Ctrl+Shift+.** | Unigram | نقل‌قول |
 | **Ctrl+B** | Unigram | Bold |
 | **Ctrl+I** | Unigram | Italic |
-| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+U** | Unigram | زیرخط |
 | **Ctrl+Shift+X** | Unigram | Strikethrough |
 | **Ctrl+Shift+M** | Unigram | Monospace |
 | **Ctrl+Shift+P** | Unigram | Spoiler |
-| **Ctrl+Shift+N** | Unigram | Null / Plain Text |
+| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+Shift+N** | Unigram | حذف قالب‌بندی (متن ساده) |
 
 ### پوشه‌ها
 
@@ -393,6 +394,15 @@
 بومی سازی ترکی اضافه شد.
 
 
+
+### نسخه 5.6.4
+
+* Shift+Delete با استفاده از فرمان اصلی Delete در Unigram و تأیید خودکار حذف برای هر دو طرف اصلاح شد.
+* Alt+2 اکنون ابتدا دکمهٔ «رفتن به پایین» Unigram را فعال می‌کند و میانبر تکراری Alt+End حذف شد.
+* تنظیمی برای انتخاب پنجرهٔ کلاسیک wx (پیش‌فرض) یا نمای وب هنگام نمایش متن پیام با Alt+C افزوده شد.
+* اکنون از متن رسمی پیام‌های غنی Unigram استفاده می‌شود و برای دکمه‌های درون‌خطی بدون برچسب در Unigram 12.9 یک اصلاح موقت اضافه شد.
+* فهرست میانبرها بر اساس مستندات رسمی Unigram 12.9 به‌روزرسانی شد.
+* اصلاحی موقت افزوده شد تا ردیف‌های موضوع پیام‌های ذخیره‌شده به‌جای نام نوع TDLib، عنوان قابل مشاهدهٔ گفتگو را اعلام کنند.
 
 ### نسخه 5.6.3
 

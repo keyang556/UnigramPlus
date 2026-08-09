@@ -50,7 +50,6 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 | **ALT+5** | UnigramPlus | Mover el foco al perfil abierto |
 | **ALT+6** | UnigramPlus | Mover el foco a la lista de hilos de grupo |
 | **ALT+D** | UnigramPlus | Mover el foco al campo de edición. Si el foco ya se encuentra en el campo de edición, entonces, después de presionar la tecla rápida, éste se moverá a donde se encontraba anteriormente |
-| **ALT+End** | UnigramPlus | Ir al final |
 
 ### Búsqueda
 
@@ -72,13 +71,15 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
 | **Ctrl+A** | Unigram | Select All |
+| **Ctrl+Shift+.** | Unigram | Cita |
 | **Ctrl+B** | Unigram | Bold |
 | **Ctrl+I** | Unigram | Italic |
-| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+U** | Unigram | Subrayado |
 | **Ctrl+Shift+X** | Unigram | Strikethrough |
 | **Ctrl+Shift+M** | Unigram | Monospace |
 | **Ctrl+Shift+P** | Unigram | Spoiler |
-| **Ctrl+Shift+N** | Unigram | Null / Plain Text |
+| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+Shift+N** | Unigram | Quitar formato (texto normal) |
 
 ### Carpetas
 
@@ -178,6 +179,15 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 <!-- shortcut-table-end -->
 
 ##Lista de cambios:
+
+### Versión 5.6.4
+
+* Se corrigió Shift+Delete usando el comando Delete nativo de Unigram y confirmando automáticamente la eliminación para ambos lados.
+* Alt+2 ahora activa primero el botón «Ir al final» de Unigram; se eliminó el atajo duplicado Alt+End.
+* Se añadió una opción para elegir entre la ventana wx clásica (predeterminada) y la vista web al mostrar texto con Alt+C.
+* Ahora se usa el texto oficial accesible de los mensajes enriquecidos de Unigram, con una corrección temporal para los botones en línea sin etiqueta de Unigram 12.9.
+* Se actualizó la lista de atajos según la documentación oficial de Unigram 12.9.
+* Se añadió una corrección temporal para que las filas de temas de Mensajes guardados anuncien el título visible del chat en vez de un nombre de tipo de TDLib.
 
 ### Versión 5.6.3
 

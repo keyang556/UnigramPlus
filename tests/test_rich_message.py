@@ -14,10 +14,8 @@ from rich_message import (  # noqa: E402
 	extract_message_text,
 	extract_rich_message_text,
 	find_rich_message_root,
-	has_empty_rich_message_summary,
-	insert_hint_before_status,
-	is_rich_message,
 	merge_message_html_and_rich_text,
+	merge_message_text_and_rich_text,
 )
 
 
@@ -52,7 +50,7 @@ def test_rejects_instant_content_alongside_a_plain_caption():
 	assert find_rich_message_root(message) is None
 
 
-def test_accepts_sophie_style_rich_content_alongside_an_empty_uia_message_node():
+def test_rejects_empty_rich_content_that_has_no_official_readable_text():
 	rich = Node(
 		class_name="InstantContent",
 		children=[Node(automation_id="LayoutRoot")],
@@ -62,76 +60,21 @@ def test_accepts_sophie_style_rich_content_alongside_an_empty_uia_message_node()
 		children=[Node(name="", automation_id="Message"), rich],
 	)
 
-	assert find_rich_message_root(message) is rich
-	assert is_rich_message(message)
+	assert find_rich_message_root(message) is None
 
 
-def test_detects_sophie_style_summary_when_instant_content_is_not_exposed():
+def test_uses_unigrams_official_rich_summary_as_direct_message_text():
+	rich = Node(
+		class_name="InstantContent",
+		children=[Node(automation_id="LayoutRoot", children=[Node(name="Official rich text")])],
+	)
 	message = Node(
-		name="Sophie ✨\r\n, Administrator.\r\nReply to Ken.\r\n, Received at 18:17",
-		children=[Node(name="provider-generated child text", automation_id="Message")],
+		name="Official rich text, Received at 18:17",
+		children=[Node(name="Official rich text", automation_id="Message"), rich],
 	)
 
 	assert find_rich_message_root(message) is None
-	assert is_rich_message(message)
-
-
-def test_does_not_treat_ordinary_comma_prefixed_text_as_an_empty_rich_message():
-	message = Node(
-		name=", ordinary text, Received at 18:17",
-		children=[Node(name=", ordinary text", automation_id="Message")],
-	)
-	assert not is_rich_message(message)
-
-
-def test_does_not_treat_group_text_starting_with_comma_as_rich_message():
-	message = Node(
-		name="Alice\r\n, hello, Received at 18:17",
-		children=[Node(name=", hello", automation_id="Message")],
-	)
-
-	assert not has_empty_rich_message_summary(message)
-	assert not is_rich_message(message)
-
-
-def test_does_not_treat_author_label_before_replied_plain_text_as_rich_message():
-	message = Node(
-		name=(
-			"ticker fastcode\r\n"
-			", Administrator.\r\n"
-			"Reply to Ken.\r\n"
-			"Ordinary incoming text, Received at 12:57"
-		),
-		children=[Node(name="Ordinary incoming text", automation_id="Message")],
-	)
-
-	assert not has_empty_rich_message_summary(message)
-	assert not is_rich_message(message)
-
-
-def test_accepts_one_line_comma_summary_without_localized_keywords():
-	rich = Node(class_name="InstantContent", children=[Node(automation_id="LayoutRoot")])
-	message = Node(name=", Received at 18:17", children=[rich])
-
-	assert find_rich_message_root(message) is rich
-	assert is_rich_message(message)
-
-
-def test_detects_one_line_empty_rich_summary_in_different_languages():
-	for summary in (
-		", Received at 17:59",
-		", 已收到 下午 05:59",
-		", Empfangen um 17:59",
-		", Получено в 17:59",
-		", تم التسليم الساعة 17:59",
-	):
-		message = Node(
-			name=summary,
-			children=[Node(name="provider-generated localized status", automation_id="Message")],
-		)
-
-		assert has_empty_rich_message_summary(message), summary
-		assert is_rich_message(message), summary
+	assert extract_message_text(message) == "Official rich text"
 
 
 def test_rejects_empty_recycled_rich_content_on_replied_media_summary():
@@ -346,6 +289,12 @@ def test_does_not_duplicate_rich_text_already_exposed_by_plain_html():
 	) == "<p>Caption and rich text</p>"
 
 
+def test_merges_plain_and_rich_text_for_the_classic_window_without_duplication():
+	assert merge_message_text_and_rich_text("Caption", "Rich text") == "Caption\n\nRich text"
+	assert merge_message_text_and_rich_text("Caption and rich text", "rich text") == ("Caption and rich text")
+	assert merge_message_text_and_rich_text("rich text", "Caption and rich text") == ("Caption and rich text")
+
+
 def test_builds_browseable_html_with_links():
 	first_link = Node(name="OpenAI")
 	first_link.role = SimpleNamespace(name="LINK")
@@ -520,19 +469,7 @@ def test_text_info_fallback_handles_flattened_provider():
 	assert extract_rich_message_text(rich, "all") == "Fallback rich text"
 
 
-def test_inserts_hint_before_localized_message_status():
-	assert insert_hint_before_status(
-		"Message content, Received at 18:17",
-		"Rich message. Press Alt+C to browse",
-		(", Sent at ", ", Received at "),
-	) == "Message content. Rich message. Press Alt+C to browse, Received at 18:17"
-
-
-def test_appends_hint_when_message_status_is_unavailable():
-	assert insert_hint_before_status("Message content.", "Rich message", ()) == "Message content. Rich message"
-
-
-def test_all_message_text_uses_browse_mode_when_rich_content_is_empty_or_absent():
+def test_alt_c_defaults_to_classic_view_and_allows_web_view():
 	"""Exercise the actual Alt+C method body without importing NVDA."""
 	source = (Path(__file__).parents[1] / "addon" / "appModules" / "unigram.py").read_text(encoding="utf-8")
 	with warnings.catch_warnings():
@@ -554,19 +491,21 @@ def test_all_message_text_uses_browse_mode_when_rich_content_is_empty_or_absent(
 			SimpleNamespace(UIAAutomationId="RecognizedText", name="Recognized text"),
 		]
 	)
-	for rich_root in (None, object()):
+	for rich_root, use_web_view in ((None, False), (object(), False), (None, True), (object(), True)):
 		opened = []
 		namespace = {
 			"find_rich_message_root": lambda obj, result=rich_root: result,
-			"is_rich_message": lambda obj, result=rich_root: bool(result),
 			"extract_rich_message_text": lambda root, position: "Distinct rich text" if root else "",
 			"extract_message_html_and_actions": extract_message_html_and_actions,
 			"extract_message_text": extract_message_text,
 			"merge_message_html_and_rich_text": merge_message_html_and_rich_text,
+			"merge_message_text_and_rich_text": merge_message_text_and_rich_text,
 			"textInfos": SimpleNamespace(POSITION_ALL="all"),
+			"conf": SimpleNamespace(get=lambda key: use_web_view),
 			"log": SimpleNamespace(debug=lambda text: None),
 			"browseableMessage": lambda *args, **kwargs: opened.append(("browse", args, kwargs)),
 			"show_browseable_message": lambda *args: opened.append(("browseHtml", args)),
+			"TextWindow": lambda *args, **kwargs: opened.append(("classic", args, kwargs)),
 			"message": lambda text: opened.append(("message", text)),
 			"_": lambda text: text,
 		}
@@ -575,60 +514,24 @@ def test_all_message_text_uses_browse_mode_when_rich_content_is_empty_or_absent(
 		namespace["script_show_text_message"](message_item, None)
 
 		title = "Rich message" if rich_root else "message text"
-		html = "<p>Ordinary text</p><p>Recognized text</p>"
-		if rich_root:
-			html += "<p>Distinct rich text</p>"
-		assert opened == [("browseHtml", (html, title, {}))]
+		if use_web_view:
+			html = "<p>Ordinary text</p><p>Recognized text</p>"
+			if rich_root:
+				html += "<p>Distinct rich text</p>"
+			assert opened == [("browseHtml", (html, title, {}))]
+		else:
+			text = "Ordinary text\n\nRecognized text"
+			if rich_root:
+				text += "\n\nDistinct rich text"
+			assert opened == [("classic", (text, title), {"readOnly": False})]
 
 
-def test_focus_hint_uses_the_message_overlay_keywords():
+def test_obsolete_empty_comma_detection_and_focus_hint_are_removed():
 	source = (Path(__file__).parents[1] / "addon" / "appModules" / "unigram.py").read_text(encoding="utf-8")
-	with warnings.catch_warnings():
-		warnings.simplefilter("ignore", SyntaxWarning)
-		module = ast.parse(source)
-	event_method = next(
-		node
-		for node in ast.walk(module)
-		if isinstance(node, ast.FunctionDef) and node.name == "event_gainFocus"
-	)
-	rich_branch = next(
-		node
-		for node in ast.walk(event_method)
-		if isinstance(node, ast.If)
-		and isinstance(node.test, ast.Call)
-		and isinstance(node.test.func, ast.Name)
-		and node.test.func.id == "is_rich_message"
-	)
-	obj = SimpleNamespace(
-		name="Content, Received at 18:17",
-		keywords=("Seen", "Not seen", ", Sent at ", ", Received at "),
-	)
-	namespace = {
-		"obj": obj,
-		"is_rich_message": lambda candidate: True,
-		"insert_hint_before_status": insert_hint_before_status,
-		"log": SimpleNamespace(debug=lambda text: None),
-		"_": lambda text: text,
-	}
-
-	exec(compile(ast.Module(body=[rich_branch], type_ignores=[]), "unigram.py", "exec"), namespace)
-
-	assert obj.name == "Content. Rich message. Press Alt+C to browse, Received at 18:17"
-
-
-def test_message_overlay_selection_uses_language_independent_rich_summary():
-	source = (Path(__file__).parents[1] / "addon" / "appModules" / "unigram.py").read_text(encoding="utf-8")
-	module = ast.parse(source)
-	app_module = next(node for node in module.body if isinstance(node, ast.ClassDef) and node.name == "AppModule")
-	choose_overlay = next(
-		node
-		for node in app_module.body
-		if isinstance(node, ast.FunctionDef) and node.name == "chooseNVDAObjectOverlayClasses"
+	rich_source = (Path(__file__).parents[1] / "addon" / "appModules" / "rich_message.py").read_text(
+		encoding="utf-8"
 	)
 
-	assert any(
-		isinstance(node, ast.Call)
-		and isinstance(node.func, ast.Name)
-		and node.func.id == "has_empty_rich_message_summary"
-		for node in ast.walk(choose_overlay)
-	)
+	assert "Rich message. Press Alt+C to browse" not in source
+	assert "has_empty_rich_message_summary" not in source + rich_source
+	assert "is_rich_message" not in source + rich_source

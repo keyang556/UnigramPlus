@@ -48,7 +48,6 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 | **ALT+5** | UnigramPlus | Move focus to open profile |
 | **ALT+6** | UnigramPlus | Move focus to the list of group threads |
 | **ALT+D** | UnigramPlus | Mover o foco para o campo de edição. Se o foco já estiver no campo de edição, depois de premir as teclas de atalho, irá deslocar-se para onde estava anteriormente |
-| **ALT+End** | UnigramPlus | Go to the end |
 
 ### Pesquisa
 
@@ -70,13 +69,15 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
 | **Ctrl+A** | Unigram | Select All |
+| **Ctrl+Shift+.** | Unigram | Citação |
 | **Ctrl+B** | Unigram | Bold |
 | **Ctrl+I** | Unigram | Italic |
-| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+U** | Unigram | Sublinhado |
 | **Ctrl+Shift+X** | Unigram | Strikethrough |
 | **Ctrl+Shift+M** | Unigram | Monospace |
 | **Ctrl+Shift+P** | Unigram | Spoiler |
-| **Ctrl+Shift+N** | Unigram | Null / Plain Text |
+| **Ctrl+K** | Unigram | Create Link |
+| **Ctrl+Shift+N** | Unigram | Remover formatação (texto normal) |
 
 ### Pastas
 
@@ -176,6 +177,15 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 <!-- shortcut-table-end -->
 
 ## Lista de alterações:
+
+### Versão 5.6.4
+
+* Corrigido Shift+Delete usando o comando Delete nativo do Unigram e confirmando automaticamente a eliminação para ambos os lados.
+* Alt+2 passa a ativar primeiro o botão “Ir para o fim” do Unigram; o atalho Alt+End duplicado foi removido.
+* Adicionada uma definição para escolher entre a janela wx clássica (predefinida) e a vista Web ao apresentar o texto da mensagem com Alt+C.
+* Passa a ser usado o texto acessível oficial das mensagens avançadas do Unigram, com uma correção temporária para botões em linha sem etiqueta no Unigram 12.9.
+* A lista de atalhos foi atualizada segundo a documentação oficial do Unigram 12.9.
+* Adicionada uma correção temporária para que as linhas de tópicos das Mensagens guardadas anunciem o título visível da conversa em vez de um nome de tipo do TDLib.
 
 ### Versão 5.6.3
 

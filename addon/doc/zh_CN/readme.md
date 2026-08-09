@@ -48,7 +48,6 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 | **ALT+5** | UnigramPlus | 将焦点移到已打开的个人资料 |
 | **ALT+6** | UnigramPlus | 将焦点移到群组话题列表 |
 | **ALT+D** | UnigramPlus | 将焦点移到编辑字段。如果焦点已在编辑字段中，按下快捷键后会移回先前所在的位置 |
-| **ALT+End** | UnigramPlus | 转到末尾 |
 
 ### 搜索
 
@@ -70,12 +69,14 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 | **Ctrl+C** | Unigram | 复制 |
 | **Ctrl+V** | Unigram | 粘贴 |
 | **Ctrl+A** | Unigram | 全选 |
+| **Ctrl+Shift+.** | Unigram | 引用 |
 | **Ctrl+B** | Unigram | 粗体 |
 | **Ctrl+I** | Unigram | 斜体 |
-| **Ctrl+K** | Unigram | 创建链接 |
+| **Ctrl+U** | Unigram | 下划线 |
 | **Ctrl+Shift+X** | Unigram | 删除线 |
 | **Ctrl+Shift+M** | Unigram | 等宽 |
 | **Ctrl+Shift+P** | Unigram | 遮罩 |
+| **Ctrl+K** | Unigram | 创建链接 |
 | **Ctrl+Shift+N** | Unigram | 清除格式 |
 
 ### 聊天文件夹
@@ -176,6 +177,15 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 <!-- shortcut-table-end -->
 
 ## 版本变更
+
+### 版本 5.6.4
+
+* 修复 Shift+Delete：现在使用 Unigram 原生 Delete 命令，并自动确认从双方删除。
+* Alt+2 现在会优先激活 Unigram 的“转到底部”按钮；已移除重复的 Alt+End 快捷键。
+* 新增设置，可选择在按 Alt+C 显示消息文本时使用经典 wx 窗口（默认）或 Web 视图。
+* 现在使用 Unigram 官方提供的富消息无障碍文本，并为 Unigram 12.9 中无标签的内联按钮加入临时修复。
+* 根据 Unigram 12.9 官方文档更新了快捷键列表。
+* 加入临时修复，使“已保存的消息”主题行朗读可见的聊天标题，而不是 TDLib 类型名称。
 
 ### 版本 5.6.3
 
