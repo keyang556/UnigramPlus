@@ -291,8 +291,7 @@ def test_auto_focus_waits_for_the_chat_list_then_completes():
 		_autoFocusChatListGeneration=2,
 		script_toChatList=lambda gesture, arg=False: focus_calls.append(arg) or True,
 		_scheduleAutoFocusChatList=lambda: retries.append(True),
-		_remember_main_window=lambda obj: True,
-		_is_main_window_object=lambda obj: True,
+		_classify_window_surface=lambda obj: "main",
 	)
 	focus = SimpleNamespace(
 		appModule=instance,
@@ -326,8 +325,7 @@ def test_auto_focus_does_not_repeat_when_focus_is_already_in_chat_list():
 		_autoFocusChatListGeneration=1,
 		script_toChatList=lambda gesture, arg=False: focus_calls.append(True),
 		_scheduleAutoFocusChatList=lambda: None,
-		_remember_main_window=lambda obj: True,
-		_is_main_window_object=lambda obj: True,
+		_classify_window_surface=lambda obj: "main",
 	)
 	parent = SimpleNamespace(UIAAutomationId="ChatsList")
 	focus = SimpleNamespace(
@@ -360,8 +358,7 @@ def test_auto_focus_never_moves_focus_away_from_a_separate_call_window():
 		_autoFocusChatListGeneration=1,
 		script_toChatList=lambda gesture, arg=False: focus_calls.append(True),
 		_scheduleAutoFocusChatList=lambda: None,
-		_remember_main_window=lambda obj: False,
-		_is_main_window_object=lambda obj: False,
+		_classify_window_surface=lambda obj: "call",
 	)
 	focus = SimpleNamespace(
 		appModule=instance,
@@ -384,6 +381,65 @@ def test_auto_focus_never_moves_focus_away_from_a_separate_call_window():
 	assert focus_calls == []
 
 
+def test_auto_focus_does_not_mistake_an_unidentified_or_second_chat_window_for_a_call():
+	focus_calls = []
+	instance = SimpleNamespace(
+		_autoFocusChatListDone=False,
+		_autoFocusChatListScheduled=True,
+		_autoFocusChatListAttempts=0,
+		_autoFocusChatListGeneration=1,
+		# Unigram can host a second chat in another WindowEx. A different handle is
+		# not sufficient evidence that this is a call surface.
+		_mainWindowHandle=999,
+		script_toChatList=lambda gesture, arg=False: focus_calls.append(arg) or True,
+		_scheduleAutoFocusChatList=lambda: None,
+		_classify_window_surface=lambda obj: None,
+	)
+	focus = SimpleNamespace(
+		appModule=instance,
+		isInForeground=True,
+		role="button",
+		windowHandle=100,
+	)
+	namespace = {
+		"api": SimpleNamespace(getFocusObject=lambda: focus),
+		"conf": SimpleNamespace(get=lambda key: True),
+		"Role": SimpleNamespace(LISTITEM="listItem"),
+		"log": SimpleNamespace(debug=lambda *args: None),
+		"_AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT": 10,
+	}
+	method = _load_app_method("_autoFocusChatListTick", namespace)
+
+	method(instance, 1)
+
+	assert instance._autoFocusChatListDone
+	assert focus_calls == [True]
+
+
+def test_auto_focus_retries_when_the_initial_focus_object_is_not_ready():
+	retries = []
+	instance = SimpleNamespace(
+		_autoFocusChatListDone=False,
+		_autoFocusChatListScheduled=True,
+		_autoFocusChatListAttempts=0,
+		_autoFocusChatListGeneration=1,
+		_scheduleAutoFocusChatList=lambda: retries.append(True),
+	)
+	namespace = {
+		"api": SimpleNamespace(getFocusObject=lambda: None),
+		"conf": SimpleNamespace(get=lambda key: True),
+		"Role": SimpleNamespace(LISTITEM="listItem"),
+		"log": SimpleNamespace(debug=lambda *args: None),
+		"_AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT": 10,
+	}
+	method = _load_app_method("_autoFocusChatListTick", namespace)
+
+	method(instance, 1)
+
+	assert instance._autoFocusChatListAttempts == 1
+	assert retries == [True]
+
+
 def test_focus_events_do_not_restart_startup_chat_list_focusing():
 	app_module = _class_ast("AppModule")
 	method = next(
@@ -398,22 +454,85 @@ def test_focus_events_do_not_restart_startup_chat_list_focusing():
 def test_main_chat_window_is_identified_from_stable_uia_ancestors():
 	main_marker = SimpleNamespace(UIAAutomationId="Messages", parent=None)
 	main_focus = SimpleNamespace(UIAAutomationId="Message_item", parent=main_marker, windowHandle=100)
-	call_focus = SimpleNamespace(UIAAutomationId="Mute", parent=None, windowHandle=200)
+	call_marker = SimpleNamespace(UIAAutomationId="ActiveButtons", parent=None)
+	call_focus = SimpleNamespace(UIAAutomationId="Mute", parent=call_marker, windowHandle=200)
 	namespace = {
 		"_MAIN_WINDOW_AUTOMATION_IDS": frozenset(("ChatsList", "Messages", "TextField", "Navigation")),
+		"_CALL_WINDOW_AUTOMATION_IDS": frozenset(("ActiveButtons", "BottomRoot")),
+		"_WINDOW_SURFACE_AUTOMATION_IDS": frozenset(
+			("ChatsList", "Messages", "TextField", "Navigation", "ActiveButtons", "BottomRoot")
+		),
 	}
 	namespace["_find_ancestor_by_automation_id"] = _load_module_function(
 		"_find_ancestor_by_automation_id",
 		{},
 	)
-	remember = _load_app_method("_remember_main_window", namespace)
+	classify = _load_app_method("_classify_window_surface", namespace)
 	is_main = _load_app_method("_is_main_window_object", namespace)
-	instance = SimpleNamespace(_mainWindowHandle=None)
+	instance = SimpleNamespace(_mainWindowHandle=None, _callWindowHandles=set())
 
-	assert remember(instance, main_focus)
+	assert classify(instance, main_focus) == "main"
 	assert is_main(instance, main_focus)
-	assert not remember(instance, call_focus)
+	assert classify(instance, call_focus) == "call"
 	assert not is_main(instance, call_focus)
+
+
+def test_known_main_window_uses_the_handle_without_walking_uia_parents():
+	class Focus:
+		windowHandle = 100
+		UIAAutomationId = "ComposeButton"
+
+		@property
+		def parent(self):
+			raise AssertionError("known windows must not walk UIA parents")
+
+	namespace = {
+		"_MAIN_WINDOW_AUTOMATION_IDS": frozenset(("ChatsList", "Messages", "TextField", "Navigation")),
+		"_CALL_WINDOW_AUTOMATION_IDS": frozenset(("ActiveButtons", "BottomRoot")),
+		"_WINDOW_SURFACE_AUTOMATION_IDS": frozenset(
+			("ChatsList", "Messages", "TextField", "Navigation", "ActiveButtons", "BottomRoot")
+		),
+		"_find_ancestor_by_automation_id": lambda *args, **kwargs: (_ for _ in ()).throw(
+			AssertionError("known windows must not search UIA ancestors")
+		),
+	}
+	classify = _load_app_method("_classify_window_surface", namespace)
+	instance = SimpleNamespace(_mainWindowHandle=100, _callWindowHandles=set())
+
+	assert classify(instance, Focus()) == "main"
+
+
+def test_direct_marker_reclassifies_a_reused_window_handle():
+	namespace = {
+		"_MAIN_WINDOW_AUTOMATION_IDS": frozenset(("ChatsList", "Messages", "TextField", "Navigation")),
+		"_CALL_WINDOW_AUTOMATION_IDS": frozenset(("ActiveButtons", "BottomRoot")),
+		"_WINDOW_SURFACE_AUTOMATION_IDS": frozenset(
+			("ChatsList", "Messages", "TextField", "Navigation", "ActiveButtons", "BottomRoot")
+		),
+		"_find_ancestor_by_automation_id": lambda *args, **kwargs: None,
+	}
+	classify = _load_app_method("_classify_window_surface", namespace)
+	instance = SimpleNamespace(_mainWindowHandle=None, _callWindowHandles={200})
+	chats = SimpleNamespace(UIAAutomationId="ChatsList", windowHandle=200)
+	call = SimpleNamespace(UIAAutomationId="ActiveButtons", windowHandle=200)
+
+	assert classify(instance, chats) == "main"
+	assert instance._mainWindowHandle == 200
+	assert 200 not in instance._callWindowHandles
+	assert classify(instance, call) == "call"
+	assert instance._mainWindowHandle is None
+	assert 200 in instance._callWindowHandles
+
+
+def test_overlay_selection_only_probes_direct_main_window_markers():
+	chooser = next(
+		node
+		for node in _class_ast("AppModule").body
+		if isinstance(node, ast.FunctionDef) and node.name == "chooseNVDAObjectOverlayClasses"
+	)
+	source = ast.unparse(chooser)
+
+	assert "getattr(obj, 'UIAAutomationId', '') in _WINDOW_SURFACE_AUTOMATION_IDS" in source
 
 
 def test_call_control_detection_never_enumerates_siblings():
@@ -455,8 +574,7 @@ def test_auto_focus_stops_retrying_at_the_limit():
 		_autoFocusChatListGeneration=3,
 		script_toChatList=lambda gesture, arg=False: False,
 		_scheduleAutoFocusChatList=lambda: retries.append(True),
-		_remember_main_window=lambda obj: True,
-		_is_main_window_object=lambda obj: True,
+		_classify_window_surface=lambda obj: "main",
 	)
 	focus = SimpleNamespace(
 		appModule=instance,

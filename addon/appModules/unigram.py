@@ -73,6 +73,8 @@ _END_OF_CHAT_PROBE_DELAY_MS = 50
 _SEARCH_RESULT_COUNTER_RE = re.compile(r"^\s*(\d+)\s*/\s*(\d+)\s*$")
 _SEARCH_RESULT_COUNTER_SIBLING_LIMIT = 6
 _MAIN_WINDOW_AUTOMATION_IDS = frozenset(("ChatsList", "Messages", "TextField", "Navigation"))
+_CALL_WINDOW_AUTOMATION_IDS = frozenset(("ActiveButtons", "BottomRoot"))
+_WINDOW_SURFACE_AUTOMATION_IDS = _MAIN_WINDOW_AUTOMATION_IDS | _CALL_WINDOW_AUTOMATION_IDS
 
 
 def _get_end_of_chat_sound_path():
@@ -1349,6 +1351,7 @@ class AppModule(appModuleHandler.AppModule):
 		self._endOfChatProbeGeneration = 0
 		self._messagesButton = None
 		self._mainWindowHandle = None
+		self._callWindowHandles = set()
 		if not self.isUnigramWindow:
 			self._fallbackAppModule = None
 			fallbackClass = _load_telegram_desktop_fallback_class()
@@ -1422,30 +1425,36 @@ class AppModule(appModuleHandler.AppModule):
 			return
 		try:
 			focus = api.getFocusObject()
-			if (
-				not focus
-				or getattr(focus, "appModule", None) is not self
-				or not focus.isInForeground
-			):
-				return
-			self._remember_main_window(focus)
-			# VoIP pages are separate WindowEx instances. Never move focus from a
-			# different (or not-yet-identified) window into the main chat window.
-			if not self._is_main_window_object(focus):
+			focus_is_ready = (
+				focus is not None
+				and getattr(focus, "appModule", None) is self
+				and focus.isInForeground
+			)
+			if not focus_is_ready:
+				focus = None
+			surface = None
+			if focus is not None:
+				surface = self._classify_window_surface(focus)
+			# VoIP pages are separate WindowEx instances and expose ActiveButtons or
+			# BottomRoot close to their focusable controls. Unknown handles must remain
+			# retryable: XAML often raises startup focus before ChatsList materializes,
+			# and Unigram also supports multiple chat windows with different handles.
+			if surface == "call":
 				self._autoFocusChatListDone = True
 				return
-			if (
+			if focus is not None and (
 				focus.role == Role.LISTITEM
 				and getattr(getattr(focus, "parent", None), "UIAAutomationId", "") == "ChatsList"
 			):
 				self._autoFocusChatListDone = True
 				return
-			# Mark first to prevent the focus event raised by setFocus() from
-			# scheduling a duplicate callback. Restore it if the list is not ready.
-			self._autoFocusChatListDone = True
-			if self.script_toChatList(None, arg=True):
-				return
-			self._autoFocusChatListDone = False
+			if focus is not None:
+				# Mark first to prevent the focus event raised by setFocus() from
+				# scheduling a duplicate callback. Restore it if the list is not ready.
+				self._autoFocusChatListDone = True
+				if self.script_toChatList(None, arg=True):
+					return
+				self._autoFocusChatListDone = False
 		except Exception as e:
 			self._autoFocusChatListDone = False
 			try: log.debug("Could not focus the chat list automatically: %r" % e)
@@ -1463,26 +1472,61 @@ class AppModule(appModuleHandler.AppModule):
 			return None
 		return super().getScript(gesture)
 
-	def _remember_main_window(self, obj):
-		"""Remember the window hosting Unigram's chat UI from a known control."""
-		marker = _find_ancestor_by_automation_id(obj, _MAIN_WINDOW_AUTOMATION_IDS, max_depth=5)
-		if not marker:
-			return False
+	def _classify_window_surface(self, obj):
+		"""Return ``main``, ``call``, or ``None`` from a nearby stable UIA marker."""
 		try:
 			handle = obj.windowHandle
 		except Exception:
-			return False
+			return None
 		if not handle:
-			return False
+			return None
+		try:
+			automation_id = getattr(obj, "UIAAutomationId", "")
+		except Exception:
+			automation_id = ""
+		call_handles = getattr(self, "_callWindowHandles", set())
+		# Direct markers are authoritative if Windows reused a recently closed
+		# WindowEx handle for a different Unigram surface.
+		if automation_id in _MAIN_WINDOW_AUTOMATION_IDS:
+			call_handles.discard(handle)
+			self._callWindowHandles = call_handles
+			self._mainWindowHandle = handle
+			return "main"
+		if automation_id in _CALL_WINDOW_AUTOMATION_IDS:
+			call_handles.add(handle)
+			self._callWindowHandles = call_handles
+			if self._mainWindowHandle == handle:
+				self._mainWindowHandle = None
+			return "call"
+		# This method is reached by every focus event. Once identified, comparing
+		# NVDA's cached native handle avoids repeated synchronous UIA parent calls.
+		if handle == self._mainWindowHandle:
+			return "main"
+		if handle in call_handles:
+			return "call"
+		marker = _find_ancestor_by_automation_id(obj, _WINDOW_SURFACE_AUTOMATION_IDS, max_depth=5)
+		if not marker:
+			return None
+		try:
+			marker_id = getattr(marker, "UIAAutomationId", "")
+		except Exception:
+			return None
+		if marker_id in _CALL_WINDOW_AUTOMATION_IDS:
+			call_handles.add(handle)
+			self._callWindowHandles = call_handles
+			if self._mainWindowHandle == handle:
+				self._mainWindowHandle = None
+			return "call"
+		call_handles.discard(handle)
+		self._callWindowHandles = call_handles
 		self._mainWindowHandle = handle
-		return True
+		return "main"
 
 	def _is_main_window_object(self, obj):
 		try:
 			return bool(self._mainWindowHandle and obj.windowHandle == self._mainWindowHandle)
 		except Exception:
 			return False
-
 
 	scriptCategory = "UnigramPlus"
 	profile_panel_element = False
@@ -2464,7 +2508,6 @@ class AppModule(appModuleHandler.AppModule):
 			# become an expensive disconnected UIA object there, and getElements()
 			# would scan the call surface every 200 ms. Voice-message monitoring is
 			# meaningful only in the window that owns ChatsList/Messages/TextField.
-			self._remember_main_window(focus)
 			if not self._is_main_window_object(focus):
 				self._voiceRecordingDiscoveryFocus = None
 				return
@@ -2741,8 +2784,7 @@ class AppModule(appModuleHandler.AppModule):
 		self._inlineButtonFocusGeneration = getattr(self, "_inlineButtonFocusGeneration", 0) + 1
 		inline_generation = self._inlineButtonFocusGeneration
 		self._remember_messages_button(obj)
-		self._remember_main_window(obj)
-		is_main_window = self._is_main_window_object(obj)
+		is_main_window = self._classify_window_surface(obj) == "main"
 		if is_main_window and conf.get("automatically announce new messages") and Chat_update.pouse:
 			# Since the timer is suspended when the program window is minimized, it needs to be restored as soon as the focus is set on some element in the window
 			Chat_update.restore(self)
@@ -2941,7 +2983,11 @@ class AppModule(appModuleHandler.AppModule):
 			return
 		try:
 			self._remember_messages_button(obj)
-			self._remember_main_window(obj)
+			# This hook runs for every materialized UIA object. Only stable marker
+			# objects can identify the chat window without a parent walk; focused
+			# descendants are handled once in event_gainFocus instead.
+			if getattr(obj, "UIAAutomationId", "") in _WINDOW_SURFACE_AUTOMATION_IDS:
+				self._classify_window_surface(obj)
 			if is_recording_button(obj):
 				self._voiceRecordingButton = obj
 			if obj.role == Role.LISTITEM and obj.isFocusable:
