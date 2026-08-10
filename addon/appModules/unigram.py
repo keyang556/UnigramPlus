@@ -75,7 +75,10 @@ _CONTEXT_MENU_ACTIVITY_TIMEOUT_MS = 3000
 _CONTEXT_MENU_NAVIGATION_LIMIT = 30
 _CONTEXT_MENU_RAW_PROBE_DELAY_MS = 50
 _CONTEXT_MENU_RAW_RETRY_DELAY_MS = 150
-_CONTEXT_MENU_RAW_PROBE_LIMIT = 8
+# Message_ContextRequested awaits GetMessageProperties before Unigram creates the
+# flyout. Keep the cheap focused-element poll alive for almost the entire open
+# timeout so a slow TDLib response does not make the shortcut probabilistic.
+_CONTEXT_MENU_RAW_PROBE_LIMIT = (_CONTEXT_MENU_OPEN_TIMEOUT_MS // _CONTEXT_MENU_RAW_RETRY_DELAY_MS) + 1
 _CONTEXT_MENU_RAW_SCOPE_LIMIT = 6
 _CONTEXT_MENU_RAW_ITEM_DEPTH_LIMIT = 10
 _CONTEXT_MENU_RAW_TEXT_LIMIT = 64
@@ -367,6 +370,57 @@ def _invoke_raw_context_menu_option(root, icons, process_id=0, diagnose=False):
 		return False
 	pattern.QueryInterface(UIAHandler.IUIAutomationInvokePattern).Invoke()
 	return True
+
+
+def _get_raw_context_menu_focus(process_id=0):
+	"""Return the raw focused popup control without depending on an NVDA event.
+
+	NVDA maps UIA's MenuOpened event to gainFocus, but intentionally drops that
+	event when another focus event is already pending. Reading UIA focus on the
+	MTA thread lets the context-menu retry loop observe the opened XAML flyout even
+	when the app module never receives a popup focus event.
+	"""
+	import UIAHandler
+
+	handler = UIAHandler.handler
+	client = handler.clientObject
+	try:
+		focused = client.GetFocusedElementBuildCache(handler.baseCacheRequest)
+	except Exception:
+		try:
+			focused = client.GetFocusedElement()
+		except Exception:
+			return None
+	if not focused:
+		return None
+	try:
+		target_process_id = int(process_id or 0)
+	except (TypeError, ValueError):
+		return None
+	try:
+		focused_process_id = int(
+			_raw_uia_property(focused, UIAHandler.UIA.UIA_ProcessIdPropertyId) or 0
+		)
+	except Exception:
+		focused_process_id = 0
+	if target_process_id and focused_process_id != target_process_id:
+		return None
+	control_type = _raw_uia_property(
+		focused,
+		UIAHandler.UIA.UIA_ControlTypePropertyId,
+	)
+	popup_control_types = frozenset(
+		control_type_id
+		for control_type_id in (
+			getattr(UIAHandler.UIA, "UIA_MenuItemControlTypeId", None),
+			getattr(UIAHandler.UIA, "UIA_MenuControlTypeId", None),
+			getattr(UIAHandler.UIA, "UIA_HyperlinkControlTypeId", None),
+			getattr(UIAHandler.UIA, "UIA_ButtonControlTypeId", None),
+			getattr(UIAHandler.UIA, "UIA_WindowControlTypeId", None),
+		)
+		if control_type_id is not None
+	)
+	return focused if control_type in popup_control_types else None
 
 
 def _clean_inline_button_text(text):
@@ -3457,8 +3511,12 @@ class AppModule(appModuleHandler.AppModule):
 			):
 				return
 			try:
-				invoked = _invoke_raw_context_menu_option(
-					obj,
+				# Prefer UIA's current raw focus. This polling path is started by the
+				# shortcut itself, so it survives NVDA coalescing MenuOpened/gainFocus.
+				# A popup object received from a normal event remains a useful fallback.
+				probe_root = _get_raw_context_menu_focus(pending["processID"]) or obj
+				invoked = bool(probe_root) and _invoke_raw_context_menu_option(
+					probe_root,
 					pending["icons"],
 					pending["processID"],
 					diagnose=pending["rawProbeAttempts"] == 1,
@@ -3539,6 +3597,10 @@ class AppModule(appModuleHandler.AppModule):
 		}
 		self.execute_context_menu_option = pending
 		self._arm_context_menu_timeout(pending, _CONTEXT_MENU_OPEN_TIMEOUT_MS)
+		# Unigram builds this menu only after awaiting GetMessageProperties. Start
+		# polling raw UIA focus now instead of requiring a later popup focus event,
+		# which NVDA may legitimately coalesce with another gainFocus event.
+		self._schedule_context_menu_raw_probe(None, pending)
 		self.keys["Applications"].send()
 		return True
 	def script_action_escape_key(self, gesture):

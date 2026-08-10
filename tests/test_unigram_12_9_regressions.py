@@ -809,6 +809,7 @@ def test_wrapped_chat_row_is_accepted_for_alt_shift_r_context_menu():
 def test_enter_opens_the_reply_context_menu_for_current_message_selectors():
 	sent = []
 	armed = []
+	probes = []
 	focus = Node(class_name="MessageSelector", role="listItem")
 	method = _load_app_method(
 		"activate_option_for_menu",
@@ -823,6 +824,7 @@ def test_enter_opens_the_reply_context_menu_for_current_message_selectors():
 		is_message_object=lambda obj: True,
 		keys={"Applications": SimpleNamespace(send=lambda: sent.append("applications"))},
 		_arm_context_menu_timeout=lambda pending, delay: armed.append((pending, delay)),
+		_schedule_context_menu_raw_probe=lambda root, pending: probes.append((root, pending)),
 	)
 
 	assert method(instance, "replyIcon", "Messages")
@@ -837,11 +839,13 @@ def test_enter_opens_the_reply_context_menu_for_current_message_selectors():
 	}
 	assert sent == ["applications"]
 	assert armed == [(instance.execute_context_menu_option, 10000)]
+	assert probes == [(None, instance.execute_context_menu_option)]
 
 
 def test_alt_shift_r_opens_the_context_menu_for_wrapped_chat_rows():
 	sent = []
 	armed = []
+	probes = []
 	focus = Node(class_name="ChatListListViewItem", role="listItem")
 	method = _load_app_method(
 		"activate_option_for_menu",
@@ -856,6 +860,7 @@ def test_alt_shift_r_opens_the_context_menu_for_wrapped_chat_rows():
 		is_message_object=lambda obj: False,
 		keys={"Applications": SimpleNamespace(send=lambda: sent.append("applications"))},
 		_arm_context_menu_timeout=lambda pending, delay: armed.append((pending, delay)),
+		_schedule_context_menu_raw_probe=lambda root, pending: probes.append((root, pending)),
 	)
 
 	assert method(instance, ("readIcon", "unreadIcon"), "ChatsList")
@@ -870,6 +875,7 @@ def test_alt_shift_r_opens_the_context_menu_for_wrapped_chat_rows():
 	}
 	assert sent == ["applications"]
 	assert armed == [(instance.execute_context_menu_option, 10000)]
+	assert probes == [(None, instance.execute_context_menu_option)]
 
 
 def test_context_menu_popup_focus_schedules_raw_probe_without_walking_nvda_objects():
@@ -1040,6 +1046,7 @@ def test_raw_context_menu_probe_runs_on_nvdas_mta_thread(monkeypatch):
 	obj = object()
 	namespace = {
 		"_CONTEXT_MENU_RAW_PROBE_LIMIT": 8,
+		"_get_raw_context_menu_focus": lambda process_id: None,
 		"_invoke_raw_context_menu_option": lambda root, icons, process_id, diagnose=False: (
 			root is obj and icons == "\ue248" and process_id == 4242 and diagnose
 		),
@@ -1068,6 +1075,98 @@ def test_raw_context_menu_probe_runs_on_nvdas_mta_thread(monkeypatch):
 	assert queue == "eventQueue"
 	callback(*args)
 	assert completed == [(obj, pending, 3, True)]
+
+
+def test_raw_context_menu_probe_finds_uia_focus_without_a_popup_event(monkeypatch):
+	jobs = []
+	main_queue_calls = []
+	monkeypatch.setitem(
+		sys.modules,
+		"UIAHandler",
+		SimpleNamespace(
+			handler=SimpleNamespace(
+				MTAThreadQueue=SimpleNamespace(put_nowait=jobs.append),
+			),
+		),
+	)
+	pending = {
+		"icons": "\ue248",
+		"processID": 4242,
+		"rawProbeToken": 1,
+		"rawProbeAttempts": 0,
+		"rawInvoked": False,
+	}
+	raw_focus = object()
+	invocations = []
+	namespace = {
+		"_CONTEXT_MENU_RAW_PROBE_LIMIT": 64,
+		"_get_raw_context_menu_focus": lambda process_id: raw_focus,
+		"_invoke_raw_context_menu_option": lambda root, icons, process_id, diagnose=False: (
+			invocations.append((root, icons, process_id, diagnose)) or True
+		),
+		"queueHandler": SimpleNamespace(
+			eventQueue="eventQueue",
+			queueFunction=lambda queue, callback, *args: main_queue_calls.append((queue, callback, args)),
+		),
+		"log": SimpleNamespace(debug=lambda *args, **kwargs: None),
+	}
+	method = _load_app_method("_queue_context_menu_raw_probe", namespace)
+	instance = SimpleNamespace(
+		execute_context_menu_option=pending,
+		_complete_context_menu_raw_probe=lambda *args: None,
+	)
+
+	assert method(instance, None, pending, 1)
+	jobs[0]()
+
+	assert invocations == [(raw_focus, "\ue248", 4242, True)]
+	assert pending["rawInvoked"] is True
+	assert len(main_queue_calls) == 1
+
+
+def test_raw_context_menu_focus_is_limited_to_the_target_process_and_popup_controls(monkeypatch):
+	class RawFocus:
+		def __init__(self):
+			self.properties = {"processId": 4242, "controlType": "menuItem"}
+
+		def GetCachedPropertyValueEx(self, property_id, ignore_default):
+			assert ignore_default
+			return self.properties[property_id]
+
+	focus = RawFocus()
+	client = SimpleNamespace(
+		GetFocusedElementBuildCache=lambda cache_request: focus,
+	)
+	monkeypatch.setitem(
+		sys.modules,
+		"UIAHandler",
+		SimpleNamespace(
+			handler=SimpleNamespace(
+				clientObject=client,
+				baseCacheRequest="baseCache",
+			),
+			UIA=SimpleNamespace(
+				UIA_ProcessIdPropertyId="processId",
+				UIA_ControlTypePropertyId="controlType",
+				UIA_MenuItemControlTypeId="menuItem",
+				UIA_MenuControlTypeId="menu",
+				UIA_HyperlinkControlTypeId="hyperlink",
+				UIA_ButtonControlTypeId="button",
+				UIA_WindowControlTypeId="window",
+			),
+		),
+	)
+	namespace = _load_module_members(
+		{"_raw_uia_property", "_get_raw_context_menu_focus"},
+		{},
+	)
+	get_focus = namespace["_get_raw_context_menu_focus"]
+
+	assert get_focus(4242) is focus
+	assert get_focus(7) is None
+	assert get_focus("not-a-process-id") is None
+	focus.properties["controlType"] = "listItem"
+	assert get_focus(4242) is None
 
 
 def test_failed_raw_context_menu_probe_retries_only_the_latest_popup():
