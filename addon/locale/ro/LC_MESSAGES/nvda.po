@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.4\n"
+"Project-Id-Version: UnigramPlus 5.6.5\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-05-08 21:23+0300\n"
 "PO-Revision-Date: 2023-05-08 21:25+0300\n"
@@ -986,9 +986,6 @@ msgstr "În timpul unui apel individual, scurtăturile pentru dezactivarea micro
 msgid "Rich message"
 msgstr "Mesaj îmbogățit"
 
-msgid "Rich message. Press Alt+C to browse"
-msgstr "Mesaj îmbogățit. Apăsați Alt+C pentru a-l parcurge"
-
 msgid "Added support for rich messages. Rich messages are now announced when focused and can be opened with Alt+C in a browseable window."
 msgstr "A fost adăugat suportul pentru mesaje îmbogățite. Acestea sunt acum anunțate când primesc focalizarea și pot fi deschise cu Alt+C într-o fereastră navigabilă."
 
@@ -1052,23 +1049,14 @@ msgstr "Anunță anteturile mesajelor după conținutul mesajului"
 msgid "Play a sound when reaching the end of a chat"
 msgstr "Redă un sunet la atingerea sfârșitului unui chat"
 
-msgid "Display message text in a web view when pressing Alt+C"
-msgstr "Afișează textul mesajului într-o vizualizare web la apăsarea Alt+C"
-
 msgid ""
-"- Fixed Shift+Delete by using Unigram's native Delete command and automatically confirming deletion for both sides.\n"
-"- Alt+2 now uses Unigram's Go to bottom button first, and the duplicate Alt+End shortcut was removed.\n"
-"- Added a setting to choose between the classic window (default) and web view when displaying message text with Alt+C.\n"
-"- Unigram's official rich-message text is now used, with a temporary fix for unlabeled inline buttons in Unigram 12.9.\n"
-"- Updated every localized manual with the Unigram 12.9 shortcut list.\n"
-"- Added a temporary fix so Saved Messages topic rows announce the visible chat title instead of a TDLib type name."
+"- Fixed Enter for replying to messages and Alt+Shift+R for marking chats as read in current Unigram versions.\n"
+"- Removed the web view mode and its setting; Alt+C now always opens message text in the original wx popup window.\n"
+"- Updated all translations and manuals for version 5.6.5."
 msgstr ""
-"- Shift+Delete a fost reparat folosind comanda Delete nativă din Unigram și confirmând automat ștergerea pentru ambele părți.\n"
-"- Alt+2 folosește acum mai întâi butonul Mergi jos din Unigram, iar scurtătura Alt+End duplicată a fost eliminată.\n"
-"- A fost adăugată o setare pentru alegerea ferestrei clasice (implicită) sau a vizualizării web la afișarea textului cu Alt+C.\n"
-"- Acum este folosit textul oficial al mesajelor îmbogățite din Unigram, cu o remediere temporară pentru butoanele în linie fără etichetă din Unigram 12.9.\n"
-"- Toate manualele localizate au fost actualizate cu lista de scurtături Unigram 12.9.\n"
-"- A fost adăugată o remediere temporară pentru ca rândurile subiectelor Mesajelor salvate să anunțe titlul vizibil al chatului în locul unui nume de tip TDLib."
+"- Au fost remediate Enter pentru răspunsul la mesaje și Alt+Shift+R pentru marcarea conversațiilor ca citite în versiunile curente de Unigram.\n"
+"- Modul de vizualizare web și setarea sa au fost eliminate; Alt+C deschide acum întotdeauna textul mesajului în fereastra popup wx originală.\n"
+"- Au fost actualizate toate traducerile și manualele pentru versiunea 5.6.5."
 
 msgid ""
 "- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"

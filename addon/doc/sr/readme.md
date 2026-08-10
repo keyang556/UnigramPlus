@@ -453,6 +453,12 @@ Added Turkish localization
 
 
 
+### Verzija 5.6.5
+
+* Ispravljeni su Enter za odgovaranje na poruke i Alt+Shift+R za označavanje ćaskanja kao pročitanih u trenutnim verzijama Unigrama.
+* Uklonjeni su režim veb prikaza i njegovo podešavanje; Alt+C sada uvek otvara tekst poruke u originalnom wx iskačućem prozoru.
+* Ažurirani su svi prevodi i priručnici za verziju 5.6.5.
+
 ### Verzija 5.6.4
 
 * Shift+Delete je ispravljen korišćenjem Unigramove izvorne naredbe Delete i automatskom potvrdom brisanja sa obe strane.

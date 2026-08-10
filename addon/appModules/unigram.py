@@ -5,7 +5,7 @@ import mouseHandler
 from keyboardHandler import KeyboardInputGesture
 import appModuleHandler
 import core
-from ui import message, browseableMessage
+from ui import message
 import api
 from controlTypes import OutputReason, Role, State
 import scriptHandler
@@ -38,14 +38,11 @@ from .message_header import (  # noqa: E402
 	move_profile_header_after_content,
 )
 from .rich_message import (  # noqa: E402
-	extract_message_html_and_actions,
 	extract_message_text,
 	extract_rich_message_text,
 	find_rich_message_root,
-	merge_message_html_and_rich_text,
 	merge_message_text_and_rich_text,
 )
-from .rich_message_dialog import show_browseable_message  # noqa: E402
 from .voice_recording import (  # noqa: E402
 	VoiceRecordingOutcome,
 	VoiceRecordingState,
@@ -72,6 +69,16 @@ _AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT = 10
 _END_OF_CHAT_PROBE_DELAY_MS = 50
 _SEARCH_RESULT_COUNTER_RE = re.compile(r"^\s*(\d+)\s*/\s*(\d+)\s*$")
 _SEARCH_RESULT_COUNTER_SIBLING_LIMIT = 6
+_CONTEXT_MENU_STEP_DELAY_MS = 20
+_CONTEXT_MENU_OPEN_TIMEOUT_MS = 10000
+_CONTEXT_MENU_ACTIVITY_TIMEOUT_MS = 3000
+_CONTEXT_MENU_NAVIGATION_LIMIT = 30
+_CONTEXT_MENU_RAW_PROBE_DELAY_MS = 50
+_CONTEXT_MENU_RAW_RETRY_DELAY_MS = 150
+_CONTEXT_MENU_RAW_PROBE_LIMIT = 8
+_CONTEXT_MENU_RAW_SCOPE_LIMIT = 6
+_CONTEXT_MENU_RAW_ITEM_DEPTH_LIMIT = 10
+_CONTEXT_MENU_RAW_TEXT_LIMIT = 64
 _MAIN_WINDOW_AUTOMATION_IDS = frozenset(("ChatsList", "Messages", "TextField", "Navigation"))
 _CALL_WINDOW_AUTOMATION_IDS = frozenset(("ActiveButtons", "BottomRoot"))
 _WINDOW_SURFACE_AUTOMATION_IDS = _MAIN_WINDOW_AUTOMATION_IDS | _CALL_WINDOW_AUTOMATION_IDS
@@ -139,17 +146,227 @@ def _walk_bounded_descendants(root, max_nodes=100):
 
 
 def _menu_item_has_icon(item, icons):
-	"""Match a context-menu command even when XAML inserts extra wrappers."""
+	"""Match an icon within one menu item's small Raw UIA subtree."""
 	if isinstance(icons, str):
 		icons = (icons,)
 	icons = frozenset(icons)
-	for node in (item, *_walk_bounded_descendants(item)):
+	for node in (item, *_walk_bounded_descendants(item, max_nodes=20)):
 		try:
-			if node.name in icons:
+			name = str(node.name or "")
+			if any(icon in name for icon in icons):
 				return True
 		except Exception:
 			pass
 	return False
+
+
+def _raw_uia_property(element, property_id):
+	"""Read one raw UIA property without assuming the element has a cache."""
+	if property_id is None:
+		return None
+	for method_name, arguments in (
+		("GetCachedPropertyValueEx", (property_id, True)),
+		("GetCurrentPropertyValueEx", (property_id, True)),
+		("GetCurrentPropertyValue", (property_id,)),
+	):
+		try:
+			return getattr(element, method_name)(*arguments)
+		except Exception:
+			continue
+	return None
+
+
+def _raw_uia_text(element):
+	"""Read a short TextPattern value from a raw XAML element, when available."""
+	import UIAHandler
+
+	available = _raw_uia_property(
+		element,
+		UIAHandler.UIA.UIA_IsTextPatternAvailablePropertyId,
+	)
+	if not available:
+		return ""
+	pattern = None
+	for method_name in ("GetCachedPattern", "GetCurrentPattern"):
+		try:
+			pattern = getattr(element, method_name)(UIAHandler.UIA_TextPatternId)
+			if pattern:
+				break
+		except Exception:
+			continue
+	if not pattern:
+		return ""
+	try:
+		pattern = pattern.QueryInterface(UIAHandler.IUIAutomationTextPattern)
+		return str(pattern.DocumentRange.GetText(_CONTEXT_MENU_RAW_TEXT_LIMIT) or "")
+	except Exception:
+		return ""
+
+
+def _raw_menu_item_has_icon(item, icons, diagnose=False):
+	"""Match a MenuFlyoutItem icon along Unigram's bounded first-child raw path."""
+	import UIAHandler
+
+	if isinstance(icons, str):
+		icons = (icons,)
+	icons = frozenset(icons)
+	handler = UIAHandler.handler
+	walker = handler.baseTreeWalker
+	cache_request = handler.baseCacheRequest
+	legacy_value_property = getattr(
+		UIAHandler,
+		"UIA_LegacyIAccessibleValuePropertyId",
+		None,
+	)
+	property_ids = (
+		UIAHandler.UIA.UIA_NamePropertyId,
+		UIAHandler.UIA.UIA_ValueValuePropertyId,
+		legacy_value_property,
+	)
+	element = item
+	path = []
+	for depth in range(_CONTEXT_MENU_RAW_ITEM_DEPTH_LIMIT):
+		values = []
+		for property_id in property_ids:
+			value = _raw_uia_property(element, property_id)
+			if isinstance(value, str) and value:
+				values.append(value[:_CONTEXT_MENU_RAW_TEXT_LIMIT])
+		text = _raw_uia_text(element)
+		if text:
+			values.append(text[:_CONTEXT_MENU_RAW_TEXT_LIMIT])
+		if diagnose:
+			class_name = _raw_uia_property(
+				element,
+				UIAHandler.UIA.UIA_ClassNamePropertyId,
+			)
+			automation_id = _raw_uia_property(
+				element,
+				UIAHandler.UIA.UIA_AutomationIdPropertyId,
+			)
+			control_type = _raw_uia_property(
+				element,
+				UIAHandler.UIA.UIA_ControlTypePropertyId,
+			)
+			path.append((depth, class_name, automation_id, control_type, values))
+		if any(icon in value for icon in icons for value in values):
+			if diagnose:
+				log.debug("Matched raw Unigram menu icon %r at path %r", icons, path)
+			return True
+		try:
+			element = walker.GetFirstChildElementBuildCache(element, cache_request)
+		except Exception:
+			break
+		if not element:
+			break
+	if diagnose:
+		log.debug("Raw Unigram MenuItem first-child path: %r", path)
+	return False
+
+
+def _find_raw_context_menu_item_by_icon(root, icons, process_id=0, diagnose=False):
+	"""Find a popup command by its FontIcon without using translated labels."""
+	from time import perf_counter
+
+	import UIAHandler
+
+	if isinstance(icons, str):
+		icons = (icons,)
+	client = UIAHandler.handler.clientObject
+	walker = UIAHandler.handler.baseTreeWalker
+	try:
+		process_id = int(process_id or root.processID)
+	except Exception:
+		process_id = 0
+	try:
+		scope_root = root.UIAElement
+	except Exception:
+		scope_root = root
+	for scope_depth in range(_CONTEXT_MENU_RAW_SCOPE_LIMIT):
+		# Never issue FindAll from NVDA's desktop root. That crosses every UIA
+		# provider and can leave the MTA worker blocked after Unigram closes its
+		# popup. A few raw parents are enough to reach the common XAML ancestor of
+		# ReactionsMenuFlyout's sibling reaction and command popups.
+		try:
+			if client.CompareElements(scope_root, UIAHandler.handler.rootElement):
+				break
+		except Exception:
+			pass
+		menu_item_condition = client.CreatePropertyCondition(
+			UIAHandler.UIA.UIA_ControlTypePropertyId,
+			UIAHandler.UIA.UIA_MenuItemControlTypeId,
+		)
+		if process_id:
+			condition = client.CreateAndConditionFromArray(
+				[
+					menu_item_condition,
+					client.CreatePropertyCondition(
+						UIAHandler.UIA.UIA_ProcessIdPropertyId,
+						process_id,
+					),
+				]
+			)
+		else:
+			condition = menu_item_condition
+		started = perf_counter()
+		if diagnose:
+			log.debug(
+				"Querying raw Unigram MenuItems at popup scope depth %d",
+				scope_depth,
+			)
+		try:
+			menu_items = scope_root.findAll(UIAHandler.TreeScope_Descendants, condition)
+		except Exception:
+			if diagnose:
+				log.debug(
+					"Raw Unigram MenuItem query failed at popup scope depth %d",
+					scope_depth,
+					exc_info=True,
+				)
+			menu_items = None
+		try:
+			menu_item_count = menu_items.length if menu_items else 0
+		except Exception:
+			menu_item_count = 0
+		if diagnose:
+			log.debug(
+				"Raw Unigram MenuItem query returned %d candidate(s) in %.3fs",
+				menu_item_count,
+				perf_counter() - started,
+			)
+		if menu_item_count:
+			for index in range(menu_item_count):
+				try:
+					item = menu_items.getElement(index)
+					if _raw_menu_item_has_icon(item, icons, diagnose):
+						return item
+				except Exception:
+					# A transient XAML popup can disappear while its bounded item path
+					# is inspected. Continue to another candidate in the same menu.
+					continue
+			# The nearest scope containing MenuItems is the command popup. Do not
+			# widen the query into the main application after inspecting it.
+			return None
+		try:
+			scope_root = walker.getParentElement(scope_root)
+		except Exception:
+			break
+		if not scope_root:
+			break
+	return None
+
+
+def _invoke_raw_context_menu_option(root, icons, process_id=0, diagnose=False):
+	"""Invoke a raw UIA context-menu command identified by its Unigram icon."""
+	import UIAHandler
+
+	item = _find_raw_context_menu_item_by_icon(root, icons, process_id, diagnose)
+	if not item:
+		return False
+	pattern = item.GetCurrentPattern(UIAHandler.UIA_InvokePatternId)
+	if not pattern:
+		return False
+	pattern.QueryInterface(UIAHandler.IUIAutomationInvokePattern).Invoke()
+	return True
 
 
 def _clean_inline_button_text(text):
@@ -364,6 +581,38 @@ def _find_ancestor_by_automation_id(obj, automation_ids, max_depth=6):
 		except Exception:
 			return None
 	return None
+
+
+def _is_message_list_item(obj):
+	"""Recognize the focused message control exposed by current and older Unigram."""
+	try:
+		if obj.role != Role.LISTITEM:
+			return False
+		automation_id = str(getattr(obj, "UIAAutomationId", "") or "")
+		if automation_id == "Message_item":
+			# Preserve the exact marker used by released Unigram versions.
+			return True
+		class_name = (
+			str(getattr(obj, "UIAClassName", "") or "")
+			.replace(":", ".")
+			.rsplit(".", 1)[-1]
+		)
+		if automation_id != "MessageSelector" and class_name != "MessageSelector":
+			return False
+		return _find_ancestor_by_automation_id(obj, ("Messages",), max_depth=8) is not None
+	except Exception:
+		return False
+
+
+def _is_chat_list_item(obj):
+	"""Recognize a chat row through Unigram's stable ChatsList boundary."""
+	try:
+		return (
+			obj.role == Role.LISTITEM
+			and _find_ancestor_by_automation_id(obj, ("ChatsList",), max_depth=8) is not None
+		)
+	except Exception:
+		return False
 
 
 def _announce_call_state_later(text, delay_ms=150):
@@ -849,32 +1098,11 @@ class Message_list_item(ListItem):
 		message_text = extract_message_text(self)
 		rich_text = extract_rich_message_text(rich_message, textInfos.POSITION_ALL) if rich_message else ""
 		title = _("Rich message") if rich_message else _("message text")
-		if not conf.get("displayMessagesInWebView"):
-			text = merge_message_text_and_rich_text(message_text, rich_text)
-			if not text:
-				message(_("This message does not contain text"))
-				return
-			TextWindow(text, title, readOnly=False)
-			return
-
-		html, link_actions = extract_message_html_and_actions(self)
-		if rich_message:
-			text = rich_text
-			log.debug("Rich message extraction returned %d characters" % len(text))
-			html = merge_message_html_and_rich_text(html, message_text, text)
-			if html:
-				show_browseable_message(html, title, link_actions)
-				return
-			if text:
-				browseableMessage(text, title)
-				return
-		if html:
-			show_browseable_message(html, _("message text"), link_actions)
-			return
-		if not message_text:
+		text = merge_message_text_and_rich_text(message_text, rich_text)
+		if not text:
 			message(_("This message does not contain text"))
 			return
-		browseableMessage(message_text, _("message text"))
+		TextWindow(text, title, readOnly=False)
 
 	@script(description=_("Open comments"), gesture="kb:control+ALT+C")
 	def script_openComentars(self, gesture):
@@ -1622,10 +1850,7 @@ class AppModule(appModuleHandler.AppModule):
 
 
 	def is_message_object(self, obj):
-		try:
-			if obj.UIAAutomationId == "Message_item": return True
-			else: return False
-		except: return False
+		return _is_message_list_item(obj)
 
 	def _same_uia_element(self, first, second):
 		"""Compare UIA elements even when NVDA assigned different overlays."""
@@ -2814,17 +3039,8 @@ class AppModule(appModuleHandler.AppModule):
 				self.profile_panel_element = panel
 				panel.firstChild.setFocus()
 		elif self.execute_context_menu_option:
-			try:
-				targetButton = next(
-					(item for item in obj.parent.children
-					if _menu_item_has_icon(item, self.execute_context_menu_option)),
-					False,
-				)
-			except: targetButton = False
-			self.execute_context_menu_option = False
-			if targetButton: targetButton.doAction()
-			else: self.keys["escape"].send()
-			return
+			if self._handle_pending_context_menu_focus(obj, nextHandler):
+				return
 		elif self.isRecord:
 			self.isRecord.setFocus()
 			self.isRecord = False
@@ -2859,7 +3075,7 @@ class AppModule(appModuleHandler.AppModule):
 			if self.is_message_object(obj):
 				self.saved_items.save("last focus object", obj)
 				obj.name = self.action_message_focus(obj)
-			elif obj.parent.UIAAutomationId == "ChatsList":
+			elif _is_chat_list_item(obj):
 				self.saved_items.save("last focused chat", obj)
 				obj.name = self.actionChatElementInFocus(obj)
 			elif obj.parent.UIAAutomationId == "ScrollingHost":
@@ -3004,7 +3220,7 @@ class AppModule(appModuleHandler.AppModule):
 				elif parent.UIAAutomationId == "Navigation":
 					clsList.insert(0, SettingsPanelListItem)
 					return True
-				elif parent.UIAAutomationId == "ChatsList":
+				elif _is_chat_list_item(obj):
 					clsList.insert(0, ChatListItem)
 					return
 				elif parent.UIAAutomationId == "TopicList": return
@@ -3017,10 +3233,7 @@ class AppModule(appModuleHandler.AppModule):
 				self.sender_message = "received" if keywords[3] in name else "send" if keywords[2] in name else ""
 				self.end_text = name
 				if (
-					(
-						obj.UIAAutomationId == "Message_item"
-						and getattr(getattr(parent, "parent", None), "UIAAutomationId", "") == "Messages"
-					)
+					_is_message_list_item(obj)
 					or self.sender_message
 					or (parent.role == Role.LISTITEM and parent.location.width > 800)
 				):
@@ -3160,14 +3373,174 @@ class AppModule(appModuleHandler.AppModule):
 	@script(description=_("Pin a message or chat"))
 	def script_attach(self, gesture):
 		self.activate_option_for_menu((icons_from_context_menu["attach"], icons_from_context_menu["unpin"]))
+	def _handle_pending_context_menu_focus(self, obj, nextHandler):
+		pending = self.execute_context_menu_option
+		if not pending:
+			return False
+		try:
+			obj_role = obj.role
+		except Exception:
+			obj_role = None
+		if obj_role == Role.MENUITEM:
+			if _menu_item_has_icon(obj, pending["icons"]):
+				self.execute_context_menu_option = False
+				core.callLater(_CONTEXT_MENU_STEP_DELAY_MS, self._invoke_context_menu_item, obj)
+				return True
+		elif obj_role not in (Role.LINK, Role.BUTTON):
+			# Unigram 12.9 can keep focus on transient popup windows and never expose
+			# a focused MenuFlyoutItem. Probe those popup roots through raw UIA on
+			# NVDA's MTA thread before calling the rest of the focus-event chain.
+			# Some third-party event handlers can raise from nextHandler, but that
+			# must not prevent this independent lookup from being scheduled.
+			popup_roles = tuple(
+				role
+				for role in (
+					getattr(Role, "WINDOW", None),
+					getattr(Role, "POPUPMENU", None),
+					getattr(Role, "MENU", None),
+				)
+				if role is not None
+			)
+			if obj_role in popup_roles:
+				self._schedule_context_menu_raw_probe(obj, pending)
+			nextHandler()
+			return True
+		# ReactionsMenuFlyout initially focuses a reaction HyperlinkButton. Its
+		# OnPreviewKeyDown handler moves Down to the first real MenuFlyoutItem.
+		self._arm_context_menu_timeout(pending, _CONTEXT_MENU_ACTIVITY_TIMEOUT_MS)
+		pending["moves"] += 1
+		if pending["moves"] <= _CONTEXT_MENU_NAVIGATION_LIMIT:
+			core.callLater(_CONTEXT_MENU_STEP_DELAY_MS, self.keys["downArrow"].send)
+		else:
+			self.execute_context_menu_option = False
+			self.keys["escape"].send()
+		return True
+	def _schedule_context_menu_raw_probe(self, obj, pending):
+		"""Debounce popup focus events while preserving the newest raw UIA root."""
+		if self.execute_context_menu_option is not pending or pending.get("rawInvoked"):
+			return False
+		pending["rawProbeToken"] += 1
+		token = pending["rawProbeToken"]
+		pending["rawProbeObject"] = obj
+		pending["rawProbeAttempts"] = 0
+		core.callLater(
+			_CONTEXT_MENU_RAW_PROBE_DELAY_MS,
+			self._queue_context_menu_raw_probe,
+			obj,
+			pending,
+			token,
+		)
+		return True
+	def _queue_context_menu_raw_probe(self, obj, pending, token):
+		"""Run one bounded popup query on NVDA's UIA MTA thread."""
+		if (
+			self.execute_context_menu_option is not pending
+			or pending.get("rawInvoked")
+			or pending["rawProbeToken"] != token
+			or pending["rawProbeAttempts"] >= _CONTEXT_MENU_RAW_PROBE_LIMIT
+		):
+			return False
+		pending["rawProbeAttempts"] += 1
+		try:
+			import UIAHandler
+
+			mta_queue = UIAHandler.handler.MTAThreadQueue
+		except Exception:
+			log.debug("NVDA's UIA MTA queue is unavailable for a context menu", exc_info=True)
+			return False
+
+		def probe_on_mta_thread():
+			if (
+				self.execute_context_menu_option is not pending
+				or pending.get("rawInvoked")
+				or pending["rawProbeToken"] != token
+			):
+				return
+			try:
+				invoked = _invoke_raw_context_menu_option(
+					obj,
+					pending["icons"],
+					pending["processID"],
+					diagnose=pending["rawProbeAttempts"] == 1,
+				)
+			except Exception:
+				log.debug("Could not inspect Unigram's raw context-menu popup", exc_info=True)
+				invoked = False
+			if invoked:
+				# Prevent another already-queued probe from invoking the same command
+				# before the main-thread completion callback clears the request.
+				pending["rawInvoked"] = True
+			queueHandler.queueFunction(
+				queueHandler.eventQueue,
+				self._complete_context_menu_raw_probe,
+				obj,
+				pending,
+				token,
+				invoked,
+			)
+
+		try:
+			mta_queue.put_nowait(probe_on_mta_thread)
+			return True
+		except Exception:
+			log.debug("Could not queue a raw context-menu probe", exc_info=True)
+			return False
+	def _complete_context_menu_raw_probe(self, obj, pending, token, invoked):
+		"""Complete a popup query without allowing stale callbacks to close a new menu."""
+		if self.execute_context_menu_option is not pending:
+			return
+		if invoked:
+			log.debug("Invoked Unigram context-menu command from its raw FontIcon")
+			self.execute_context_menu_option = False
+			return
+		if pending["rawProbeToken"] != token or pending.get("rawProbeObject") is not obj:
+			return
+		if pending["rawProbeAttempts"] < _CONTEXT_MENU_RAW_PROBE_LIMIT:
+			core.callLater(
+				_CONTEXT_MENU_RAW_RETRY_DELAY_MS,
+				self._queue_context_menu_raw_probe,
+				obj,
+				pending,
+				token,
+			)
+		else:
+			log.debug(
+				"Unigram context-menu icons %r were not found in the latest raw popup",
+				pending["icons"],
+			)
+	def _invoke_context_menu_item(self, item):
+		try:
+			item.doAction()
+		except Exception:
+			log.debug("Could not invoke the matched Unigram context-menu item", exc_info=True)
+			self.keys["escape"].send()
+	def _arm_context_menu_timeout(self, pending, delay_ms):
+		pending["timeoutToken"] += 1
+		token = pending["timeoutToken"]
+		core.callLater(delay_ms, self._expire_context_menu_option, pending, token)
+	def _expire_context_menu_option(self, pending, token):
+		if self.execute_context_menu_option is pending and pending["timeoutToken"] == token:
+			self.execute_context_menu_option = False
+			self.keys["escape"].send()
 	def activate_option_for_menu(self, option, list_name=False):
 		if self.execute_context_menu_option: return False
 		obj = api.getFocusObject()
 		if list_name == "Messages" and not self.is_message_object(obj): return False
-		elif list_name == "ChatsList" and obj.parent.UIAAutomationId and obj.parent.UIAAutomationId != list_name: return False
-		elif not list_name and (not self.is_message_object(obj) and obj.parent.UIAAutomationId and obj.parent.UIAAutomationId != "ChatsList"): return
-		self.execute_context_menu_option = option
+		elif list_name == "ChatsList" and not _is_chat_list_item(obj): return False
+		elif not list_name and not self.is_message_object(obj) and not _is_chat_list_item(obj): return False
+		pending = {
+			"icons": option,
+			"processID": getattr(obj, "processID", 0),
+			"moves": 0,
+			"timeoutToken": 0,
+			"rawProbeToken": 0,
+			"rawProbeAttempts": 0,
+			"rawInvoked": False,
+		}
+		self.execute_context_menu_option = pending
+		self._arm_context_menu_timeout(pending, _CONTEXT_MENU_OPEN_TIMEOUT_MS)
 		self.keys["Applications"].send()
+		return True
 	def script_action_escape_key(self, gesture):
 		gesture.send()
 		if self.is_exit_from_media:

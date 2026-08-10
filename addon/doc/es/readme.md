@@ -180,6 +180,12 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 
 ##Lista de cambios:
 
+### Versión 5.6.5
+
+* Se corrigió Enter para responder a mensajes y Alt+Shift+R para marcar chats como leídos en las versiones actuales de Unigram.
+* Se eliminó el modo de vista web y su opción; Alt+C ahora siempre abre el texto del mensaje en la ventana emergente wx original.
+* Se actualizaron todas las traducciones y los manuales para la versión 5.6.5.
+
 ### Versión 5.6.4
 
 * Se corrigió Shift+Delete usando el comando Delete nativo de Unigram y confirmando automáticamente la eliminación para ambos lados.

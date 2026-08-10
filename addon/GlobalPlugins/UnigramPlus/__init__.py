@@ -292,11 +292,6 @@ class UnigramPlusSettings(SettingsPanel):
 		self.messageHeaderAtTheEnd = settingsSizerHelper.addItem(wx.CheckBox(
 			self, label=_("Announce message headers after the message content")))
 		self.messageHeaderAtTheEnd.SetValue(conf.get("messageHeaderAtTheEnd"))
-		# Alt+C historically used a native wx text window. Keep that as the
-		# default while allowing users who need link activation to opt into WebView.
-		self.displayMessagesInWebView = settingsSizerHelper.addItem(wx.CheckBox(
-			self, label=_("Display message text in a web view when pressing Alt+C")))
-		self.displayMessagesInWebView.SetValue(conf.get("displayMessagesInWebView"))
 		# Announce the phrases "Administrator" and "Owner" on messages in communities
 		self.notify_administrators_in_messages = settingsSizerHelper.addItem(wx.CheckBox(
 			self, label=_('Announce the phrases "Administrator" and "Owner" on messages in communities')))
@@ -365,7 +360,6 @@ class UnigramPlusSettings(SettingsPanel):
 		conf.set("saySenderName", self.get_key(self.listSaySenderName, self.saySenderName.GetStringSelection()))
 		conf.set("unreadBeforeMessageContent", self.unreadBeforeMessageContent.IsChecked())
 		conf.set("messageHeaderAtTheEnd", self.messageHeaderAtTheEnd.IsChecked())
-		conf.set("displayMessagesInWebView", self.displayMessagesInWebView.IsChecked())
 		conf.set("notify administrators in messages",
 		         self.notify_administrators_in_messages.IsChecked())
 		conf.set("voiceFolderNames", self.voiceFolderNames.IsChecked())

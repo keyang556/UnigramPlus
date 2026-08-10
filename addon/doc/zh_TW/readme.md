@@ -178,6 +178,12 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 
 ## 版本變更
 
+### 版本 5.6.5
+
+* 修正目前 Unigram 版本中按 Enter 回覆訊息，以及按 Alt+Shift+R 將聊天標示為已讀的問題。
+* 移除 Web 檢視模式及其設定；Alt+C 現在一律在原始 wx 快顯視窗中開啟訊息文字。
+* 已將所有翻譯與說明文件更新至版本 5.6.5。
+
 ### 版本 5.6.4
 
 * 修正 Shift+Delete：現在使用 Unigram 原生 Delete 命令，並自動確認從雙方刪除。

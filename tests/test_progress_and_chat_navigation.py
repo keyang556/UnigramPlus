@@ -618,5 +618,5 @@ def test_chat_list_items_receive_the_mention_navigation_overlay():
 	)
 	source = ast.unparse(chooser)
 
-	assert "parent.UIAAutomationId == 'ChatsList'" in source
+	assert "_is_chat_list_item(obj)" in source
 	assert "clsList.insert(0, ChatListItem)" in source

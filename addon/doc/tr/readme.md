@@ -177,6 +177,12 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 
 ##Değişiklik listesi:
 
+### Sürüm 5.6.5
+
+* Güncel Unigram sürümlerinde iletileri yanıtlamak için Enter ve sohbetleri okundu olarak işaretlemek için Alt+Shift+R düzeltildi.
+* Web görünümü modu ve ayarı kaldırıldı; Alt+C artık ileti metnini her zaman özgün wx açılır penceresinde açar.
+* Sürüm 5.6.5 için tüm çeviriler ve kılavuzlar güncellendi.
+
 ### Sürüm 5.6.4
 
 * Shift+Delete, Unigram'ın yerel Delete komutu kullanılarak ve her iki taraf için silme otomatik onaylanarak düzeltildi.

@@ -180,6 +180,12 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
+### Version 5.6.5
+
+* Fixed Enter for replying to messages and Alt+Shift+R for marking chats as read in current Unigram versions.
+* Removed the web view mode and its setting; Alt+C now always opens message text in the original wx popup window.
+* Updated all translations and manuals for version 5.6.5.
+
 ### Version 5.6.4
 
 * Fixed Shift+Delete by using Unigram's native Delete command and automatically confirming deletion for both sides.

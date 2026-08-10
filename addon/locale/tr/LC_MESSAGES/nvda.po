@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.4\n"
+"Project-Id-Version: UnigramPlus 5.6.5\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 00:48+0300\n"
@@ -1046,9 +1046,6 @@ msgstr "Bire bir çağrı sırasında mikrofonu sessize alma (ALT+A), kamerayı 
 msgid "Rich message"
 msgstr "Zengin ileti"
 
-msgid "Rich message. Press Alt+C to browse"
-msgstr "Zengin ileti. Göz atmak için Alt+C tuşlarına basın"
-
 msgid "Added support for rich messages. Rich messages are now announced when focused and can be opened with Alt+C in a browseable window."
 msgstr "Zengin ileti desteği eklendi. Zengin iletiler artık odaklandığında duyurulur ve Alt+C ile göz atılabilir bir pencerede açılabilir."
 
@@ -1112,23 +1109,14 @@ msgstr "Mesaj başlıklarını mesaj içeriğinden sonra seslendir"
 msgid "Play a sound when reaching the end of a chat"
 msgstr "Sohbetin sonuna ulaşıldığında ses çal"
 
-msgid "Display message text in a web view when pressing Alt+C"
-msgstr "Alt+C tuşuna basıldığında ileti metnini web görünümünde göster"
-
 msgid ""
-"- Fixed Shift+Delete by using Unigram's native Delete command and automatically confirming deletion for both sides.\n"
-"- Alt+2 now uses Unigram's Go to bottom button first, and the duplicate Alt+End shortcut was removed.\n"
-"- Added a setting to choose between the classic window (default) and web view when displaying message text with Alt+C.\n"
-"- Unigram's official rich-message text is now used, with a temporary fix for unlabeled inline buttons in Unigram 12.9.\n"
-"- Updated every localized manual with the Unigram 12.9 shortcut list.\n"
-"- Added a temporary fix so Saved Messages topic rows announce the visible chat title instead of a TDLib type name."
+"- Fixed Enter for replying to messages and Alt+Shift+R for marking chats as read in current Unigram versions.\n"
+"- Removed the web view mode and its setting; Alt+C now always opens message text in the original wx popup window.\n"
+"- Updated all translations and manuals for version 5.6.5."
 msgstr ""
-"- Shift+Delete, Unigram'ın yerel Delete komutu kullanılarak ve her iki taraf için silme otomatik onaylanarak düzeltildi.\n"
-"- Alt+2 artık önce Unigram'ın En alta git düğmesini kullanıyor ve yinelenen Alt+End kısayolu kaldırıldı.\n"
-"- Alt+C ile ileti metni gösterilirken klasik pencere (varsayılan) veya web görünümü arasında seçim yapma ayarı eklendi.\n"
-"- Artık Unigram'ın resmi zengin ileti metni kullanılıyor; Unigram 12.9'daki etiketsiz satır içi düğmeler için geçici bir düzeltme eklendi.\n"
-"- Tüm yerelleştirilmiş kılavuzlar Unigram 12.9 kısayol listesiyle güncellendi.\n"
-"- Kayıtlı Mesajlar konu satırlarının TDLib tür adı yerine görünen sohbet başlığını duyurması için geçici bir düzeltme eklendi."
+"- Güncel Unigram sürümlerinde iletileri yanıtlamak için Enter ve sohbetleri okundu olarak işaretlemek için Alt+Shift+R düzeltildi.\n"
+"- Web görünümü modu ve ayarı kaldırıldı; Alt+C artık ileti metnini her zaman özgün wx açılır penceresinde açar.\n"
+"- Sürüm 5.6.5 için tüm çeviriler ve kılavuzlar güncellendi."
 
 msgid ""
 "- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"

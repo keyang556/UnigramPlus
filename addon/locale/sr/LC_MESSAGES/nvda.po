@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.4\n"
+"Project-Id-Version: UnigramPlus 5.6.5\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 06:02+0100\n"
@@ -1021,9 +1021,6 @@ msgstr "Tokom pojedinačnog poziva ponovo rade prečice za isključivanje mikrof
 msgid "Rich message"
 msgstr "Obogaćena poruka"
 
-msgid "Rich message. Press Alt+C to browse"
-msgstr "Obogaćena poruka. Pritisnite Alt+C za pregledanje"
-
 msgid "Added support for rich messages. Rich messages are now announced when focused and can be opened with Alt+C in a browseable window."
 msgstr "Dodata je podrška za obogaćene poruke. One se sada izgovaraju kada dobiju fokus i mogu se otvoriti kombinacijom Alt+C u prozoru za pregledanje."
 
@@ -1087,23 +1084,14 @@ msgstr "Izgovaraj zaglavlja poruka posle sadržaja poruke"
 msgid "Play a sound when reaching the end of a chat"
 msgstr "Reprodukuj zvuk pri dostizanju kraja ćaskanja"
 
-msgid "Display message text in a web view when pressing Alt+C"
-msgstr "Prikaži tekst poruke u veb-prikazu pritiskom na Alt+C"
-
 msgid ""
-"- Fixed Shift+Delete by using Unigram's native Delete command and automatically confirming deletion for both sides.\n"
-"- Alt+2 now uses Unigram's Go to bottom button first, and the duplicate Alt+End shortcut was removed.\n"
-"- Added a setting to choose between the classic window (default) and web view when displaying message text with Alt+C.\n"
-"- Unigram's official rich-message text is now used, with a temporary fix for unlabeled inline buttons in Unigram 12.9.\n"
-"- Updated every localized manual with the Unigram 12.9 shortcut list.\n"
-"- Added a temporary fix so Saved Messages topic rows announce the visible chat title instead of a TDLib type name."
+"- Fixed Enter for replying to messages and Alt+Shift+R for marking chats as read in current Unigram versions.\n"
+"- Removed the web view mode and its setting; Alt+C now always opens message text in the original wx popup window.\n"
+"- Updated all translations and manuals for version 5.6.5."
 msgstr ""
-"- Shift+Delete je ispravljen korišćenjem Unigramove izvorne naredbe Delete i automatskom potvrdom brisanja sa obe strane.\n"
-"- Alt+2 sada prvo koristi Unigramovo dugme Idi na dno, a duplirana prečica Alt+End je uklonjena.\n"
-"- Dodato je podešavanje za izbor klasičnog prozora (podrazumevano) ili veb-prikaza pri prikazu teksta poruke pomoću Alt+C.\n"
-"- Sada se koristi zvanični tekst obogaćenih poruka Unigrama, uz privremenu ispravku neoznačenih ugrađenih dugmadi u Unigramu 12.9.\n"
-"- Svi lokalizovani priručnici ažurirani su spiskom prečica Unigrama 12.9.\n"
-"- Dodata je privremena ispravka kako bi redovi tema Sačuvanih poruka izgovarali vidljivi naslov ćaskanja umesto naziva tipa TDLib."
+"- Ispravljeni su Enter za odgovaranje na poruke i Alt+Shift+R za označavanje ćaskanja kao pročitanih u trenutnim verzijama Unigrama.\n"
+"- Uklonjeni su režim veb prikaza i njegovo podešavanje; Alt+C sada uvek otvara tekst poruke u originalnom wx iskačućem prozoru.\n"
+"- Ažurirani su svi prevodi i priručnici za verziju 5.6.5."
 
 msgid ""
 "- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"

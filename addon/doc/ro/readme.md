@@ -179,6 +179,12 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 ##Lista de modificări:
 
+### Versiunea 5.6.5
+
+* Au fost remediate Enter pentru răspunsul la mesaje și Alt+Shift+R pentru marcarea conversațiilor ca citite în versiunile curente de Unigram.
+* Modul de vizualizare web și setarea sa au fost eliminate; Alt+C deschide acum întotdeauna textul mesajului în fereastra popup wx originală.
+* Au fost actualizate toate traducerile și manualele pentru versiunea 5.6.5.
+
 ### Versiunea 5.6.4
 
 * Shift+Delete a fost reparat folosind comanda Delete nativă din Unigram și confirmând automat ștergerea pentru ambele părți.

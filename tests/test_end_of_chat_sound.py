@@ -477,8 +477,9 @@ def test_alt_2_at_a_confirmed_last_message_plays_the_sound():
 def test_blank_service_messages_receive_the_message_overlay():
 	source = SOURCE_PATH.read_text(encoding="utf-8")
 	assert "if obj.role == Role.LISTITEM and obj.isFocusable:" in source
-	assert 'obj.UIAAutomationId == "Message_item"' in source
-	assert '"UIAAutomationId", "") == "Messages"' in source
+	assert '_is_message_list_item(obj)' in source
+	assert 'automation_id == "Message_item"' in source
+	assert '("Messages",), max_depth=8' in source
 
 
 def test_end_of_chat_sound_setting_is_enabled_by_default_and_persisted():

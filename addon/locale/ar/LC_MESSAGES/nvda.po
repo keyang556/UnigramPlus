@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.4\n"
+"Project-Id-Version: UnigramPlus 5.6.5\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 02:57+0300\n"
@@ -1027,9 +1027,6 @@ msgstr "أثناء المكالمة الفردية، تعمل مرة أخرى ا
 msgid "Rich message"
 msgstr "رسالة منسّقة"
 
-msgid "Rich message. Press Alt+C to browse"
-msgstr "رسالة منسّقة. اضغط Alt+C للتصفح"
-
 msgid "Added support for rich messages. Rich messages are now announced when focused and can be opened with Alt+C in a browseable window."
 msgstr "تمت إضافة دعم الرسائل المنسّقة. يُعلَن عنها الآن عند التركيز عليها، ويمكن فتحها باستخدام Alt+C في نافذة قابلة للتصفح."
 
@@ -1093,23 +1090,14 @@ msgstr "نطق رؤوس الرسائل بعد محتوى الرسالة"
 msgid "Play a sound when reaching the end of a chat"
 msgstr "تشغيل صوت عند الوصول إلى نهاية الدردشة"
 
-msgid "Display message text in a web view when pressing Alt+C"
-msgstr "عرض نص الرسالة في عرض ويب عند الضغط على Alt+C"
-
 msgid ""
-"- Fixed Shift+Delete by using Unigram's native Delete command and automatically confirming deletion for both sides.\n"
-"- Alt+2 now uses Unigram's Go to bottom button first, and the duplicate Alt+End shortcut was removed.\n"
-"- Added a setting to choose between the classic window (default) and web view when displaying message text with Alt+C.\n"
-"- Unigram's official rich-message text is now used, with a temporary fix for unlabeled inline buttons in Unigram 12.9.\n"
-"- Updated every localized manual with the Unigram 12.9 shortcut list.\n"
-"- Added a temporary fix so Saved Messages topic rows announce the visible chat title instead of a TDLib type name."
+"- Fixed Enter for replying to messages and Alt+Shift+R for marking chats as read in current Unigram versions.\n"
+"- Removed the web view mode and its setting; Alt+C now always opens message text in the original wx popup window.\n"
+"- Updated all translations and manuals for version 5.6.5."
 msgstr ""
-"- تم إصلاح Shift+Delete باستخدام أمر Delete الأصلي في Unigram وتأكيد الحذف تلقائيًا من الطرفين.\n"
-"- أصبح Alt+2 يستخدم زر «الانتقال إلى الأسفل» في Unigram أولاً، وتمت إزالة اختصار Alt+End المكرر.\n"
-"- تمت إضافة إعداد للاختيار بين النافذة الكلاسيكية (الافتراضية) وعرض الويب عند عرض نص الرسالة باستخدام Alt+C.\n"
-"- يُستخدم الآن نص الرسائل المنسقة الرسمي من Unigram، مع إصلاح مؤقت للأزرار المضمنة بلا تسمية في Unigram 12.9.\n"
-"- تم تحديث كل الأدلة المترجمة بقائمة اختصارات Unigram 12.9.\n"
-"- تمت إضافة إصلاح مؤقت لكي تنطق صفوف موضوعات الرسائل المحفوظة عنوان المحادثة الظاهر بدلاً من اسم نوع TDLib."
+"- تم إصلاح Enter للرد على الرسائل و Alt+Shift+R لوضع علامة مقروء على الدردشات في إصدارات Unigram الحالية.\n"
+"- تمت إزالة وضع عرض الويب وإعداده؛ يفتح Alt+C الآن دائمًا نص الرسالة في نافذة wx المنبثقة الأصلية.\n"
+"- تم تحديث جميع الترجمات والأدلة للإصدار 5.6.5."
 
 msgid ""
 "- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"

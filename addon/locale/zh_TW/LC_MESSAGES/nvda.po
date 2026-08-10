@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.4\n"
+"Project-Id-Version: UnigramPlus 5.6.5\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2026-05-24 00:00+0800\n"
 "PO-Revision-Date: 2026-06-14 20:36+0800\n"
@@ -949,9 +949,6 @@ msgstr "一對一通話中，靜音麥克風（ALT+A）、開啟或關閉鏡頭�
 msgid "Rich message"
 msgstr "豐富訊息"
 
-msgid "Rich message. Press Alt+C to browse"
-msgstr "豐富訊息。按 Alt+C 瀏覽"
-
 msgid "Added support for rich messages. Rich messages are now announced when focused and can be opened with Alt+C in a browseable window."
 msgstr "新增豐富訊息支援。豐富訊息取得焦點時會被朗讀，並可按 Alt+C 在可瀏覽視窗中開啟。"
 
@@ -1015,23 +1012,14 @@ msgstr "在訊息內容之後讀出訊息標頭"
 msgid "Play a sound when reaching the end of a chat"
 msgstr "到達聊天室末尾時播放聲音"
 
-msgid "Display message text in a web view when pressing Alt+C"
-msgstr "按 Alt+C 時在 Web 檢視中顯示訊息文字"
-
 msgid ""
-"- Fixed Shift+Delete by using Unigram's native Delete command and automatically confirming deletion for both sides.\n"
-"- Alt+2 now uses Unigram's Go to bottom button first, and the duplicate Alt+End shortcut was removed.\n"
-"- Added a setting to choose between the classic window (default) and web view when displaying message text with Alt+C.\n"
-"- Unigram's official rich-message text is now used, with a temporary fix for unlabeled inline buttons in Unigram 12.9.\n"
-"- Updated every localized manual with the Unigram 12.9 shortcut list.\n"
-"- Added a temporary fix so Saved Messages topic rows announce the visible chat title instead of a TDLib type name."
+"- Fixed Enter for replying to messages and Alt+Shift+R for marking chats as read in current Unigram versions.\n"
+"- Removed the web view mode and its setting; Alt+C now always opens message text in the original wx popup window.\n"
+"- Updated all translations and manuals for version 5.6.5."
 msgstr ""
-"- 修正 Shift+Delete：現在使用 Unigram 原生 Delete 命令，並自動確認從雙方刪除。\n"
-"- Alt+2 現在會優先使用 Unigram 的移至底部按鈕，並已移除重複的 Alt+End 快速鍵。\n"
-"- 新增設定，可選擇在按 Alt+C 顯示訊息文字時使用傳統視窗（預設）或 Web 檢視。\n"
-"- 現在使用 Unigram 官方提供的豐富訊息文字，並為 Unigram 12.9 中沒有標籤的行內按鈕加入暫時修正。\n"
-"- 所有本地化手冊均已更新 Unigram 12.9 快速鍵列表。\n"
-"- 加入暫時修正，使儲存的訊息主題列朗讀畫面上顯示的聊天標題，而不是 TDLib 型別名稱。"
+"- 修正目前 Unigram 版本中按 Enter 回覆訊息，以及按 Alt+Shift+R 將聊天標示為已讀的問題。\n"
+"- 移除 Web 檢視模式及其設定；Alt+C 現在一律在原始 wx 快顯視窗中開啟訊息文字。\n"
+"- 已將所有翻譯與說明文件更新至版本 5.6.5。"
 
 msgid ""
 "- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"

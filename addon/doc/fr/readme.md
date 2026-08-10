@@ -178,6 +178,12 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 
 ##Liste des changements :
 
+### Version 5.6.5
+
+* Correction de la touche Entrée pour répondre aux messages et de Alt+Maj+R pour marquer les discussions comme lues dans les versions actuelles d’Unigram.
+* Suppression du mode vue Web et de son réglage ; Alt+C ouvre désormais toujours le texte du message dans la fenêtre contextuelle wx d’origine.
+* Mise à jour de toutes les traductions et de tous les manuels pour la version 5.6.5.
+
 ### Version 5.6.4
 
 * Correction de Shift+Delete en utilisant la commande Delete native d’Unigram et en confirmant automatiquement la suppression des deux côtés.

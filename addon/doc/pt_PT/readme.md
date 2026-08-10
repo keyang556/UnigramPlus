@@ -178,6 +178,12 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 
 ## Lista de alterações:
 
+### Versão 5.6.5
+
+* Corrigida a tecla Enter para responder a mensagens e Alt+Shift+R para marcar conversas como lidas nas versões atuais do Unigram.
+* Removidos o modo de vista Web e a respetiva definição; Alt+C passa a abrir sempre o texto da mensagem na janela de pop-up wx original.
+* Atualizadas todas as traduções e os manuais para a versão 5.6.5.
+
 ### Versão 5.6.4
 
 * Corrigido Shift+Delete usando o comando Delete nativo do Unigram e confirmando automaticamente a eliminação para ambos os lados.

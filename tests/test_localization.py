@@ -15,7 +15,6 @@ REQUIRED_TRANSLATIONS = {
 	"Select the progress bar notification level:",
 	"File transfer progress announcement interval (percent):",
 	"Rich message",
-	"Display message text in a web view when pressing Alt+C",
 	"Added support for rich messages. Rich messages are now announced when focused and can be opened with Alt+C in a browseable window.",
 	"Links and mixed content in rich messages are preserved, and links can be activated from the browseable window.",
 	"Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation.",
@@ -38,12 +37,9 @@ REQUIRED_TRANSLATIONS = {
 		"- Added an optional sound notification when reaching the end of a chat."
 	),
 	(
-		"- Fixed Shift+Delete by using Unigram's native Delete command and automatically confirming deletion for both sides.\n"
-		"- Alt+2 now uses Unigram's Go to bottom button first, and the duplicate Alt+End shortcut was removed.\n"
-		"- Added a setting to choose between the classic window (default) and web view when displaying message text with Alt+C.\n"
-		"- Unigram's official rich-message text is now used, with a temporary fix for unlabeled inline buttons in Unigram 12.9.\n"
-		"- Updated every localized manual with the Unigram 12.9 shortcut list.\n"
-		"- Added a temporary fix so Saved Messages topic rows announce the visible chat title instead of a TDLib type name."
+		"- Fixed Enter for replying to messages and Alt+Shift+R for marking chats as read in current Unigram versions.\n"
+		"- Removed the web view mode and its setting; Alt+C now always opens message text in the original wx popup window.\n"
+		"- Updated all translations and manuals for version 5.6.5."
 	),
 }
 
@@ -90,41 +86,47 @@ def test_required_strings_are_translated_in_every_locale():
 		assert not missing, f"{locale_dir.name} has missing translations: {missing}"
 
 
-def test_release_version_is_564():
+def test_release_version_is_565():
 	build_vars = (ROOT / "buildVars.py").read_text(encoding="utf-8")
 	manifest = (ROOT / "addon" / "manifest.ini").read_text(encoding="utf-8")
 	pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
 	lockfile = (ROOT / "uv.lock").read_text(encoding="utf-8")
 
-	assert 'addon_version="5.6.4"' in build_vars
-	assert "version = 5.6.4" in manifest
-	assert 'version = "5.6.4"' in pyproject
-	assert 'name = "unigramplus"\nversion = "5.6.4"' in lockfile
+	assert 'addon_version="5.6.5"' in build_vars
+	assert "version = 5.6.5" in manifest
+	assert 'version = "5.6.5"' in pyproject
+	assert 'name = "unigramplus"\nversion = "5.6.5"' in lockfile
 
 
-def test_all_catalogs_identify_the_564_release():
+def test_all_catalogs_identify_the_565_release():
 	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
 		catalog = (locale_dir / "LC_MESSAGES" / "nvda.po").read_text(encoding="utf-8")
-		assert '"Project-Id-Version: UnigramPlus 5.6.4\\n"' in catalog
+		assert '"Project-Id-Version: UnigramPlus 5.6.5\\n"' in catalog
 
 
-def test_every_localized_manual_has_564_through_559_and_updated_558_changelogs():
+def test_every_localized_manual_has_565_through_559_and_updated_558_changelogs():
 	manuals = [ROOT / "readme.md", *sorted(DOC_DIR.glob("*/readme.md"))]
 	assert len(manuals) == 17
 	for manual in manuals:
 		text = manual.read_text(encoding="utf-8")
-		version_564 = text.index("5.6.4")
+		version_565 = text.index("5.6.5")
+		version_564 = text.index("5.6.4", version_565)
 		version_563 = text.index("5.6.3", version_564)
 		version_562 = text.index("5.6.2", version_563)
 		version_561 = text.index("5.6.1", version_562)
 		version_560 = text.index("5.6.0", version_561)
 		version_559 = text.index("5.5.9", version_560)
 		version_558 = text.index("5.5.8", version_559)
+		section_565 = text[version_565:version_564]
 		section_564 = text[version_564:version_563]
 		section_563 = text[version_563:version_562]
 		section_562 = text[version_562:version_561]
 		section_561 = text[version_561:version_560]
 		section_560 = text[version_560:version_559]
+		assert "Enter" in section_565 or "Entrée" in section_565, manual
+		assert "Alt+Shift+R" in section_565 or "Alt+Maj+R" in section_565, manual
+		assert "Alt+C" in section_565, manual
+		assert section_565.count("\n* ") == 3, manual
 		assert "Shift+Delete" in section_564, manual
 		assert "Alt+2" in section_564, manual
 		assert "Alt+C" in section_564, manual
@@ -143,3 +145,19 @@ def test_every_localized_manual_has_564_through_559_and_updated_558_changelogs()
 		assert section_560.count("\n* ") == 3, manual
 		assert "Alt+C" in text[version_559:version_558], manual
 		assert "GitHub" in text[version_558:text.find("5.5.7", version_558)], manual
+
+
+def test_removed_web_view_setting_is_absent_but_historical_changelogs_remain():
+	setting = "Display message text in a web view when pressing Alt+C"
+	runtime_hint = "Rich message. Press Alt+C to browse"
+	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
+		entries = _parse_po(locale_dir / "LC_MESSAGES" / "nvda.po")
+		assert setting not in entries, locale_dir
+		assert runtime_hint not in entries, locale_dir
+	manuals = [ROOT / "readme.md", *sorted(DOC_DIR.glob("*/readme.md"))]
+	for manual in manuals:
+		text = manual.read_text(encoding="utf-8")
+		section_564 = text[text.index("5.6.4"):text.index("5.6.3", text.index("5.6.4"))]
+		section_559 = text[text.index("5.5.9"):text.index("5.5.8", text.index("5.5.9"))]
+		assert "Alt+C" in section_564, manual
+		assert "Alt+C" in section_559, manual

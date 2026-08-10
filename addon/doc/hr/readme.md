@@ -181,6 +181,12 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 
 ##Popis promjena:
 
+### Verzija 5.6.5
+
+* Ispravljena je tipka Enter za odgovaranje na poruke i Alt+Shift+R za označavanje razgovora kao pročitanih u trenutačnim verzijama Unigrama.
+* Uklonjeni su način web-prikaza i njegova postavka; Alt+C sada uvijek otvara tekst poruke u izvornom wx skočnom prozoru.
+* Ažurirani su svi prijevodi i priručnici za verziju 5.6.5.
+
 ### Verzija 5.6.4
 
 * Shift+Delete je ispravljen korištenjem Unigramove izvorne naredbe Delete i automatskom potvrdom brisanja s obje strane.

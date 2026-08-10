@@ -79,6 +79,199 @@ def test_context_menu_icon_matching_handles_unigram_12_9_wrappers_and_cycles():
 	assert not namespace["_menu_item_has_icon"](wrapper, "\ue8b2")
 
 
+def test_raw_context_menu_item_is_invoked_by_unigrams_font_icon(monkeypatch):
+	invocations = []
+	conditions = []
+
+	class TextRange:
+		def __init__(self, text):
+			self.text = text
+
+		def GetText(self, limit):
+			assert limit == 64
+			return self.text
+
+	class TextPattern:
+		def __init__(self, text):
+			self.DocumentRange = TextRange(text)
+
+		def QueryInterface(self, interface):
+			assert interface == "textInterface"
+			return self
+
+	class InvokePattern:
+		def QueryInterface(self, interface):
+			assert interface == "invokeInterface"
+			return self
+
+		def Invoke(self):
+			invocations.append(True)
+
+	class RawElement:
+		def __init__(
+			self,
+			control_type,
+			parent=None,
+			first_child=None,
+			class_name="",
+			automation_id="",
+			name="",
+			value="",
+			text="",
+		):
+			self.parent = parent
+			self.first_child = first_child
+			self.properties = {
+				"controlType": control_type,
+				"className": class_name,
+				"automationId": automation_id,
+				"name": name,
+				"value": value,
+				"legacyValue": "",
+				"textAvailable": bool(text),
+			}
+			self.text = text
+
+		def GetCachedPropertyValueEx(self, property_id, ignore_default):
+			assert ignore_default
+			return self.properties[property_id]
+
+		def GetCurrentPattern(self, pattern_id):
+			if pattern_id == "invokePattern":
+				return InvokePattern()
+			if pattern_id == "textPattern" and self.text:
+				return TextPattern(self.text)
+			raise LookupError(pattern_id)
+
+		def GetCachedPattern(self, pattern_id):
+			return self.GetCurrentPattern(pattern_id)
+
+	class ElementArray:
+		def __init__(self, elements):
+			self.elements = elements
+			self.length = len(elements)
+
+		def getElement(self, index):
+			return self.elements[index]
+
+	class Root:
+		def __init__(self, menu_items, parent=None):
+			self.menu_items = menu_items
+			self.parent = parent
+			self.find_all_calls = 0
+
+		def findAll(self, scope, condition):
+			assert scope == "descendants"
+			self.find_all_calls += 1
+			parts = condition[1] if condition[0] == "and" else (condition,)
+			assert ("controlType", "menuItem") in parts
+			return ElementArray(self.menu_items)
+
+	class Client:
+		@staticmethod
+		def CreatePropertyCondition(property_id, value):
+			conditions.append((property_id, value))
+			return (property_id, value)
+
+		@staticmethod
+		def CreateAndConditionFromArray(parts):
+			return ("and", tuple(parts))
+
+		@staticmethod
+		def CompareElements(first, second):
+			return first is second
+
+	class Walker:
+		@staticmethod
+		def getParentElement(element):
+			return element.parent
+
+		@staticmethod
+		def GetFirstChildElementBuildCache(element, cache_request):
+			assert cache_request == "baseCache"
+			return element.first_child
+
+	def menu_item_with_icon(icon):
+		font_icon = RawElement("text", class_name="FontIcon", text=icon)
+		icon_content = RawElement(
+			"group",
+			first_child=font_icon,
+			class_name="ContentPresenter",
+			automation_id="IconContent",
+		)
+		viewbox = RawElement("group", first_child=icon_content, class_name="Viewbox")
+		layout = RawElement(
+			"group",
+			first_child=viewbox,
+			class_name="Grid",
+			automation_id="LayoutRoot",
+		)
+		return RawElement("menuItem", first_child=layout, class_name="MenuFlyoutItem")
+
+	desktop_root = Root([])
+	nonmatching_item = menu_item_with_icon("\ue104")
+	menu_item = menu_item_with_icon("\ue248")
+	common_xaml_root = Root([nonmatching_item, menu_item], parent=desktop_root)
+	focused_popup = SimpleNamespace(
+		processID=4242,
+		UIAElement=Root([], parent=common_xaml_root),
+	)
+	monkeypatch.setitem(
+		sys.modules,
+		"UIAHandler",
+		SimpleNamespace(
+			handler=SimpleNamespace(
+				clientObject=Client(),
+				baseTreeWalker=Walker(),
+				baseCacheRequest="baseCache",
+				rootElement=desktop_root,
+			),
+			UIA=SimpleNamespace(
+				UIA_NamePropertyId="name",
+				UIA_ValueValuePropertyId="value",
+				UIA_IsTextPatternAvailablePropertyId="textAvailable",
+				UIA_ClassNamePropertyId="className",
+				UIA_AutomationIdPropertyId="automationId",
+				UIA_ProcessIdPropertyId="processId",
+				UIA_ControlTypePropertyId="controlType",
+				UIA_MenuItemControlTypeId="menuItem",
+			),
+			UIA_LegacyIAccessibleValuePropertyId="legacyValue",
+			TreeScope_Descendants="descendants",
+			UIA_TextPatternId="textPattern",
+			IUIAutomationTextPattern="textInterface",
+			UIA_InvokePatternId="invokePattern",
+			IUIAutomationInvokePattern="invokeInterface",
+		),
+	)
+	namespace = _load_module_members(
+		{
+			"_raw_uia_property",
+			"_raw_uia_text",
+			"_raw_menu_item_has_icon",
+			"_find_raw_context_menu_item_by_icon",
+			"_invoke_raw_context_menu_option",
+		},
+		{
+			"_CONTEXT_MENU_RAW_SCOPE_LIMIT": 6,
+			"_CONTEXT_MENU_RAW_ITEM_DEPTH_LIMIT": 10,
+			"_CONTEXT_MENU_RAW_TEXT_LIMIT": 64,
+			"log": SimpleNamespace(debug=lambda *args, **kwargs: None),
+		},
+	)
+
+	assert namespace["_invoke_raw_context_menu_option"](
+		focused_popup,
+		("\ue91d", "\ue248"),
+		4242,
+	)
+	assert conditions.count(("controlType", "menuItem")) == 2
+	assert conditions.count(("processId", 4242)) == 2
+	assert not any(property_id == "name" for property_id, value in conditions)
+	assert desktop_root.find_all_calls == 0
+	assert invocations == [True]
+
+
 def test_context_menu_deletion_still_activates_a_nested_delete_item():
 	namespace = _load_module_members(
 		{"_walk_bounded_descendants", "_menu_item_has_icon"},
@@ -435,9 +628,7 @@ def test_inline_button_text_pattern_read_is_queued_off_the_main_thread(monkeypat
 			"_inline_button_descendant_text": lambda obj: "Open website",
 			"queueHandler": SimpleNamespace(
 				eventQueue="eventQueue",
-				queueFunction=lambda queue, callback, *args: main_queue_calls.append(
-					(queue, callback, args)
-				),
+				queueFunction=lambda queue, callback, *args: main_queue_calls.append((queue, callback, args)),
 			),
 			"log": SimpleNamespace(debug=lambda *args, **kwargs: None),
 		},
@@ -571,12 +762,386 @@ def test_shift_delete_remains_bound_but_alt_end_is_removed():
 	assert "def script_to_down" not in source
 
 
-def test_alt_c_classic_view_is_the_persisted_default():
+def test_alt_c_web_view_code_and_setting_are_removed():
 	config = (ROOT / "addon" / "appModules" / "cnf.py").read_text(encoding="utf-8")
 	settings = (ROOT / "addon" / "GlobalPlugins" / "UnigramPlus" / "__init__.py").read_text(
 		encoding="utf-8-sig"
 	)
+	app = SOURCE_PATH.read_text(encoding="utf-8")
 
-	assert '"displayMessagesInWebView = boolean(default=False)"' in config
-	assert '_("Display message text in a web view when pressing Alt+C")' in settings
-	assert 'conf.set("displayMessagesInWebView", self.displayMessagesInWebView.IsChecked())' in settings
+	assert "displayMessagesInWebView" not in config + settings + app
+	assert "browseableMessage" not in app
+	assert not (ROOT / "addon" / "appModules" / "rich_message_dialog.py").exists()
+
+
+def test_current_unigram_message_selector_is_recognized_without_legacy_automation_id():
+	role = SimpleNamespace(LISTITEM="listItem")
+	namespace = _load_module_members(
+		{"_find_ancestor_by_automation_id", "_is_message_list_item"},
+		{"Role": role},
+	)
+	messages = Node(role="list", automation_id="Messages")
+	container = Node(role=role.LISTITEM, parent=messages)
+	selector = Node(role=role.LISTITEM, parent=container, class_name="MessageSelector")
+
+	assert namespace["_is_message_list_item"](selector)
+	assert not namespace["_is_message_list_item"](
+		Node(role=role.LISTITEM, parent=container, class_name="ReactionButton")
+	)
+
+
+def test_wrapped_chat_row_is_accepted_for_alt_shift_r_context_menu():
+	role = SimpleNamespace(LISTITEM="listItem")
+	namespace = _load_module_members(
+		{"_find_ancestor_by_automation_id", "_is_chat_list_item"},
+		{"Role": role},
+	)
+	chat_list = Node(role="list", automation_id="ChatsList")
+	wrapper = Node(parent=chat_list)
+	chat = Node(role=role.LISTITEM, parent=wrapper, class_name="ChatListListViewItem")
+
+	assert namespace["_is_chat_list_item"](chat)
+	assert not namespace["_is_chat_list_item"](
+		Node(role=role.LISTITEM, parent=Node(automation_id="SettingsList"))
+	)
+
+
+def test_enter_opens_the_reply_context_menu_for_current_message_selectors():
+	sent = []
+	armed = []
+	focus = Node(class_name="MessageSelector", role="listItem")
+	method = _load_app_method(
+		"activate_option_for_menu",
+		{
+			"api": SimpleNamespace(getFocusObject=lambda: focus),
+			"_is_chat_list_item": lambda obj: False,
+			"_CONTEXT_MENU_OPEN_TIMEOUT_MS": 10000,
+		},
+	)
+	instance = SimpleNamespace(
+		execute_context_menu_option=False,
+		is_message_object=lambda obj: True,
+		keys={"Applications": SimpleNamespace(send=lambda: sent.append("applications"))},
+		_arm_context_menu_timeout=lambda pending, delay: armed.append((pending, delay)),
+	)
+
+	assert method(instance, "replyIcon", "Messages")
+	assert instance.execute_context_menu_option == {
+		"icons": "replyIcon",
+		"processID": 0,
+		"moves": 0,
+		"timeoutToken": 0,
+		"rawProbeToken": 0,
+		"rawProbeAttempts": 0,
+		"rawInvoked": False,
+	}
+	assert sent == ["applications"]
+	assert armed == [(instance.execute_context_menu_option, 10000)]
+
+
+def test_alt_shift_r_opens_the_context_menu_for_wrapped_chat_rows():
+	sent = []
+	armed = []
+	focus = Node(class_name="ChatListListViewItem", role="listItem")
+	method = _load_app_method(
+		"activate_option_for_menu",
+		{
+			"api": SimpleNamespace(getFocusObject=lambda: focus),
+			"_is_chat_list_item": lambda obj: True,
+			"_CONTEXT_MENU_OPEN_TIMEOUT_MS": 10000,
+		},
+	)
+	instance = SimpleNamespace(
+		execute_context_menu_option=False,
+		is_message_object=lambda obj: False,
+		keys={"Applications": SimpleNamespace(send=lambda: sent.append("applications"))},
+		_arm_context_menu_timeout=lambda pending, delay: armed.append((pending, delay)),
+	)
+
+	assert method(instance, ("readIcon", "unreadIcon"), "ChatsList")
+	assert instance.execute_context_menu_option == {
+		"icons": ("readIcon", "unreadIcon"),
+		"processID": 0,
+		"moves": 0,
+		"timeoutToken": 0,
+		"rawProbeToken": 0,
+		"rawProbeAttempts": 0,
+		"rawInvoked": False,
+	}
+	assert sent == ["applications"]
+	assert armed == [(instance.execute_context_menu_option, 10000)]
+
+
+def test_context_menu_popup_focus_schedules_raw_probe_without_walking_nvda_objects():
+	role = SimpleNamespace(
+		MENUITEM="menuItem",
+		LINK="link",
+		BUTTON="button",
+		WINDOW="window",
+		POPUPMENU="popupMenu",
+		MENU="menu",
+	)
+	scheduled = []
+	next_calls = []
+	probes = []
+	method = _load_app_method(
+		"_handle_pending_context_menu_focus",
+		{
+			"Role": role,
+			"_menu_item_has_icon": lambda obj, icons: (_ for _ in ()).throw(
+				AssertionError("popup descendants must not be inspected")
+			),
+			"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args)),
+			"_CONTEXT_MENU_STEP_DELAY_MS": 20,
+			"_CONTEXT_MENU_NAVIGATION_LIMIT": 30,
+		},
+	)
+	pending = {"icons": "\ue248", "moves": 0}
+	instance = SimpleNamespace(
+		execute_context_menu_option=pending,
+		keys={},
+		_invoke_context_menu_item=lambda item: None,
+		_arm_context_menu_timeout=lambda pending, delay: None,
+		_schedule_context_menu_raw_probe=lambda obj, request: probes.append((obj, request)),
+	)
+	popup = Node(role="window", children=[Node(children=[Node(children=[Node()])])])
+
+	assert method(instance, popup, lambda: next_calls.append(True))
+	assert instance.execute_context_menu_option is pending
+	assert next_calls == [True]
+	assert scheduled == []
+	assert probes == [(popup, pending)]
+
+
+def test_context_menu_focused_item_is_invoked_by_unigrams_icon_not_its_translation():
+	role = SimpleNamespace(MENUITEM="menuItem", LINK="link", BUTTON="button")
+	scheduled = []
+	namespace = _load_module_members(
+		{"_walk_bounded_descendants", "_menu_item_has_icon"},
+		{"Role": role},
+	)
+	namespace.update(
+		{
+			"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args)),
+			"_CONTEXT_MENU_STEP_DELAY_MS": 20,
+			"_CONTEXT_MENU_NAVIGATION_LIMIT": 30,
+		}
+	)
+	method = _load_app_method("_handle_pending_context_menu_focus", namespace)
+	item = Node(
+		name="any localized label",
+		role=role.MENUITEM,
+		children=[Node(children=[Node(name="\ue248")])],
+	)
+	pending = {"icons": "\ue248", "moves": 0}
+	instance = SimpleNamespace(
+		execute_context_menu_option=pending,
+		keys={},
+		_invoke_context_menu_item=lambda item: None,
+		_arm_context_menu_timeout=lambda pending, delay: None,
+	)
+
+	assert method(instance, item, lambda: None)
+	assert instance.execute_context_menu_option is False
+	assert scheduled == [(20, instance._invoke_context_menu_item, item)]
+
+
+def test_context_menu_moves_one_item_at_a_time_until_read_icon_is_focused():
+	role = SimpleNamespace(MENUITEM="menuItem", LINK="link", BUTTON="button")
+	scheduled = []
+	sent = []
+	armed = []
+	method = _load_app_method(
+		"_handle_pending_context_menu_focus",
+		{
+			"Role": role,
+			"_menu_item_has_icon": lambda obj, icons: False,
+			"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args)),
+			"_CONTEXT_MENU_STEP_DELAY_MS": 20,
+			"_CONTEXT_MENU_NAVIGATION_LIMIT": 30,
+			"_CONTEXT_MENU_ACTIVITY_TIMEOUT_MS": 3000,
+		},
+	)
+	pending = {"icons": ("\ue91d", "\ue91c"), "moves": 0}
+	instance = SimpleNamespace(
+		execute_context_menu_option=pending,
+		keys={
+			"downArrow": SimpleNamespace(send=lambda: sent.append("down")),
+			"escape": SimpleNamespace(send=lambda: sent.append("escape")),
+		},
+		_invoke_context_menu_item=lambda item: None,
+		_arm_context_menu_timeout=lambda pending, delay: armed.append((pending, delay)),
+	)
+
+	assert method(instance, Node(role=role.MENUITEM), lambda: None)
+	assert pending["moves"] == 1
+	assert armed == [(pending, 3000)]
+	assert len(scheduled) == 1
+	scheduled[0][1](*scheduled[0][2:])
+	assert sent == ["down"]
+
+
+def test_context_menu_moves_from_unigrams_reaction_link_to_the_first_command():
+	role = SimpleNamespace(MENUITEM="menuItem", LINK="link", BUTTON="button")
+	scheduled = []
+	sent = []
+	armed = []
+	method = _load_app_method(
+		"_handle_pending_context_menu_focus",
+		{
+			"Role": role,
+			"_menu_item_has_icon": lambda obj, icons: (_ for _ in ()).throw(
+				AssertionError("a reaction link is not a menu command")
+			),
+			"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args)),
+			"_CONTEXT_MENU_STEP_DELAY_MS": 20,
+			"_CONTEXT_MENU_NAVIGATION_LIMIT": 30,
+			"_CONTEXT_MENU_ACTIVITY_TIMEOUT_MS": 3000,
+		},
+	)
+	pending = {"icons": "\ue248", "moves": 0}
+	instance = SimpleNamespace(
+		execute_context_menu_option=pending,
+		keys={
+			"downArrow": SimpleNamespace(send=lambda: sent.append("down")),
+			"escape": SimpleNamespace(send=lambda: sent.append("escape")),
+		},
+		_invoke_context_menu_item=lambda item: None,
+		_arm_context_menu_timeout=lambda pending, delay: armed.append((pending, delay)),
+	)
+
+	assert method(instance, Node(name="group-specific reaction", role=role.LINK), lambda: None)
+	assert pending["moves"] == 1
+	assert armed == [(pending, 3000)]
+	assert len(scheduled) == 1
+	scheduled[0][1](*scheduled[0][2:])
+	assert sent == ["down"]
+
+
+def test_raw_context_menu_probe_runs_on_nvdas_mta_thread(monkeypatch):
+	jobs = []
+	main_queue_calls = []
+	monkeypatch.setitem(
+		sys.modules,
+		"UIAHandler",
+		SimpleNamespace(
+			handler=SimpleNamespace(
+				MTAThreadQueue=SimpleNamespace(put_nowait=jobs.append),
+			),
+		),
+	)
+	pending = {
+		"icons": "\ue248",
+		"processID": 4242,
+		"rawProbeToken": 3,
+		"rawProbeAttempts": 0,
+		"rawInvoked": False,
+	}
+	obj = object()
+	namespace = {
+		"_CONTEXT_MENU_RAW_PROBE_LIMIT": 8,
+		"_invoke_raw_context_menu_option": lambda root, icons, process_id, diagnose=False: (
+			root is obj and icons == "\ue248" and process_id == 4242 and diagnose
+		),
+		"queueHandler": SimpleNamespace(
+			eventQueue="eventQueue",
+			queueFunction=lambda queue, callback, *args: main_queue_calls.append((queue, callback, args)),
+		),
+		"log": SimpleNamespace(debug=lambda *args, **kwargs: None),
+	}
+	method = _load_app_method("_queue_context_menu_raw_probe", namespace)
+	completed = []
+	instance = SimpleNamespace(
+		execute_context_menu_option=pending,
+		_complete_context_menu_raw_probe=lambda *args: completed.append(args),
+	)
+
+	assert method(instance, obj, pending, 3)
+	assert pending["rawProbeAttempts"] == 1
+	assert len(jobs) == 1
+	assert not main_queue_calls
+
+	jobs[0]()
+	assert pending["rawInvoked"] is True
+	assert len(main_queue_calls) == 1
+	queue, callback, args = main_queue_calls[0]
+	assert queue == "eventQueue"
+	callback(*args)
+	assert completed == [(obj, pending, 3, True)]
+
+
+def test_failed_raw_context_menu_probe_retries_only_the_latest_popup():
+	scheduled = []
+	obj = object()
+	pending = {
+		"icons": "\ue248",
+		"rawProbeToken": 2,
+		"rawProbeAttempts": 1,
+		"rawProbeObject": obj,
+	}
+	method = _load_app_method(
+		"_complete_context_menu_raw_probe",
+		{
+			"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args)),
+			"log": SimpleNamespace(debug=lambda *args, **kwargs: None),
+			"_CONTEXT_MENU_RAW_RETRY_DELAY_MS": 150,
+			"_CONTEXT_MENU_RAW_PROBE_LIMIT": 8,
+		},
+	)
+	instance = SimpleNamespace(
+		execute_context_menu_option=pending,
+		_queue_context_menu_raw_probe=lambda *args: None,
+	)
+
+	method(instance, obj, pending, 1, False)
+	assert scheduled == []
+
+	method(instance, obj, pending, 2, False)
+	assert scheduled == [
+		(150, instance._queue_context_menu_raw_probe, obj, pending, 2),
+	]
+
+	method(instance, obj, pending, 2, True)
+	assert instance.execute_context_menu_option is False
+
+
+def test_context_menu_timeout_generation_prevents_stale_callbacks_from_closing_the_menu():
+	method = _load_app_method("_expire_context_menu_option", {})
+	sent = []
+	old_pending = {"icons": "old", "moves": 0, "timeoutToken": 1}
+	new_pending = {"icons": "new", "moves": 0, "timeoutToken": 2}
+	instance = SimpleNamespace(
+		execute_context_menu_option=new_pending,
+		keys={"escape": SimpleNamespace(send=lambda: sent.append("escape"))},
+	)
+
+	method(instance, old_pending, 1)
+	assert instance.execute_context_menu_option is new_pending
+	assert sent == []
+
+	method(instance, new_pending, 1)
+	assert instance.execute_context_menu_option is new_pending
+	assert sent == []
+
+	method(instance, new_pending, 2)
+	assert instance.execute_context_menu_option is False
+	assert sent == ["escape"]
+
+
+def test_context_menu_timeout_arming_invalidates_the_previous_timer():
+	scheduled = []
+	method = _load_app_method(
+		"_arm_context_menu_timeout",
+		{"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args))},
+	)
+	pending = {"icons": "reply", "moves": 0, "timeoutToken": 0}
+	instance = SimpleNamespace(_expire_context_menu_option=lambda pending, token: None)
+
+	method(instance, pending, 10000)
+	method(instance, pending, 3000)
+
+	assert pending["timeoutToken"] == 2
+	assert scheduled == [
+		(10000, instance._expire_context_menu_option, pending, 1),
+		(3000, instance._expire_context_menu_option, pending, 2),
+	]
