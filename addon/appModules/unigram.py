@@ -70,6 +70,7 @@ _END_OF_CHAT_PROBE_DELAY_MS = 50
 _SEARCH_RESULT_COUNTER_RE = re.compile(r"^\s*(\d+)\s*/\s*(\d+)\s*$")
 _SEARCH_RESULT_COUNTER_SIBLING_LIMIT = 6
 _CONTEXT_MENU_STEP_DELAY_MS = 20
+_CONTEXT_MENU_NAVIGATION_DELAY_MS = 250
 _CONTEXT_MENU_OPEN_TIMEOUT_MS = 10000
 _CONTEXT_MENU_ACTIVITY_TIMEOUT_MS = 3000
 _CONTEXT_MENU_NAVIGATION_LIMIT = 30
@@ -124,6 +125,28 @@ def _normalized_text(text):
 	try: text = text or ""
 	except Exception: text = ""
 	return str(text).translate(_APP_MODULE_NAME_IGNORED_CHARS).strip().casefold()
+
+
+def _context_menu_raw_probe_hint_priority(obj):
+	"""Rank popup hints so a generic app window cannot replace a flyout root."""
+	if obj is None:
+		return -1
+	identity = []
+	for attribute in ("UIAClassName", "UIAAutomationId"):
+		try:
+			identity.append(str(getattr(obj, attribute, "") or "").casefold())
+		except Exception:
+			pass
+	identity = " ".join(identity)
+	if any(marker in identity for marker in ("popup", "flyout", "menu")):
+		return 2
+	try:
+		name = str(getattr(obj, "name", "") or "").strip().casefold()
+	except Exception:
+		name = ""
+	if name in ("unigram", "telegram"):
+		return 0
+	return 1
 
 
 def _walk_bounded_descendants(root, max_nodes=100):
@@ -3431,6 +3454,9 @@ class AppModule(appModuleHandler.AppModule):
 		pending = self.execute_context_menu_option
 		if not pending:
 			return False
+		if pending.get("rawInvoked"):
+			nextHandler()
+			return True
 		try:
 			obj_role = obj.role
 		except Exception:
@@ -3462,21 +3488,46 @@ class AppModule(appModuleHandler.AppModule):
 		# ReactionsMenuFlyout initially focuses a reaction HyperlinkButton. Its
 		# OnPreviewKeyDown handler moves Down to the first real MenuFlyoutItem.
 		self._arm_context_menu_timeout(pending, _CONTEXT_MENU_ACTIVITY_TIMEOUT_MS)
+		if pending.get("navigationScheduled"):
+			return True
 		pending["moves"] += 1
 		if pending["moves"] <= _CONTEXT_MENU_NAVIGATION_LIMIT:
-			core.callLater(_CONTEXT_MENU_STEP_DELAY_MS, self.keys["downArrow"].send)
+			# Give the raw UIA probe priority. Moving through reaction buttons too
+			# quickly makes ReactionsMenuFlyout rebuild its popups and can starve the
+			# MTA query behind a continuous focus-event storm.
+			pending["navigationScheduled"] = True
+			core.callLater(
+				_CONTEXT_MENU_NAVIGATION_DELAY_MS,
+				self._send_pending_context_menu_navigation_key,
+				pending,
+			)
 		else:
 			self.execute_context_menu_option = False
 			self.keys["escape"].send()
 		return True
-	def _schedule_context_menu_raw_probe(self, obj, pending):
-		"""Debounce popup focus events while preserving the newest raw UIA root."""
+	def _send_pending_context_menu_navigation_key(self, pending):
+		"""Send one fallback Down only while its original request is active."""
 		if self.execute_context_menu_option is not pending or pending.get("rawInvoked"):
 			return False
+		pending["navigationScheduled"] = False
+		self.keys["downArrow"].send()
+		return True
+	def _schedule_context_menu_raw_probe(self, obj, pending):
+		"""Start one persistent probe chain and retain the newest popup root hint."""
+		if self.execute_context_menu_option is not pending or pending.get("rawInvoked"):
+			return False
+		priority = _context_menu_raw_probe_hint_priority(obj)
+		if priority >= pending.get("rawProbeObjectPriority", -1):
+			pending["rawProbeObject"] = obj
+			pending["rawProbeObjectPriority"] = priority
+		# Unigram can rebuild its reaction popup several times for one menu. Those
+		# focus events can improve the hint without invalidating a queued MTA job.
+		if pending["rawProbeToken"]:
+			return True
 		pending["rawProbeToken"] += 1
 		token = pending["rawProbeToken"]
-		pending["rawProbeObject"] = obj
 		pending["rawProbeAttempts"] = 0
+		pending["rawProbeDiagnosed"] = False
 		core.callLater(
 			_CONTEXT_MENU_RAW_PROBE_DELAY_MS,
 			self._queue_context_menu_raw_probe,
@@ -3510,20 +3561,39 @@ class AppModule(appModuleHandler.AppModule):
 				or pending["rawProbeToken"] != token
 			):
 				return
+			probe_hint = pending.get("rawProbeObject") or obj
+			probe_roots = []
 			try:
 				# Prefer UIA's current raw focus. This polling path is started by the
 				# shortcut itself, so it survives NVDA coalescing MenuOpened/gainFocus.
-				# A popup object received from a normal event remains a useful fallback.
-				probe_root = _get_raw_context_menu_focus(pending["processID"]) or obj
-				invoked = bool(probe_root) and _invoke_raw_context_menu_option(
-					probe_root,
-					pending["icons"],
-					pending["processID"],
-					diagnose=pending["rawProbeAttempts"] == 1,
-				)
+				focused_root = _get_raw_context_menu_focus(pending["processID"])
 			except Exception:
-				log.debug("Could not inspect Unigram's raw context-menu popup", exc_info=True)
-				invoked = False
+				log.debug("Could not read Unigram's raw context-menu focus", exc_info=True)
+				focused_root = None
+			if focused_root:
+				probe_roots.append(focused_root)
+			# A popup object received from a normal event is independent evidence. A
+			# transient focus on Unigram's generic Window must not hide this narrower
+			# root, and a provider failure on either root must not skip the other.
+			if probe_hint is not None and probe_hint is not focused_root:
+				probe_roots.append(probe_hint)
+			diagnose = bool(probe_roots) and not pending["rawProbeDiagnosed"]
+			if probe_roots:
+				pending["rawProbeDiagnosed"] = True
+			invoked = False
+			for probe_root in probe_roots:
+				try:
+					invoked = _invoke_raw_context_menu_option(
+						probe_root,
+						pending["icons"],
+						pending["processID"],
+						diagnose=diagnose,
+					)
+				except Exception:
+					log.debug("Could not inspect an Unigram context-menu root", exc_info=True)
+					continue
+				if invoked:
+					break
 			if invoked:
 				# Prevent another already-queued probe from invoking the same command
 				# before the main-thread completion callback clears the request.
@@ -3531,7 +3601,7 @@ class AppModule(appModuleHandler.AppModule):
 			queueHandler.queueFunction(
 				queueHandler.eventQueue,
 				self._complete_context_menu_raw_probe,
-				obj,
+				probe_hint,
 				pending,
 				token,
 				invoked,
@@ -3551,21 +3621,28 @@ class AppModule(appModuleHandler.AppModule):
 			log.debug("Invoked Unigram context-menu command from its raw FontIcon")
 			self.execute_context_menu_option = False
 			return
-		if pending["rawProbeToken"] != token or pending.get("rawProbeObject") is not obj:
+		if pending["rawProbeToken"] != token:
 			return
 		if pending["rawProbeAttempts"] < _CONTEXT_MENU_RAW_PROBE_LIMIT:
 			core.callLater(
 				_CONTEXT_MENU_RAW_RETRY_DELAY_MS,
 				self._queue_context_menu_raw_probe,
-				obj,
+				pending.get("rawProbeObject") or obj,
 				pending,
 				token,
 			)
 		else:
-			log.debug(
-				"Unigram context-menu icons %r were not found in the latest raw popup",
-				pending["icons"],
-			)
+			if pending.get("rawProbeDiagnosed"):
+				log.debug(
+					"Unigram context-menu icons %r were not found in the latest raw popup",
+					pending["icons"],
+				)
+			else:
+				log.debug(
+					"No Unigram popup focus was observed for context-menu icons %r after %d raw polls",
+					pending["icons"],
+					pending["rawProbeAttempts"],
+				)
 	def _invoke_context_menu_item(self, item):
 		try:
 			item.doAction()
@@ -3579,7 +3656,8 @@ class AppModule(appModuleHandler.AppModule):
 	def _expire_context_menu_option(self, pending, token):
 		if self.execute_context_menu_option is pending and pending["timeoutToken"] == token:
 			self.execute_context_menu_option = False
-			self.keys["escape"].send()
+			if not pending.get("rawInvoked"):
+				self.keys["escape"].send()
 	def activate_option_for_menu(self, option, list_name=False):
 		if self.execute_context_menu_option: return False
 		obj = api.getFocusObject()
@@ -3590,9 +3668,12 @@ class AppModule(appModuleHandler.AppModule):
 			"icons": option,
 			"processID": getattr(obj, "processID", 0),
 			"moves": 0,
+			"navigationScheduled": False,
 			"timeoutToken": 0,
 			"rawProbeToken": 0,
 			"rawProbeAttempts": 0,
+			"rawProbeDiagnosed": False,
+			"rawProbeObjectPriority": -1,
 			"rawInvoked": False,
 		}
 		self.execute_context_menu_option = pending

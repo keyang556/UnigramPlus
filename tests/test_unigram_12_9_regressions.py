@@ -832,9 +832,12 @@ def test_enter_opens_the_reply_context_menu_for_current_message_selectors():
 		"icons": "replyIcon",
 		"processID": 0,
 		"moves": 0,
+		"navigationScheduled": False,
 		"timeoutToken": 0,
 		"rawProbeToken": 0,
 		"rawProbeAttempts": 0,
+		"rawProbeDiagnosed": False,
+		"rawProbeObjectPriority": -1,
 		"rawInvoked": False,
 	}
 	assert sent == ["applications"]
@@ -868,9 +871,12 @@ def test_alt_shift_r_opens_the_context_menu_for_wrapped_chat_rows():
 		"icons": ("readIcon", "unreadIcon"),
 		"processID": 0,
 		"moves": 0,
+		"navigationScheduled": False,
 		"timeoutToken": 0,
 		"rawProbeToken": 0,
 		"rawProbeAttempts": 0,
+		"rawProbeDiagnosed": False,
+		"rawProbeObjectPriority": -1,
 		"rawInvoked": False,
 	}
 	assert sent == ["applications"]
@@ -899,6 +905,7 @@ def test_context_menu_popup_focus_schedules_raw_probe_without_walking_nvda_objec
 			),
 			"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args)),
 			"_CONTEXT_MENU_STEP_DELAY_MS": 20,
+			"_CONTEXT_MENU_NAVIGATION_DELAY_MS": 250,
 			"_CONTEXT_MENU_NAVIGATION_LIMIT": 30,
 		},
 	)
@@ -919,6 +926,62 @@ def test_context_menu_popup_focus_schedules_raw_probe_without_walking_nvda_objec
 	assert probes == [(popup, pending)]
 
 
+def test_context_menu_popup_focus_storm_does_not_restart_the_raw_probe_chain():
+	scheduled = []
+	priority = _load_module_members({"_context_menu_raw_probe_hint_priority"}, {})[
+		"_context_menu_raw_probe_hint_priority"
+	]
+	method = _load_app_method(
+		"_schedule_context_menu_raw_probe",
+		{
+			"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args)),
+			"_CONTEXT_MENU_RAW_PROBE_DELAY_MS": 50,
+			"_context_menu_raw_probe_hint_priority": priority,
+		},
+	)
+	pending = {
+		"rawProbeToken": 0,
+		"rawProbeAttempts": 0,
+		"rawProbeDiagnosed": False,
+		"rawInvoked": False,
+	}
+	instance = SimpleNamespace(
+		execute_context_menu_option=pending,
+		_queue_context_menu_raw_probe=lambda *args: None,
+	)
+
+	assert method(instance, None, pending)
+	assert pending["rawProbeToken"] == 1
+	assert len(scheduled) == 1
+
+	pending["rawProbeAttempts"] = 3
+	pending["rawProbeDiagnosed"] = True
+	first_popup = Node(class_name="PopupRoot")
+	latest_popup = Node(class_name="MenuFlyoutPresenter")
+	generic_window = Node(name="Unigram", class_name="Window")
+	assert method(instance, first_popup, pending)
+	assert method(instance, latest_popup, pending)
+	assert method(instance, generic_window, pending)
+
+	assert pending["rawProbeToken"] == 1
+	assert pending["rawProbeAttempts"] == 3
+	assert pending["rawProbeDiagnosed"] is True
+	assert pending["rawProbeObject"] is latest_popup
+	assert pending["rawProbeObjectPriority"] == 2
+	assert len(scheduled) == 1
+
+
+def test_context_menu_focus_after_raw_invoke_only_continues_the_event_chain():
+	method = _load_app_method("_handle_pending_context_menu_focus", {})
+	pending = {"rawInvoked": True}
+	next_calls = []
+	instance = SimpleNamespace(execute_context_menu_option=pending)
+
+	assert method(instance, object(), lambda: next_calls.append(True))
+	assert instance.execute_context_menu_option is pending
+	assert next_calls == [True]
+
+
 def test_context_menu_focused_item_is_invoked_by_unigrams_icon_not_its_translation():
 	role = SimpleNamespace(MENUITEM="menuItem", LINK="link", BUTTON="button")
 	scheduled = []
@@ -930,6 +993,7 @@ def test_context_menu_focused_item_is_invoked_by_unigrams_icon_not_its_translati
 		{
 			"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args)),
 			"_CONTEXT_MENU_STEP_DELAY_MS": 20,
+			"_CONTEXT_MENU_NAVIGATION_DELAY_MS": 250,
 			"_CONTEXT_MENU_NAVIGATION_LIMIT": 30,
 		}
 	)
@@ -964,6 +1028,7 @@ def test_context_menu_moves_one_item_at_a_time_until_read_icon_is_focused():
 			"_menu_item_has_icon": lambda obj, icons: False,
 			"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args)),
 			"_CONTEXT_MENU_STEP_DELAY_MS": 20,
+			"_CONTEXT_MENU_NAVIGATION_DELAY_MS": 250,
 			"_CONTEXT_MENU_NAVIGATION_LIMIT": 30,
 			"_CONTEXT_MENU_ACTIVITY_TIMEOUT_MS": 3000,
 		},
@@ -977,12 +1042,13 @@ def test_context_menu_moves_one_item_at_a_time_until_read_icon_is_focused():
 		},
 		_invoke_context_menu_item=lambda item: None,
 		_arm_context_menu_timeout=lambda pending, delay: armed.append((pending, delay)),
+		_send_pending_context_menu_navigation_key=lambda request: sent.append("down"),
 	)
 
 	assert method(instance, Node(role=role.MENUITEM), lambda: None)
 	assert pending["moves"] == 1
 	assert armed == [(pending, 3000)]
-	assert len(scheduled) == 1
+	assert scheduled[0][0] == 250
 	scheduled[0][1](*scheduled[0][2:])
 	assert sent == ["down"]
 
@@ -1001,6 +1067,7 @@ def test_context_menu_moves_from_unigrams_reaction_link_to_the_first_command():
 			),
 			"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args)),
 			"_CONTEXT_MENU_STEP_DELAY_MS": 20,
+			"_CONTEXT_MENU_NAVIGATION_DELAY_MS": 250,
 			"_CONTEXT_MENU_NAVIGATION_LIMIT": 30,
 			"_CONTEXT_MENU_ACTIVITY_TIMEOUT_MS": 3000,
 		},
@@ -1014,13 +1081,39 @@ def test_context_menu_moves_from_unigrams_reaction_link_to_the_first_command():
 		},
 		_invoke_context_menu_item=lambda item: None,
 		_arm_context_menu_timeout=lambda pending, delay: armed.append((pending, delay)),
+		_send_pending_context_menu_navigation_key=lambda request: sent.append("down"),
 	)
 
 	assert method(instance, Node(name="group-specific reaction", role=role.LINK), lambda: None)
+	assert method(instance, Node(name="another reaction event", role=role.LINK), lambda: None)
 	assert pending["moves"] == 1
-	assert armed == [(pending, 3000)]
+	assert armed == [(pending, 3000), (pending, 3000)]
 	assert len(scheduled) == 1
+	assert scheduled[0][0] == 250
 	scheduled[0][1](*scheduled[0][2:])
+	assert sent == ["down"]
+
+
+def test_delayed_context_menu_navigation_is_cancelled_after_raw_invoke():
+	sent = []
+	method = _load_app_method("_send_pending_context_menu_navigation_key", {})
+	pending = {"navigationScheduled": True}
+	instance = SimpleNamespace(
+		execute_context_menu_option=False,
+		keys={"downArrow": SimpleNamespace(send=lambda: sent.append("down"))},
+	)
+
+	assert not method(instance, pending)
+	assert sent == []
+
+	instance.execute_context_menu_option = pending
+	pending["rawInvoked"] = True
+	assert not method(instance, pending)
+	assert sent == []
+
+	pending["rawInvoked"] = False
+	assert method(instance, pending)
+	assert pending["navigationScheduled"] is False
 	assert sent == ["down"]
 
 
@@ -1036,19 +1129,22 @@ def test_raw_context_menu_probe_runs_on_nvdas_mta_thread(monkeypatch):
 			),
 		),
 	)
+	old_popup = object()
+	latest_popup = object()
 	pending = {
 		"icons": "\ue248",
 		"processID": 4242,
 		"rawProbeToken": 3,
 		"rawProbeAttempts": 0,
+		"rawProbeDiagnosed": False,
 		"rawInvoked": False,
+		"rawProbeObject": latest_popup,
 	}
-	obj = object()
 	namespace = {
 		"_CONTEXT_MENU_RAW_PROBE_LIMIT": 8,
 		"_get_raw_context_menu_focus": lambda process_id: None,
 		"_invoke_raw_context_menu_option": lambda root, icons, process_id, diagnose=False: (
-			root is obj and icons == "\ue248" and process_id == 4242 and diagnose
+			root is latest_popup and icons == "\ue248" and process_id == 4242 and diagnose
 		),
 		"queueHandler": SimpleNamespace(
 			eventQueue="eventQueue",
@@ -1063,7 +1159,7 @@ def test_raw_context_menu_probe_runs_on_nvdas_mta_thread(monkeypatch):
 		_complete_context_menu_raw_probe=lambda *args: completed.append(args),
 	)
 
-	assert method(instance, obj, pending, 3)
+	assert method(instance, old_popup, pending, 3)
 	assert pending["rawProbeAttempts"] == 1
 	assert len(jobs) == 1
 	assert not main_queue_calls
@@ -1074,7 +1170,61 @@ def test_raw_context_menu_probe_runs_on_nvdas_mta_thread(monkeypatch):
 	queue, callback, args = main_queue_calls[0]
 	assert queue == "eventQueue"
 	callback(*args)
-	assert completed == [(obj, pending, 3, True)]
+	assert completed == [(latest_popup, pending, 3, True)]
+
+
+def test_raw_context_menu_probe_tries_latest_popup_after_current_focus_fails(monkeypatch):
+	jobs = []
+	main_queue_calls = []
+	monkeypatch.setitem(
+		sys.modules,
+		"UIAHandler",
+		SimpleNamespace(
+			handler=SimpleNamespace(
+				MTAThreadQueue=SimpleNamespace(put_nowait=jobs.append),
+			),
+		),
+	)
+	current_window = object()
+	latest_popup = object()
+	pending = {
+		"icons": "\ue248",
+		"processID": 4242,
+		"rawProbeToken": 1,
+		"rawProbeAttempts": 0,
+		"rawProbeDiagnosed": False,
+		"rawInvoked": False,
+		"rawProbeObject": latest_popup,
+	}
+	invocations = []
+	def invoke(root, icons, process_id, diagnose=False):
+		invocations.append((root, diagnose))
+		if root is current_window:
+			raise RuntimeError("transient provider failure")
+		return root is latest_popup
+
+	namespace = {
+		"_CONTEXT_MENU_RAW_PROBE_LIMIT": 8,
+		"_get_raw_context_menu_focus": lambda process_id: current_window,
+		"_invoke_raw_context_menu_option": invoke,
+		"queueHandler": SimpleNamespace(
+			eventQueue="eventQueue",
+			queueFunction=lambda queue, callback, *args: main_queue_calls.append((queue, callback, args)),
+		),
+		"log": SimpleNamespace(debug=lambda *args, **kwargs: None),
+	}
+	method = _load_app_method("_queue_context_menu_raw_probe", namespace)
+	instance = SimpleNamespace(
+		execute_context_menu_option=pending,
+		_complete_context_menu_raw_probe=lambda *args: None,
+	)
+
+	assert method(instance, object(), pending, 1)
+	jobs[0]()
+
+	assert invocations == [(current_window, True), (latest_popup, True)]
+	assert pending["rawInvoked"] is True
+	assert len(main_queue_calls) == 1
 
 
 def test_raw_context_menu_probe_finds_uia_focus_without_a_popup_event(monkeypatch):
@@ -1094,6 +1244,7 @@ def test_raw_context_menu_probe_finds_uia_focus_without_a_popup_event(monkeypatc
 		"processID": 4242,
 		"rawProbeToken": 1,
 		"rawProbeAttempts": 0,
+		"rawProbeDiagnosed": False,
 		"rawInvoked": False,
 	}
 	raw_focus = object()
@@ -1122,6 +1273,60 @@ def test_raw_context_menu_probe_finds_uia_focus_without_a_popup_event(monkeypatc
 	assert invocations == [(raw_focus, "\ue248", 4242, True)]
 	assert pending["rawInvoked"] is True
 	assert len(main_queue_calls) == 1
+
+
+def test_first_real_popup_query_keeps_diagnostics_after_empty_focus_polls(monkeypatch):
+	jobs = []
+	main_queue_calls = []
+	monkeypatch.setitem(
+		sys.modules,
+		"UIAHandler",
+		SimpleNamespace(
+			handler=SimpleNamespace(
+				MTAThreadQueue=SimpleNamespace(put_nowait=jobs.append),
+			),
+		),
+	)
+	pending = {
+		"icons": "\ue248",
+		"processID": 4242,
+		"rawProbeToken": 1,
+		"rawProbeAttempts": 0,
+		"rawProbeDiagnosed": False,
+		"rawInvoked": False,
+	}
+	raw_focus = object()
+	focuses = iter((None, raw_focus))
+	invocations = []
+	namespace = {
+		"_CONTEXT_MENU_RAW_PROBE_LIMIT": 64,
+		"_get_raw_context_menu_focus": lambda process_id: next(focuses),
+		"_invoke_raw_context_menu_option": lambda root, icons, process_id, diagnose=False: (
+			invocations.append((root, diagnose)) or True
+		),
+		"queueHandler": SimpleNamespace(
+			eventQueue="eventQueue",
+			queueFunction=lambda queue, callback, *args: main_queue_calls.append((queue, callback, args)),
+		),
+		"log": SimpleNamespace(debug=lambda *args, **kwargs: None),
+	}
+	method = _load_app_method("_queue_context_menu_raw_probe", namespace)
+	instance = SimpleNamespace(
+		execute_context_menu_option=pending,
+		_complete_context_menu_raw_probe=lambda *args: None,
+	)
+
+	assert method(instance, None, pending, 1)
+	jobs[0]()
+	assert pending["rawProbeAttempts"] == 1
+	assert pending["rawProbeDiagnosed"] is False
+	assert invocations == []
+
+	assert method(instance, None, pending, 1)
+	jobs[1]()
+	assert pending["rawProbeAttempts"] == 2
+	assert pending["rawProbeDiagnosed"] is True
+	assert invocations == [(raw_focus, True)]
 
 
 def test_raw_context_menu_focus_is_limited_to_the_target_process_and_popup_controls(monkeypatch):
@@ -1169,14 +1374,15 @@ def test_raw_context_menu_focus_is_limited_to_the_target_process_and_popup_contr
 	assert get_focus(4242) is None
 
 
-def test_failed_raw_context_menu_probe_retries_only_the_latest_popup():
+def test_failed_raw_context_menu_probe_keeps_its_chain_across_popup_hint_changes():
 	scheduled = []
-	obj = object()
+	stale_popup = object()
+	latest_popup = object()
 	pending = {
 		"icons": "\ue248",
-		"rawProbeToken": 2,
+		"rawProbeToken": 1,
 		"rawProbeAttempts": 1,
-		"rawProbeObject": obj,
+		"rawProbeObject": latest_popup,
 	}
 	method = _load_app_method(
 		"_complete_context_menu_raw_probe",
@@ -1192,15 +1398,15 @@ def test_failed_raw_context_menu_probe_retries_only_the_latest_popup():
 		_queue_context_menu_raw_probe=lambda *args: None,
 	)
 
-	method(instance, obj, pending, 1, False)
+	method(instance, stale_popup, pending, 2, False)
 	assert scheduled == []
 
-	method(instance, obj, pending, 2, False)
+	method(instance, stale_popup, pending, 1, False)
 	assert scheduled == [
-		(150, instance._queue_context_menu_raw_probe, obj, pending, 2),
+		(150, instance._queue_context_menu_raw_probe, latest_popup, pending, 1),
 	]
 
-	method(instance, obj, pending, 2, True)
+	method(instance, stale_popup, pending, 1, True)
 	assert instance.execute_context_menu_option is False
 
 
@@ -1225,6 +1431,21 @@ def test_context_menu_timeout_generation_prevents_stale_callbacks_from_closing_t
 	method(instance, new_pending, 2)
 	assert instance.execute_context_menu_option is False
 	assert sent == ["escape"]
+
+
+def test_context_menu_timeout_does_not_escape_after_raw_invoke():
+	method = _load_app_method("_expire_context_menu_option", {})
+	sent = []
+	pending = {"timeoutToken": 3, "rawInvoked": True}
+	instance = SimpleNamespace(
+		execute_context_menu_option=pending,
+		keys={"escape": SimpleNamespace(send=lambda: sent.append("escape"))},
+	)
+
+	method(instance, pending, 3)
+
+	assert instance.execute_context_menu_option is False
+	assert sent == []
 
 
 def test_context_menu_timeout_arming_invalidates_the_previous_timer():
