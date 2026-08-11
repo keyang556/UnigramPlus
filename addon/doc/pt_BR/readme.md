@@ -167,6 +167,7 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | Anunciar o nome e o status de uma conversa aberta |
+| **NVDA+Shift+V** | UnigramPlus | Anunciar os números de versão do Unigram e do UnigramPlus |
 | **ALT+M** | UnigramPlus | Abrir menu de navegação |
 | **ALT+Shift+P** | UnigramPlus | Abrir o perfil da conversa atual |
 | **ALT+L** | UnigramPlus | Enable automatic reading of new messages in the current chat |
@@ -177,6 +178,12 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 <!-- shortcut-table-end -->
 
 ## Lista de alterações:
+
+### Versão 5.6.6
+
+* Adicionado NVDA+Shift+V para anunciar as versões instaladas do Unigram e do UnigramPlus.
+* Removida a solução temporária para os botões em linha do Unigram 12.9 após o Unigram 12.9.1 corrigir os rótulos dos botões; isso evita travamentos da UIA em listas de bots, navegação por mensagens, reações e na lista de conversas.
+* Atualizadas todas as traduções e manuais para a versão 5.6.6.
 
 ### Versão 5.6.5
 

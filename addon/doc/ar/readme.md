@@ -170,6 +170,7 @@
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | الإعلان عن اسم وحالة الدردشة المفتوحة حاليًّا |
+| **NVDA+Shift+V** | UnigramPlus | الإعلان عن أرقام إصدار Unigram وUnigramPlus |
 | **ALT+M** | UnigramPlus | فتح قائمة التنقل |
 | **ALT+Shift+P** | UnigramPlus | فتح ملف تعريف الدردشة الحالية |
 | **ALT+L** | UnigramPlus | تمكين القراءة التلقائية للرسائل الجديدة في الدردشة الحالية |
@@ -180,6 +181,12 @@
 <!-- shortcut-table-end -->
 
 ## قائمة التغييرات:
+
+### الإصدار 5.6.6
+
+* تمت إضافة NVDA+Shift+V للإعلان عن إصداري Unigram وUnigramPlus المثبتين.
+* تمت إزالة الحل المؤقت لأزرار Unigram 12.9 المضمنة بعد أن أصلح Unigram 12.9.1 تسميات الأزرار؛ وهذا يمنع توقفات UIA في قوائم البوتات، والتنقل بين الرسائل، والتفاعلات، وقائمة الدردشات.
+* تم تحديث جميع الترجمات والأدلة للإصدار 5.6.6.
 
 ### الإصدار 5.6.5
 

@@ -7,7 +7,7 @@ import appModuleHandler
 import core
 from ui import message
 import api
-from controlTypes import OutputReason, Role, State
+from controlTypes import Role, State
 import scriptHandler
 from scriptHandler import script
 from NVDAObjects.UIA import UIA
@@ -444,170 +444,6 @@ def _get_raw_context_menu_focus(process_id=0):
 		if control_type_id is not None
 	)
 	return focused if control_type in popup_control_types else None
-
-
-def _clean_inline_button_text(text):
-	"""Remove icon-font glyphs while preserving an inline button's visible label."""
-	return "".join(
-		char
-		for char in str(text or "")
-		if not (
-			0xE000 <= ord(char) <= 0xF8FF
-			or 0xF0000 <= ord(char) <= 0xFFFFD
-			or 0x100000 <= ord(char) <= 0x10FFFD
-		)
-	).strip()
-
-
-def _is_inline_button_list_item(obj):
-	"""Recognize Unigram 12.9 inline buttons even when UIA reports generic classes."""
-	try:
-		if obj.role != Role.LISTITEM or not obj.isFocusable:
-			return False
-		parent = obj.parent
-		obj_class = str(getattr(obj, "UIAClassName", "") or "").casefold()
-		parent_class = str(getattr(parent, "UIAClassName", "") or "").casefold()
-		if obj_class == "replymarkupinlinebutton" or parent_class == "replymarkupinlinepanel":
-			return True
-		if str(getattr(obj, "name", "") or "").strip():
-			return False
-		# In 12.9 both controls can have generic class and AutomationId values, and
-		# Raw View inserts layout wrappers between the item and the element NVDA
-		# announces as a list. The stable boundary is an unnamed nested list item
-		# under a message row. Start at the parent so the message row itself is never
-		# mistaken for an inline button.
-		return _find_ancestor_by_automation_id(parent, ("Message_item",), max_depth=8) is not None
-	except Exception:
-		return False
-
-
-def _inline_button_descendant_text(obj):
-	"""Recover text that Unigram 12.9 deliberately hides in UIA's raw view."""
-	from time import perf_counter
-
-	# TODO: Remove this workaround when ReplyMarkupInlineButtonAutomationPeer
-	# exposes its content again. Generic.xaml marks every ContentPresenter child as
-	# AccessibilityView.Raw, while GetNameCore skips raw descendants. The new rich
-	# message buttons render their label in a RichTextBlock, but UIA flattens that
-	# peer and reports its class as TextBlock. Generic.xaml also appends a raw
-	# TextBlock for the button-type glyph, so the label is the first raw child and
-	# the glyph is the last. Follow the first-child path only: Unigram 12.9 returns
-	# E_POINTER from the raw walker's next-sibling API, while descendant
-	# FindFirst/FindAll blocks NVDA for seconds.
-	cache_attribute = "_unigramPlusInlineButtonName"
-	cached = getattr(obj, cache_attribute, None)
-	if cached:
-		return cached
-	text = ""
-	visited = []
-	timings = None
-	started = perf_counter()
-	try:
-		import UIAHandler
-
-		handler = UIAHandler.handler
-		walker = handler.baseTreeWalker
-		cache_request = handler.baseCacheRequest
-		element = obj.UIAElement
-		for _depth in range(10):
-			class_name = element.GetCachedPropertyValueEx(
-				UIAHandler.UIA.UIA_ClassNamePropertyId,
-				True,
-			)
-			automation_id = element.GetCachedPropertyValueEx(
-				UIAHandler.UIA.UIA_AutomationIdPropertyId,
-				True,
-			)
-			class_name = class_name if isinstance(class_name, str) else ""
-			automation_id = automation_id if isinstance(automation_id, str) else ""
-			visited.append(f"{class_name}:{automation_id}")
-			if class_name in ("TextBlock", "RichTextBlock"):
-				timings = {"locate": perf_counter() - started}
-				stage_started = perf_counter()
-				name = element.GetCachedPropertyValueEx(
-					UIAHandler.UIA.UIA_NamePropertyId,
-					True,
-				)
-				timings["name"] = perf_counter() - stage_started
-				text = name if isinstance(name, str) else ""
-				if not text:
-					stage_started = perf_counter()
-					pattern = element.GetCachedPattern(UIAHandler.UIA_TextPatternId)
-					pattern = pattern.QueryInterface(UIAHandler.IUIAutomationTextPattern)
-					timings["pattern"] = perf_counter() - stage_started
-					stage_started = perf_counter()
-					text_range = pattern.DocumentRange
-					timings["range"] = perf_counter() - stage_started
-					stage_started = perf_counter()
-					# A label is short. Asking XAML for all text with -1 can enter its
-					# expensive document-length path, which takes about three seconds in
-					# Unigram 12.9. Bound the provider request while leaving ample room
-					# for localized inline-button labels.
-					text = text_range.GetText(512) or ""
-					timings["text"] = perf_counter() - stage_started
-				text = _clean_inline_button_text(text)
-				if text:
-					break
-			element = walker.GetFirstChildElementBuildCache(element, cache_request)
-			# comtypes can wrap a null result in a false pointer object rather than
-			# returning Python's None. Accessing a property on it raises ValueError.
-			if not element:
-				break
-	except Exception:
-		log.debug("Could not read cached inline-button text; raw path: %s", visited, exc_info=True)
-	if timings is not None:
-		log.debug(
-			"Inline-button UIA timing: locate=%.3fs, name=%.3fs, pattern=%.3fs, "
-			"range=%.3fs, text=%.3fs, total=%.3fs",
-			timings.get("locate", 0.0),
-			timings.get("name", 0.0),
-			timings.get("pattern", 0.0),
-			timings.get("range", 0.0),
-			timings.get("text", 0.0),
-			perf_counter() - started,
-		)
-	text = _clean_inline_button_text(text)
-	if not text:
-		log.debug("Cached inline-button text was empty; raw path: %s", visited)
-	# Do not retain a negative result. XAML can raise the focus event before the
-	# RichTextBlock has finished materializing, and the same NVDAObject must then
-	# be allowed to retry when its name is requested for speech.
-	if text:
-		try:
-			setattr(obj, cache_attribute, text)
-		except Exception:
-			pass
-	return text
-
-
-def _queue_inline_button_text_read(obj, callback, is_current=None):
-	"""Read a slow XAML Text Pattern without blocking NVDA's main event loop."""
-	try:
-		import UIAHandler
-
-		mta_queue = UIAHandler.handler.MTAThreadQueue
-	except Exception:
-		log.debug("NVDA's UIA MTA queue is unavailable for an inline button", exc_info=True)
-		return False
-
-	def read_on_mta_thread():
-		# Direction keys can move across several buttons while an older provider
-		# call is still finishing. Drop queued stale work before it reaches XAML.
-		if is_current is not None and not is_current():
-			return
-		try:
-			text = _inline_button_descendant_text(obj)
-		except Exception:
-			log.debug("Could not read inline-button text on NVDA's UIA MTA thread", exc_info=True)
-			text = ""
-		queueHandler.queueFunction(queueHandler.eventQueue, callback, text)
-
-	try:
-		mta_queue.put_nowait(read_on_mta_thread)
-		return True
-	except Exception:
-		log.debug("Could not queue inline-button text on NVDA's UIA MTA thread", exc_info=True)
-		return False
 
 
 def _repair_saved_messages_topic_name(obj):
@@ -1133,20 +969,6 @@ class Audio_and_video_button:
 	def initOverlayClass(self):
 		self.bindGesture("kb:Enter", "enter")
 		# self.bindGesture("kb:space", "enter")
-
-
-class ReplyMarkupInlineButtonListItem:
-	"""Temporary name repair for Unigram 12.9 inline-keyboard list items."""
-
-	def _get_name(self):
-		# Do not call UIA._get_name here. It requests the current Name property,
-		# whose ReplyMarkupInlineButtonAutomationPeer.GetNameCore skips the raw
-		# label and returns empty. The bounded raw-cache path takes only a few
-		# milliseconds on Unigram 12.9 and supplies the name during normal focus.
-		# The app module retains an asynchronous fallback for the brief interval
-		# where XAML has not materialized the raw TextBlock yet.
-		name = getattr(self, "_unigramPlusInlineButtonName", "")
-		return name or _inline_button_descendant_text(self)
 
 
 class Message_list_item(ListItem):
@@ -3047,29 +2869,6 @@ class AppModule(appModuleHandler.AppModule):
 		nextHandler()
 
 	# Focus change tracking
-	def _complete_inline_button_name(self, obj, generation, text):
-		"""Announce the latest asynchronously recovered inline-button label."""
-		if generation != getattr(self, "_inlineButtonFocusGeneration", 0):
-			return
-		try:
-			focus = api.getFocusObject()
-			if focus is not obj or getattr(focus, "appModule", None) is not self:
-				return
-		except Exception:
-			return
-		text = _clean_inline_button_text(text)
-		if text:
-			try:
-				setattr(obj, "_unigramPlusInlineButtonName", text)
-			except Exception:
-				pass
-			# NVDA may have cached the empty result for this core cycle. Override the
-			# public property so the completion announcement sees the repaired label.
-			obj.name = text
-		log.debug("Asynchronous inline-button focus fallback returned %r", text)
-		speech.cancelSpeech()
-		speech.speakObject(obj, reason=OutputReason.FOCUS)
-
 	def event_gainFocus(self, obj, nextHandler):
 		if is_recording_button(obj):
 			self._voiceRecordingButton = obj
@@ -3083,8 +2882,6 @@ class AppModule(appModuleHandler.AppModule):
 					pass
 				nextHandler()
 				return
-		self._inlineButtonFocusGeneration = getattr(self, "_inlineButtonFocusGeneration", 0) + 1
-		inline_generation = self._inlineButtonFocusGeneration
 		self._remember_messages_button(obj)
 		is_main_window = self._classify_window_surface(obj) == "main"
 		if is_main_window and conf.get("automatically announce new messages") and Chat_update.pouse:
@@ -3131,24 +2928,6 @@ class AppModule(appModuleHandler.AppModule):
 			# chat-only branch never saw them.
 			if _SAVED_MESSAGES_TOPIC_TYPE_NAME in str(obj.name or ""):
 				obj.name = _repair_saved_messages_topic_name(obj)
-			elif not str(obj.name or "").strip() and _is_inline_button_list_item(obj):
-				inline_name = getattr(obj, "_unigramPlusInlineButtonName", "")
-				if not inline_name and _queue_inline_button_text_read(
-					obj,
-					lambda text: self._complete_inline_button_name(
-						obj,
-						inline_generation,
-						text,
-					),
-					lambda: inline_generation == getattr(self, "_inlineButtonFocusGeneration", 0),
-				):
-					# Suppress the empty "list item" announcement. The completion callback
-					# speaks this object only if it is still the latest Unigram focus.
-					return
-				elif not inline_name:
-					# Older NVDA releases without an MTA queue retain the working, albeit
-					# slower, synchronous compatibility path.
-					_inline_button_descendant_text(obj)
 			if self.is_message_object(obj):
 				self.saved_items.save("last focus object", obj)
 				obj.name = self.action_message_focus(obj)
@@ -3284,11 +3063,6 @@ class AppModule(appModuleHandler.AppModule):
 			if is_recording_button(obj):
 				self._voiceRecordingButton = obj
 			if obj.role == Role.LISTITEM and obj.isFocusable:
-				if _is_inline_button_list_item(obj):
-					# TODO: Remove with _inline_button_descendant_text after Unigram
-					# fixes ReplyMarkupInlineButtonAutomationPeer.GetNameCore.
-					clsList.insert(0, ReplyMarkupInlineButtonListItem)
-					return
 				parent = obj.parent
 				if parent.UIAAutomationId == "ChatFolders":
 					self.tabs_folder_element = parent
@@ -3967,6 +3741,37 @@ class AppModule(appModuleHandler.AppModule):
 		else:
 			message(_("Message headers will be announced before the message content"))
 		return enabled
+
+	# Translators: Input gesture description for NVDA+Shift+V in Unigram.
+	@script(
+		description=_("Announce the Unigram and UnigramPlus version numbers"),
+		gesture="kb:NVDA+shift+V",
+	)
+	def script_announceVersions(self, gesture):
+		try:
+			cached_version = getattr(self, "app_version", None)
+			unigram_version = str(cached_version).strip() if cached_version is not None else ""
+		except Exception:
+			unigram_version = ""
+		if not unigram_version:
+			try:
+				product_version = self.productVersion
+				unigram_version = str(product_version).strip() if product_version is not None else ""
+			except Exception:
+				unigram_version = ""
+		try:
+			manifest_version = addonHandler.getCodeAddon().manifest["version"]
+			addon_version = str(manifest_version).strip() if manifest_version is not None else ""
+		except Exception:
+			addon_version = ""
+		# Translators: Reported when NVDA+Shift+V is pressed in Unigram. Keep the
+		# content inside braces unchanged; it is replaced with each installed version.
+		message(
+			_("Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}.").format(
+				unigramVersion=unigram_version or "-",
+				addonVersion=addon_version or "-",
+			)
+		)
 	
 	@script(description=_("Show a list of all UnigramPlus shortcuts"), gesture="kb:ALT+H")
 	def script_help(self, gesture):

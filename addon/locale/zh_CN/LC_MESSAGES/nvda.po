@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.5\n"
+"Project-Id-Version: UnigramPlus 5.6.6\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2026-05-24 00:00+0800\n"
 "PO-Revision-Date: 2026-05-24 00:00+0800\n"
@@ -1021,6 +1021,21 @@ msgstr ""
 "- 修复了当前 Unigram 版本中按 Enter 回复消息以及按 Alt+Shift+R 将聊天标记为已读的问题。\n"
 "- 移除了 Web 视图模式及其设置；Alt+C 现在始终在原始 wx 弹出窗口中打开消息文本。\n"
 "- 已将所有翻译和说明文档更新至版本 5.6.5。"
+
+msgid "Announce the Unigram and UnigramPlus version numbers"
+msgstr "读出 Unigram 和 UnigramPlus 版本号"
+
+msgid "Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
+msgstr "Unigram 版本：{unigramVersion}。UnigramPlus 版本：{addonVersion}。"
+
+msgid ""
+"- Added NVDA+Shift+V to announce the installed Unigram and UnigramPlus versions.\n"
+"- Removed the temporary Unigram 12.9 inline-button workaround after Unigram 12.9.1 fixed button labels; this avoids UIA stalls in bot lists, message navigation, reactions, and the chat list.\n"
+"- Updated all translations and manuals for version 5.6.6."
+msgstr ""
+"- 新增 NVDA+Shift+V，用于读出已安装的 Unigram 和 UnigramPlus 版本。\n"
+"- Unigram 12.9.1 已修复按钮标签，因此移除了针对 Unigram 12.9 内联按钮的临时解决方案；这可避免机器人列表、消息导航、回应和聊天列表中的 UIA 卡顿。\n"
+"- 已更新 5.6.6 版的所有翻译和手册。"
 
 msgid ""
 "- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"

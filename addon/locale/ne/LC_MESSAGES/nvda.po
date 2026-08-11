@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.5\n"
+"Project-Id-Version: UnigramPlus 5.6.6\n"
 "POT-Creation-Date: 2022-10-07 22:33+0300\n"
 "PO-Revision-Date: 2022-10-20 12:30+0300\n"
 "Last-Translator: samrat kc <samrat.kc7@gmail.com>\n"
@@ -948,6 +948,21 @@ msgstr ""
 "- हालका Unigram संस्करणहरूमा सन्देशको जवाफ दिन Enter र च्याटलाई पढिएको चिन्ह लगाउन Alt+Shift+R सुधार गरियो।\n"
 "- वेब दृश्य मोड र यसको सेटिङ हटाइयो; Alt+C ले अब सधैं मूल wx पपअप सञ्झ्यालमा सन्देश पाठ खोल्छ।\n"
 "- संस्करण 5.6.5 का लागि सबै अनुवाद र पुस्तिकाहरू अद्यावधिक गरियो।"
+
+msgid "Announce the Unigram and UnigramPlus version numbers"
+msgstr "Unigram र UnigramPlus का संस्करण नम्बरहरू घोषणा गर्नुहोस्"
+
+msgid "Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
+msgstr "Unigram संस्करण: {unigramVersion}. UnigramPlus संस्करण: {addonVersion}."
+
+msgid ""
+"- Added NVDA+Shift+V to announce the installed Unigram and UnigramPlus versions.\n"
+"- Removed the temporary Unigram 12.9 inline-button workaround after Unigram 12.9.1 fixed button labels; this avoids UIA stalls in bot lists, message navigation, reactions, and the chat list.\n"
+"- Updated all translations and manuals for version 5.6.6."
+msgstr ""
+"- स्थापित Unigram र UnigramPlus संस्करणहरू घोषणा गर्न NVDA+Shift+V थपियो।\n"
+"- Unigram 12.9.1 ले बटनका लेबलहरू सच्याएपछि Unigram 12.9 को अस्थायी इनलाइन-बटन समाधान हटाइयो; यसले बोट सूची, सन्देश नेभिगेसन, प्रतिक्रिया र च्याट सूचीमा UIA अड्किनबाट जोगाउँछ।\n"
+"- संस्करण 5.6.6 का लागि सबै अनुवाद र पुस्तिकाहरू अद्यावधिक गरियो।"
 
 msgid ""
 "- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"

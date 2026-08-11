@@ -172,6 +172,7 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će neko sigurno po
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | Najavi ime i status otvorenog ćaskanja |
+| **NVDA+Shift+V** | UnigramPlus | Izgovori brojeve verzija programa Unigram i dodatka UnigramPlus |
 | **ALT+M** | UnigramPlus | Otvori meni za navigaciju |
 | **ALT+Shift+P** | UnigramPlus | Otvori trenutni profil za ćaskanje |
 | **ALT+L** | UnigramPlus | Omogući automatsko čitanje novih poruka u trenutnom ćaskanju |
@@ -452,6 +453,12 @@ This update adds a combination that press "Instant View" button in the message, 
 Added Turkish localization
 
 
+
+### Verzija 5.6.6
+
+* Dodat je NVDA+Shift+V za izgovaranje instaliranih verzija programa Unigram i dodatka UnigramPlus.
+* Uklonjeno je privremeno zaobilazno rešenje za umetnuta dugmad u Unigramu 12.9 nakon što je Unigram 12.9.1 ispravio oznake dugmadi; time se izbegavaju zastoji UIA-e u listama botova, kretanju kroz poruke, reakcijama i listi ćaskanja.
+* Ažurirani su svi prevodi i priručnici za verziju 5.6.6.
 
 ### Verzija 5.6.5
 

@@ -168,6 +168,7 @@
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | نام و وضعیت گفتوگوی باز شده را بگو |
+| **NVDA+Shift+V** | UnigramPlus | اعلام شماره نسخه‌های Unigram و UnigramPlus |
 | **ALT+M** | UnigramPlus | باز کردن فهرست مسیریابی. |
 | **ALT+Shift+P** | UnigramPlus | باز کن پروفایل گفتوگویی را که باز است. |
 | **ALT+L** | UnigramPlus | Enable automatic reading of new messages in the current chat |
@@ -394,6 +395,12 @@
 بومی سازی ترکی اضافه شد.
 
 
+
+### نسخه 5.6.6
+
+* کلید NVDA+Shift+V برای اعلام نسخه‌های نصب‌شدهٔ Unigram و UnigramPlus افزوده شد.
+* پس از اصلاح برچسب دکمه‌ها در Unigram 12.9.1، راه‌حل موقت دکمه‌های درون‌خطی Unigram 12.9 حذف شد؛ این کار از توقف UIA در فهرست ربات‌ها، پیمایش پیام‌ها، واکنش‌ها و فهرست گفتگوها جلوگیری می‌کند.
+* همهٔ ترجمه‌ها و راهنماها برای نسخهٔ 5.6.6 به‌روز شدند.
 
 ### نسخه 5.6.5
 

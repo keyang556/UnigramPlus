@@ -167,6 +167,7 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | Annoncer le nom et l'état d'un échange ouvert |
+| **NVDA+Maj+V** | UnigramPlus | Annoncer les numéros de version d’Unigram et d’UnigramPlus |
 | **ALT+M** | UnigramPlus | Ouvrir le menu de navigation |
 | **ALT+Shift+P** | UnigramPlus | Ouvrir le profil de l'échange en cours |
 | **ALT+L** | UnigramPlus | Activer la lecture automatique des nouveaux messages dans l'échange courant |
@@ -177,6 +178,12 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 <!-- shortcut-table-end -->
 
 ##Liste des changements :
+
+### Version 5.6.6
+
+* Ajout de NVDA+Maj+V pour annoncer les versions installées d’Unigram et d’UnigramPlus.
+* Suppression du correctif temporaire des boutons intégrés d’Unigram 12.9 après la correction de leurs libellés dans Unigram 12.9.1 ; cela évite les blocages UIA dans les listes de bots, la navigation entre les messages, les réactions et la liste des discussions.
+* Mise à jour de toutes les traductions et de tous les manuels pour la version 5.6.6.
 
 ### Version 5.6.5
 

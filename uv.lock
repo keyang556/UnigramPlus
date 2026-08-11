@@ -22,7 +22,7 @@ wheels = [
 
 [[package]]
 name = "unigramplus"
-version = "5.6.5"
+version = "5.6.6"
 source = { virtual = "." }
 dependencies = [
     { name = "markdown" },

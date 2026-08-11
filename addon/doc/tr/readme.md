@@ -166,6 +166,7 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | Açık bir sohbetin adını ve durumunu duyur |
+| **NVDA+Shift+V** | UnigramPlus | Unigram ve UnigramPlus sürüm numaralarını duyur |
 | **ALT+M** | UnigramPlus | Gezinti menüsünü aç |
 | **ALT+Shift+P** | UnigramPlus | Mevcut sohbetin profilini aç |
 | **ALT+L** | UnigramPlus | Mevcut sohbette yeni mesajların otomatik olarak okunmasını etkinleştir |
@@ -176,6 +177,12 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 <!-- shortcut-table-end -->
 
 ##Değişiklik listesi:
+
+### Sürüm 5.6.6
+
+* Yüklü Unigram ve UnigramPlus sürümlerini duyurmak için NVDA+Shift+V eklendi.
+* Unigram 12.9.1 düğme etiketlerini düzelttikten sonra Unigram 12.9 için geçici satır içi düğme çözümü kaldırıldı; böylece bot listelerinde, ileti ve tepki gezintisinde ve sohbet listesinde UIA takılmaları önlenir.
+* Tüm çeviriler ve kılavuzlar 5.6.6 sürümü için güncellendi.
 
 ### Sürüm 5.6.5
 

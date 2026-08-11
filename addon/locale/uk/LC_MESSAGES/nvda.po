@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.5\n"
+"Project-Id-Version: UnigramPlus 5.6.6\n"
 "POT-Creation-Date: 2023-12-15 11:58+0200\n"
 "PO-Revision-Date: 2023-12-15 12:00+0200\n"
 "Last-Translator: \n"
@@ -1015,6 +1015,21 @@ msgstr ""
 "- Виправлено Enter для відповіді на повідомлення та Alt+Shift+R для позначення чатів як прочитаних у поточних версіях Unigram.\n"
 "- Видалено режим веб-подання та його налаштування; тепер Alt+C завжди відкриває текст повідомлення в початковому спливному вікні wx.\n"
 "- Оновлено всі переклади та посібники для версії 5.6.5."
+
+msgid "Announce the Unigram and UnigramPlus version numbers"
+msgstr "Повідомити номери версій Unigram і UnigramPlus"
+
+msgid "Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
+msgstr "Версія Unigram: {unigramVersion}. Версія UnigramPlus: {addonVersion}."
+
+msgid ""
+"- Added NVDA+Shift+V to announce the installed Unigram and UnigramPlus versions.\n"
+"- Removed the temporary Unigram 12.9 inline-button workaround after Unigram 12.9.1 fixed button labels; this avoids UIA stalls in bot lists, message navigation, reactions, and the chat list.\n"
+"- Updated all translations and manuals for version 5.6.6."
+msgstr ""
+"- Додано NVDA+Shift+V для повідомлення встановлених версій Unigram і UnigramPlus.\n"
+"- Видалено тимчасове рішення для вбудованих кнопок Unigram 12.9 після виправлення їхніх міток у Unigram 12.9.1; це запобігає зависанням UIA у списках ботів, під час навігації повідомленнями й реакціями та у списку чатів.\n"
+"- Оновлено всі переклади й посібники для версії 5.6.6."
 
 msgid ""
 "- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"

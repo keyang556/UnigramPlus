@@ -2,7 +2,7 @@
 def _(t): return t
 
 value = _(
-	"- Fixed Enter for replying to messages and Alt+Shift+R for marking chats as read in current Unigram versions.\n"
-	"- Removed the web view mode and its setting; Alt+C now always opens message text in the original wx popup window.\n"
-	"- Updated all translations and manuals for version 5.6.5."
+	"- Added NVDA+Shift+V to announce the installed Unigram and UnigramPlus versions.\n"
+	"- Removed the temporary Unigram 12.9 inline-button workaround after Unigram 12.9.1 fixed button labels; this avoids UIA stalls in bot lists, message navigation, reactions, and the chat list.\n"
+	"- Updated all translations and manuals for version 5.6.6."
 )

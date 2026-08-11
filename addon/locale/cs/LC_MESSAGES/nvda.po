@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.5\n"
+"Project-Id-Version: UnigramPlus 5.6.6\n"
 "POT-Creation-Date: 2022-06-30 15:13+0300\n"
 "PO-Revision-Date: 2022-06-30 15:13+0300\n"
 "Last-Translator: Petr Řehák\n"
@@ -831,6 +831,21 @@ msgstr ""
 "- Opraven Enter pro odpovídání na zprávy a Alt+Shift+R pro označování chatů jako přečtených v aktuálních verzích Unigramu.\n"
 "- Režim webového zobrazení a jeho nastavení byly odstraněny; Alt+C nyní vždy otevře text zprávy v původním vyskakovacím okně wx.\n"
 "- Aktualizovány všechny překlady a příručky pro verzi 5.6.5."
+
+msgid "Announce the Unigram and UnigramPlus version numbers"
+msgstr "Oznámit čísla verzí aplikace Unigram a doplňku UnigramPlus"
+
+msgid "Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
+msgstr "Verze aplikace Unigram: {unigramVersion}. Verze doplňku UnigramPlus: {addonVersion}."
+
+msgid ""
+"- Added NVDA+Shift+V to announce the installed Unigram and UnigramPlus versions.\n"
+"- Removed the temporary Unigram 12.9 inline-button workaround after Unigram 12.9.1 fixed button labels; this avoids UIA stalls in bot lists, message navigation, reactions, and the chat list.\n"
+"- Updated all translations and manuals for version 5.6.6."
+msgstr ""
+"- Přidána klávesová zkratka NVDA+Shift+V pro oznámení nainstalovaných verzí aplikace Unigram a doplňku UnigramPlus.\n"
+"- Po opravě popisků tlačítek v aplikaci Unigram 12.9.1 bylo odstraněno dočasné řešení pro vložená tlačítka z verze 12.9; tím se předchází zasekávání UIA v seznamech botů, při procházení zpráv, reakcí a seznamu chatů.\n"
+"- Aktualizovány všechny překlady a příručky pro verzi 5.6.6."
 
 msgid ""
 "- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"

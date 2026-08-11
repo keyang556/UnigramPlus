@@ -167,6 +167,7 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 | **Ctrl+Q** | Unigram | 关闭 Unigram（仅限主窗口） |
 | **Ctrl+Shift+Y** | Unigram | 更改状态 |
 | **ALT+T** | UnigramPlus | 读出已打开聊天的名称和状态 |
+| **NVDA+Shift+V** | UnigramPlus | 读出 Unigram 和 UnigramPlus 版本号 |
 | **ALT+M** | UnigramPlus | 打开导航菜单 |
 | **ALT+Shift+P** | UnigramPlus | 打开当前聊天的个人资料 |
 | **ALT+L** | UnigramPlus | 启用当前聊天中新消息的自动读出 |
@@ -177,6 +178,12 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 <!-- shortcut-table-end -->
 
 ## 版本变更
+
+### 版本 5.6.6
+
+* 新增 NVDA+Shift+V，用于读出已安装的 Unigram 和 UnigramPlus 版本。
+* Unigram 12.9.1 已修复按钮标签，因此移除了针对 Unigram 12.9 内联按钮的临时解决方案；这可避免机器人列表、消息导航、回应和聊天列表中的 UIA 卡顿。
+* 已更新 5.6.6 版的所有翻译和手册。
 
 ### 版本 5.6.5
 

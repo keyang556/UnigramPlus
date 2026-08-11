@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.5\n"
+"Project-Id-Version: UnigramPlus 5.6.6\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 00:48+0300\n"
@@ -1117,6 +1117,21 @@ msgstr ""
 "- Güncel Unigram sürümlerinde iletileri yanıtlamak için Enter ve sohbetleri okundu olarak işaretlemek için Alt+Shift+R düzeltildi.\n"
 "- Web görünümü modu ve ayarı kaldırıldı; Alt+C artık ileti metnini her zaman özgün wx açılır penceresinde açar.\n"
 "- Sürüm 5.6.5 için tüm çeviriler ve kılavuzlar güncellendi."
+
+msgid "Announce the Unigram and UnigramPlus version numbers"
+msgstr "Unigram ve UnigramPlus sürüm numaralarını duyur"
+
+msgid "Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
+msgstr "Unigram sürümü: {unigramVersion}. UnigramPlus sürümü: {addonVersion}."
+
+msgid ""
+"- Added NVDA+Shift+V to announce the installed Unigram and UnigramPlus versions.\n"
+"- Removed the temporary Unigram 12.9 inline-button workaround after Unigram 12.9.1 fixed button labels; this avoids UIA stalls in bot lists, message navigation, reactions, and the chat list.\n"
+"- Updated all translations and manuals for version 5.6.6."
+msgstr ""
+"- Yüklü Unigram ve UnigramPlus sürümlerini duyurmak için NVDA+Shift+V eklendi.\n"
+"- Unigram 12.9.1 düğme etiketlerini düzelttikten sonra Unigram 12.9 için geçici satır içi düğme çözümü kaldırıldı; böylece bot listelerinde, ileti ve tepki gezintisinde ve sohbet listesinde UIA takılmaları önlenir.\n"
+"- Tüm çeviriler ve kılavuzlar 5.6.6 sürümü için güncellendi."
 
 msgid ""
 "- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"

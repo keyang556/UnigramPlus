@@ -169,6 +169,7 @@ And remember that everyone who read this line thought that someone will definite
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | Announce the name and status of an open chat |
+| **NVDA+Shift+V** | UnigramPlus | Announce the Unigram and UnigramPlus version numbers |
 | **ALT+M** | UnigramPlus | Open navigation menu |
 | **ALT+Shift+P** | UnigramPlus | Open current chat profile |
 | **ALT+L** | UnigramPlus | Enable automatic reading of new messages in the current chat |
@@ -179,6 +180,12 @@ And remember that everyone who read this line thought that someone will definite
 <!-- shortcut-table-end -->
 
 ## List of changes:
+
+### Version 5.6.6
+
+* Added NVDA+Shift+V to announce the installed Unigram and UnigramPlus versions.
+* Removed the temporary Unigram 12.9 inline-button workaround after Unigram 12.9.1 fixed button labels; this avoids UIA stalls in bot lists, message navigation, reactions, and the chat list.
+* Updated all translations and manuals for version 5.6.6.
 
 ### Version 5.6.5
 

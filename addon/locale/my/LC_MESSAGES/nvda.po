@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.5\n"
+"Project-Id-Version: UnigramPlus 5.6.6\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2026-07-13 20:21+0630\n"
 "PO-Revision-Date: 2026-07-13 21:01+0630\n"
@@ -1004,6 +1004,21 @@ msgstr ""
 "- လက်ရှိ Unigram ဗားရှင်းများတွင် မက်ဆေ့ချ်များကို ပြန်ကြားရန် Enter နှင့် ချတ်များကို ဖတ်ပြီးအဖြစ် မှတ်သားရန် Alt+Shift+R ကို ပြင်ဆင်ခဲ့သည်။\n"
 "- Web view mode နှင့် ၎င်း၏ setting ကို ဖယ်ရှားခဲ့သည်; Alt+C သည် ယခု မက်ဆေ့ချ်စာသားကို မူရင်း wx popup window တွင် အမြဲဖွင့်သည်။\n"
 "- ဗားရှင်း 5.6.5 အတွက် ဘာသာပြန်များနှင့် လမ်းညွှန်များအားလုံးကို အပ်ဒိတ်လုပ်ခဲ့သည်။"
+
+msgid "Announce the Unigram and UnigramPlus version numbers"
+msgstr "Unigram နှင့် UnigramPlus ဗားရှင်းနံပါတ်များကို ကြေညာရန်"
+
+msgid "Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
+msgstr "Unigram ဗားရှင်း: {unigramVersion}. UnigramPlus ဗားရှင်း: {addonVersion}."
+
+msgid ""
+"- Added NVDA+Shift+V to announce the installed Unigram and UnigramPlus versions.\n"
+"- Removed the temporary Unigram 12.9 inline-button workaround after Unigram 12.9.1 fixed button labels; this avoids UIA stalls in bot lists, message navigation, reactions, and the chat list.\n"
+"- Updated all translations and manuals for version 5.6.6."
+msgstr ""
+"- ထည့်သွင်းထားသော Unigram နှင့် UnigramPlus ဗားရှင်းများကို ကြေညာရန် NVDA+Shift+V ကို ထည့်သွင်းခဲ့သည်။\n"
+"- Unigram 12.9.1 တွင် ခလုတ်အညွှန်းများကို ပြင်ဆင်ပြီးနောက် ယာယီ Unigram 12.9 inline ခလုတ် workaround ကို ဖယ်ရှားခဲ့သည်။ ထို့ကြောင့် bot စာရင်းများ၊ မက်ဆေ့ချ်လမ်းညွှန်ခြင်း၊ reaction များနှင့် chat စာရင်းရှိ UIA တုံ့ဆိုင်းမှုများကို ရှောင်ရှားနိုင်သည်။\n"
+"- ဗားရှင်း 5.6.6 အတွက် ဘာသာပြန်များနှင့် လက်စွဲအားလုံးကို မွမ်းမံခဲ့သည်။"
 
 msgid ""
 "- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"

@@ -170,6 +170,7 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | Najavljuje naziv i status otvorenog razgovora |
+| **NVDA+Shift+V** | UnigramPlus | Izgovori brojeve verzija programa Unigram i dodatka UnigramPlus |
 | **ALT+M** | UnigramPlus | Otvara navigacijski izbornik |
 | **ALT+Shift+P** | UnigramPlus | Otvara profil trenutnog razgovora |
 | **ALT+L** | UnigramPlus | Omogućava automatsko čitanje novih poruka u trenutnom razgovoru |
@@ -180,6 +181,12 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 <!-- shortcut-table-end -->
 
 ##Popis promjena:
+
+### Verzija 5.6.6
+
+* Dodan je NVDA+Shift+V za izgovaranje instaliranih verzija programa Unigram i dodatka UnigramPlus.
+* Uklonjeno je privremeno zaobilazno rješenje za umetnute gumbe u Unigramu 12.9 nakon što je Unigram 12.9.1 ispravio oznake gumba; time se izbjegavaju zastoji UIA-e u popisima botova, kretanju porukama, reakcijama i popisu razgovora.
+* Ažurirani su svi prijevodi i priručnici za verziju 5.6.6.
 
 ### Verzija 5.6.5
 

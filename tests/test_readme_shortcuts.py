@@ -98,11 +98,15 @@ def test_all_readmes_have_complete_integrated_shortcut_tables():
 		assert text.count("<!-- shortcut-table-end -->") == 1, readme
 		assert text.count("|---|---|---|") == 9, readme
 		assert text.count("| Unigram |") == 44, readme
-		assert text.count("| UnigramPlus |") == 52, readme
+		assert text.count("| UnigramPlus |") == 53, readme
 		assert "| **Ctrl+Shift+.** | Unigram |" in text, readme
 		assert "| **Ctrl+U** | Unigram |" in text, readme
 		assert "| **ALT+End** |" not in text, readme
-		assert "5.6.5" in text, readme
+		assert "5.6.6" in text, readme
+		assert (
+			"| **NVDA+Shift+V** | UnigramPlus |" in text
+			or "| **NVDA+Maj+V** | UnigramPlus |" in text
+		), readme
 		if reference_unigram_shortcuts is None:
 			reference_unigram_shortcuts = unigram_shortcuts
 		else:

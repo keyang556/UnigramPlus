@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.5\n"
+"Project-Id-Version: UnigramPlus 5.6.6\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 06:02+0100\n"
@@ -1092,6 +1092,21 @@ msgstr ""
 "- Ispravljeni su Enter za odgovaranje na poruke i Alt+Shift+R za označavanje ćaskanja kao pročitanih u trenutnim verzijama Unigrama.\n"
 "- Uklonjeni su režim veb prikaza i njegovo podešavanje; Alt+C sada uvek otvara tekst poruke u originalnom wx iskačućem prozoru.\n"
 "- Ažurirani su svi prevodi i priručnici za verziju 5.6.5."
+
+msgid "Announce the Unigram and UnigramPlus version numbers"
+msgstr "Izgovori brojeve verzija programa Unigram i dodatka UnigramPlus"
+
+msgid "Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
+msgstr "Verzija programa Unigram: {unigramVersion}. Verzija dodatka UnigramPlus: {addonVersion}."
+
+msgid ""
+"- Added NVDA+Shift+V to announce the installed Unigram and UnigramPlus versions.\n"
+"- Removed the temporary Unigram 12.9 inline-button workaround after Unigram 12.9.1 fixed button labels; this avoids UIA stalls in bot lists, message navigation, reactions, and the chat list.\n"
+"- Updated all translations and manuals for version 5.6.6."
+msgstr ""
+"- Dodat je NVDA+Shift+V za izgovaranje instaliranih verzija programa Unigram i dodatka UnigramPlus.\n"
+"- Uklonjeno je privremeno zaobilazno rešenje za umetnuta dugmad u Unigramu 12.9 nakon što je Unigram 12.9.1 ispravio oznake dugmadi; time se izbegavaju zastoji UIA-e u listama botova, kretanju kroz poruke, reakcijama i listi ćaskanja.\n"
+"- Ažurirani su svi prevodi i priručnici za verziju 5.6.6."
 
 msgid ""
 "- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"

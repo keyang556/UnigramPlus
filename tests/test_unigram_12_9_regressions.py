@@ -521,204 +521,21 @@ def test_context_menu_delete_keeps_constant_time_checkbox_template_path():
 	assert instance.isDelete["state"] == 2
 
 
-def test_unigram_12_9_inline_button_label_is_recovered_without_the_icon_glyph(monkeypatch):
-	namespace = _load_module_members(
-		{"_clean_inline_button_text", "_inline_button_descendant_text"},
-		{},
-	)
-	requested_lengths = []
-
-	class TextPattern:
-		DocumentRange = SimpleNamespace(GetText=lambda length: "\ue9b7 Open website")
-
-		def QueryInterface(self, interface):
-			assert interface == "textPatternInterface"
-			return self
-
-	class RawElement:
-		def __init__(self, class_name="", automation_id="", children=None, text=""):
-			self.class_name = class_name
-			self.automation_id = automation_id
-			self.children = children or []
-			self.text = text
-
-		def GetCachedPattern(self, pattern_id):
-			assert pattern_id == "textPattern"
-			pattern = TextPattern()
-			pattern.DocumentRange = SimpleNamespace(
-				GetText=lambda length: requested_lengths.append(length) or self.text,
-			)
-			return pattern
-
-		def GetCachedPropertyValueEx(self, property_id, ignore_default):
-			assert ignore_default is True
-			return {
-				"class": self.class_name,
-				"automationId": self.automation_id,
-				"name": "",
-			}.get(property_id, "")
-
-	class RawWalker:
-		@staticmethod
-		def GetFirstChildElementBuildCache(element, cache_request):
-			assert cache_request == "baseCache"
-			return element.children[0] if element.children else None
-
-	# Raw UIA flattens the template peers. The first TextBlock is the rich label;
-	# Generic.xaml's final TextBlock is only the button-type glyph.
-	label = RawElement("TextBlock", "TextBlock", text="\ue9b7 Open website")
-	type_glyph = RawElement("TextBlock", text="\ue9b7")
-	button = RawElement("ReplyMarkupInlineButton", children=[label, type_glyph])
-	monkeypatch.setitem(
-		sys.modules,
-		"UIAHandler",
-		SimpleNamespace(
-			handler=SimpleNamespace(
-				baseTreeWalker=RawWalker(),
-				baseCacheRequest="baseCache",
-			),
-			UIA=SimpleNamespace(
-				UIA_ClassNamePropertyId="class",
-				UIA_AutomationIdPropertyId="automationId",
-				UIA_NamePropertyId="name",
-			),
-			UIA_TextPatternId="textPattern",
-			IUIAutomationTextPattern="textPatternInterface",
-		),
-	)
-	button_obj = SimpleNamespace(UIAElement=button)
-	namespace["log"] = SimpleNamespace(debug=lambda *args, **kwargs: None)
-
-	assert namespace["_inline_button_descendant_text"](button_obj) == "Open website"
-	assert namespace["_inline_button_descendant_text"](button_obj) == "Open website"
-	assert requested_lengths == [512]
-	assert namespace["_clean_inline_button_text"]("\ue9b7 Open website") == "Open website"
-	helper_source = ast.get_source_segment(
-		SOURCE_PATH.read_text(encoding="utf-8"),
-		next(
-			node
-			for node in ast.parse(SOURCE_PATH.read_text(encoding="utf-8")).body
-			if isinstance(node, ast.FunctionDef) and node.name == "_inline_button_descendant_text"
-		),
-	)
-	assert ".findFirst(" not in helper_source
-	assert ".findAll(" not in helper_source
-	assert "GetNextSiblingElementBuildCache" not in helper_source
-	assert "GetFirstChildElementBuildCache" in helper_source
-	assert "GetLastChildElementBuildCache" not in helper_source
-	assert "GetCachedPattern" in helper_source
-	assert "GetText(-1)" not in helper_source
-
-
-def test_inline_button_text_pattern_read_is_queued_off_the_main_thread(monkeypatch):
-	jobs = []
-	main_queue_calls = []
-	monkeypatch.setitem(
-		sys.modules,
-		"UIAHandler",
-		SimpleNamespace(
-			handler=SimpleNamespace(
-				MTAThreadQueue=SimpleNamespace(put_nowait=jobs.append),
-			),
-		),
-	)
-	namespace = _load_module_members(
-		{"_queue_inline_button_text_read"},
-		{
-			"_inline_button_descendant_text": lambda obj: "Open website",
-			"queueHandler": SimpleNamespace(
-				eventQueue="eventQueue",
-				queueFunction=lambda queue, callback, *args: main_queue_calls.append((queue, callback, args)),
-			),
-			"log": SimpleNamespace(debug=lambda *args, **kwargs: None),
-		},
-	)
-	received = []
-
-	assert namespace["_queue_inline_button_text_read"](object(), received.append)
-	assert len(jobs) == 1
-	assert not main_queue_calls
-	assert not received
-
-	jobs[0]()
-	assert len(main_queue_calls) == 1
-	queue, callback, args = main_queue_calls[0]
-	assert queue == "eventQueue"
-	callback(*args)
-	assert received == ["Open website"]
-
-	# A superseded focus must be discarded before it performs the slow UIA read.
-	jobs.clear()
-	main_queue_calls.clear()
-	assert namespace["_queue_inline_button_text_read"](
-		object(),
-		received.append,
-		is_current=lambda: False,
-	)
-	jobs[0]()
-	assert not main_queue_calls
-
-
-def test_inline_button_workaround_is_narrow_and_marked_for_removal():
-	role = SimpleNamespace(LISTITEM="listItem", LIST="list")
-	parent = Node(role=role.LIST, class_name="ReplyMarkupInlinePanel")
-	button = Node(role=role.LISTITEM, parent=parent, class_name="Button")
-	recovered = []
-	namespace = _load_module_members(
-		{
-			"_is_inline_button_list_item",
-			"_find_ancestor_by_automation_id",
-			"ReplyMarkupInlineButtonListItem",
-		},
-		{
-			"Role": role,
-			"_inline_button_descendant_text": lambda obj: recovered.append(obj) or "Open website",
-		},
-	)
+def test_inline_button_workaround_was_removed_after_unigram_fixed_its_automation_peer():
 	source = SOURCE_PATH.read_text(encoding="utf-8")
 
-	assert namespace["_is_inline_button_list_item"](button)
-	message = Node(automation_id="Message_item")
-	parent.UIAClassName = "List"
-	parent.UIAAutomationId = "Markup"
-	parent.parent = message
-	assert namespace["_is_inline_button_list_item"](button)
-	# Unigram 12.9's raw UIA view can insert a layout wrapper as the direct parent.
-	parent.role = "group"
-	assert namespace["_is_inline_button_list_item"](button)
-	parent.UIAClassName = "List"
-	parent.UIAAutomationId = "ChatsList"
-	parent.parent = None
-	assert not namespace["_is_inline_button_list_item"](button)
-	assert "ReplyMarkupInlineButtonListItem" in source
-	assert "AccessibilityView.Raw" in source
-	assert "TODO: Remove" in source
-	overlay_source = ast.get_source_segment(
-		source,
-		next(
-			node
-			for node in ast.parse(source).body
-			if isinstance(node, ast.ClassDef) and node.name == "ReplyMarkupInlineButtonListItem"
-		),
-	)
-	assert "_inline_button_descendant_text" in overlay_source
-	assert "_unigramPlusInlineButtonName" in overlay_source
-	assert "super().name" not in overlay_source
-
-	class SlowProviderName:
-		@property
-		def name(self):
-			raise AssertionError("Unigram's current UIA Name property must not be requested")
-
-	class InlineButton(namespace["ReplyMarkupInlineButtonListItem"], SlowProviderName):
-		pass
-
-	inline_button = InlineButton()
-	assert inline_button._get_name() == "Open website"
-	assert recovered == [inline_button]
-	inline_button._unigramPlusInlineButtonName = "Cached label"
-	assert inline_button._get_name() == "Cached label"
-	assert recovered == [inline_button]
+	# Unigram 12.9.1 now exposes reply-markup labels through GetNameCore. Keeping
+	# any raw TextPattern probing here would reintroduce multi-second UIA stalls
+	# while NVDA materializes messages, bot lists, chat rows, or reaction popups.
+	for removed_symbol in (
+		"_clean_inline_button_text",
+		"_is_inline_button_list_item",
+		"_inline_button_descendant_text",
+		"_queue_inline_button_text_read",
+		"ReplyMarkupInlineButtonListItem",
+		"_unigramPlusInlineButtonName",
+	):
+		assert removed_symbol not in source
 
 
 def test_saved_messages_topic_type_name_is_replaced_with_visible_title(monkeypatch):

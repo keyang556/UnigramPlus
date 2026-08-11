@@ -169,6 +169,7 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | Anunciar nombre y estado del chat actual |
+| **NVDA+Shift+V** | UnigramPlus | Anunciar los números de versión de Unigram y UnigramPlus |
 | **ALT+M** | UnigramPlus | Abrir menú de navegación |
 | **ALT+Shift+P** | UnigramPlus | Abrir el perfil del chat actual |
 | **ALT+L** | UnigramPlus | Activar lectura automática de nuevos mensajes en el chat actual |
@@ -179,6 +180,12 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 <!-- shortcut-table-end -->
 
 ##Lista de cambios:
+
+### Versión 5.6.6
+
+* Se añadió NVDA+Shift+V para anunciar las versiones instaladas de Unigram y UnigramPlus.
+* Se eliminó la solución temporal para los botones en línea de Unigram 12.9 después de que Unigram 12.9.1 corrigiera sus etiquetas; esto evita bloqueos de UIA en listas de bots, navegación por mensajes, reacciones y la lista de chats.
+* Se actualizaron todas las traducciones y manuales para la versión 5.6.6.
 
 ### Versión 5.6.5
 

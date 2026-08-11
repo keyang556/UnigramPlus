@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.5\n"
+"Project-Id-Version: UnigramPlus 5.6.6\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2022-08-13 21:15+0300\n"
 "PO-Revision-Date: 2022-08-14 23:15+0430\n"
@@ -995,6 +995,21 @@ msgstr ""
 "- کلید Enter برای پاسخ به پیام‌ها و Alt+Shift+R برای علامت‌گذاری گفتگوها به‌عنوان خوانده‌شده در نسخه‌های کنونی Unigram اصلاح شد.\n"
 "- حالت WebView و تنظیم آن حذف شد؛ اکنون Alt+C همیشه متن پیام را در پنجرهٔ بازشوی اصلی wx باز می‌کند.\n"
 "- همهٔ ترجمه‌ها و راهنماها برای نسخهٔ 5.6.5 به‌روزرسانی شدند."
+
+msgid "Announce the Unigram and UnigramPlus version numbers"
+msgstr "اعلام شماره نسخه‌های Unigram و UnigramPlus"
+
+msgid "Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
+msgstr "نسخهٔ Unigram: {unigramVersion}. نسخهٔ UnigramPlus: {addonVersion}."
+
+msgid ""
+"- Added NVDA+Shift+V to announce the installed Unigram and UnigramPlus versions.\n"
+"- Removed the temporary Unigram 12.9 inline-button workaround after Unigram 12.9.1 fixed button labels; this avoids UIA stalls in bot lists, message navigation, reactions, and the chat list.\n"
+"- Updated all translations and manuals for version 5.6.6."
+msgstr ""
+"- کلید NVDA+Shift+V برای اعلام نسخه‌های نصب‌شدهٔ Unigram و UnigramPlus افزوده شد.\n"
+"- پس از اصلاح برچسب دکمه‌ها در Unigram 12.9.1، راه‌حل موقت دکمه‌های درون‌خطی Unigram 12.9 حذف شد؛ این کار از توقف UIA در فهرست ربات‌ها، پیمایش پیام‌ها، واکنش‌ها و فهرست گفتگوها جلوگیری می‌کند.\n"
+"- همهٔ ترجمه‌ها و راهنماها برای نسخهٔ 5.6.6 به‌روز شدند."
 
 msgid ""
 "- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"
