@@ -616,8 +616,10 @@ def _load_telegram_desktop_fallback_class():
 class File_transfer_progress_tracking:
 	# Unigram 12.7 exposes file transfer progress on FileButton's UIA Value
 	# pattern while the control type is Button, not ProgressBar. Handle value
-	# changes directly and keep a focused-message polling fallback for cases where
-	# Unigram does not raise a fresh event. Poll on NVDA's main event loop: using
+	# changes directly and poll only a directly focused transfer control when
+	# Unigram does not raise a fresh event. Never search the focused message tree
+	# from this recurring callback: some XAML controls block for seconds while
+	# exposing their parent or children. Poll on NVDA's main event loop: using
 	# threading.Timer here creates a fresh native thread for every sample.
 	active = False
 	interval = .35
@@ -630,7 +632,6 @@ class File_transfer_progress_tracking:
 	_last_logged_id = None
 	_candidate_automation_ids = ("Button", "Download", "Overlay")
 	_candidate_roles = (Role.LINK, Role.BUTTON)
-	_max_search_depth = 6
 
 	@classmethod
 	def _read_fresh_value(cls, obj):
@@ -724,8 +725,6 @@ class File_transfer_progress_tracking:
 	@classmethod
 	def _get_key(cls, obj):
 		aid = cls._get_automation_id(obj)
-		context = cls._get_context_key(obj)
-		if context: return ("context", aid, context)
 		elem = getattr(obj, "UIAElement", None)
 		if elem is not None:
 			try: return ("runtime", tuple(elem.GetRuntimeId()), aid)
@@ -736,82 +735,6 @@ class File_transfer_progress_tracking:
 				return ("location", getattr(obj, "windowHandle", 0), aid, location.left, location.top, location.width, location.height)
 		except Exception: pass
 		return ("object", getattr(obj, "windowHandle", 0), aid, id(obj))
-
-	@classmethod
-	def _clean_context_name(cls, name):
-		if not name: return ""
-		name = re.sub(r"\b\d+(?:[\.,]\d+)?\s*%", "", str(name))
-		name = re.sub(r"\s+", " ", name)
-		return name.strip(" ,.-")
-
-	@classmethod
-	def _get_context_key(cls, obj):
-		for root in cls._iter_candidate_roots(obj):
-			labels = []
-			for item in cls._walk(root):
-				aid = cls._get_automation_id(item)
-				if aid not in ("Title", "TitleTrim", "DocumentName"):
-					continue
-				try: name = item.name
-				except Exception: name = ""
-				name = cls._clean_context_name(name)
-				if name and name not in labels:
-					labels.append(name)
-			if labels:
-				return tuple(labels[:4])
-			try: role = root.role
-			except Exception: role = None
-			if role == Role.LISTITEM:
-				try: name = root.name
-				except Exception: name = ""
-				name = cls._clean_context_name(name)
-				if name:
-					return (name[:200],)
-		return None
-
-	@classmethod
-	def _walk(cls, root):
-		queue = [(root, 0)]
-		seen = set()
-		while queue:
-			obj, depth = queue.pop(0)
-			obj_id = id(obj)
-			if obj_id in seen: continue
-			seen.add(obj_id)
-			yield obj
-			if depth >= cls._max_search_depth: continue
-			try: children = obj.children
-			except Exception: continue
-			for child in children:
-				queue.append((child, depth + 1))
-
-	@classmethod
-	def _iter_candidate_roots(cls, obj):
-		root = obj
-		for _ in range(4):
-			if not root: break
-			yield root
-			try: parent = root.parent
-			except Exception: break
-			if not parent or parent is root: break
-			if cls._get_automation_id(parent) == "Messages": break
-			root = parent
-
-	@classmethod
-	def _find_transfer_button(cls, focus):
-		if not focus: return None
-		if not cls._is_unigram_object(focus): return None
-		if not cls._is_inside_messages(focus): return None
-		candidates = []
-		for root in cls._iter_candidate_roots(focus):
-			for obj in cls._walk(root):
-				if not cls._is_transfer_button(obj) or not cls._is_visible(obj): continue
-				percentage = cls._parse_percentage(cls._read_fresh_value(obj))
-				if percentage is None: continue
-				# Prefer a visible in-progress transfer when one message contains
-				# both a main play button and an overlay download button.
-				candidates.append((0 if 0 < percentage < 100 else 1, obj))
-		return min(candidates, key=lambda item: item[0])[1] if candidates else None
 
 	@classmethod
 	def _format_percentage(cls, percentage):
@@ -867,9 +790,12 @@ class File_transfer_progress_tracking:
 				cls._last_logged_id = None
 				return
 			if conf.get("voicingPerformanceIndicators") == "none": return
-			# Search the focused message subtree for Unigram FileButton progress.
-			obj = cls._find_transfer_button(obj)
-			if not obj: return
+			# The old fallback searched every descendant of the focused message on
+			# every tick. Reply-markup and rich-message XAML providers can take
+			# several seconds to answer those tree requests. A transfer control is
+			# focusable, so polling the focus itself preserves the user-facing path
+			# without touching unrelated UIA objects.
+			if not cls._is_transfer_button(obj) or not cls._is_visible(obj): return
 			# Log once per focused object so we can verify detection without spam.
 			obj_id = id(obj)
 			if cls._last_logged_id != obj_id:
@@ -2894,10 +2820,11 @@ class AppModule(appModuleHandler.AppModule):
 			Typing_sound_tracking.restore(self.saved_items)
 		if not File_transfer_progress_tracking.active:
 			try:
-				transfer = File_transfer_progress_tracking._find_transfer_button(obj)
-				percentage = File_transfer_progress_tracking._parse_percentage(
-					File_transfer_progress_tracking._read_fresh_value(transfer)
-				) if transfer else None
+				percentage = None
+				if File_transfer_progress_tracking._is_transfer_button(obj):
+					percentage = File_transfer_progress_tracking._parse_percentage(
+						File_transfer_progress_tracking._read_fresh_value(obj)
+					)
 				if percentage is not None and percentage < 100:
 					File_transfer_progress_tracking.start()
 			except Exception:

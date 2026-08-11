@@ -137,6 +137,49 @@ def test_progress_tracker_stops_and_does_not_reschedule_at_100_percent(monkeypat
 	assert len(scheduled) == 1
 
 
+def test_progress_tracker_never_walks_an_unrelated_focused_uia_tree(monkeypatch):
+	scheduled = []
+	tree_accesses = []
+	tracker = _load_progress_tracker(monkeypatch, scheduled)
+
+	class InlineButton:
+		role = "listItem"
+		UIAAutomationId = ""
+		appModule = object()
+		isInForeground = True
+
+		@property
+		def parent(self):
+			tree_accesses.append("parent")
+			raise AssertionError("the recurring transfer poll must not walk parents")
+
+		@property
+		def children(self):
+			tree_accesses.append("children")
+			raise AssertionError("the recurring transfer poll must not walk children")
+
+	focus = InlineButton()
+	tracker._is_unigram_object = classmethod(lambda cls, obj: obj is focus)
+	tracker._is_in_foreground = classmethod(lambda cls, obj: obj is focus)
+	tracker.start()
+	_scheduled_delay, callback, _scheduled_call = scheduled.pop()
+	callback()
+
+	assert tracker.active
+	assert len(scheduled) == 1
+	assert tree_accesses == []
+	assert "_find_transfer_button" not in {
+		node.name
+		for node in _class_ast("File_transfer_progress_tracking").body
+		if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+	}
+
+
+def test_focus_handler_does_not_search_message_subtrees_for_file_transfers():
+	method = _load_app_method("event_gainFocus", {})
+	assert "_find_transfer_button" not in method.__code__.co_names
+
+
 def test_all_recurring_uia_pollers_use_the_nvda_main_loop():
 	for class_name in ("Title_change_tracking", "Typing_sound_tracking", "Chat_update"):
 		class_node = _class_ast(class_name)
