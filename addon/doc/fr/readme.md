@@ -167,7 +167,7 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | Annoncer le nom et l'état d'un échange ouvert |
-| **NVDA+Maj+V** | UnigramPlus | Annoncer les numéros de version d’Unigram et d’UnigramPlus |
+| **NVDA+Alt+V** | UnigramPlus | Annoncer les numéros de version d’Unigram et d’UnigramPlus |
 | **ALT+M** | UnigramPlus | Ouvrir le menu de navigation |
 | **ALT+Shift+P** | UnigramPlus | Ouvrir le profil de l'échange en cours |
 | **ALT+L** | UnigramPlus | Activer la lecture automatique des nouveaux messages dans l'échange courant |
@@ -178,6 +178,11 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 <!-- shortcut-table-end -->
 
 ##Liste des changements :
+
+### Version 5.6.7
+
+* Le raccourci annonçant les versions installées d’Unigram et d’UnigramPlus est passé de NVDA+Maj+V à NVDA+Alt+V afin d’éviter les conflits de raccourcis.
+* Correction de Shift+Suppr pour supprimer des discussions et quitter des groupes ou canaux dans les versions actuelles d’Unigram, y compris la confirmation automatique de la fenêtre contextuelle.
 
 ### Version 5.6.6
 

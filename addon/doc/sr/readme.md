@@ -172,7 +172,7 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će neko sigurno po
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | Najavi ime i status otvorenog ćaskanja |
-| **NVDA+Shift+V** | UnigramPlus | Izgovori brojeve verzija programa Unigram i dodatka UnigramPlus |
+| **NVDA+Alt+V** | UnigramPlus | Izgovori brojeve verzija programa Unigram i dodatka UnigramPlus |
 | **ALT+M** | UnigramPlus | Otvori meni za navigaciju |
 | **ALT+Shift+P** | UnigramPlus | Otvori trenutni profil za ćaskanje |
 | **ALT+L** | UnigramPlus | Omogući automatsko čitanje novih poruka u trenutnom ćaskanju |
@@ -453,6 +453,11 @@ This update adds a combination that press "Instant View" button in the message, 
 Added Turkish localization
 
 
+
+### Verzija 5.6.7
+
+* Prečica za izgovaranje instaliranih verzija programa Unigram i dodatka UnigramPlus promenjena je sa NVDA+Shift+V na NVDA+Alt+V radi izbegavanja sukoba prečica.
+* Ispravljen je Shift+Delete za brisanje ćaskanja i napuštanje grupa ili kanala u trenutnim verzijama Unigrama, uključujući automatsku potvrdu iskačućeg prozora.
 
 ### Verzija 5.6.6
 

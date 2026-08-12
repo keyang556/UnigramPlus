@@ -167,7 +167,7 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | Anunciar o nome e o status de uma conversa aberta |
-| **NVDA+Shift+V** | UnigramPlus | Anunciar os números de versão do Unigram e do UnigramPlus |
+| **NVDA+Alt+V** | UnigramPlus | Anunciar os números de versão do Unigram e do UnigramPlus |
 | **ALT+M** | UnigramPlus | Abrir menu de navegação |
 | **ALT+Shift+P** | UnigramPlus | Abrir o perfil da conversa atual |
 | **ALT+L** | UnigramPlus | Enable automatic reading of new messages in the current chat |
@@ -178,6 +178,11 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 <!-- shortcut-table-end -->
 
 ## Lista de alterações:
+
+### Versão 5.6.7
+
+* O atalho para anunciar as versões instaladas do Unigram e do UnigramPlus foi alterado de NVDA+Shift+V para NVDA+Alt+V para evitar conflitos de atalhos.
+* Corrigido Shift+Delete para excluir conversas e sair de grupos ou canais nas versões atuais do Unigram, incluindo a confirmação automática da janela pop-up.
 
 ### Versão 5.6.6
 

@@ -168,7 +168,7 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | Anunță numele și starea unui chat deschis |
-| **NVDA+Shift+V** | UnigramPlus | Anunță numerele versiunilor Unigram și UnigramPlus |
+| **NVDA+Alt+V** | UnigramPlus | Anunță numerele versiunilor Unigram și UnigramPlus |
 | **ALT+M** | UnigramPlus | Deschide meniul de navigare |
 | **ALT+Shift+P** | UnigramPlus | Deschide profilul de chat curent |
 | **ALT+L** | UnigramPlus | Activează citirea automată a mesajelor într-un chat |
@@ -179,6 +179,11 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 <!-- shortcut-table-end -->
 
 ##Lista de modificări:
+
+### Versiunea 5.6.7
+
+* Scurtătura pentru anunțarea versiunilor instalate de Unigram și UnigramPlus a fost schimbată din NVDA+Shift+V în NVDA+Alt+V pentru a evita conflictele de taste.
+* A fost reparat Shift+Delete pentru ștergerea chat-urilor și părăsirea grupurilor sau canalelor în versiunile actuale de Unigram, inclusiv confirmarea automată a ferestrei pop-up.
 
 ### Versiunea 5.6.6
 

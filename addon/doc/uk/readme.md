@@ -166,7 +166,7 @@
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | Повідомити назву та статус відкритого чату |
-| **NVDA+Shift+V** | UnigramPlus | Повідомити номери версій Unigram і UnigramPlus |
+| **NVDA+Alt+V** | UnigramPlus | Повідомити номери версій Unigram і UnigramPlus |
 | **ALT+M** | UnigramPlus | Відкрити меню навігації |
 | **ALT+Shift+P** | UnigramPlus | Відкрити профіль поточного чату |
 | **ALT+L** | UnigramPlus | Увімкнути автоматичне читання нових повідомлень у поточному чаті |
@@ -177,6 +177,11 @@
 <!-- shortcut-table-end -->
 
 ## Список змін:
+
+### Версія 5.6.7
+
+* Комбінацію клавіш для повідомлення встановлених версій Unigram і UnigramPlus змінено з NVDA+Shift+V на NVDA+Alt+V, щоб уникнути конфліктів клавіш.
+* Виправлено Shift+Delete для видалення чатів і виходу з груп або каналів у поточних версіях Unigram, зокрема автоматичне підтвердження у спливаючому вікні.
 
 ### Версія 5.6.6
 

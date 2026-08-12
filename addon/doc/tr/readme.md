@@ -166,7 +166,7 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | Açık bir sohbetin adını ve durumunu duyur |
-| **NVDA+Shift+V** | UnigramPlus | Unigram ve UnigramPlus sürüm numaralarını duyur |
+| **NVDA+Alt+V** | UnigramPlus | Unigram ve UnigramPlus sürüm numaralarını duyur |
 | **ALT+M** | UnigramPlus | Gezinti menüsünü aç |
 | **ALT+Shift+P** | UnigramPlus | Mevcut sohbetin profilini aç |
 | **ALT+L** | UnigramPlus | Mevcut sohbette yeni mesajların otomatik olarak okunmasını etkinleştir |
@@ -177,6 +177,11 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 <!-- shortcut-table-end -->
 
 ##Değişiklik listesi:
+
+### Sürüm 5.6.7
+
+* Yüklü Unigram ve UnigramPlus sürümlerini duyurma kısayolu, kısayol çakışmalarını önlemek için NVDA+Shift+V'den NVDA+Alt+V'ye değiştirildi.
+* Açılır pencerenin otomatik onaylanması da dahil olmak üzere, güncel Unigram sürümlerinde sohbetleri silmek ve gruplardan veya kanallardan ayrılmak için Shift+Delete düzeltildi.
 
 ### Sürüm 5.6.6
 

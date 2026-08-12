@@ -2053,6 +2053,27 @@ class AppModule(appModuleHandler.AppModule):
 			except: pass
 		return False
 
+	def _find_deletion_primary_button(self, obj):
+		"""Return the confirmation button from this delete popup only.
+
+		Unigram's DeleteMessagesPopup and DeleteChatPopup do not share a stable
+		child layout.  Start at the focused popup control and walk only a few
+		ancestors, with the existing bounded descendant lookup at each level.
+		"""
+		for _ in range(5):
+			if not obj:
+				return False
+			button = self._find_descendant(
+				obj, Role.BUTTON, "PrimaryButton", max_depth=6
+			)
+			if button:
+				return button
+			try:
+				obj = obj.parent
+			except Exception:
+				return False
+		return False
+
 	def _get_call_button_grid(self, foreground):
 		# Return the VoipPage 1:1-call button grid (whose children include the named toggles
 		# Mute/Camera/Screen and the unnamed hang-up button), or None when we are not in a
@@ -3049,28 +3070,18 @@ class AppModule(appModuleHandler.AppModule):
 		if not pending:
 			return False
 		state = pending["state"]
-		if state == 0:
-			if obj.role != Role.MENUITEM:
-				return False
-			if not conf.get("confirmation_at_deletion"):
-				speech.cancelSpeech()
-			for item in obj.parent.children:
-				if _menu_item_has_icon(item, icons_from_context_menu["delete"]):
-					pending["state"] = 1
-					item.doAction()
-					if conf.get("confirmation_at_deletion"): self.isDelete = False
-					return True
-			self.isDelete = False
-			self.keys["escape"].send()
-			return True
 		if state == 1 and pending.get("nativeDelete", False):
 			automation_id = str(getattr(obj, "UIAAutomationId", "") or "")
 			if obj.role == Role.CHECKBOX and automation_id == "RevokeCheck":
 				if not conf.get("confirmation_at_deletion"):
 					speech.cancelSpeech()
 				checked = State.CHECKED in obj.states
-				if pending["isCompleteDeletion"] and not checked:
+				if pending["isCompleteDeletion"] != checked:
 					obj.doAction()
+				primary_button = self._find_deletion_primary_button(obj)
+				if primary_button:
+					primary_button.doAction()
+					pending["state"] = 2
 				return True
 			if obj.role == Role.BUTTON and automation_id == "PrimaryButton":
 				if not conf.get("confirmation_at_deletion"):
@@ -3084,30 +3095,29 @@ class AppModule(appModuleHandler.AppModule):
 			return False
 		if state == 1:
 			automation_id = str(getattr(obj, "UIAAutomationId", "") or "")
-			is_checkbox = obj.role == Role.CHECKBOX and automation_id in ("CheckBox", "RevokeCheck")
+			is_checkbox = obj.role == Role.CHECKBOX and automation_id == "CheckBox"
 			is_primary_button = obj.role == Role.BUTTON and automation_id == "PrimaryButton"
 			if not (is_checkbox or is_primary_button):
 				return False
 			if not conf.get("confirmation_at_deletion"):
 				speech.cancelSpeech()
 			targetButton = next(
-				(x for x in pending["elements"] if x.location and x.location.width),
+				(x for x in pending.get("elements", []) if x.location and x.location.width),
 				False,
 			)
 			if is_checkbox:
 				# Check whether deletion for both sides must be toggled.
 				checked = State.CHECKED in obj.states
-				if obj.UIAAutomationId in ("CheckBox", "RevokeCheck") and (
+				if (
 					(pending["isCompleteDeletion"] and not checked)
 					or (not pending["isCompleteDeletion"] and checked)
 				):
 					obj.doAction()
-				# DeleteChatPopup intentionally focuses its checkbox. Its stable legacy
-				# template path is constant-time and avoids scanning any popup subtree.
-				try: obj.parent.lastChild.previous.doAction()
-				except Exception:
+				primary_button = self._find_deletion_primary_button(obj)
+				if not primary_button:
 					self.isDelete = False
 					return True
+				primary_button.doAction()
 			else:
 				obj.doAction()
 			if targetButton: targetButton.setFocus()
@@ -3401,7 +3411,8 @@ class AppModule(appModuleHandler.AppModule):
 	def startDeleteMessage(self, isCompleteDeletion = False, useNativeDelete = False):
 		obj = api.getFocusObject()
 		isMessage = self.is_message_object(obj)
-		if isMessage or obj.parent.UIAAutomationId == "ChatsList":
+		isChatListItem = not isMessage and _is_chat_list_item(obj)
+		if isMessage or isChatListItem:
 			# Unigram's native Delete command is implemented by ChatView for messages.
 			# Keep the context-menu fallback for chat rows, where no native Delete
 			# handler exists.
@@ -3411,14 +3422,14 @@ class AppModule(appModuleHandler.AppModule):
 				"elements": [],
 				"message": "",
 				"list": "",
-				"state": 1 if useNativeDelete else 0,
+				"state": 1,
 				"nativeDelete": useNativeDelete,
 			}
 			if isMessage:
 				self.isDelete["list"] = "messages"
 				if self.isDelete["isCompleteDeletion"]: self.isDelete["message"] = _("Message deleted on both sides")
 				else: self.isDelete["message"] = _("Message deleted")
-			elif obj.parent.UIAAutomationId == "ChatsList":
+			elif isChatListItem:
 				self.isDelete["list"] = "chats"
 				if obj.children[1].name == "": self.isDelete["message"] = _("You left the group")
 				elif obj.children[1].name == "": self.isDelete["message"] = _("You left the channel")
@@ -3436,7 +3447,17 @@ class AppModule(appModuleHandler.AppModule):
 				if obj.previous and obj.previous.role == Role.LISTITEM and obj.previous.childCount > 1: self.isDelete["elements"].append(obj.previous.firstChild)
 				if obj.previous and obj.previous.previous and obj.previous.previous.role == Role.LISTITEM and obj.previous.previous.childCount > 1: self.isDelete["elements"].append(obj.previous.previous.firstChild)
 				if obj.next and obj.next.next and obj.next.next.role == Role.LISTITEM and obj.next.next.childCount > 1: self.isDelete["elements"].append(obj.next.next.firstChild)
-			self.keys["delete" if useNativeDelete else "Applications"].send()
+			if not useNativeDelete:
+				if conf.get("confirmation_at_deletion"):
+					self.isDelete = False
+				menuList = "Messages" if isMessage else "ChatsList"
+				if not self.activate_option_for_menu(
+					(icons_from_context_menu["delete"],), menuList
+				):
+					self.isDelete = False
+					return False
+			else:
+				self.keys["delete"].send()
 			if useNativeDelete and conf.get("confirmation_at_deletion"):
 				self.isDelete = False
 			elif useNativeDelete:
@@ -3669,10 +3690,10 @@ class AppModule(appModuleHandler.AppModule):
 			message(_("Message headers will be announced before the message content"))
 		return enabled
 
-	# Translators: Input gesture description for NVDA+Shift+V in Unigram.
+	# Translators: Input gesture description for NVDA+Alt+V in Unigram.
 	@script(
 		description=_("Announce the Unigram and UnigramPlus version numbers"),
-		gesture="kb:NVDA+shift+V",
+		gesture="kb:NVDA+alt+V",
 	)
 	def script_announceVersions(self, gesture):
 		try:
@@ -3691,7 +3712,7 @@ class AppModule(appModuleHandler.AppModule):
 			addon_version = str(manifest_version).strip() if manifest_version is not None else ""
 		except Exception:
 			addon_version = ""
-		# Translators: Reported when NVDA+Shift+V is pressed in Unigram. Keep the
+		# Translators: Reported when NVDA+Alt+V is pressed in Unigram. Keep the
 		# content inside braces unchanged; it is replaced with each installed version.
 		message(
 			_("Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}.").format(

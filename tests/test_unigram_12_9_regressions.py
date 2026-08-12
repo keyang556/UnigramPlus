@@ -30,10 +30,18 @@ class Node:
 		self.next = None
 		self.previous = None
 		self.actions = 0
+		for index, child in enumerate(self.children):
+			child.parent = self
+			child.previous = self.children[index - 1] if index else None
+			child.next = self.children[index + 1] if index + 1 < len(self.children) else None
 
 	@property
 	def childCount(self):
 		return len(self.children)
+
+	@property
+	def firstChild(self):
+		return self.children[0] if self.children else None
 
 	def doAction(self):
 		self.actions += 1
@@ -272,35 +280,10 @@ def test_raw_context_menu_item_is_invoked_by_unigrams_font_icon(monkeypatch):
 	assert invocations == [True]
 
 
-def test_context_menu_deletion_still_activates_a_nested_delete_item():
-	namespace = _load_module_members(
-		{"_walk_bounded_descendants", "_menu_item_has_icon"},
-		{},
-	)
-	role = SimpleNamespace(MENUITEM="menuItem", CHECKBOX="checkBox", BUTTON="button")
-	delete_item = Node(children=[Node(children=[Node("\ue74d")])])
-	other_item = Node(children=[Node(children=[Node("\ue8b2")])])
-	menu = Node(children=[other_item, delete_item])
-	focus = Node(role=role.MENUITEM, parent=menu)
-	cancelled = []
-	namespace.update(
-		{
-			"Role": role,
-			"State": SimpleNamespace(CHECKED="checked"),
-			"conf": SimpleNamespace(get=lambda key: False),
-			"speech": SimpleNamespace(cancelSpeech=lambda: cancelled.append(True)),
-			"icons_from_context_menu": {"delete": "\ue74d"},
-		}
-	)
-	method = _load_app_method("deleteMessageAndChat", namespace)
-	instance = SimpleNamespace(isDelete={"state": 0})
+def test_chat_deletion_does_not_wait_for_a_menu_focus_event():
+	source = SOURCE_PATH.read_text(encoding="utf-8")
 
-	method(instance, focus)
-
-	assert cancelled == [True]
-	assert delete_item.actions == 1
-	assert other_item.actions == 0
-	assert instance.isDelete["state"] == 1
+	assert "if state == 0:" not in source
 
 
 def test_shift_delete_uses_unigrams_native_delete_for_messages():
@@ -370,6 +353,8 @@ def test_shift_delete_keeps_context_menu_fallback_for_chat_rows():
 		"api": SimpleNamespace(getFocusObject=lambda: focus),
 		"Role": SimpleNamespace(LISTITEM="listItem"),
 		"conf": SimpleNamespace(get=lambda key: False),
+		"_is_chat_list_item": lambda obj: obj is focus,
+		"icons_from_context_menu": {"delete": "delete"},
 		"_": lambda text: text,
 	}
 	method = _load_app_method("startDeleteMessage", namespace)
@@ -379,14 +364,15 @@ def test_shift_delete_keeps_context_menu_fallback_for_chat_rows():
 			"delete": SimpleNamespace(send=lambda: sent.append("delete")),
 			"Applications": SimpleNamespace(send=lambda: sent.append("applications")),
 		},
+		activate_option_for_menu=lambda option, list_name: sent.append((option, list_name)) or True,
 	)
 
 	assert method(instance, True, True)
-	assert sent == ["applications"]
-	assert instance.isDelete["state"] == 0
+	assert sent == [(("delete",), "ChatsList")]
+	assert instance.isDelete["state"] == 1
 
 
-def test_native_delete_activates_the_focused_primary_button_without_walking_the_popup():
+def test_native_delete_activates_the_focused_primary_button_from_the_popup():
 	class UnexpectedAdjacentTarget:
 		@property
 		def location(self):
@@ -410,13 +396,14 @@ def test_native_delete_activates_the_focused_primary_button_without_walking_the_
 			"list": "other",
 			"nativeDelete": True,
 		},
+		_find_deletion_primary_button=lambda obj: False,
 	)
 
 	assert method(instance, primary)
 
 	assert primary.actions == 1
 	assert instance.isDelete["state"] == 2
-	assert "_find_deletion_primary_button" not in SOURCE_PATH.read_text(encoding="utf-8")
+	assert "def _find_deletion_primary_button" in SOURCE_PATH.read_text(encoding="utf-8")
 
 
 def test_native_delete_ignores_unrelated_buttons_while_the_popup_is_loading():
@@ -465,7 +452,10 @@ def test_native_delete_checkbox_is_only_toggled_when_delete_for_everyone_is_unch
 		"list": "messages",
 		"nativeDelete": True,
 	}
-	instance = SimpleNamespace(isDelete=pending)
+	instance = SimpleNamespace(
+		isDelete=pending,
+		_find_deletion_primary_button=lambda obj: False,
+	)
 	checkbox = Node(role=role.CHECKBOX, automation_id="RevokeCheck")
 
 	assert method(instance, checkbox)
@@ -489,14 +479,12 @@ def test_native_delete_timeout_only_clears_the_request_that_scheduled_it():
 	assert instance.isDelete is False
 
 
-def test_context_menu_delete_keeps_constant_time_checkbox_template_path():
+def test_context_menu_delete_finds_the_popup_primary_button_by_automation_id():
 	role = SimpleNamespace(MENUITEM="menuItem", CHECKBOX="checkBox", BUTTON="button")
 	state = SimpleNamespace(CHECKED="checked")
-	checkbox = Node(role=role.CHECKBOX, automation_id="RevokeCheck")
+	checkbox = Node(role=role.CHECKBOX, automation_id="CheckBox")
 	primary = Node(role=role.BUTTON, automation_id="PrimaryButton")
-	last = Node(role=role.BUTTON)
-	last.previous = primary
-	checkbox.parent = Node(children=[checkbox, primary, last])
+	popup = Node(children=[checkbox, primary])
 	namespace = {
 		"Role": role,
 		"State": state,
@@ -512,11 +500,38 @@ def test_context_menu_delete_keeps_constant_time_checkbox_template_path():
 			"list": "other",
 			"nativeDelete": False,
 		},
+		_find_deletion_primary_button=lambda obj: primary if obj is checkbox else False,
 	)
 
 	method(instance, checkbox)
 
 	assert checkbox.actions == 1
+	assert primary.actions == 1
+	assert instance.isDelete["state"] == 2
+
+
+def test_chat_delete_popup_without_checkbox_uses_its_primary_button():
+	role = SimpleNamespace(MENUITEM="menuItem", CHECKBOX="checkBox", BUTTON="button")
+	primary = Node(role=role.BUTTON, automation_id="PrimaryButton")
+	namespace = {
+		"Role": role,
+		"State": SimpleNamespace(CHECKED="checked"),
+		"conf": SimpleNamespace(get=lambda key: False),
+		"speech": SimpleNamespace(cancelSpeech=lambda: None),
+	}
+	method = _load_app_method("deleteMessageAndChat", namespace)
+	instance = SimpleNamespace(
+		isDelete={
+			"state": 1,
+			"isCompleteDeletion": True,
+			"elements": [],
+			"list": "chats",
+			"nativeDelete": False,
+		},
+		script_toChatList=lambda gesture: None,
+	)
+
+	assert method(instance, primary)
 	assert primary.actions == 1
 	assert instance.isDelete["state"] == 2
 

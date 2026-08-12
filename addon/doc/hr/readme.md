@@ -170,7 +170,7 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | Najavljuje naziv i status otvorenog razgovora |
-| **NVDA+Shift+V** | UnigramPlus | Izgovori brojeve verzija programa Unigram i dodatka UnigramPlus |
+| **NVDA+Alt+V** | UnigramPlus | Izgovori brojeve verzija programa Unigram i dodatka UnigramPlus |
 | **ALT+M** | UnigramPlus | Otvara navigacijski izbornik |
 | **ALT+Shift+P** | UnigramPlus | Otvara profil trenutnog razgovora |
 | **ALT+L** | UnigramPlus | Omogućava automatsko čitanje novih poruka u trenutnom razgovoru |
@@ -181,6 +181,11 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 <!-- shortcut-table-end -->
 
 ##Popis promjena:
+
+### Verzija 5.6.7
+
+* Prečac za izgovaranje instaliranih verzija programa Unigram i dodatka UnigramPlus promijenjen je s NVDA+Shift+V na NVDA+Alt+V kako bi se izbjegli sukobi prečaca.
+* Ispravljen je Shift+Delete za brisanje chatova i napuštanje grupa ili kanala u trenutačnim verzijama Unigrama, uključujući automatsku potvrdu skočnog prozora.
 
 ### Verzija 5.6.6
 

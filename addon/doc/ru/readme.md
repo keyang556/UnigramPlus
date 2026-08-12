@@ -169,7 +169,7 @@
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | Произнести название и статус открытого чата |
-| **NVDA+Shift+V** | UnigramPlus | Объявить номера версий Unigram и UnigramPlus |
+| **NVDA+Alt+V** | UnigramPlus | Объявить номера версий Unigram и UnigramPlus |
 | **ALT+M** | UnigramPlus | Открыть меню навигации |
 | **ALT+Shift+P** | UnigramPlus | Открыть профиль текущего чата |
 | **ALT+L** | UnigramPlus | Включить автоматическое чтение новых сообщений в текущем чате |
@@ -467,6 +467,11 @@
 Добавлена Турецкая локализация.
 
 
+
+### Версия 5.6.7
+
+* Сочетание клавиш для объявления установленных версий Unigram и UnigramPlus изменено с NVDA+Shift+V на NVDA+Alt+V, чтобы избежать конфликтов.
+* Исправлена работа Shift+Delete для удаления чатов и выхода из групп или каналов в текущих версиях Unigram, включая автоматическое подтверждение во всплывающем окне.
 
 ### Версия 5.6.6
 

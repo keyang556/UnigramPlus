@@ -167,7 +167,7 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 | **Ctrl+Q** | Unigram | 關閉 Unigram（僅限主視窗） |
 | **Ctrl+Shift+Y** | Unigram | 變更狀態 |
 | **ALT+T** | UnigramPlus | 讀出已開啟聊天的名稱與狀態 |
-| **NVDA+Shift+V** | UnigramPlus | 讀出 Unigram 與 UnigramPlus 版本號碼 |
+| **NVDA+Alt+V** | UnigramPlus | 讀出 Unigram 與 UnigramPlus 版本號碼 |
 | **ALT+M** | UnigramPlus | 開啟導覽功能表 |
 | **ALT+Shift+P** | UnigramPlus | 開啟目前聊天的個人資料 |
 | **ALT+L** | UnigramPlus | 啟用目前聊天中新訊息的自動讀出 |
@@ -178,6 +178,11 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 <!-- shortcut-table-end -->
 
 ## 版本變更
+
+### 版本 5.6.7
+
+* 為避免快速鍵衝突，讀出已安裝 Unigram 與 UnigramPlus 版本的快速鍵已從 NVDA+Shift+V 改為 NVDA+Alt+V。
+* 修正目前 Unigram 版本中以 Shift+Delete 刪除聊天及退出群組或頻道的問題，包括自動處理彈出式視窗的確認動作。
 
 ### 版本 5.6.6
 

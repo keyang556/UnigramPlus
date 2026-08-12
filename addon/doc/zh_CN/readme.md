@@ -167,7 +167,7 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 | **Ctrl+Q** | Unigram | 关闭 Unigram（仅限主窗口） |
 | **Ctrl+Shift+Y** | Unigram | 更改状态 |
 | **ALT+T** | UnigramPlus | 读出已打开聊天的名称和状态 |
-| **NVDA+Shift+V** | UnigramPlus | 读出 Unigram 和 UnigramPlus 版本号 |
+| **NVDA+Alt+V** | UnigramPlus | 读出 Unigram 和 UnigramPlus 版本号 |
 | **ALT+M** | UnigramPlus | 打开导航菜单 |
 | **ALT+Shift+P** | UnigramPlus | 打开当前聊天的个人资料 |
 | **ALT+L** | UnigramPlus | 启用当前聊天中新消息的自动读出 |
@@ -178,6 +178,11 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 <!-- shortcut-table-end -->
 
 ## 版本变更
+
+### 版本 5.6.7
+
+* 为避免快捷键冲突，将读出已安装 Unigram 和 UnigramPlus 版本的快捷键从 NVDA+Shift+V 改为 NVDA+Alt+V。
+* 修复了在当前 Unigram 版本中使用 Shift+Delete 删除聊天以及退出群组或频道的问题，包括自动处理弹出窗口确认。
 
 ### 版本 5.6.6
 

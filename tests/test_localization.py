@@ -98,30 +98,38 @@ def test_required_strings_are_translated_in_every_locale():
 			)
 
 
-def test_release_version_is_566():
+def test_release_version_is_567():
 	build_vars = (ROOT / "buildVars.py").read_text(encoding="utf-8")
 	manifest = (ROOT / "addon" / "manifest.ini").read_text(encoding="utf-8")
 	pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
 	lockfile = (ROOT / "uv.lock").read_text(encoding="utf-8")
 
-	assert 'addon_version="5.6.6"' in build_vars
-	assert "version = 5.6.6" in manifest
-	assert 'version = "5.6.6"' in pyproject
-	assert 'name = "unigramplus"\nversion = "5.6.6"' in lockfile
+	assert 'addon_version="5.6.7"' in build_vars
+	assert "version = 5.6.7" in manifest
+	assert 'version = "5.6.7"' in pyproject
+	assert 'name = "unigramplus"\nversion = "5.6.7"' in lockfile
 
 
-def test_all_catalogs_identify_the_566_release():
+def test_all_catalogs_identify_the_567_release():
 	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
 		catalog = (locale_dir / "LC_MESSAGES" / "nvda.po").read_text(encoding="utf-8")
-		assert '"Project-Id-Version: UnigramPlus 5.6.6\\n"' in catalog
+		assert '"Project-Id-Version: UnigramPlus 5.6.7\\n"' in catalog
 
 
-def test_every_localized_manual_has_566_through_559_and_updated_558_changelogs():
+def test_current_release_changelog_comes_from_the_changelog_source():
+	changelog = (ROOT / "changelog.py").read_text(encoding="utf-8")
+
+	assert "NVDA+Shift+V to NVDA+Alt+V" in changelog
+	assert "Fixed Shift+Delete for deleting chats" in changelog
+
+
+def test_every_localized_manual_has_567_through_559_and_updated_558_changelogs():
 	manuals = [ROOT / "readme.md", *sorted(DOC_DIR.glob("*/readme.md"))]
 	assert len(manuals) == 17
 	for manual in manuals:
 		text = manual.read_text(encoding="utf-8")
-		version_566 = text.index("5.6.6")
+		version_567 = text.index("5.6.7")
+		version_566 = text.index("5.6.6", version_567)
 		version_565 = text.index("5.6.5", version_566)
 		version_564 = text.index("5.6.4", version_565)
 		version_563 = text.index("5.6.3", version_564)
@@ -130,6 +138,7 @@ def test_every_localized_manual_has_566_through_559_and_updated_558_changelogs()
 		version_560 = text.index("5.6.0", version_561)
 		version_559 = text.index("5.5.9", version_560)
 		version_558 = text.index("5.5.8", version_559)
+		section_567 = text[version_567:version_566]
 		section_566 = text[version_566:version_565]
 		section_565 = text[version_565:version_564]
 		section_564 = text[version_564:version_563]
@@ -137,6 +146,9 @@ def test_every_localized_manual_has_566_through_559_and_updated_558_changelogs()
 		section_562 = text[version_562:version_561]
 		section_561 = text[version_561:version_560]
 		section_560 = text[version_560:version_559]
+		assert "NVDA+Alt+V" in section_567, manual
+		assert "Shift+Delete" in section_567 or "Shift+Suppr" in section_567, manual
+		assert section_567.count("\n* ") == 2, manual
 		assert "NVDA+Shift+V" in section_566 or "NVDA+Maj+V" in section_566, manual
 		assert "12.9.1" in section_566, manual
 		assert section_566.count("\n* ") == 3, manual

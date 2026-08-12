@@ -167,7 +167,7 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | हाल खुला रहेको च्याटको नाम र स्थिति घोषणा गर्नुहोस् |
-| **NVDA+Shift+V** | UnigramPlus | Unigram र UnigramPlus का संस्करण नम्बरहरू घोषणा गर्नुहोस् |
+| **NVDA+Alt+V** | UnigramPlus | Unigram र UnigramPlus का संस्करण नम्बरहरू घोषणा गर्नुहोस् |
 | **ALT+M** | UnigramPlus | नेभिगेसन मेनु खोल्नुहोस् |
 | **ALT+Shift+P** | UnigramPlus | हाल च्याट गरिरहेको प्रोफाइल खोल्नुहोस् |
 | **ALT+L** | UnigramPlus | हाल चलिरहेको च्याटमा नयाँ सन्देशहरूको स्वचालित पठन सक्षम गर्नुहोस् |
@@ -399,6 +399,11 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 ###संस्करण १.१.७
 
 टर्की स्थानीयकरण थपियो।
+
+### Version 5.6.7
+
+* सर्टकट द्वन्द्वबाट बच्न स्थापित Unigram र UnigramPlus संस्करणहरू घोषणा गर्ने सर्टकटलाई NVDA+Shift+V बाट NVDA+Alt+V मा परिवर्तन गरियो।
+* हालका Unigram संस्करणहरूमा च्याट मेटाउन तथा समूह वा च्यानल छोड्नका लागि Shift+Delete लाई सुधार गरियो, स्वचालित पपअप पुष्टि सहित।
 
 ### Version 5.6.6
 

@@ -170,7 +170,7 @@
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | الإعلان عن اسم وحالة الدردشة المفتوحة حاليًّا |
-| **NVDA+Shift+V** | UnigramPlus | الإعلان عن أرقام إصدار Unigram وUnigramPlus |
+| **NVDA+Alt+V** | UnigramPlus | الإعلان عن أرقام إصدار Unigram وUnigramPlus |
 | **ALT+M** | UnigramPlus | فتح قائمة التنقل |
 | **ALT+Shift+P** | UnigramPlus | فتح ملف تعريف الدردشة الحالية |
 | **ALT+L** | UnigramPlus | تمكين القراءة التلقائية للرسائل الجديدة في الدردشة الحالية |
@@ -181,6 +181,11 @@
 <!-- shortcut-table-end -->
 
 ## قائمة التغييرات:
+
+### الإصدار 5.6.7
+
+* تم تغيير اختصار الإعلان عن إصداري Unigram وUnigramPlus المثبتين من NVDA+Shift+V إلى NVDA+Alt+V لتجنب تعارضات الاختصارات.
+* تم إصلاح Shift+Delete لحذف الدردشات ومغادرة المجموعات أو القنوات في إصدارات Unigram الحالية، بما في ذلك معالجة تأكيد النافذة المنبثقة تلقائيًا.
 
 ### الإصدار 5.6.6
 

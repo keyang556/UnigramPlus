@@ -2,7 +2,6 @@
 def _(t): return t
 
 value = _(
-	"- Added NVDA+Shift+V to announce the installed Unigram and UnigramPlus versions.\n"
-	"- Removed the temporary Unigram 12.9 inline-button workaround after Unigram 12.9.1 fixed button labels; this avoids UIA stalls in bot lists, message navigation, reactions, and the chat list.\n"
-	"- Updated all translations and manuals for version 5.6.6."
+	"- Changed the shortcut for announcing the installed Unigram and UnigramPlus versions from NVDA+Shift+V to NVDA+Alt+V to avoid shortcut conflicts.\n"
+	"- Fixed Shift+Delete for deleting chats and leaving groups or channels in current Unigram versions, including automatic popup confirmation handling."
 )

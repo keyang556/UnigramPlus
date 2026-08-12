@@ -169,7 +169,7 @@ And remember that everyone who read this line thought that someone will definite
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
 | **ALT+T** | UnigramPlus | Announce the name and status of an open chat |
-| **NVDA+Shift+V** | UnigramPlus | Announce the Unigram and UnigramPlus version numbers |
+| **NVDA+Alt+V** | UnigramPlus | Announce the Unigram and UnigramPlus version numbers |
 | **ALT+M** | UnigramPlus | Open navigation menu |
 | **ALT+Shift+P** | UnigramPlus | Open current chat profile |
 | **ALT+L** | UnigramPlus | Enable automatic reading of new messages in the current chat |
@@ -180,6 +180,11 @@ And remember that everyone who read this line thought that someone will definite
 <!-- shortcut-table-end -->
 
 ## List of changes:
+
+### Version 5.6.7
+
+* Changed the shortcut for announcing the installed Unigram and UnigramPlus versions from NVDA+Shift+V to NVDA+Alt+V to avoid shortcut conflicts.
+* Fixed Shift+Delete for deleting chats and leaving groups or channels in current Unigram versions, including automatic popup confirmation handling.
 
 ### Version 5.6.6
 
