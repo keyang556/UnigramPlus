@@ -178,6 +178,10 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 
 ##Değişiklik listesi:
 
+### Sürüm 5.6.8
+
+* WhatsApp Enhancer kurulu olduğunda appModules içindeki yardımcı modül adı çakışması nedeniyle Alt+C'nin başarısız olması düzeltildi.
+
 ### Sürüm 5.6.7
 
 * Yüklü Unigram ve UnigramPlus sürümlerini duyurma kısayolu, kısayol çakışmalarını önlemek için NVDA+Shift+V'den NVDA+Alt+V'ye değiştirildi.

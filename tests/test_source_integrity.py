@@ -30,11 +30,31 @@ def test_python_sources_compile_without_syntax_warnings():
 	paths = (
 		ROOT / "addon" / "GlobalPlugins" / "UnigramPlus" / "__init__.py",
 		ROOT / "addon" / "appModules" / "unigram.py",
+		ROOT / "addon" / "appModules" / "unigramplus_text_window.py",
 	)
 	with warnings.catch_warnings():
 		warnings.simplefilter("error", SyntaxWarning)
 		for path in paths:
 			compile(path.read_text(encoding="utf-8-sig"), str(path), "exec")
+
+
+def test_text_window_helper_uses_a_private_module_name():
+	app_modules = ROOT / "addon" / "appModules"
+	assert (app_modules / "unigramplus_text_window.py").is_file()
+	assert not (app_modules / "text_window.py").exists()
+
+	unigram = ast.parse((app_modules / "unigram.py").read_text(encoding="utf-8-sig"))
+	imports = [
+		node
+		for node in unigram.body
+		if isinstance(node, ast.ImportFrom) and node.level == 1
+	]
+	assert any(
+		node.module == "unigramplus_text_window"
+		and [(name.name, name.asname) for name in node.names] == [("TextWindow", None)]
+		for node in imports
+	)
+	assert not any(node.module == "text_window" for node in imports)
 
 
 def test_release_bundle_excludes_python_bytecode_caches():

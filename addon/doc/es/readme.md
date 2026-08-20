@@ -181,6 +181,10 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 
 ##Lista de cambios:
 
+### Versión 5.6.8
+
+* Se corrigió el fallo de Alt+C cuando WhatsApp Enhancer está instalado debido a una colisión de nombres de módulos auxiliares en appModules.
+
 ### Versión 5.6.7
 
 * Se cambió el atajo para anunciar las versiones instaladas de Unigram y UnigramPlus de NVDA+Shift+V a NVDA+Alt+V para evitar conflictos de atajos.

@@ -180,6 +180,10 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 ##Lista de modificări:
 
+### Versiunea 5.6.8
+
+* A fost remediată nereușita Alt+C atunci când WhatsApp Enhancer este instalat, cauzată de o coliziune de nume de module auxiliare în appModules.
+
 ### Versiunea 5.6.7
 
 * Scurtătura pentru anunțarea versiunilor instalate de Unigram și UnigramPlus a fost schimbată din NVDA+Shift+V în NVDA+Alt+V pentru a evita conflictele de taste.

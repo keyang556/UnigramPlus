@@ -102,7 +102,7 @@ def test_all_readmes_have_complete_integrated_shortcut_tables():
 		assert "| **Ctrl+Shift+.** | Unigram |" in text, readme
 		assert "| **Ctrl+U** | Unigram |" in text, readme
 		assert "| **ALT+End** |" not in text, readme
-		assert "5.6.7" in text, readme
+		assert "5.6.8" in text, readme
 		assert "| **NVDA+Alt+V** | UnigramPlus |" in text, readme
 		if reference_unigram_shortcuts is None:
 			reference_unigram_shortcuts = unigram_shortcuts

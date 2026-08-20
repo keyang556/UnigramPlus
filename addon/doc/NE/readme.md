@@ -400,6 +400,10 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 
 टर्की स्थानीयकरण थपियो।
 
+### Version 5.6.8
+
+* WhatsApp Enhancer स्थापना हुँदा appModules सहायक मोड्युल नाम टकरावका कारण Alt+C असफल हुने समस्या समाधान गरियो।
+
 ### Version 5.6.7
 
 * सर्टकट द्वन्द्वबाट बच्न स्थापित Unigram र UnigramPlus संस्करणहरू घोषणा गर्ने सर्टकटलाई NVDA+Shift+V बाट NVDA+Alt+V मा परिवर्तन गरियो।

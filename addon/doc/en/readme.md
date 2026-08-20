@@ -181,6 +181,10 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
+### Version 5.6.8
+
+* Fixed Alt+C failing when WhatsApp Enhancer is installed due to an appModules helper module name collision.
+
 ### Version 5.6.7
 
 * Changed the shortcut for announcing the installed Unigram and UnigramPlus versions from NVDA+Shift+V to NVDA+Alt+V to avoid shortcut conflicts.

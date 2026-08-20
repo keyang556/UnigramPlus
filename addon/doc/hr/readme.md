@@ -182,6 +182,10 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 
 ##Popis promjena:
 
+### Verzija 5.6.8
+
+* Ispravljen je neuspjeh prečaca Alt+C kada je instaliran WhatsApp Enhancer zbog sukoba naziva pomoćnog modula u appModules.
+
 ### Verzija 5.6.7
 
 * Prečac za izgovaranje instaliranih verzija programa Unigram i dodatka UnigramPlus promijenjen je s NVDA+Shift+V na NVDA+Alt+V kako bi se izbjegli sukobi prečaca.

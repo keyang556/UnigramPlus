@@ -179,6 +179,10 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 
 ## 版本变更
 
+### 版本 5.6.8
+
+* 修复安装 WhatsApp Enhancer 时因 appModules 辅助模块名称冲突导致 Alt+C 失效的问题。
+
 ### 版本 5.6.7
 
 * 为避免快捷键冲突，将读出已安装 Unigram 和 UnigramPlus 版本的快捷键从 NVDA+Shift+V 改为 NVDA+Alt+V。

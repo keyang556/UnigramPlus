@@ -179,6 +179,10 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 
 ##Liste des changements :
 
+### Version 5.6.8
+
+* Correction de l’échec de Alt+C lorsque WhatsApp Enhancer est installé, dû à une collision de noms de modules auxiliaires dans appModules.
+
 ### Version 5.6.7
 
 * Le raccourci annonçant les versions installées d’Unigram et d’UnigramPlus est passé de NVDA+Maj+V à NVDA+Alt+V afin d’éviter les conflits de raccourcis.

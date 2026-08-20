@@ -30,7 +30,7 @@ import re
 import importlib.util
 sys.path.insert(0, ".")
 from .data import *
-from .text_window import *
+from .unigramplus_text_window import TextWindow
 from .cnf import conf, lang
 from .readme_shortcuts import extractShortcutText  # noqa: E402
 from .message_header import (  # noqa: E402

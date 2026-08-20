@@ -454,6 +454,10 @@ Added Turkish localization
 
 
 
+### Verzija 5.6.8
+
+* Ispravljen je neuspeh Alt+C kada je instaliran WhatsApp Enhancer, izazvan sukobom naziva pomoćnog modula u appModules.
+
 ### Verzija 5.6.7
 
 * Prečica za izgovaranje instaliranih verzija programa Unigram i dodatka UnigramPlus promenjena je sa NVDA+Shift+V na NVDA+Alt+V radi izbegavanja sukoba prečica.
