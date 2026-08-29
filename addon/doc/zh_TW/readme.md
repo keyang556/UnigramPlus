@@ -179,6 +179,12 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 
 ## 版本變更
 
+### 版本 5.6.9
+
+* UnigramPlus 現已通過 NVDA 2026.2 測試，並改用 NVDA 新版對話方塊 API，同時為較舊的 NVDA 版本保留備援方案。
+* Unigram 12.10.1 已為「我的收藏」聊天列提供正確的無障礙名稱，因此移除「我的收藏」主題名稱的暫時修正。
+* 已更新 5.6.9 版的所有翻譯與說明文件。
+
 ### 版本 5.6.8
 
 * 修正安裝 WhatsApp Enhancer 時，因 appModules 輔助模組名稱衝突導致 Alt+C 失效的問題。

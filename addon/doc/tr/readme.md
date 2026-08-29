@@ -178,6 +178,12 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 
 ##Değişiklik listesi:
 
+### Sürüm 5.6.9
+
+* UnigramPlus artık NVDA 2026.2 ile test edilmektedir ve eski NVDA sürümleri için geri dönüş çözümleriyle birlikte NVDA'nın modern iletişim kutusu API'lerini kullanır.
+* Unigram 12.10.1, Kayıtlı Mesajlar sohbet satırlarına doğru erişilebilir adlar ekledikten sonra Kayıtlı Mesajlar konu adı için geçici düzeltme kaldırıldı.
+* Tüm çeviriler ve kılavuzlar 5.6.9 sürümü için güncellendi.
+
 ### Sürüm 5.6.8
 
 * WhatsApp Enhancer kurulu olduğunda appModules içindeki yardımcı modül adı çakışması nedeniyle Alt+C'nin başarısız olması düzeltildi.

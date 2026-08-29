@@ -179,6 +179,12 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 
 ## Lista de alterações:
 
+### Versão 5.6.9
+
+* O UnigramPlus agora é testado com o NVDA 2026.2 e usa as APIs de diálogos modernas do NVDA, com alternativas para versões mais antigas do NVDA.
+* Removida a correção temporária do nome dos tópicos de Mensagens salvas após o Unigram 12.10.1 adicionar nomes acessíveis adequados às linhas de conversas de Mensagens salvas.
+* Atualizadas todas as traduções e manuais para a versão 5.6.9.
+
 ### Versão 5.6.8
 
 * Corrigida a falha do Alt+C quando o WhatsApp Enhancer está instalado, causada por uma colisão de nomes de módulos auxiliares em appModules.

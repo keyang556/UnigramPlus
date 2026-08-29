@@ -454,6 +454,12 @@ Added Turkish localization
 
 
 
+### Verzija 5.6.9
+
+* UnigramPlus je sada testiran sa NVDA 2026.2 i koristi moderne NVDA API-je za dijaloge, uz rezervna rešenja za starije verzije NVDA-a.
+* Uklonjena je privremena ispravka naziva tema Sačuvanih poruka nakon što je Unigram 12.10.1 dodao ispravna pristupačna imena redovima ćaskanja Sačuvanih poruka.
+* Ažurirani su svi prevodi i priručnici za verziju 5.6.9.
+
 ### Verzija 5.6.8
 
 * Ispravljen je neuspeh Alt+C kada je instaliran WhatsApp Enhancer, izazvan sukobom naziva pomoćnog modula u appModules.

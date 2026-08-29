@@ -553,37 +553,18 @@ def test_inline_button_workaround_was_removed_after_unigram_fixed_its_automation
 		assert removed_symbol not in source
 
 
-def test_saved_messages_topic_type_name_is_replaced_with_visible_title(monkeypatch):
-	class RawTitle:
-		def GetCurrentPropertyValueEx(self, property_id, ignore_default):
-			assert property_id == "name"
-			assert ignore_default is True
-			return "Project chat"
+def test_saved_messages_topic_workaround_was_removed_after_unigram_fixed_chat_cells():
+	source = SOURCE_PATH.read_text(encoding="utf-8")
 
-	client = SimpleNamespace(
-		CreatePropertyCondition=lambda property_id, value: (property_id, value),
-	)
-	monkeypatch.setitem(
-		sys.modules,
-		"UIAHandler",
-		SimpleNamespace(
-			handler=SimpleNamespace(clientObject=client),
-			TreeScope_Descendants="descendants",
-			UIA=SimpleNamespace(
-				UIA_AutomationIdPropertyId="automationId",
-				UIA_NamePropertyId="name",
-			),
-		),
-	)
-	chat = Node("Telegram.Td.Api.SavedMessagesTopic")
-	chat.UIAElement = SimpleNamespace(findFirst=lambda scope, condition: RawTitle())
-	namespace = _load_module_members(
-		{"_repair_saved_messages_topic_name"},
-		{"_SAVED_MESSAGES_TOPIC_TYPE_NAME": "Telegram.Td.Api.SavedMessagesTopic"},
-	)
-
-	assert namespace["_repair_saved_messages_topic_name"](chat) == "Project chat"
-	assert "ChatCell.GetAutomationName handles" in SOURCE_PATH.read_text(encoding="utf-8")
+	# Unigram 12.10.1 added a ChatCell.GetAutomationName branch for saved-messages
+	# topics, so their rows now expose a real accessible name instead of the
+	# TDLib type string the add-on used to repair.
+	for removed_symbol in (
+		"_repair_saved_messages_topic_name",
+		"_SAVED_MESSAGES_TOPIC_TYPE_NAME",
+		"Telegram.Td.Api.SavedMessagesTopic",
+	):
+		assert removed_symbol not in source
 
 
 def test_shift_delete_remains_bound_but_alt_end_is_removed():

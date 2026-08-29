@@ -181,6 +181,12 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
+### Version 5.6.9
+
+* UnigramPlus is now tested with NVDA 2026.2 and uses NVDA's modern dialog APIs, with fallbacks for older NVDA versions.
+* Removed the temporary Saved Messages topic name fix after Unigram 12.10.1 added proper accessible names for Saved Messages chat rows.
+* Updated all translations and manuals for version 5.6.9.
+
 ### Version 5.6.8
 
 * Fixed Alt+C failing when WhatsApp Enhancer is installed due to an appModules helper module name collision.

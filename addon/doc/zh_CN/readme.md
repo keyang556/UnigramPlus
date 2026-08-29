@@ -179,6 +179,12 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 
 ## 版本变更
 
+### 版本 5.6.9
+
+* UnigramPlus 现已通过 NVDA 2026.2 测试，并改用 NVDA 新版对话框 API，同时为较旧的 NVDA 版本保留后备方案。
+* Unigram 12.10.1 已为“已保存的消息”聊天行提供正确的无障碍名称，因此移除了“已保存的消息”主题名称的临时修复。
+* 已更新 5.6.9 版的所有翻译和手册。
+
 ### 版本 5.6.8
 
 * 修复安装 WhatsApp Enhancer 时因 appModules 辅助模块名称冲突导致 Alt+C 失效的问题。

@@ -59,7 +59,6 @@ _telegramDesktopFallbackClass = None
 _telegramDesktopFallbackLoadAttempted = False
 
 _APP_MODULE_NAME_IGNORED_CHARS = str.maketrans("", "", "\u200e\u200f\u2066\u2067\u2068\u2069")
-_SAVED_MESSAGES_TOPIC_TYPE_NAME = "Telegram.Td.Api.SavedMessagesTopic"
 _VOICE_RECORDING_POLL_INTERVAL = .2
 # Allow Unigram time to finalize the recording and insert its outgoing message.
 # A sent message is still reported immediately; only cancellation waits this long.
@@ -444,36 +443,6 @@ def _get_raw_context_menu_focus(process_id=0):
 		if control_type_id is not None
 	)
 	return focused if control_type in popup_control_types else None
-
-
-def _repair_saved_messages_topic_name(obj):
-	"""Temporarily replace Unigram's leaked TDLib type with the visible chat title."""
-	try:
-		name = str(obj.name or "")
-	except Exception:
-		return ""
-	if _SAVED_MESSAGES_TOPIC_TYPE_NAME not in name:
-		return name
-	# TODO: Remove when ChatCell.GetAutomationName handles _savedMessagesTopic.
-	# Ask the UIA provider for the one known element instead of recursively
-	# materializing the chat row as NVDAObjects on NVDA's main thread.
-	try:
-		import UIAHandler
-
-		client = UIAHandler.handler.clientObject
-		condition = client.CreatePropertyCondition(
-			UIAHandler.UIA.UIA_AutomationIdPropertyId,
-			"TitleLabel",
-		)
-		title = obj.UIAElement.findFirst(UIAHandler.TreeScope_Descendants, condition)
-		if title:
-			title_name = title.GetCurrentPropertyValueEx(UIAHandler.UIA.UIA_NamePropertyId, True) or ""
-			title_name = str(title_name).strip()
-			if title_name:
-				return name.replace(_SAVED_MESSAGES_TOPIC_TYPE_NAME, title_name)
-	except Exception:
-		pass
-	return name
 
 
 def _find_ancestor_by_automation_id(obj, automation_ids, max_depth=6):
@@ -2692,9 +2661,6 @@ class AppModule(appModuleHandler.AppModule):
 
 	# Processing the focused element from the list of chats
 	def actionChatElementInFocus(self, obj):
-		# TODO: Remove when Unigram's ChatCell.GetAutomationName handles
-		# _savedMessagesTopic instead of exposing Telegram.Td.Api.SavedMessagesTopic.
-		obj.name = _repair_saved_messages_topic_name(obj)
 		# If the user does not want to change the order of elements in the chat name, then we immediately terminate the function to improve the response speed
 		if conf.get("voiceTypeAfterChatName") == "beforeName": return obj.name
 		item = obj.firstChild
@@ -2872,10 +2838,6 @@ class AppModule(appModuleHandler.AppModule):
 			return
 		if obj.role == Role.LISTITEM:
 			speech.cancelSpeech()
-			# Saved-message topic rows are not children of ChatsList, so the older
-			# chat-only branch never saw them.
-			if _SAVED_MESSAGES_TOPIC_TYPE_NAME in str(obj.name or ""):
-				obj.name = _repair_saved_messages_topic_name(obj)
 			if self.is_message_object(obj):
 				self.saved_items.save("last focus object", obj)
 				obj.name = self.action_message_focus(obj)

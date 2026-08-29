@@ -2,7 +2,7 @@
 def _(t): return t
 
 value = _(
-	"- Fixed Alt+C failing when WhatsApp Enhancer is installed due to an appModules helper module name collision.\n"
-	"- Changed the shortcut for announcing the installed Unigram and UnigramPlus versions from NVDA+Shift+V to NVDA+Alt+V to avoid shortcut conflicts.\n"
-	"- Fixed Shift+Delete for deleting chats and leaving groups or channels in current Unigram versions, including automatic popup confirmation handling."
+	"- UnigramPlus is now tested with NVDA 2026.2 and uses NVDA's modern dialog APIs, with fallbacks for older NVDA versions.\n"
+	"- Removed the temporary Saved Messages topic name fix after Unigram 12.10.1 added proper accessible names for Saved Messages chat rows.\n"
+	"- Updated all translations and manuals for version 5.6.9."
 )

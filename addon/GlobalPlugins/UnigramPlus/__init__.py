@@ -12,7 +12,6 @@ import urllib.request
 import urllib.parse
 import json
 import core
-import globalVars
 import os
 import re
 addonHandler.initTranslation()
@@ -28,11 +27,17 @@ from ui import message
 UPDATE_REPO = "keyang556/UnigramPlus"
 UPDATE_API_URL = "https://api.github.com/repos/%s/releases/latest" % UPDATE_REPO
 
+def _alert_dialog(text, caption):
+	# NVDA 2025.1 deprecated gui.messageBox; MessageDialog.alert is its thread-safe
+	# replacement. Keep the old call as a fallback for NVDA versions before 2025.1.
+	try:
+		from gui.message import MessageDialog
+		MessageDialog.alert(text, caption)
+	except ImportError:
+		gui.messageBox(text, caption, wx.OK | wx.ICON_INFORMATION)
+
 def no_updates_dialog():
-	res = gui.messageBox(
-		_("No updates available"),
-		_("UnigramPlus update"),
-		wx.OK | wx.ICON_INFORMATION)
+	_alert_dialog(_("No updates available"), _("UnigramPlus update"))
 
 def _http_get(url, timeout=30):
 	request = urllib.request.Request(url, headers={
@@ -166,10 +171,9 @@ class window_for_update(wx.Frame):
 			except ImportError:
 				compatible = True
 			if not compatible:
-				gui.messageBox(
+				_alert_dialog(
 					_("The new version of UnigramPlus is not compatible with this version of NVDA. Please update NVDA first."),
-					_("UnigramPlus update"),
-					wx.OK | wx.ICON_WARNING)
+					_("UnigramPlus update"))
 				self.Close()
 				return
 		except Exception:
@@ -199,7 +203,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	@script(description=_("Open UnigramPlus settings window"), gesture="kb:NVDA+ALT+U")
 	def script_open_settings_dialog(self, gesture, arg = False):
-		wx.CallAfter(gui.mainFrame._popupSettingsDialog, gui.settingsDialogs.NVDASettingsDialog, UnigramPlusSettings)
+		# popupSettingsDialog is public API since NVDA 2023.2; the underscore name
+		# is deprecated and kept only as a fallback for older NVDA versions.
+		popup = getattr(gui.mainFrame, "popupSettingsDialog", None) or gui.mainFrame._popupSettingsDialog
+		wx.CallAfter(popup, gui.settingsDialogs.NVDASettingsDialog, UnigramPlusSettings)
 
 	# Call answer
 	@script(description=_("Accept call"), gesture="kb:ALT+Y")

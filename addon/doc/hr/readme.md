@@ -182,6 +182,12 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 
 ##Popis promjena:
 
+### Verzija 5.6.9
+
+* UnigramPlus je sada testiran s NVDA 2026.2 i koristi moderne NVDA API-je za dijaloge, uz rezervna rješenja za starije verzije NVDA-e.
+* Uklonjen je privremeni popravak naziva tema Spremljenih poruka nakon što je Unigram 12.10.1 dodao ispravna pristupačna imena recima razgovora Spremljenih poruka.
+* Ažurirani su svi prijevodi i priručnici za verziju 5.6.9.
+
 ### Verzija 5.6.8
 
 * Ispravljen je neuspjeh prečaca Alt+C kada je instaliran WhatsApp Enhancer zbog sukoba naziva pomoćnog modula u appModules.

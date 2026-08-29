@@ -180,6 +180,12 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 ##Lista de modificări:
 
+### Versiunea 5.6.9
+
+* UnigramPlus este acum testat cu NVDA 2026.2 și folosește API-urile moderne de dialog ale NVDA, cu soluții de rezervă pentru versiunile mai vechi de NVDA.
+* S-a eliminat remedierea temporară a numelui subiectelor Mesajelor salvate după ce Unigram 12.10.1 a adăugat nume accesibile corecte rândurilor de conversații ale Mesajelor salvate.
+* Au fost actualizate toate traducerile și manualele pentru versiunea 5.6.9.
+
 ### Versiunea 5.6.8
 
 * A fost remediată nereușita Alt+C atunci când WhatsApp Enhancer este instalat, cauzată de o coliziune de nume de module auxiliare în appModules.

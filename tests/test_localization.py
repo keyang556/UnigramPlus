@@ -49,6 +49,11 @@ REQUIRED_TRANSLATIONS = {
 		"- Removed the temporary Unigram 12.9 inline-button workaround after Unigram 12.9.1 fixed button labels; this avoids UIA stalls in bot lists, message navigation, reactions, and the chat list.\n"
 		"- Updated all translations and manuals for version 5.6.6."
 	),
+	(
+		"- UnigramPlus is now tested with NVDA 2026.2 and uses NVDA's modern dialog APIs, with fallbacks for older NVDA versions.\n"
+		"- Removed the temporary Saved Messages topic name fix after Unigram 12.10.1 added proper accessible names for Saved Messages chat rows.\n"
+		"- Updated all translations and manuals for version 5.6.9."
+	),
 }
 
 
@@ -98,37 +103,40 @@ def test_required_strings_are_translated_in_every_locale():
 			)
 
 
-def test_release_version_is_568():
+def test_release_version_is_569():
 	build_vars = (ROOT / "buildVars.py").read_text(encoding="utf-8")
 	manifest = (ROOT / "addon" / "manifest.ini").read_text(encoding="utf-8")
 	pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
 	lockfile = (ROOT / "uv.lock").read_text(encoding="utf-8")
 
-	assert 'addon_version="5.6.8"' in build_vars
-	assert "version = 5.6.8" in manifest
-	assert 'version = "5.6.8"' in pyproject
-	assert 'name = "unigramplus"\nversion = "5.6.8"' in lockfile
+	assert 'addon_version="5.6.9"' in build_vars
+	assert "version = 5.6.9" in manifest
+	assert 'lastTestedNVDAVersion = 2026.2.0' in manifest
+	assert 'version = "5.6.9"' in pyproject
+	assert 'name = "unigramplus"\nversion = "5.6.9"' in lockfile
 
 
-def test_all_catalogs_identify_the_568_release():
+def test_all_catalogs_identify_the_569_release():
 	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
 		catalog = (locale_dir / "LC_MESSAGES" / "nvda.po").read_text(encoding="utf-8")
-		assert '"Project-Id-Version: UnigramPlus 5.6.8\\n"' in catalog
+		assert '"Project-Id-Version: UnigramPlus 5.6.9\\n"' in catalog
 
 
 def test_current_release_changelog_comes_from_the_changelog_source():
 	changelog = (ROOT / "changelog.py").read_text(encoding="utf-8")
 
-	assert "WhatsApp Enhancer" in changelog
-	assert "appModules helper module name collision" in changelog
+	assert "NVDA 2026.2" in changelog
+	assert "Unigram 12.10.1" in changelog
+	assert "Saved Messages" in changelog
 
 
-def test_every_localized_manual_has_568_through_559_and_updated_558_changelogs():
+def test_every_localized_manual_has_569_through_559_and_updated_558_changelogs():
 	manuals = [ROOT / "readme.md", *sorted(DOC_DIR.glob("*/readme.md"))]
 	assert len(manuals) == 17
 	for manual in manuals:
 		text = manual.read_text(encoding="utf-8")
-		version_568 = text.index("5.6.8")
+		version_569 = text.index("5.6.9")
+		version_568 = text.index("5.6.8", version_569)
 		version_567 = text.index("5.6.7", version_568)
 		version_566 = text.index("5.6.6", version_567)
 		version_565 = text.index("5.6.5", version_566)
@@ -139,6 +147,7 @@ def test_every_localized_manual_has_568_through_559_and_updated_558_changelogs()
 		version_560 = text.index("5.6.0", version_561)
 		version_559 = text.index("5.5.9", version_560)
 		version_558 = text.index("5.5.8", version_559)
+		section_569 = text[version_569:version_568]
 		section_568 = text[version_568:version_567]
 		section_567 = text[version_567:version_566]
 		section_566 = text[version_566:version_565]
@@ -148,6 +157,9 @@ def test_every_localized_manual_has_568_through_559_and_updated_558_changelogs()
 		section_562 = text[version_562:version_561]
 		section_561 = text[version_561:version_560]
 		section_560 = text[version_560:version_559]
+		assert "NVDA 2026.2" in section_569, manual
+		assert "12.10.1" in section_569, manual
+		assert section_569.count("\n* ") == 3, manual
 		assert "Alt+C" in section_568, manual
 		assert "WhatsApp Enhancer" in section_568, manual
 		assert section_568.count("\n* ") == 1, manual
