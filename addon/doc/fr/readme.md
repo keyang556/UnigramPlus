@@ -179,6 +179,13 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 
 ##Liste des changements :
 
+### Version 5.6.9
+
+* Correction d’une erreur pouvant survenir lorsque NVDA entrait dans un bureau sécurisé, par exemple lors d’une invite UAC, alors que le suivi des messages en arrière-plan d’UnigramPlus était activé.
+* Suppression de l’ancien correctif de nom des rubriques Messages enregistrés ; les versions actuelles d’Unigram fournissent désormais nativement des noms accessibles pour les discussions Messages enregistrés.
+* Mise à jour de la compatibilité avec NVDA 2026.2.
+* Mise à jour des traductions polonaise et birmane.
+
 ### Version 5.6.8
 
 * Correction de l’échec de Alt+C lorsque WhatsApp Enhancer est installé, dû à une collision de noms de modules auxiliaires dans appModules.

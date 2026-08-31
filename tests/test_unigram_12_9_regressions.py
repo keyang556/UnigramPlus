@@ -553,37 +553,46 @@ def test_inline_button_workaround_was_removed_after_unigram_fixed_its_automation
 		assert removed_symbol not in source
 
 
-def test_saved_messages_topic_type_name_is_replaced_with_visible_title(monkeypatch):
-	class RawTitle:
-		def GetCurrentPropertyValueEx(self, property_id, ignore_default):
-			assert property_id == "name"
-			assert ignore_default is True
-			return "Project chat"
+def test_saved_messages_topic_workaround_is_absent_after_unigram_native_fix():
+	source = SOURCE_PATH.read_text(encoding="utf-8")
 
-	client = SimpleNamespace(
-		CreatePropertyCondition=lambda property_id, value: (property_id, value),
-	)
-	monkeypatch.setitem(
-		sys.modules,
-		"UIAHandler",
-		SimpleNamespace(
-			handler=SimpleNamespace(clientObject=client),
-			TreeScope_Descendants="descendants",
-			UIA=SimpleNamespace(
-				UIA_AutomationIdPropertyId="automationId",
-				UIA_NamePropertyId="name",
-			),
-		),
-	)
-	chat = Node("Telegram.Td.Api.SavedMessagesTopic")
-	chat.UIAElement = SimpleNamespace(findFirst=lambda scope, condition: RawTitle())
+	assert "_SAVED_MESSAGES_TOPIC_TYPE_NAME" not in source
+	assert "_repair_saved_messages_topic_name" not in source
+	assert "Telegram.Td.Api.SavedMessagesTopic" not in source
+
+
+def test_saved_items_uses_only_a_valid_focused_window_handle():
+	focus = SimpleNamespace(windowHandle=200)
 	namespace = _load_module_members(
-		{"_repair_saved_messages_topic_name"},
-		{"_SAVED_MESSAGES_TOPIC_TYPE_NAME": "Telegram.Td.Api.SavedMessagesTopic"},
+		{"Saved_items"},
+		{"api": SimpleNamespace(getFocusObject=lambda: focus)},
 	)
+	saved_items = namespace["Saved_items"]()
+	saved_items._items = {}
 
-	assert namespace["_repair_saved_messages_topic_name"](chat) == "Project chat"
-	assert "ChatCell.GetAutomationName handles" in SOURCE_PATH.read_text(encoding="utf-8")
+	saved_items.save("last message", "message in first window")
+	assert saved_items.get("last message") == "message in first window"
+
+	focus.windowHandle = 201
+	assert saved_items.get("last message") is False
+	saved_items.save("last message", "message in second window")
+	assert saved_items._items == {
+		200: {"last message": "message in first window"},
+		201: {"last message": "message in second window"},
+	}
+
+	for invalid_window_handle in (None, 0, -1, True, "201"):
+		focus = SimpleNamespace(windowHandle=invalid_window_handle)
+		assert saved_items.get("last message") is False
+		saved_items.save("last message", "must not be cached")
+
+	focus = SimpleNamespace()
+	assert saved_items.get("last message") is False
+	saved_items.save("last message", "must not be cached")
+	assert saved_items._items == {
+		200: {"last message": "message in first window"},
+		201: {"last message": "message in second window"},
+	}
 
 
 def test_shift_delete_remains_bound_but_alt_end_is_removed():

@@ -7,6 +7,8 @@ LOCALE_DIR = ROOT / "addon" / "locale"
 DOC_DIR = ROOT / "addon" / "doc"
 VERSION_REPORT = "Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
 
+# Only active runtime strings belong here. Historical release notes and removed
+# features may correctly be absent from the newest translator-maintained catalogs.
 REQUIRED_TRANSLATIONS = {
 	"Interface language in Unigram:",
 	"Speak the type of chat in the chat list:",
@@ -16,9 +18,6 @@ REQUIRED_TRANSLATIONS = {
 	"Select the progress bar notification level:",
 	"File transfer progress announcement interval (percent):",
 	"Rich message",
-	"Added support for rich messages. Rich messages are now announced when focused and can be opened with Alt+C in a browseable window.",
-	"Links and mixed content in rich messages are preserved, and links can be activated from the browseable window.",
-	"Fixed automatic updates: releases are now retrieved securely from GitHub and the downloaded add-on is validated before installation.",
 	"Move to the next or previous chat with unread mentions",
 	"No more chats with unread mentions in this direction",
 	"No search results",
@@ -29,26 +28,6 @@ REQUIRED_TRANSLATIONS = {
 	"Play a sound when reaching the end of a chat",
 	"Announce the Unigram and UnigramPlus version numbers",
 	VERSION_REPORT,
-	(
-		"- Fixed Ctrl+Alt+Left/Right so they seek the current voice message playback again.\n"
-		"- Fixed Alt+I so it moves to Unigram's inline chat search results list.\n"
-		"- Added Alt+[ to announce message headers after the content, so file names can be announced before sender names in profile media sections."
-	),
-	(
-		"- Fixed an intermittent issue where NVDA announced \"list\" before a message while navigating with the Up and Down Arrow keys.\n"
-		"- Added a setting for the Alt+[ behavior that announces message headers after their content; it is disabled by default.\n"
-		"- Added an optional sound notification when reaching the end of a chat."
-	),
-	(
-		"- Fixed Enter for replying to messages and Alt+Shift+R for marking chats as read in current Unigram versions.\n"
-		"- Removed the web view mode and its setting; Alt+C now always opens message text in the original wx popup window.\n"
-		"- Updated all translations and manuals for version 5.6.5."
-	),
-	(
-		"- Added NVDA+Shift+V to announce the installed Unigram and UnigramPlus versions.\n"
-		"- Removed the temporary Unigram 12.9 inline-button workaround after Unigram 12.9.1 fixed button labels; this avoids UIA stalls in bot lists, message navigation, reactions, and the chat list.\n"
-		"- Updated all translations and manuals for version 5.6.6."
-	),
 }
 
 
@@ -98,19 +77,19 @@ def test_required_strings_are_translated_in_every_locale():
 			)
 
 
-def test_release_version_is_568():
+def test_release_version_is_569():
 	build_vars = (ROOT / "buildVars.py").read_text(encoding="utf-8")
 	manifest = (ROOT / "addon" / "manifest.ini").read_text(encoding="utf-8")
 	pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
 	lockfile = (ROOT / "uv.lock").read_text(encoding="utf-8")
 
-	assert 'addon_version="5.6.8"' in build_vars
-	assert "version = 5.6.8" in manifest
-	assert 'version = "5.6.8"' in pyproject
-	assert 'name = "unigramplus"\nversion = "5.6.8"' in lockfile
+	assert 'addon_version="5.6.9"' in build_vars
+	assert "version = 5.6.9" in manifest
+	assert 'version = "5.6.9"' in pyproject
+	assert 'name = "unigramplus"\nversion = "5.6.9"' in lockfile
 
 
-def test_all_catalogs_identify_the_568_release():
+def test_catalogs_keep_the_568_translation_metadata():
 	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
 		catalog = (locale_dir / "LC_MESSAGES" / "nvda.po").read_text(encoding="utf-8")
 		assert '"Project-Id-Version: UnigramPlus 5.6.8\\n"' in catalog
@@ -119,16 +98,19 @@ def test_all_catalogs_identify_the_568_release():
 def test_current_release_changelog_comes_from_the_changelog_source():
 	changelog = (ROOT / "changelog.py").read_text(encoding="utf-8")
 
-	assert "WhatsApp Enhancer" in changelog
-	assert "appModules helper module name collision" in changelog
+	assert "secure desktop" in changelog
+	assert "Saved Messages topic name workaround" in changelog
+	assert "NVDA 2026.2" in changelog
+	assert "Polish and Burmese translations" in changelog
 
 
-def test_every_localized_manual_has_568_through_559_and_updated_558_changelogs():
+def test_every_localized_manual_has_569_through_559_and_updated_558_changelogs():
 	manuals = [ROOT / "readme.md", *sorted(DOC_DIR.glob("*/readme.md"))]
 	assert len(manuals) == 17
 	for manual in manuals:
 		text = manual.read_text(encoding="utf-8")
-		version_568 = text.index("5.6.8")
+		version_569 = text.index("5.6.9")
+		version_568 = text.index("5.6.8", version_569)
 		version_567 = text.index("5.6.7", version_568)
 		version_566 = text.index("5.6.6", version_567)
 		version_565 = text.index("5.6.5", version_566)
@@ -139,6 +121,7 @@ def test_every_localized_manual_has_568_through_559_and_updated_558_changelogs()
 		version_560 = text.index("5.6.0", version_561)
 		version_559 = text.index("5.5.9", version_560)
 		version_558 = text.index("5.5.8", version_559)
+		section_569 = text[version_569:version_568]
 		section_568 = text[version_568:version_567]
 		section_567 = text[version_567:version_566]
 		section_566 = text[version_566:version_565]
@@ -148,6 +131,7 @@ def test_every_localized_manual_has_568_through_559_and_updated_558_changelogs()
 		section_562 = text[version_562:version_561]
 		section_561 = text[version_561:version_560]
 		section_560 = text[version_560:version_559]
+		assert section_569.count("\n* ") == 4, manual
 		assert "Alt+C" in section_568, manual
 		assert "WhatsApp Enhancer" in section_568, manual
 		assert section_568.count("\n* ") == 1, manual
