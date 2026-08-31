@@ -10,10 +10,10 @@ sys.path.insert(0, str(ROOT / "addon" / "appModules"))
 from voice_recording import (  # noqa: E402
 	VoiceRecordingOutcome,
 	VoiceRecordingState,
+	is_elapsed_label,
 	is_recorded_message,
 	is_recording_button,
 	message_marker,
-	recording_button_state,
 )
 
 
@@ -160,81 +160,37 @@ def test_default_outcome_window_allows_slow_recording_finalization():
 	assert outcome.observe(("position", 8), is_recorded=False) == "canceled"
 
 
-def test_recording_state_uses_the_same_elapsed_sibling_as_the_button_label():
-	idle_button = SimpleNamespace(
-		UIAAutomationId="btnVoiceMessage",
-		next=SimpleNamespace(UIAAutomationId="SomeOtherControl"),
-	)
-	recording_button = SimpleNamespace(
-		UIAAutomationId="btnVoiceMessage",
-		next=SimpleNamespace(UIAAutomationId="ElapsedLabel"),
-	)
-
-	assert is_recording_button(idle_button)
-	assert recording_button_state(idle_button) is False
-	assert recording_button_state(recording_button) is True
-	assert recording_button_state(SimpleNamespace(UIAAutomationId="SendButton")) is None
-
-
-def test_unreadable_cached_button_is_rediscovered_instead_of_misdetected():
-	class StaleButton:
-		UIAAutomationId = "btnVoiceMessage"
-
-		@property
-		def next(self):
-			raise RuntimeError("stale UIA object")
-
-	assert recording_button_state(StaleButton()) is None
-
-
-def test_cached_recording_button_avoids_repeated_ui_tree_searches():
-	button = SimpleNamespace(UIAAutomationId="btnVoiceMessage")
-	focus = SimpleNamespace(UIAAutomationId="TextField")
-	instance = SimpleNamespace(
-		_voiceRecordingButton=button,
-		_voiceRecordingDiscoveryFocus=None,
-		getElements=lambda: (_ for _ in ()).throw(AssertionError("unexpected UI tree scan")),
-	)
-	namespace = {"is_recording_button": is_recording_button}
-	method = _load_method("_getVoiceRecordingButton", namespace)
-
-	assert method(instance, focus) is button
-
-
-def test_recording_button_discovery_runs_only_once_for_the_same_focus():
-	focus = SimpleNamespace(UIAAutomationId="TextField")
-	searches = []
-	instance = SimpleNamespace(
-		_voiceRecordingButton=None,
-		_voiceRecordingDiscoveryFocus=None,
-		getElements=lambda: searches.append(True) or [],
-	)
-	namespace = {"is_recording_button": is_recording_button}
-	method = _load_method("_getVoiceRecordingButton", namespace)
-
-	assert method(instance, focus) is None
-	assert method(instance, focus) is None
-	assert searches == [True]
-
-
-def test_recording_monitor_schedules_on_nvda_main_loop_without_timer_threads(monkeypatch):
+def test_recording_outcome_poll_schedules_only_while_an_outcome_is_pending(monkeypatch):
 	scheduled = []
 	core = SimpleNamespace(callLater=lambda delay, callback: scheduled.append((delay, callback)))
 	monkeypatch.setitem(sys.modules, "core", core)
 	instance = SimpleNamespace(
-		_voiceRecordingMonitorRunning=True,
-		_pollVoiceRecordingState=lambda: None,
+		_voiceRecordingOutcomePollingEnabled=True,
+		_voiceRecordingOutcome=SimpleNamespace(pending=True),
+		_voiceRecordingOutcomePollScheduled=False,
+		_pollVoiceRecordingOutcome=lambda: None,
 	)
-	namespace = {"_VOICE_RECORDING_POLL_INTERVAL": 0.2}
-	method = _load_method("_scheduleVoiceRecordingPoll", namespace)
+	namespace = {"_VOICE_RECORDING_OUTCOME_POLL_INTERVAL": 0.2}
+	method = _load_method("_scheduleVoiceRecordingOutcomePoll", namespace)
 
 	method(instance)
+	method(instance)
 
-	assert scheduled == [(200, instance._pollVoiceRecordingState)]
+	assert scheduled == [(200, instance._pollVoiceRecordingOutcome)]
+	assert instance._voiceRecordingOutcomePollScheduled
+
+
+def test_app_module_has_no_permanent_recording_state_poll_or_tree_discovery():
+	serialized = ast.dump(_app_module_ast())
+
+	assert "_pollVoiceRecordingState" not in serialized
+	assert "_getVoiceRecordingButton" not in serialized
+	assert "_voiceRecordingDiscoveryFocus" not in serialized
 
 
 def test_app_transition_handler_captures_baseline_before_resolving_outcome():
 	announcements = []
+	scheduled = []
 	button = SimpleNamespace(states=set())
 	outcome = VoiceRecordingOutcome(poll_limit=2)
 	instance = SimpleNamespace(
@@ -242,6 +198,7 @@ def test_app_transition_handler_captures_baseline_before_resolving_outcome():
 		_voiceRecordingOutcome=outcome,
 		_getVoiceRecordingLastMessage=lambda: (("position", 5), object()),
 		_announceVoiceRecordingTransition=announcements.append,
+		_scheduleVoiceRecordingOutcomePoll=lambda: scheduled.append(True),
 	)
 	namespace = {"State": SimpleNamespace(PRESSED="pressed")}
 	method = _load_method("_handleVoiceRecordingTransition", namespace)
@@ -253,6 +210,7 @@ def test_app_transition_handler_captures_baseline_before_resolving_outcome():
 	assert outcome.pending
 	assert not outcome.video
 	assert announcements == ["start"]
+	assert scheduled == [True]
 
 
 def test_app_outcome_poll_announces_new_voice_message_as_sent():
@@ -266,9 +224,14 @@ def test_app_outcome_poll_announces_new_voice_message_as_sent():
 	outcome.started(("position", 5))
 	outcome.stopped()
 	instance = SimpleNamespace(
+		_voiceRecordingOutcomePollingEnabled=True,
 		_voiceRecordingOutcome=outcome,
+		_voiceRecordingOutcomePollScheduled=True,
 		_getVoiceRecordingLastMessage=lambda: (("position", 6), voice),
 		_announceVoiceRecordingTransition=announcements.append,
+		_scheduleVoiceRecordingOutcomePoll=lambda: (_ for _ in ()).throw(
+			AssertionError("a completed outcome must not be rescheduled")
+		),
 	)
 	namespace = {
 		"is_recorded_message": is_recorded_message,
@@ -281,90 +244,92 @@ def test_app_outcome_poll_announces_new_voice_message_as_sent():
 	assert announcements == ["sent"]
 	assert logs and logs[0].endswith("sent")
 	assert not outcome.pending
+	assert not instance._voiceRecordingOutcomePollScheduled
 
 
-def test_polling_native_ui_announces_manual_or_keyboard_recording_once():
+def test_native_elapsed_label_events_announce_recording_once():
 	transitions = []
-	scheduled = []
-
-	button = SimpleNamespace(
-		UIAAutomationId="btnVoiceMessage",
-		next=SimpleNamespace(UIAAutomationId="ElapsedLabel"),
-	)
+	next_calls = []
 	instance = SimpleNamespace(
-		_voiceRecordingMonitorRunning=True,
+		isUnigramWindow=True,
 		_voiceRecordingState=VoiceRecordingState(),
-		_voiceRecordingButton=button,
-		_getVoiceRecordingButton=lambda focus: button,
-		_pollVoiceRecordingOutcome=lambda: None,
+		_voiceRecordingElapsed="",
+		_remember_messages_button=lambda obj: None,
 		_handleVoiceRecordingTransition=lambda transition: transitions.append(transition) if transition else None,
-		_scheduleVoiceRecordingPoll=lambda: scheduled.append(True),
-		_is_main_window_object=lambda obj: True,
 	)
-	focus = SimpleNamespace(appModule=instance)
-	namespace = {
-		"api": SimpleNamespace(getFocusObject=lambda: focus),
-		"recording_button_state": recording_button_state,
-		"log": SimpleNamespace(debug=lambda text: None, info=lambda text: None),
-	}
-	method = _load_method("_pollVoiceRecordingState", namespace)
+	label = SimpleNamespace(UIAAutomationId="ElapsedLabel", name="0:00,00")
+	show = _load_method(
+		"event_show",
+		{"is_recording_button": is_recording_button, "is_elapsed_label": is_elapsed_label},
+	)
+	name_change = _load_method("event_nameChange", {"is_elapsed_label": is_elapsed_label})
+	hide = _load_method(
+		"event_hide",
+		{"is_recording_button": is_recording_button, "is_elapsed_label": is_elapsed_label},
+	)
 
-	method(instance)
-	method(instance)
-	button.next = SimpleNamespace(UIAAutomationId="SomeOtherControl")
-	method(instance)
+	show(instance, label, lambda: next_calls.append("show"))
+	label.name = "0:00.10"
+	name_change(instance, label, lambda: next_calls.append("name"))
+	label.name = "0:00,0"
+	name_change(instance, label, lambda: next_calls.append("name"))
+	hide(instance, label, lambda: next_calls.append("hide"))
 
 	assert transitions == ["start", "stopped"]
-	assert scheduled == [True, True, True]
+	assert next_calls == ["show", "name", "name", "hide"]
 	assert not instance._voiceRecordingState.active
+	assert instance._voiceRecordingElapsed == ""
 
 
-def test_recording_monitor_does_not_scan_a_separate_call_window():
+def test_pending_outcome_reschedules_without_a_permanent_state_monitor():
 	scheduled = []
+	outcome = VoiceRecordingOutcome(poll_limit=2)
+	outcome.started(("position", 5))
+	outcome.stopped()
 	instance = SimpleNamespace(
-		_voiceRecordingMonitorRunning=True,
-		_voiceRecordingDiscoveryFocus=object(),
-		_is_main_window_object=lambda obj: False,
-		_pollVoiceRecordingOutcome=lambda: (_ for _ in ()).throw(AssertionError("unexpected outcome scan")),
-		_getVoiceRecordingButton=lambda focus: (_ for _ in ()).throw(AssertionError("unexpected UI tree scan")),
-		_scheduleVoiceRecordingPoll=lambda: scheduled.append(True),
+		_voiceRecordingOutcomePollingEnabled=True,
+		_voiceRecordingOutcome=outcome,
+		_voiceRecordingOutcomePollScheduled=True,
+		_getVoiceRecordingLastMessage=lambda: (("position", 5), object()),
+		_announceVoiceRecordingTransition=lambda transition: None,
+		_scheduleVoiceRecordingOutcomePoll=lambda: scheduled.append(True),
 	)
-	focus = SimpleNamespace(appModule=instance, windowHandle=200)
 	namespace = {
-		"api": SimpleNamespace(getFocusObject=lambda: focus),
-		"recording_button_state": recording_button_state,
-		"log": SimpleNamespace(debug=lambda text: None, info=lambda text: None),
+		"is_recorded_message": is_recorded_message,
+		"log": SimpleNamespace(info=lambda text: None),
 	}
-	method = _load_method("_pollVoiceRecordingState", namespace)
-
-	method(instance)
-
-	assert instance._voiceRecordingDiscoveryFocus is None
-	assert scheduled == [True]
-
-
-def test_recording_monitor_does_not_probe_uia_ancestors_on_each_poll():
-	scheduled = []
-	instance = SimpleNamespace(
-		_voiceRecordingMonitorRunning=True,
-		_voiceRecordingDiscoveryFocus=object(),
-		_classify_window_surface=lambda obj: (_ for _ in ()).throw(
-			AssertionError("the high-frequency poll must not walk UIA ancestors")
-		),
-		_is_main_window_object=lambda obj: False,
-		_scheduleVoiceRecordingPoll=lambda: scheduled.append(True),
-	)
-	focus = SimpleNamespace(appModule=instance, windowHandle=200)
-	namespace = {
-		"api": SimpleNamespace(getFocusObject=lambda: focus),
-		"recording_button_state": recording_button_state,
-		"log": SimpleNamespace(debug=lambda text: None, info=lambda text: None),
-	}
-	method = _load_method("_pollVoiceRecordingState", namespace)
+	method = _load_method("_pollVoiceRecordingOutcome", namespace)
 
 	method(instance)
 
 	assert scheduled == [True]
+	assert not instance._voiceRecordingOutcomePollScheduled
+
+
+def test_transient_outcome_read_error_keeps_the_bounded_poll_alive():
+	scheduled = []
+	debug = []
+	outcome = VoiceRecordingOutcome(poll_limit=2)
+	outcome.started(("position", 5))
+	outcome.stopped()
+	instance = SimpleNamespace(
+		_voiceRecordingOutcomePollingEnabled=True,
+		_voiceRecordingOutcome=outcome,
+		_voiceRecordingOutcomePollScheduled=True,
+		_getVoiceRecordingLastMessage=lambda: (_ for _ in ()).throw(RuntimeError("stale UIA")),
+		_scheduleVoiceRecordingOutcomePoll=lambda: scheduled.append(True),
+	)
+	namespace = {
+		"is_recorded_message": is_recorded_message,
+		"log": SimpleNamespace(info=lambda text: None, debug=debug.append),
+	}
+	method = _load_method("_pollVoiceRecordingOutcome", namespace)
+
+	method(instance)
+
+	assert scheduled == [True]
+	assert debug and "stale UIA" in debug[0]
+	assert outcome.pending
 
 
 def test_recording_transitions_keep_text_and_audio_notifications():

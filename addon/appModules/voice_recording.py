@@ -20,23 +20,11 @@ def is_recording_button(obj):
 		return False
 
 
-def recording_button_state(button):
-	"""Return True while UnigramPlus can see the button's elapsed-time sibling.
-
-	The same relationship is used when UnigramPlus labels the focused record
-	button as "Recording ..., elapsed time". None means that the cached button
-	is no longer readable and must be rediscovered.
-	"""
-	if not is_recording_button(button):
-		return None
+def is_elapsed_label(obj):
 	try:
-		next_element = button.next
+		return obj.UIAAutomationId == ELAPSED_LABEL_AUTOMATION_ID
 	except Exception:
-		return None
-	try:
-		return bool(next_element and next_element.UIAAutomationId == ELAPSED_LABEL_AUTOMATION_ID)
-	except Exception:
-		return None
+		return False
 
 
 def message_marker(obj):

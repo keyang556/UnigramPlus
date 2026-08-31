@@ -457,6 +457,7 @@ Added Turkish localization
 ### Verzija 5.6.9
 
 * Otklonjena je greška do koje je moglo doći kada NVDA uđe na bezbednu radnu površinu, na primer pri UAC upitu, dok je bilo uključeno UnigramPlus praćenje poruka u pozadini.
+* Ažurirano je praćenje snimanja glasovnih poruka za trenutni Unigram i uklonjeno je stalno ispitivanje UI Automationa koje je moglo usporiti kretanje kroz razgovore i poruke.
 * Uklonjeno je zastarelo zaobilazno rešenje za nazive tema Sačuvanih poruka; trenutne verzije Unigrama sada izvorno pružaju pristupačne nazive za razgovore Sačuvanih poruka.
 * Ažurirana je kompatibilnost sa NVDA 2026.2.
 * Ažurirani su poljski i burmanski prevodi.
