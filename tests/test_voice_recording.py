@@ -10,7 +10,6 @@ sys.path.insert(0, str(ROOT / "addon" / "appModules"))
 from voice_recording import (  # noqa: E402
 	VoiceRecordingOutcome,
 	VoiceRecordingState,
-	is_elapsed_label,
 	is_recorded_message,
 	is_recording_button,
 	message_marker,
@@ -161,7 +160,7 @@ def test_default_outcome_window_allows_slow_recording_finalization():
 	assert outcome.observe(("position", 8), is_recorded=False) == "canceled"
 
 
-def test_recording_state_uses_the_elapsed_sibling_exposed_by_nvda():
+def test_recording_state_uses_the_same_elapsed_sibling_as_the_button_label():
 	idle_button = SimpleNamespace(
 		UIAAutomationId="btnVoiceMessage",
 		next=SimpleNamespace(UIAAutomationId="SomeOtherControl"),
@@ -196,7 +195,8 @@ def test_cached_recording_button_avoids_repeated_ui_tree_searches():
 		_voiceRecordingDiscoveryFocus=None,
 		getElements=lambda: (_ for _ in ()).throw(AssertionError("unexpected UI tree scan")),
 	)
-	method = _load_method("_getVoiceRecordingButton", {"is_recording_button": is_recording_button})
+	namespace = {"is_recording_button": is_recording_button}
+	method = _load_method("_getVoiceRecordingButton", namespace)
 
 	assert method(instance, focus) is button
 
@@ -209,7 +209,8 @@ def test_recording_button_discovery_runs_only_once_for_the_same_focus():
 		_voiceRecordingDiscoveryFocus=None,
 		getElements=lambda: searches.append(True) or [],
 	)
-	method = _load_method("_getVoiceRecordingButton", {"is_recording_button": is_recording_button})
+	namespace = {"is_recording_button": is_recording_button}
+	method = _load_method("_getVoiceRecordingButton", namespace)
 
 	assert method(instance, focus) is None
 	assert method(instance, focus) is None
@@ -224,7 +225,8 @@ def test_recording_monitor_schedules_on_nvda_main_loop_without_timer_threads(mon
 		_voiceRecordingMonitorRunning=True,
 		_pollVoiceRecordingState=lambda: None,
 	)
-	method = _load_method("_scheduleVoiceRecordingPoll", {"_VOICE_RECORDING_POLL_INTERVAL": 0.2})
+	namespace = {"_VOICE_RECORDING_POLL_INTERVAL": 0.2}
+	method = _load_method("_scheduleVoiceRecordingPoll", namespace)
 
 	method(instance)
 
@@ -284,6 +286,7 @@ def test_app_outcome_poll_announces_new_voice_message_as_sent():
 def test_polling_native_ui_announces_manual_or_keyboard_recording_once():
 	transitions = []
 	scheduled = []
+
 	button = SimpleNamespace(
 		UIAAutomationId="btnVoiceMessage",
 		next=SimpleNamespace(UIAAutomationId="ElapsedLabel"),
@@ -336,8 +339,32 @@ def test_recording_monitor_does_not_scan_a_separate_call_window():
 
 	method(instance)
 
-	assert scheduled == [True]
 	assert instance._voiceRecordingDiscoveryFocus is None
+	assert scheduled == [True]
+
+
+def test_recording_monitor_does_not_probe_uia_ancestors_on_each_poll():
+	scheduled = []
+	instance = SimpleNamespace(
+		_voiceRecordingMonitorRunning=True,
+		_voiceRecordingDiscoveryFocus=object(),
+		_classify_window_surface=lambda obj: (_ for _ in ()).throw(
+			AssertionError("the high-frequency poll must not walk UIA ancestors")
+		),
+		_is_main_window_object=lambda obj: False,
+		_scheduleVoiceRecordingPoll=lambda: scheduled.append(True),
+	)
+	focus = SimpleNamespace(appModule=instance, windowHandle=200)
+	namespace = {
+		"api": SimpleNamespace(getFocusObject=lambda: focus),
+		"recording_button_state": recording_button_state,
+		"log": SimpleNamespace(debug=lambda text: None, info=lambda text: None),
+	}
+	method = _load_method("_pollVoiceRecordingState", namespace)
+
+	method(instance)
+
+	assert scheduled == [True]
 
 
 def test_recording_transitions_keep_text_and_audio_notifications():

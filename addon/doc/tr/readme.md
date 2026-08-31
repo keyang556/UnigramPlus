@@ -181,7 +181,6 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 ### Sürüm 5.6.9
 
 * UnigramPlus arka plan mesaj takibi etkin durumdayken NVDA güvenli masaüstüne, örneğin bir UAC istemine, girdiğinde oluşabilecek bir hata düzeltildi.
-* Güvenilir sesli mesaj kaydı algılama geri getirildi ve mesajlarda gezinmeyi geciktirebilen gereksiz sohbet sonu UI Automation kontrolleri önlendi; profildeki Kaydedilmiş Mesajlar sekmesi satırları artık ileti ağacının tamamını çözümleyerek gecikmeye yol açmak yerine Unigram'ın yerel erişilebilirlik bilgilerini koruyor.
 * Kaydedilmiş Mesajlar konu adları için kullanılan eski geçici çözüm kaldırıldı; Unigram'ın güncel sürümleri artık Kaydedilmiş Mesajlar sohbetleri için erişilebilir adları yerel olarak sağlıyor.
 * NVDA 2026.2 uyumluluğu güncellendi.
 * Lehçe ve Birmanca çeviriler güncellendi.

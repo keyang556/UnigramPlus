@@ -131,7 +131,7 @@ def test_every_localized_manual_has_569_through_559_and_updated_558_changelogs()
 		section_562 = text[version_562:version_561]
 		section_561 = text[version_561:version_560]
 		section_560 = text[version_560:version_559]
-		assert section_569.count("\n* ") == 5, manual
+		assert section_569.count("\n* ") == 4, manual
 		assert "Alt+C" in section_568, manual
 		assert "WhatsApp Enhancer" in section_568, manual
 		assert section_568.count("\n* ") == 1, manual

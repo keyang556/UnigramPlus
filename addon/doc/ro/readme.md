@@ -183,7 +183,6 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 ### Versiunea 5.6.9
 
 * A fost remediată o eroare care putea apărea când NVDA intra pe un desktop securizat, cum ar fi la un mesaj UAC, în timp ce urmărirea mesajelor în fundal a UnigramPlus era activată.
-* A fost restabilită detectarea fiabilă a înregistrării mesajelor vocale și au fost evitate verificările UI Automation inutile de la sfârșitul conversației care puteau întârzia navigarea prin mesaje; rândurile filei Mesaje salvate din profil păstrează acum informațiile native de accesibilitate oferite de Unigram, evitând întârzierile produse de analizarea întregului arbore al mesajului.
 * A fost eliminată soluția temporară învechită pentru numele subiectelor Mesaje salvate; versiunile actuale de Unigram oferă acum în mod nativ nume accesibile pentru conversațiile Mesaje salvate.
 * A fost actualizată compatibilitatea cu NVDA 2026.2.
 * Au fost actualizate traducerile în poloneză și birmană.

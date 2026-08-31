@@ -46,7 +46,6 @@ from .rich_message import (  # noqa: E402
 from .voice_recording import (  # noqa: E402
 	VoiceRecordingOutcome,
 	VoiceRecordingState,
-	is_elapsed_label,
 	is_recorded_message,
 	is_recording_button,
 	message_marker,
@@ -86,8 +85,6 @@ _CONTEXT_MENU_RAW_TEXT_LIMIT = 64
 _MAIN_WINDOW_AUTOMATION_IDS = frozenset(("ChatsList", "Messages", "TextField", "Navigation"))
 _CALL_WINDOW_AUTOMATION_IDS = frozenset(("ActiveButtons", "BottomRoot"))
 _WINDOW_SURFACE_AUTOMATION_IDS = _MAIN_WINDOW_AUTOMATION_IDS | _CALL_WINDOW_AUTOMATION_IDS
-_SAVED_MESSAGES_TAB_LIST_MARKER = "_unigramPlusSavedMessagesTabList"
-_SAVED_MESSAGES_TAB_ROW_MARKER = "_unigramPlusNativeSavedMessagesTabRow"
 
 
 def _get_end_of_chat_sound_path():
@@ -468,28 +465,6 @@ def _find_ancestor_by_automation_id(obj, automation_ids, max_depth=6):
 	return None
 
 
-def _is_saved_messages_tab_list(obj):
-	"""Identify the Messages list embedded in Unigram's profile Saved tab.
-
-	Current Unigram removes the message list's own ScrollViewer in this tab and
-	uses ProfilePage.ScrollingHost instead.  A normal chat keeps its internal
-	ScrollViewer (automation id ``ScrollViewer``), so it has no higher
-	``ScrollingHost`` ancestor.  This structural marker is stable across display
-	languages and avoids reviving the removed SavedMessagesTopic name workaround.
-	"""
-	try:
-		if getattr(obj, "UIAAutomationId", "") != "Messages":
-			return False
-		parent = obj.parent
-	except Exception:
-		return False
-	return _find_ancestor_by_automation_id(
-		parent,
-		("ScrollingHost",),
-		max_depth=16,
-	) is not None
-
-
 def _is_message_list_item(obj):
 	"""Recognize the focused message control exposed by current and older Unigram."""
 	try:
@@ -511,31 +486,12 @@ def _is_message_list_item(obj):
 		return False
 
 
-def _message_position_may_be_last(position_info):
-	"""Use cached list metadata only to reject rows that are clearly not last.
-
-	Unigram can expose temporarily inconsistent endpoint positions while loading
-	history, so missing, invalid, zero, or over-total values remain candidates for
-	the slower identity check. A normal ``index < total`` row cannot be the end.
-	"""
-	try:
-		index = int(position_info.get("indexInGroup"))
-		total = int(position_info.get("similarItemsInGroup"))
-	except (AttributeError, TypeError, ValueError):
-		return True
-	return not (0 < index < total)
-
-
-def _is_chat_list_item(obj, known_parent=None):
+def _is_chat_list_item(obj):
 	"""Recognize a chat row through Unigram's stable ChatsList boundary."""
 	try:
 		return (
 			obj.role == Role.LISTITEM
-			and _find_ancestor_by_automation_id(
-				known_parent if known_parent is not None else obj,
-				("ChatsList",),
-				max_depth=8,
-			) is not None
+			and _find_ancestor_by_automation_id(obj, ("ChatsList",), max_depth=8) is not None
 		)
 	except Exception:
 		return False
@@ -962,14 +918,11 @@ class Message_list_item(ListItem):
 		# Deliver Down immediately. UIA tree walks here can stall the NVDA main
 		# thread while Unigram updates its virtualized history.
 		move_focus_to_text = conf.get("action_when_pressing_up_arrow_in_text_field") == "to_messages"
-		probe_endpoint = (
-			conf.get("play_end_of_chat_sound") or move_focus_to_text
-		) and _message_position_may_be_last(getattr(self, "positionInfo", None))
 		app = self.appModule
 		gesture.send()
-		if probe_endpoint:
-			# Only ambiguous or endpoint position metadata reaches the slower UIA
-			# identity confirmation after native navigation has been delivered.
+		if conf.get("play_end_of_chat_sound") or move_focus_to_text:
+			# The callback is tied to this source object; moving to another message
+			# makes the source/focus comparison fail before endpoint work begins.
 			app._schedule_end_of_chat_confirmation(self, move_focus_to_text)
 
 	def script_next_media(self, gesture, revers=False):
@@ -1883,11 +1836,6 @@ class AppModule(appModuleHandler.AppModule):
 		if generation != getattr(self, "_endOfChatProbeGeneration", 0):
 			return
 		try:
-			# A successful Down move changes focus. Reject that overwhelmingly
-			# common path using two runtime IDs before touching message ancestry or
-			# Messages.lastChild, both of which can block in Unigram's XAML provider.
-			if not self._same_uia_element(source, api.getFocusObject()):
-				return
 			candidate = self._get_end_of_chat_candidate(source)
 			if candidate is None:
 				log.debug("End-of-chat probe did not match Messages.lastChild")
@@ -2555,9 +2503,8 @@ class AppModule(appModuleHandler.AppModule):
 		if is_recording_button(focus):
 			self._voiceRecordingButton = focus
 			return focus
-		# The record button normally reaches chooseNVDAObjectOverlayClasses first.
-		# Keep the proven fallback for providers that omit that materialization
-		# event, but run it only once for each focused object.
+		# getElements is comparatively cheap but can fail while a packaged app is
+		# starting. Try it only once per focused object, never on every poll.
 		if focus is self._voiceRecordingDiscoveryFocus:
 			return None
 		self._voiceRecordingDiscoveryFocus = focus
@@ -2612,6 +2559,10 @@ class AppModule(appModuleHandler.AppModule):
 			focus = api.getFocusObject()
 			if getattr(focus, "appModule", None) is not self:
 				return
+			# Calls run in separate WindowEx instances. A cached chat control can
+			# become an expensive disconnected UIA object there, and getElements()
+			# would scan the call surface every 200 ms. Voice-message monitoring is
+			# meaningful only in the window that owns ChatsList/Messages/TextField.
 			if not self._is_main_window_object(focus):
 				self._voiceRecordingDiscoveryFocus = None
 				return
@@ -2619,6 +2570,8 @@ class AppModule(appModuleHandler.AppModule):
 			button = self._getVoiceRecordingButton(focus)
 			active = recording_button_state(button)
 			if button is not None and active is None:
+				# A chat change can detach the cached UIA object. Rediscover once for
+				# this focus; a second failure is not retried on every poll.
 				self._voiceRecordingButton = None
 				self._voiceRecordingDiscoveryFocus = None
 				button = self._getVoiceRecordingButton(focus)
@@ -2790,7 +2743,7 @@ class AppModule(appModuleHandler.AppModule):
 				if is_recording_button(obj):
 					self._voiceRecordingButton = obj
 					self._voiceRecordingDiscoveryFocus = None
-				elif is_elapsed_label(obj):
+				elif obj.UIAAutomationId == "ElapsedLabel":
 					transition = self._voiceRecordingState.elapsedChanged(obj.name)
 					self._handleVoiceRecordingTransition(transition)
 		finally:
@@ -2798,7 +2751,7 @@ class AppModule(appModuleHandler.AppModule):
 
 	def event_nameChange(self, obj, nextHandler):
 		try:
-			if getattr(self, "isUnigramWindow", False) and is_elapsed_label(obj):
+			if getattr(self, "isUnigramWindow", False) and obj.UIAAutomationId == "ElapsedLabel":
 				transition = self._voiceRecordingState.elapsedChanged(obj.name)
 				self._handleVoiceRecordingTransition(transition)
 		finally:
@@ -2813,7 +2766,7 @@ class AppModule(appModuleHandler.AppModule):
 			):
 				self._voiceRecordingButton = None
 				self._voiceRecordingDiscoveryFocus = None
-			elif getattr(self, "isUnigramWindow", False) and is_elapsed_label(obj):
+			elif getattr(self, "isUnigramWindow", False) and obj.UIAAutomationId == "ElapsedLabel":
 				self._handleVoiceRecordingTransition(self._voiceRecordingState.hidden())
 		finally:
 			nextHandler()
@@ -2899,17 +2852,11 @@ class AppModule(appModuleHandler.AppModule):
 		elif self.isDelete and self.deleteMessageAndChat(obj):
 			return
 		if obj.role == Role.LISTITEM:
-			# The profile Saved tab already exposes complete native row names and
-			# positions.  Keep its focus event entirely native: action_message_focus
-			# walks each message subtree and is the source of the navigation delay.
-			if getattr(obj, _SAVED_MESSAGES_TAB_ROW_MARKER, False):
-				nextHandler()
-				return
 			speech.cancelSpeech()
 			if self.is_message_object(obj):
 				self.saved_items.save("last focus object", obj)
 				obj.name = self.action_message_focus(obj)
-			elif isinstance(obj, ChatListItem) or _is_chat_list_item(obj):
+			elif _is_chat_list_item(obj):
 				self.saved_items.save("last focused chat", obj)
 				obj.name = self.actionChatElementInFocus(obj)
 			elif obj.parent.UIAAutomationId == "ScrollingHost":
@@ -2977,11 +2924,13 @@ class AppModule(appModuleHandler.AppModule):
 			except: pass
 		elif obj.role == Role.TOGGLEBUTTON:
 			try:
-				# NVDA flattens the visible ChatRecordBar next to this toggle even though
-				# current Unigram declares it separately in XAML.
+				# The voice/video message record button carries no text of its own, so NVDA
+				# would otherwise announce its automation id as "Tn voice message". Give it a
+				# clear label; while recording is in progress also read the elapsed time shown
+				# next to it (a pressed toggle means video-note mode, otherwise a voice message).
 				if obj.UIAAutomationId == "btnVoiceMessage":
 					isVideo = State.PRESSED in obj.states
-					if obj.next and is_elapsed_label(obj.next):
+					if obj.next and obj.next.UIAAutomationId == "ElapsedLabel":
 						label = _("Recording a video message, elapsed time") if isVideo else _("Recording a voice message, elapsed time")
 						obj.name = label+" "+re.split(r"[.,]", obj.next.name)[0]
 					else:
@@ -3034,35 +2983,12 @@ class AppModule(appModuleHandler.AppModule):
 			# This hook runs for every materialized UIA object. Only stable marker
 			# objects can identify the chat window without a parent walk; focused
 			# descendants are handled once in event_gainFocus instead.
-			automation_id = getattr(obj, "UIAAutomationId", "")
-			if automation_id in _WINDOW_SURFACE_AUTOMATION_IDS:
+			if getattr(obj, "UIAAutomationId", "") in _WINDOW_SURFACE_AUTOMATION_IDS:
 				self._classify_window_surface(obj)
-				if automation_id == "Messages":
-					# Classify the list once.  Child rows reuse this NVDA parent
-					# object, avoiding an ancestor walk on every arrow press.
-					is_saved_messages_tab = _is_saved_messages_tab_list(obj)
-					setattr(
-						obj,
-						_SAVED_MESSAGES_TAB_LIST_MARKER,
-						is_saved_messages_tab,
-					)
-					if is_saved_messages_tab:
-						log.debug(
-							"Using native accessibility for Saved Messages profile-tab rows"
-						)
 			if is_recording_button(obj):
 				self._voiceRecordingButton = obj
 			if obj.role == Role.LISTITEM and obj.isFocusable:
 				parent = obj.parent
-				if (
-					getattr(parent, "UIAAutomationId", "") == "Messages"
-					and getattr(parent, _SAVED_MESSAGES_TAB_LIST_MARKER, False)
-				):
-					# Do not attach Message_list_item here.  Apart from its costly
-					# focus parser, that overlay replaces the native positionInfo
-					# and binds Down to an unnecessary end-of-chat UIA probe.
-					setattr(obj, _SAVED_MESSAGES_TAB_ROW_MARKER, True)
-					return
 				if parent.UIAAutomationId == "ChatFolders":
 					self.tabs_folder_element = parent
 					if conf.get("voiceFolderNames") and State.SELECTED in obj.states: self.change_chats_folder(obj, parent.UIAAutomationId)
@@ -3070,7 +2996,7 @@ class AppModule(appModuleHandler.AppModule):
 				elif parent.UIAAutomationId == "Navigation":
 					clsList.insert(0, SettingsPanelListItem)
 					return True
-				elif _is_chat_list_item(obj, parent):
+				elif _is_chat_list_item(obj):
 					clsList.insert(0, ChatListItem)
 					return
 				elif parent.UIAAutomationId == "TopicList": return

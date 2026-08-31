@@ -492,7 +492,6 @@ def test_focus_events_do_not_restart_startup_chat_list_focusing():
 	)
 
 	assert "_scheduleAutoFocusChatList" not in ast.unparse(method)
-	assert "isinstance(obj, ChatListItem)" in ast.unparse(method)
 
 
 def test_main_chat_window_is_identified_from_stable_uia_ancestors():
@@ -576,8 +575,7 @@ def test_overlay_selection_only_probes_direct_main_window_markers():
 	)
 	source = ast.unparse(chooser)
 
-	assert "automation_id = getattr(obj, 'UIAAutomationId', '')" in source
-	assert "automation_id in _WINDOW_SURFACE_AUTOMATION_IDS" in source
+	assert "getattr(obj, 'UIAAutomationId', '') in _WINDOW_SURFACE_AUTOMATION_IDS" in source
 
 
 def test_call_control_detection_never_enumerates_siblings():
@@ -591,28 +589,6 @@ def test_call_control_detection_never_enumerates_siblings():
 	find_ancestor = _load_module_function("_find_ancestor_by_automation_id", {})
 
 	assert find_ancestor(control, ("ActiveButtons",), max_depth=4) is container
-
-
-def test_chat_list_detection_reuses_the_parent_already_materialized_by_overlay_selection():
-	class ChatRow(SimpleNamespace):
-		role = "listItem"
-
-		@property
-		def parent(self):
-			raise AssertionError("chat row parent must not be fetched twice")
-
-	chat_list = SimpleNamespace(UIAAutomationId="ChatsList", parent=None)
-	known_parent = SimpleNamespace(UIAAutomationId="", parent=chat_list)
-	namespace = {
-		"Role": SimpleNamespace(LISTITEM="listItem"),
-		"_find_ancestor_by_automation_id": _load_module_function(
-			"_find_ancestor_by_automation_id",
-			{},
-		),
-	}
-	is_chat_list_item = _load_module_function("_is_chat_list_item", namespace)
-
-	assert is_chat_list_item(ChatRow(), known_parent)
 
 
 def test_call_state_announcements_use_the_nvda_main_loop(monkeypatch):
@@ -685,5 +661,5 @@ def test_chat_list_items_receive_the_mention_navigation_overlay():
 	)
 	source = ast.unparse(chooser)
 
-	assert "_is_chat_list_item(obj, parent)" in source
+	assert "_is_chat_list_item(obj)" in source
 	assert "clsList.insert(0, ChatListItem)" in source
