@@ -50,6 +50,7 @@ from .voice_recording import (  # noqa: E402
 	is_recorded_message,
 	is_recording_button,
 	message_marker,
+	recording_button_state,
 )
 
 baseDir = os.path.join(os.path.dirname(__file__), "media\\")
@@ -59,7 +60,7 @@ _telegramDesktopFallbackClass = None
 _telegramDesktopFallbackLoadAttempted = False
 
 _APP_MODULE_NAME_IGNORED_CHARS = str.maketrans("", "", "\u200e\u200f\u2066\u2067\u2068\u2069")
-_VOICE_RECORDING_OUTCOME_POLL_INTERVAL = .2
+_VOICE_RECORDING_POLL_INTERVAL = .2
 # Allow Unigram time to finalize the recording and insert its outgoing message.
 # A sent message is still reported immediately; only cancellation waits this long.
 _VOICE_RECORDING_OUTCOME_POLL_LIMIT = 25  # 5 seconds at the interval above.
@@ -484,6 +485,21 @@ def _is_message_list_item(obj):
 		return _find_ancestor_by_automation_id(obj, ("Messages",), max_depth=8) is not None
 	except Exception:
 		return False
+
+
+def _message_position_may_be_last(position_info):
+	"""Use cached list metadata only to reject rows that are clearly not last.
+
+	Unigram can expose temporarily inconsistent endpoint positions while loading
+	history, so missing, invalid, zero, or over-total values remain candidates for
+	the slower identity check. A normal ``index < total`` row cannot be the end.
+	"""
+	try:
+		index = int(position_info.get("indexInGroup"))
+		total = int(position_info.get("similarItemsInGroup"))
+	except (AttributeError, TypeError, ValueError):
+		return True
+	return not (0 < index < total)
 
 
 def _is_chat_list_item(obj, known_parent=None):
@@ -922,11 +938,14 @@ class Message_list_item(ListItem):
 		# Deliver Down immediately. UIA tree walks here can stall the NVDA main
 		# thread while Unigram updates its virtualized history.
 		move_focus_to_text = conf.get("action_when_pressing_up_arrow_in_text_field") == "to_messages"
+		probe_endpoint = (
+			conf.get("play_end_of_chat_sound") or move_focus_to_text
+		) and _message_position_may_be_last(getattr(self, "positionInfo", None))
 		app = self.appModule
 		gesture.send()
-		if conf.get("play_end_of_chat_sound") or move_focus_to_text:
-			# The callback is tied to this source object; moving to another message
-			# makes the source/focus comparison fail before endpoint work begins.
+		if probe_endpoint:
+			# Only ambiguous or endpoint position metadata reaches the slower UIA
+			# identity confirmation after native navigation has been delivered.
 			app._schedule_end_of_chat_confirmation(self, move_focus_to_text)
 
 	def script_next_media(self, gesture, revers=False):
@@ -1382,10 +1401,9 @@ class AppModule(appModuleHandler.AppModule):
 		self.isUnigramWindow = is_unigram_app_module(self)
 		self._voiceRecordingState = VoiceRecordingState()
 		self._voiceRecordingOutcome = VoiceRecordingOutcome(_VOICE_RECORDING_OUTCOME_POLL_LIMIT)
-		self._voiceRecordingOutcomePollingEnabled = False
-		self._voiceRecordingOutcomePollScheduled = False
+		self._voiceRecordingMonitorRunning = False
 		self._voiceRecordingButton = None
-		self._voiceRecordingElapsed = ""
+		self._voiceRecordingDiscoveryFocus = None
 		self._autoFocusChatListDone = False
 		self._autoFocusChatListScheduled = False
 		self._autoFocusChatListAttempts = 0
@@ -1420,10 +1438,11 @@ class AppModule(appModuleHandler.AppModule):
 		# for i in range(10): self.bindGesture("kb:control+ALT+%d" % i, "rewind_voice_message")
 		# Binding reactions to the corresponding hotkeys
 		# for i in range(1,8): self.bindGesture("kb:NVDA+ALT+%d" % i, "set_reaction")
-		self._voiceRecordingOutcomePollingEnabled = True
+		self._voiceRecordingMonitorRunning = True
+		self._scheduleVoiceRecordingPoll()
 
 	def terminate(self):
-		self._voiceRecordingOutcomePollingEnabled = False
+		self._voiceRecordingMonitorRunning = False
 		self._autoFocusChatListGeneration += 1
 		self._autoFocusChatListScheduled = False
 		self._endOfChatProbeGeneration = getattr(self, "_endOfChatProbeGeneration", 0) + 1
@@ -1840,6 +1859,11 @@ class AppModule(appModuleHandler.AppModule):
 		if generation != getattr(self, "_endOfChatProbeGeneration", 0):
 			return
 		try:
+			# A successful Down move changes focus. Reject that overwhelmingly
+			# common path using two runtime IDs before touching message ancestry or
+			# Messages.lastChild, both of which can block in Unigram's XAML provider.
+			if not self._same_uia_element(source, api.getFocusObject()):
+				return
 			candidate = self._get_end_of_chat_candidate(source)
 			if candidate is None:
 				log.debug("End-of-chat probe did not match Messages.lastChild")
@@ -2493,20 +2517,30 @@ class AppModule(appModuleHandler.AppModule):
 		else:
 			message(_("Video") if isVideo else _("Audio"))
 
-	def _scheduleVoiceRecordingOutcomePoll(self):
-		if (
-			not self._voiceRecordingOutcomePollingEnabled
-			or not self._voiceRecordingOutcome.pending
-			or self._voiceRecordingOutcomePollScheduled
-		):
+	def _scheduleVoiceRecordingPoll(self):
+		if not self._voiceRecordingMonitorRunning:
 			return
 		import core
 
-		self._voiceRecordingOutcomePollScheduled = True
-		core.callLater(
-			round(_VOICE_RECORDING_OUTCOME_POLL_INTERVAL * 1000),
-			self._pollVoiceRecordingOutcome,
-		)
+		core.callLater(round(_VOICE_RECORDING_POLL_INTERVAL * 1000), self._pollVoiceRecordingState)
+
+	def _getVoiceRecordingButton(self, focus):
+		button = self._voiceRecordingButton
+		if is_recording_button(button):
+			return button
+		if is_recording_button(focus):
+			self._voiceRecordingButton = focus
+			return focus
+		# The record button normally reaches chooseNVDAObjectOverlayClasses first.
+		# Keep the proven fallback for providers that omit that materialization
+		# event, but run it only once for each focused object.
+		if focus is self._voiceRecordingDiscoveryFocus:
+			return None
+		self._voiceRecordingDiscoveryFocus = focus
+		button = next((item for item in self.getElements() if is_recording_button(item)), None)
+		if button:
+			self._voiceRecordingButton = button
+		return button
 
 	def _getVoiceRecordingLastMessage(self):
 		try:
@@ -2530,32 +2564,52 @@ class AppModule(appModuleHandler.AppModule):
 			self._announceVoiceRecordingTransition("start")
 		elif transition == "stopped":
 			self._voiceRecordingOutcome.stopped()
-			self._scheduleVoiceRecordingOutcomePoll()
 
 	def _pollVoiceRecordingOutcome(self):
-		self._voiceRecordingOutcomePollScheduled = False
-		if not self._voiceRecordingOutcomePollingEnabled:
-			return
 		if not self._voiceRecordingOutcome.pending:
 			return
+		marker, lastMessage = self._getVoiceRecordingLastMessage()
+		markerChanged = (
+			self._voiceRecordingOutcome.baseline is not None
+			and marker != self._voiceRecordingOutcome.baseline
+		)
+		transition = self._voiceRecordingOutcome.observe(
+			marker,
+			markerChanged and is_recorded_message(lastMessage, self._voiceRecordingOutcome.video),
+		)
+		if transition:
+			log.info("Unigram voice-message recording outcome: %s" % transition)
+			self._announceVoiceRecordingTransition(transition)
+
+	def _pollVoiceRecordingState(self):
+		if not self._voiceRecordingMonitorRunning:
+			return
 		try:
-			marker, lastMessage = self._getVoiceRecordingLastMessage()
-			markerChanged = (
-				self._voiceRecordingOutcome.baseline is not None
-				and marker != self._voiceRecordingOutcome.baseline
-			)
-			transition = self._voiceRecordingOutcome.observe(
-				marker,
-				markerChanged and is_recorded_message(lastMessage, self._voiceRecordingOutcome.video),
-			)
+			focus = api.getFocusObject()
+			if getattr(focus, "appModule", None) is not self:
+				return
+			if not self._is_main_window_object(focus):
+				self._voiceRecordingDiscoveryFocus = None
+				return
+			self._pollVoiceRecordingOutcome()
+			button = self._getVoiceRecordingButton(focus)
+			active = recording_button_state(button)
+			if button is not None and active is None:
+				self._voiceRecordingButton = None
+				self._voiceRecordingDiscoveryFocus = None
+				button = self._getVoiceRecordingButton(focus)
+				active = recording_button_state(button)
+			if active is None:
+				self._voiceRecordingButton = None
+				return
+			transition = self._voiceRecordingState.visibilityChanged(active)
 			if transition:
-				log.info("Unigram voice-message recording outcome: %s" % transition)
-				self._announceVoiceRecordingTransition(transition)
+				log.info("Unigram voice-message recording transition: %s" % transition)
+			self._handleVoiceRecordingTransition(transition)
 		except Exception as error:
-			log.debug("Could not inspect the stopped Unigram voice-message recording: %r" % error)
+			log.debug("Could not monitor Unigram voice-message recording UI: %r" % error)
 		finally:
-			if self._voiceRecordingOutcome.pending:
-				self._scheduleVoiceRecordingOutcomePoll()
+			self._scheduleVoiceRecordingPoll()
 
 	# Processing the message that got into focus
 	def action_message_focus(self, obj):
@@ -2711,12 +2765,9 @@ class AppModule(appModuleHandler.AppModule):
 				self._remember_messages_button(obj)
 				if is_recording_button(obj):
 					self._voiceRecordingButton = obj
+					self._voiceRecordingDiscoveryFocus = None
 				elif is_elapsed_label(obj):
-					self._voiceRecordingElapsed = obj.name or ""
-					# Current Unigram makes ChatRecord visible from
-					# ChatRecordBar.OnRecordingStarting. The elapsed label is therefore
-					# the native, event-driven recording lifecycle signal.
-					transition = self._voiceRecordingState.shown()
+					transition = self._voiceRecordingState.elapsedChanged(obj.name)
 					self._handleVoiceRecordingTransition(transition)
 		finally:
 			nextHandler()
@@ -2724,8 +2775,7 @@ class AppModule(appModuleHandler.AppModule):
 	def event_nameChange(self, obj, nextHandler):
 		try:
 			if getattr(self, "isUnigramWindow", False) and is_elapsed_label(obj):
-				self._voiceRecordingElapsed = obj.name or ""
-				transition = self._voiceRecordingState.elapsedChanged(self._voiceRecordingElapsed)
+				transition = self._voiceRecordingState.elapsedChanged(obj.name)
 				self._handleVoiceRecordingTransition(transition)
 		finally:
 			nextHandler()
@@ -2738,8 +2788,8 @@ class AppModule(appModuleHandler.AppModule):
 				and obj is self._voiceRecordingButton
 			):
 				self._voiceRecordingButton = None
+				self._voiceRecordingDiscoveryFocus = None
 			elif getattr(self, "isUnigramWindow", False) and is_elapsed_label(obj):
-				self._voiceRecordingElapsed = ""
 				self._handleVoiceRecordingTransition(self._voiceRecordingState.hidden())
 		finally:
 			nextHandler()
@@ -2897,14 +2947,13 @@ class AppModule(appModuleHandler.AppModule):
 			except: pass
 		elif obj.role == Role.TOGGLEBUTTON:
 			try:
-				# A pressed toggle means video-note mode. Current Unigram renders the elapsed
-				# label inside the separate ChatRecordBar, so use the event-cached value rather
-				# than the obsolete assumption that it is the button's next UIA sibling.
+				# NVDA flattens the visible ChatRecordBar next to this toggle even though
+				# current Unigram declares it separately in XAML.
 				if obj.UIAAutomationId == "btnVoiceMessage":
 					isVideo = State.PRESSED in obj.states
-					if self._voiceRecordingState.active and self._voiceRecordingElapsed:
+					if obj.next and is_elapsed_label(obj.next):
 						label = _("Recording a video message, elapsed time") if isVideo else _("Recording a voice message, elapsed time")
-						obj.name = label+" "+re.split(r"[.,]", self._voiceRecordingElapsed)[0]
+						obj.name = label+" "+re.split(r"[.,]", obj.next.name)[0]
 					else:
 						obj.name = _("Record a video message") if isVideo else _("Record a voice message")
 				else:

@@ -27,6 +27,17 @@ def is_elapsed_label(obj):
 		return False
 
 
+def recording_button_state(button):
+	"""Return the recording state exposed by Unigram's flattened UIA tree."""
+	if not is_recording_button(button):
+		return None
+	try:
+		next_element = button.next
+		return bool(next_element and is_elapsed_label(next_element))
+	except Exception:
+		return None
+
+
 def message_marker(obj):
 	"""Build a stable marker for the last item in Unigram's message list."""
 	if obj is None:

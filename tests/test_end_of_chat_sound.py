@@ -50,6 +50,16 @@ def _load_message_list_item(namespace):
 	return namespace["Message_list_item"]
 
 
+def _load_module_function(name, namespace):
+	function = next(
+		node
+		for node in _source_module().body
+		if isinstance(node, ast.FunctionDef) and node.name == name
+	)
+	exec(compile(ast.Module(body=[function], type_ignores=[]), str(SOURCE_PATH), "exec"), namespace)
+	return namespace[name]
+
+
 def _load_app_methods(names, namespace):
 	app_module = next(
 		node
@@ -366,6 +376,26 @@ def test_confirmation_cancels_when_source_is_not_slice_final(monkeypatch):
 	assert sounds == []
 
 
+def test_confirmation_does_not_inspect_message_tree_after_focus_moves(monkeypatch):
+	messages, _row, focus = _endpoint_nodes()
+	app, api_state, _settings, sounds, _moves = _make_endpoint_app(
+		messages,
+		focus,
+		None,
+	)
+	scheduled = _install_fake_core(monkeypatch)
+	app._get_end_of_chat_candidate = lambda *args: (_ for _ in ()).throw(
+		AssertionError("ordinary Down navigation must not inspect the message tree")
+	)
+	api_state["focus"] = _Node(("next", "message"), automation_id="Message_item")
+
+	assert app._schedule_end_of_chat_confirmation(focus)
+	_, callback, args = scheduled[0]
+	callback(*args)
+
+	assert sounds == []
+
+
 def test_down_arrow_reads_settings_at_use_time_and_preserves_native_navigation():
 	scheduled = []
 	native_gestures = []
@@ -388,9 +418,14 @@ def test_down_arrow_reads_settings_at_use_time_and_preserves_native_navigation()
 			"_": lambda text: text,
 			"message": lambda text: None,
 			"conf": SimpleNamespace(get=lambda key: settings[key]),
+			"_message_position_may_be_last": _load_module_function(
+				"_message_position_may_be_last",
+				{},
+			),
 		}
 	)
 	item = message_class()
+	item.positionInfo = {"indexInGroup": 1, "similarItemsInGroup": 2}
 	item.appModule = SimpleNamespace(
 		_schedule_end_of_chat_confirmation=lambda source, move: scheduled.append(
 			(source, move)
@@ -406,18 +441,34 @@ def test_down_arrow_reads_settings_at_use_time_and_preserves_native_navigation()
 	# so enabling it does not require a new message overlay.
 	settings["play_end_of_chat_sound"] = True
 	item.script_next_message(gesture)
-	assert scheduled == [(item, False)]
+	assert scheduled == []
 	assert native_gestures == [True, True]
+
+	# The expensive identity confirmation is reserved for a possible endpoint.
+	item.positionInfo = {"indexInGroup": 2, "similarItemsInGroup": 2}
+	item.script_next_message(gesture)
+	assert scheduled == [(item, False)]
+	assert native_gestures == [True, True, True]
 	assert events[-2:] == ["send", "schedule"]
 
 	settings["play_end_of_chat_sound"] = False
 	settings["action_when_pressing_up_arrow_in_text_field"] = "to_messages"
 	item.script_next_message(gesture)
 	assert scheduled[-1] == (item, True)
-	assert native_gestures == [True, True, True]
+	assert native_gestures == [True, True, True, True]
 
 	source = SOURCE_PATH.read_text(encoding="utf-8")
 	assert 'self.bindGesture("kb:downArrow", "next_message")' in source
+
+
+def test_end_position_prefilter_is_conservative_for_inconsistent_uia_metadata():
+	may_be_last = _load_module_function("_message_position_may_be_last", {})
+
+	assert not may_be_last({"indexInGroup": 2, "similarItemsInGroup": 59})
+	assert may_be_last({"indexInGroup": 59, "similarItemsInGroup": 59})
+	assert may_be_last({"indexInGroup": 39, "similarItemsInGroup": 38})
+	assert may_be_last({})
+	assert may_be_last(None)
 
 
 def test_alt_2_prioritizes_the_cached_go_to_bottom_button():
