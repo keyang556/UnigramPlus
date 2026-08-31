@@ -6,10 +6,10 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.8\n"
+"Project-Id-Version: UnigramPlus 5.6.9\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2026-08-31 10:45+0630\n"
-"PO-Revision-Date: 2026-08-31 10:49+0630\n"
+"POT-Creation-Date: 2026-09-01 01:58+0630\n"
+"PO-Revision-Date: 2026-09-01 02:04+0630\n"
 "Last-Translator: Harry Min Khant <harrymk64@gmail.com>\n"
 "Language-Team: Harry Min Khant\n"
 "Language: my\n"
@@ -126,11 +126,11 @@ msgstr "တွဲပါ။"
 msgid "Edit"
 msgstr "တည်းဖြတ်ပါ။"
 
-#: addon\appModules\data.py:52 addon\appModules\unigram.py:970
+#: addon\appModules\data.py:52 addon\appModules\unigram.py:939
 msgid "Photo"
 msgstr "ဓာတ်ပုံ"
 
-#: addon\appModules\data.py:53 addon\appModules\unigram.py:2900
+#: addon\appModules\data.py:53 addon\appModules\unigram.py:2877
 msgid "Image"
 msgstr "ပုံ"
 
@@ -178,118 +178,118 @@ msgstr "ဖျက်ပါ။"
 msgid "Close"
 msgstr "ပိတ်လိုက်"
 
-#: addon\appModules\unigram.py:741
+#: addon\appModules\unigram.py:710
 #, python-format
 msgid "%d percent"
 msgstr "%d ရာခိုင်နှုန်း"
 
-#: addon\appModules\unigram.py:889 addon\appModules\unigram.py:2330 addon\appModules\unigram.py:2980
+#: addon\appModules\unigram.py:858 addon\appModules\unigram.py:2314 addon\appModules\unigram.py:2957
 msgid "Microphone on"
 msgstr "မိုက်ခရိုဖုန်း ဖွင့်ထား"
 
-#: addon\appModules\unigram.py:889 addon\appModules\unigram.py:2330 addon\appModules\unigram.py:2980
+#: addon\appModules\unigram.py:858 addon\appModules\unigram.py:2314 addon\appModules\unigram.py:2957
 msgid "Microphone muted"
 msgstr "မိုက်ခရိုဖုန်း အသံပိတ်"
 
-#: addon\appModules\unigram.py:890 addon\appModules\unigram.py:892 addon\appModules\unigram.py:2356 addon\appModules\unigram.py:2367 addon\appModules\unigram.py:2981
+#: addon\appModules\unigram.py:859 addon\appModules\unigram.py:861 addon\appModules\unigram.py:2340 addon\appModules\unigram.py:2351 addon\appModules\unigram.py:2958
 msgid "Camera off"
 msgstr "ကင်မရာပိတ်"
 
-#: addon\appModules\unigram.py:890 addon\appModules\unigram.py:892 addon\appModules\unigram.py:2356 addon\appModules\unigram.py:2366 addon\appModules\unigram.py:2981
+#: addon\appModules\unigram.py:859 addon\appModules\unigram.py:861 addon\appModules\unigram.py:2340 addon\appModules\unigram.py:2350 addon\appModules\unigram.py:2958
 msgid "Camera on"
 msgstr "ကင်မရာဖွင့်ထားသည်။"
 
-#: addon\appModules\unigram.py:909
+#: addon\appModules\unigram.py:878
 msgid "Announce the original message, the message that was replied to"
 msgstr "မူရင်းမက်ဆေ့ချ်ကို ကြေငြာပြီး ပြန်ကြားထားသည့် မက်ဆေ့ချ်"
 
-#: addon\appModules\unigram.py:920
+#: addon\appModules\unigram.py:889
 msgid "Show message text in popup window"
 msgstr "ပေါ့ပ်အပ်ဝင်းဒိုးတွင် မက်ဆေ့ချ်စာသားကို ပြပါ။"
 
-#: addon\appModules\unigram.py:925
+#: addon\appModules\unigram.py:894
 msgid "Rich message"
 msgstr "ပုံစံစုံ မက်ဆေ့ချ်"
 
-#: addon\appModules\unigram.py:925 addon\appModules\unigram.py:2402
+#: addon\appModules\unigram.py:894 addon\appModules\unigram.py:2386
 msgid "message text"
 msgstr "မက်ဆေ့ခ်ျ စာသား"
 
-#: addon\appModules\unigram.py:928 addon\appModules\unigram.py:2389 addon\appModules\unigram.py:2403
+#: addon\appModules\unigram.py:897 addon\appModules\unigram.py:2373 addon\appModules\unigram.py:2387
 msgid "This message does not contain text"
 msgstr "ဤစာတွင် စာသားမပါဝင်ပါ။"
 
-#: addon\appModules\unigram.py:932
+#: addon\appModules\unigram.py:901
 msgid "Open comments"
 msgstr "မှတ်ချက်များဖွင့်ပါ။"
 
-#: addon\appModules\unigram.py:938
+#: addon\appModules\unigram.py:907
 msgid "Button to open comments not found"
 msgstr "မှတ်ချက်များဖွင့်ရန် ခလုတ်မတွေ့ပါ။"
 
-#: addon\appModules\unigram.py:940
+#: addon\appModules\unigram.py:909
 msgid "Edit message"
 msgstr "မက်ဆေ့ချ်ကို တည်းဖြတ်ပါ။"
 
-#: addon\appModules\unigram.py:944
+#: addon\appModules\unigram.py:913
 msgid "Reply to message"
 msgstr "မက်ဆေ့ခ်ျကို အကြောင်းပြန်ပါ။"
 
-#: addon\appModules\unigram.py:971 addon\appModules\unigram.py:2506
+#: addon\appModules\unigram.py:940 addon\appModules\unigram.py:2490
 msgid "Video"
 msgstr "ဗီဒီယို"
 
-#: addon\appModules\unigram.py:977
+#: addon\appModules\unigram.py:946
 msgid "Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information."
 msgstr "မက်ဆေ့ဂျ်ပေးပို့ခြင်း သို့မဟုတ် လက်ခံရရှိသည့်အချိန်အပြင် တုံ့ပြန်မှုစာရင်းကို ကြေညာသည်။ နှစ်ချက်နှိပ်ခြင်းဖြင့် ဤအချက်အလက်အတွက် ကြေငြာမုဒ်ကို ပြောင်းပေးသည်။"
 
-#: addon\appModules\unigram.py:983
+#: addon\appModules\unigram.py:952
 msgid "The display of message sending or receiving time and the list of installed emojis is enabled."
 msgstr "မက်ဆေ့ချ်ပို့ခြင်း သို့မဟုတ် လက်ခံချိန်ပြသခြင်းနှင့် ထည့်သွင်းထားသော အီမိုဂျီများစာရင်းကို ဖွင့်ထားသည်။"
 
-#: addon\appModules\unigram.py:984
+#: addon\appModules\unigram.py:953
 msgid "The display of message sending or receiving time and the list of installed emojis is  disabled."
 msgstr "မက်ဆေ့ချ်ပို့ခြင်း သို့မဟုတ် လက်ခံချိန်ပြသခြင်းနှင့် ထည့်သွင်းထားသော အီမိုဂျီများစာရင်းကို ပိတ်ထားသည်။"
 
 #. message(obj.name)
-#: addon\appModules\unigram.py:1044
+#: addon\appModules\unigram.py:1013
 msgid "Explanation"
 msgstr "ရှင်းလင်းချက်"
 
-#: addon\appModules\unigram.py:1376
+#: addon\appModules\unigram.py:1360
 msgid "No more chats with unread mentions in this direction"
 msgstr "ဤဦးတည်ချက်တွင် မဖတ်ရသေးသော ဖော်ပြချက်များပါသည့် ချတ်များ မရှိတော့ပါ"
 
-#: addon\appModules\unigram.py:1381
+#: addon\appModules\unigram.py:1365
 msgid "Move to the next or previous chat with unread mentions"
 msgstr "မဖတ်ရသေးသော ဖော်ပြချက်များပါသည့် နောက် သို့မဟုတ် ယခင် ချတ်သို့ ရွှေ့ပါ"
 
 #. The function of changing the playback speed of a voice message
-#: addon\appModules\unigram.py:1872
+#: addon\appModules\unigram.py:1856
 msgid "Increase/decrease the playback speed of voice messages"
 msgstr "အသံမက်ဆေ့ဂျ်များ၏ ဖွင့်ခြင်းအမြန်နှုန်းကို တိုး/လျှော့ပါ။"
 
-#: addon\appModules\unigram.py:1878 addon\appModules\unigram.py:1890 addon\appModules\unigram.py:1900 addon\appModules\unigram.py:3563 addon\appModules\unigram.py:3580
-#: addon\appModules\unigram.py:3595
+#: addon\appModules\unigram.py:1862 addon\appModules\unigram.py:1874 addon\appModules\unigram.py:1884 addon\appModules\unigram.py:3540
+#: addon\appModules\unigram.py:3557 addon\appModules\unigram.py:3572
 msgid "Nothing is playing right now"
 msgstr "လောလောဆယ် ဘာမှ မကစားဘူး။"
 
 #. Audio player close function
-#: addon\appModules\unigram.py:1881
+#: addon\appModules\unigram.py:1865
 msgid "Close audio player"
 msgstr "အသံဖွင့်စက်ကို ပိတ်ပါ။"
 
-#: addon\appModules\unigram.py:1889
+#: addon\appModules\unigram.py:1873
 msgid "The audio player has been closed"
 msgstr "အသံဖွင့်စက်ကို ပိတ်လိုက်ပါပြီ။"
 
 #. Voice message pause function
-#: addon\appModules\unigram.py:1893
+#: addon\appModules\unigram.py:1877
 msgid "Play/pause the voice message currently playing"
 msgstr "လက်ရှိဖွင့်နေသည့် အသံမက်ဆေ့ဂျ်ကို ဖွင့်/ရပ်ပါ။"
 
 #. Go to chat list
-#: addon\appModules\unigram.py:1936
+#: addon\appModules\unigram.py:1920
 msgid "Move focus to chat list"
 msgstr "ချတ်စာရင်းသို့ အာရုံပြောင်းပါ။"
 
@@ -297,408 +297,409 @@ msgstr "ချတ်စာရင်းသို့ အာရုံပြော�
 #. if contacts_list:
 #. contacts_list.setFocus()
 #. return True
-#: addon\appModules\unigram.py:1955
+#: addon\appModules\unigram.py:1939
 msgid "Chat list not found"
 msgstr "ချတ်စာရင်းကို ရှာမတွေ့ပါ။"
 
-#: addon\appModules\unigram.py:1963
+#: addon\appModules\unigram.py:1947
 msgid "Chat list is empty"
 msgstr "ချတ်စာရင်းသည် ဗလာဖြစ်နေသည်။"
 
 #. Go to the last message in the chat
-#: addon\appModules\unigram.py:1967
+#: addon\appModules\unigram.py:1951
 msgid "Move focus to the last message in an open chat"
 msgstr "ဖွင့်ထားသော ချတ်တွင် နောက်ဆုံးမက်ဆေ့ဂျ်သို့ အာရုံစိုက်ပါ။"
 
-#: addon\appModules\unigram.py:1996 addon\appModules\unigram.py:2259 addon\appModules\unigram.py:2741 addon\appModules\unigram.py:2754
+#: addon\appModules\unigram.py:1980 addon\appModules\unigram.py:2243 addon\appModules\unigram.py:2722 addon\appModules\unigram.py:2735
 msgid "This chat is empty"
 msgstr "ဤချတ်သည် ဗလာဖြစ်နေသည်။"
 
-#: addon\appModules\unigram.py:2010 addon\appModules\unigram.py:2250 addon\appModules\unigram.py:2258 addon\appModules\unigram.py:2470 addon\appModules\unigram.py:2737
+#: addon\appModules\unigram.py:1994 addon\appModules\unigram.py:2234 addon\appModules\unigram.py:2242 addon\appModules\unigram.py:2454
+#: addon\appModules\unigram.py:2718
 msgid "No open chat"
 msgstr "ဖွင့်ချတ်မရှိပါ။"
 
 #. Move focus to the list of chat folders
-#: addon\appModules\unigram.py:2020
+#: addon\appModules\unigram.py:2004
 msgid "Move focus to list of chat folders"
 msgstr "ချတ်ဖိုဒါများစာရင်းသို့ အာရုံစိုက်ပါ။"
 
-#: addon\appModules\unigram.py:2026 addon\appModules\unigram.py:2034 addon\appModules\unigram.py:2035
+#: addon\appModules\unigram.py:2010 addon\appModules\unigram.py:2018 addon\appModules\unigram.py:2019
 msgid "Chat folder list not found"
 msgstr "ချတ်ဖိုဒါစာရင်းကို ရှာမတွေ့ပါ။"
 
-#: addon\appModules\unigram.py:2198
+#: addon\appModules\unigram.py:2182
 msgid "Move focus to the list of group threads"
 msgstr "အဖွဲ့အစည်းများစာရင်းသို့ အာရုံပြောင်းပါ။"
 
-#: addon\appModules\unigram.py:2202
+#: addon\appModules\unigram.py:2186
 msgid "No list with threads was found"
 msgstr "စာတွဲများပါသည့်စာရင်းကို ရှာမတွေ့ပါ။"
 
 #. Move focus to open profile
-#: addon\appModules\unigram.py:2223
+#: addon\appModules\unigram.py:2207
 msgid "Move focus to open profile"
 msgstr "ပရိုဖိုင်ဖွင့်ရန် အာရုံကိုရွှေ့ပါ။"
 
-#: addon\appModules\unigram.py:2227
+#: addon\appModules\unigram.py:2211
 msgid "There is no open profile"
 msgstr "ပရိုဖိုင်ဖွင့်ထားခြင်းမရှိပါ။"
 
 #. Announces the profile name and status in an open chat
-#: addon\appModules\unigram.py:2230
+#: addon\appModules\unigram.py:2214
 msgid "Announce the name and status of an open chat"
 msgstr "ဖွင့်ချတ်တစ်ခု၏ အမည်နှင့် အခြေအနေကို ကြေညာပါ။"
 
-#: addon\appModules\unigram.py:2233
+#: addon\appModules\unigram.py:2217
 msgid "Chat activity tracking is enabled"
 msgstr "ချတ်လှုပ်ရှားမှု ခြေရာခံခြင်းကို ဖွင့်ထားသည်။"
 
-#: addon\appModules\unigram.py:2234
+#: addon\appModules\unigram.py:2218
 msgid "Chat activity tracking is disabled"
 msgstr "ချတ်လှုပ်ရှားမှု ခြေရာခံခြင်းကို ပိတ်ထားသည်။"
 
 #. Go to "unread messages" label
-#: addon\appModules\unigram.py:2253
+#: addon\appModules\unigram.py:2237
 msgid "Move focus to 'unread messages' label"
 msgstr "အာရုံစူးစိုက်မှုကို 'မဖတ်ရသေးသောစာများ' အညွှန်းသို့ ရွှေ့ပါ။"
 
-#: addon\appModules\unigram.py:2268
+#: addon\appModules\unigram.py:2252
 msgid "There are no unread messages in this chat"
 msgstr "ဤချတ်တွင် မဖတ်ရသေးသောစာများ မရှိပါ။"
 
 #. Call if it's a contact, or enter a voice chat if it's a group
-#: addon\appModules\unigram.py:2271
+#: addon\appModules\unigram.py:2255
 msgid "Call if it's a contact, or enter a voice chat if it's a group"
 msgstr "အဆက်အသွယ်ဖြစ်လျှင် ဖုန်းခေါ်ပါ သို့မဟုတ် အဖွဲ့တစ်ခုဖြစ်လျှင် အသံချတ်တစ်ခုထည့်ပါ။"
 
-#: addon\appModules\unigram.py:2276
+#: addon\appModules\unigram.py:2260
 msgid "Call unavailable"
 msgstr "ခေါ်ဆို၍မရပါ။"
 
 #. Make a video call if it's a contact
-#: addon\appModules\unigram.py:2279
+#: addon\appModules\unigram.py:2263
 msgid "Press the video call button"
 msgstr "ဗီဒီယိုခေါ်ဆိုမှုခလုတ်ကို နှိပ်ပါ။"
 
-#: addon\appModules\unigram.py:2283
+#: addon\appModules\unigram.py:2267
 msgid "Video call not available"
 msgstr "ဗီဒီယိုခေါ်ဆိုမှု မရရှိနိုင်ပါ။"
 
 #. Function to open instant view
-#: addon\appModules\unigram.py:2286
+#: addon\appModules\unigram.py:2270
 msgid "Press \"Instant view\" button, if it is included in the current message"
 msgstr "လက်ရှိမက်ဆေ့ချ်တွင် ပါဝင်ပါက \"ချက်ခြင်းကြည့်ရှုရန်\" ခလုတ်ကို နှိပ်ပါ။"
 
-#: addon\appModules\unigram.py:2297 addon\appModules\unigram.py:2430 addon\appModules\unigram.py:2437 addon\appModules\unigram.py:2445 addon\appModules\unigram.py:3671
-#: addon\appModules\unigram.py:3799 addon\appModules\unigram.py:3862 addon\appModules\unigram.py:3871
+#: addon\appModules\unigram.py:2281 addon\appModules\unigram.py:2414 addon\appModules\unigram.py:2421 addon\appModules\unigram.py:2429
+#: addon\appModules\unigram.py:3648 addon\appModules\unigram.py:3776 addon\appModules\unigram.py:3839 addon\appModules\unigram.py:3848
 msgid "Button not found"
 msgstr "ခလုတ်မတွေ့ပါ။"
 
 #. Mute/unmute the microphone
-#: addon\appModules\unigram.py:2317
+#: addon\appModules\unigram.py:2301
 msgid "Press \"Mute/unmute microphone\" button"
 msgstr "\"Mute/unmute microphone\" ခလုတ်ကို နှိပ်ပါ။"
 
-#: addon\appModules\unigram.py:2341
+#: addon\appModules\unigram.py:2325
 msgid "Microphone button not found"
 msgstr "မိုက်ခရိုဖုန်းခလုတ် ရှာမတွေ့ပါ"
 
 #. Turn off/on the camera
-#: addon\appModules\unigram.py:2344
+#: addon\appModules\unigram.py:2328
 msgid "Press \"Enable/disable camera\" button"
 msgstr "\"Enable/disable camera\" ခလုတ်ကိုနှိပ်ပါ။"
 
-#: addon\appModules\unigram.py:2373
+#: addon\appModules\unigram.py:2357
 msgid "Camera button not found"
 msgstr "ကင်မရာခလုတ် ရှာမတွေ့ပါ"
 
 #. Copy the focused link to the clipboard. For anything else we defer to Unigram's own
 #. Ctrl+C, so the shortcut is never handled twice (Unigram can't copy just a link, and
 #. its copy does not apply while the focus is on a link, so the two no longer conflict).
-#: addon\appModules\unigram.py:2378
+#: addon\appModules\unigram.py:2362
 msgid "Copy the message if it contains text. If the focus is on a link, the link will be copied"
 msgstr "စာသားပါရှိလျှင် စာကို ကူးယူပါ။ လင့်ခ်တစ်ခုကို အာရုံစိုက်ပါက၊ လင့်ခ်ကို ကူးယူမည်ဖြစ်သည်။"
 
-#: addon\appModules\unigram.py:2388
+#: addon\appModules\unigram.py:2372
 msgid "Link copied"
 msgstr "လင့်ခ်ကို ကူးယူထားသည်။"
 
 #. Move the focus to the message input field. If the focus is already in this field, then move it to the last element that had focus before this field
-#: addon\appModules\unigram.py:2406
+#: addon\appModules\unigram.py:2390
 msgid "Move the focus to the edit field. If the focus is already in the edit field, then after pressing the hotkey, it will move to where it was before"
 msgstr "အာရုံကို တည်းဖြတ်သည့်အကွက်သို့ ရွှေ့ပါ။ အကယ်၍ အာရုံသည် တည်းဖြတ်မှုအကွက်တွင် ရှိပြီးသားဖြစ်ပါက၊ ထို့နောက် ဟော့ကီးကိုနှိပ်ပြီးနောက်၊ ၎င်းသည် ယခင်ရှိခဲ့သည့်နေရာသို့ ရွှေ့သွားမည်ဖြစ်သည်။"
 
-#: addon\appModules\unigram.py:2423
+#: addon\appModules\unigram.py:2407
 msgid "Message input field not found"
 msgstr "မက်ဆေ့ဂျ်ထည့်သွင်းမှုအကွက်ကို ရှာမတွေ့ပါ။"
 
 #. Press the "Attach media" button
-#: addon\appModules\unigram.py:2426
+#: addon\appModules\unigram.py:2410
 msgid "Press \"Attach file\" button"
 msgstr "\"ဖိုင်တွဲ\" ခလုတ်ကိုနှိပ်ပါ။"
 
 #. Press the "New Conversation" button
-#: addon\appModules\unigram.py:2433
+#: addon\appModules\unigram.py:2417
 msgid "Press \"New conversation\" button"
 msgstr "\"စကားဝိုင်းအသစ်\" ခလုတ်ကိုနှိပ်ပါ။"
 
 #. Open navigation menu
-#: addon\appModules\unigram.py:2448
+#: addon\appModules\unigram.py:2432
 msgid "Open navigation menu"
 msgstr "လမ်းညွှန်မီနူးကိုဖွင့်ပါ။"
 
-#: addon\appModules\unigram.py:2454
+#: addon\appModules\unigram.py:2438
 msgid "Navigation menu not available"
 msgstr "လမ်းညွှန်မီနူးကို မရရှိနိုင်ပါ။"
 
 #. Function to open the profile of the current chat
-#: addon\appModules\unigram.py:2457
+#: addon\appModules\unigram.py:2441
 msgid "Open current chat profile"
 msgstr "လက်ရှိ ချတ်ပရိုဖိုင်ကို ဖွင့်ပါ။"
 
-#: addon\appModules\unigram.py:2480
+#: addon\appModules\unigram.py:2464
 msgid "Record sent"
 msgstr "မှတ်တမ်းပေးပို့ခဲ့သည်။"
 
-#: addon\appModules\unigram.py:2489
+#: addon\appModules\unigram.py:2473
 msgid "Recording canceled"
 msgstr "အသံသွင်းခြင်းကို ပယ်ဖျက်လိုက်ပါပြီ။"
 
-#: addon\appModules\unigram.py:2506
+#: addon\appModules\unigram.py:2490
 msgid "Audio"
 msgstr "အသံ"
 
-#: addon\appModules\unigram.py:2626
+#: addon\appModules\unigram.py:2610
 msgid "Answer options"
 msgstr "အဖြေရွေးချယ်မှုများ"
 
-#: addon\appModules\unigram.py:2656
+#: addon\appModules\unigram.py:2640
 msgid "You"
 msgstr "မင်း"
 
 #. Check if a message is selected
-#: addon\appModules\unigram.py:2689
+#: addon\appModules\unigram.py:2673
 msgid "Selected"
 msgstr "ရွေးချယ်ခဲ့သည်။"
 
 #. Change the announce level of progress bars
-#: addon\appModules\unigram.py:2715
+#: addon\appModules\unigram.py:2696
 msgid "Toggle progress bar announcements"
 msgstr "တိုးတက်မှုဘားကြေငြာချက်များကို ပြောင်းရန်"
 
-#: addon\appModules\unigram.py:2721
+#: addon\appModules\unigram.py:2702
 msgid "Announce progress bars only during upload and download"
 msgstr "အပ်လုဒ်နှင့် ဒေါင်းလုဒ်လုပ်နေစဉ်အတွင်းသာ တိုးတက်မှုဘားများကို ကြေညာပါ။"
 
-#: addon\appModules\unigram.py:2725 addon\GlobalPlugins\UnigramPlus\__init__.py:248
+#: addon\appModules\unigram.py:2706 addon\GlobalPlugins\UnigramPlus\__init__.py:248
 msgid "Announce all progress bars"
 msgstr "တိုးတက်မှုဘားများအားလုံးကိုကြေငြာပါ။"
 
-#: addon\appModules\unigram.py:2729 addon\GlobalPlugins\UnigramPlus\__init__.py:250
+#: addon\appModules\unigram.py:2710 addon\GlobalPlugins\UnigramPlus\__init__.py:250
 msgid "Do not announce any progress bars"
 msgstr "မည်သည့်တိုးတက်မှုကိုမျှ မကြေငြာပါနှင့်"
 
-#: addon\appModules\unigram.py:2922
+#: addon\appModules\unigram.py:2899
 msgid "Editing"
 msgstr "တည်းဖြတ်ခြင်း။"
 
-#: addon\appModules\unigram.py:2923
+#: addon\appModules\unigram.py:2900
 msgid "Reply"
 msgstr "အကြောင်းပြန်တယ်။"
 
-#: addon\appModules\unigram.py:2932
+#: addon\appModules\unigram.py:2909
 msgid "Duration"
 msgstr "သင်တန်းကာလ"
 
-#: addon\appModules\unigram.py:2933
+#: addon\appModules\unigram.py:2910
 msgid "Size"
 msgstr "အရွယ်အစား"
 
-#: addon\appModules\unigram.py:2945
+#: addon\appModules\unigram.py:2922
 msgid "Enable video"
 msgstr "ဗီဒီယိုကို ဖွင့်ပါ။"
 
-#: addon\appModules\unigram.py:2946
+#: addon\appModules\unigram.py:2923
 msgid "Disable video"
 msgstr "ဗီဒီယိုကို ပိတ်ပါ။"
 
-#: addon\appModules\unigram.py:2957
+#: addon\appModules\unigram.py:2934
 msgid "Recording a video message, elapsed time"
 msgstr "ဗီဒီယိုမက်ဆေ့ဂျ် မှတ်တမ်းတင်နေသည်၊ ကုန်လွန်ချိန်"
 
-#: addon\appModules\unigram.py:2957
+#: addon\appModules\unigram.py:2934
 msgid "Recording a voice message, elapsed time"
 msgstr "အသံမက်ဆေ့ဂျ် မှတ်တမ်းတင်နေသည်၊ ကုန်လွန်ချိန်"
 
-#: addon\appModules\unigram.py:2960
+#: addon\appModules\unigram.py:2937
 msgid "Record a video message"
 msgstr "ဗီဒီယိုမက်ဆေ့ဂျ် မှတ်တမ်းတင်ရန်"
 
-#: addon\appModules\unigram.py:2960
+#: addon\appModules\unigram.py:2937
 msgid "Record a voice message"
 msgstr "အသံမက်ဆေ့ဂျ် မှတ်တမ်းတင်ရန်"
 
-#: addon\appModules\unigram.py:3143
+#: addon\appModules\unigram.py:3120
 msgid "Delete a message or chat"
 msgstr "မက်ဆေ့ချ် သို့မဟုတ် ချတ်ကို ဖျက်ပါ။"
 
-#: addon\appModules\unigram.py:3146
+#: addon\appModules\unigram.py:3123
 msgid "Delete message or chat from both sides"
 msgstr "နှစ်ဖက်စလုံးမှ မက်ဆေ့ဂျ် သို့မဟုတ် ချတ်ကို ဖျက်ပါ။"
 
-#: addon\appModules\unigram.py:3149
+#: addon\appModules\unigram.py:3126
 msgid "Switch to selection mode"
 msgstr "ရွေးချယ်မှုမုဒ်သို့ ပြောင်းပါ။"
 
-#: addon\appModules\unigram.py:3152
+#: addon\appModules\unigram.py:3129
 msgid "Forward message"
 msgstr "မက်ဆေ့ခ်ျကို ထပ်ဆင့်ပို့ပါ။"
 
-#: addon\appModules\unigram.py:3155
+#: addon\appModules\unigram.py:3132
 msgid "Mark a chat as read"
 msgstr "ချတ်ကို ဖတ်ပြီးဟု အမှတ်အသားပြုပါ။"
 
-#: addon\appModules\unigram.py:3158
+#: addon\appModules\unigram.py:3135
 msgid "Save file as..."
 msgstr "ဖိုင်အဖြစ် သိမ်းဆည်းပါ..."
 
-#: addon\appModules\unigram.py:3161
+#: addon\appModules\unigram.py:3138
 msgid "Pin a message or chat"
 msgstr "မက်ဆေ့ဂျ် သို့မဟုတ် ချတ်ကို ပင်ထိုးပါ။"
 
-#: addon\appModules\unigram.py:3430
+#: addon\appModules\unigram.py:3407
 msgid "Message deleted on both sides"
 msgstr "နှစ်ဖက်စလုံးတွင် မက်ဆေ့ချ်ကို ဖျက်လိုက်သည်။"
 
-#: addon\appModules\unigram.py:3431
+#: addon\appModules\unigram.py:3408
 msgid "Message deleted"
 msgstr "မက်ဆေ့ချ်ကို ဖျက်လိုက်ပါပြီ။"
 
-#: addon\appModules\unigram.py:3434
+#: addon\appModules\unigram.py:3411
 msgid "You left the group"
 msgstr "သင်အဖွဲ့မှထွက်ခဲ့သည်။"
 
-#: addon\appModules\unigram.py:3435
+#: addon\appModules\unigram.py:3412
 msgid "You left the channel"
 msgstr "သင်သည် ချန်နယ်မှ ထွက်သွားသည်။"
 
-#: addon\appModules\unigram.py:3436
+#: addon\appModules\unigram.py:3413
 msgid "Bot removed and blocked"
 msgstr "ဘော့တ်ကို ဖယ်ရှားပြီး ပိတ်ဆို့ထားသည်။"
 
-#: addon\appModules\unigram.py:3437
+#: addon\appModules\unigram.py:3414
 msgid "Bot removed"
 msgstr "ဘော့တ်ကို ဖယ်ရှားခဲ့သည်။"
 
-#: addon\appModules\unigram.py:3438
+#: addon\appModules\unigram.py:3415
 msgid "Chat deleted on both sides"
 msgstr "နှစ်ဖက်စလုံးတွင် မက်ဆေ့ချ်ကို ဖျက်လိုက်သည်။"
 
-#: addon\appModules\unigram.py:3439
+#: addon\appModules\unigram.py:3416
 msgid "Chat deleted"
 msgstr "မက်ဆေ့ချ်ကို ဖျက်လိုက်ပါပြီ။"
 
 #. Data copy function for broadcasting
-#: addon\appModules\unigram.py:3495
+#: addon\appModules\unigram.py:3472
 msgid "Copy data for broadcasting to the clipboard"
 msgstr "ထုတ်လွှင့်မှုအတွက် ဒေတာကို ကလစ်ဘုတ်သို့ ကူးယူပါ။"
 
-#: addon\appModules\unigram.py:3499 addon\appModules\unigram.py:3503
+#: addon\appModules\unigram.py:3476 addon\appModules\unigram.py:3480
 msgid "Broadcast window not found"
 msgstr "အသံလွှင့်ဝင်းဒိုးကို ရှာမတွေ့ပါ။"
 
-#: addon\appModules\unigram.py:3509
+#: addon\appModules\unigram.py:3486
 msgid "%url and %key copied to clipboard"
 msgstr "%url နှင့် %key ကို ကလစ်ဘုတ်သို့ ကူးယူထားသည်။"
 
-#: addon\appModules\unigram.py:3606
+#: addon\appModules\unigram.py:3583
 msgid "Fast forward a voice message"
 msgstr "အသံမက်ဆေ့ဂျ်ကို အမြန်ပို့ပါ။"
 
-#: addon\appModules\unigram.py:3610
+#: addon\appModules\unigram.py:3587
 msgid "Rewind voice message"
 msgstr "အသံမက်ဆေ့ဂျ်ကို ပြန်ရစ်ပါ။"
 
 #. This is necessary for this phrase to appear in the translation dictionary
-#: addon\appModules\unigram.py:3633 addon\appModules\unigram.py:3634
+#: addon\appModules\unigram.py:3610 addon\appModules\unigram.py:3611
 msgid "Right answer"
 msgstr "အဖြေမှန်"
 
 #. Converting voice messages to text
-#: addon\appModules\unigram.py:3656
+#: addon\appModules\unigram.py:3633
 msgid "Convert voice message to text"
 msgstr "အသံမက်ဆေ့ဂျ်ကို စာသားအဖြစ် ပြောင်းပါ။"
 
-#: addon\appModules\unigram.py:3663
+#: addon\appModules\unigram.py:3640
 msgid "This voice message is already converted to text"
 msgstr "ဤအသံမက်ဆေ့ဂျ်ကို စာသားအဖြစ် ပြောင်းလဲပြီးဖြစ်သည်။"
 
-#: addon\appModules\unigram.py:3664
+#: addon\appModules\unigram.py:3641
 msgid "Converting this voice message is already in process"
 msgstr "ဤအသံမက်ဆေ့ဂျ်ကို ပြောင်းလဲခြင်းမှာ လုပ်ဆောင်နေပြီဖြစ်သည်။"
 
-#: addon\appModules\unigram.py:3674
+#: addon\appModules\unigram.py:3651
 msgid "Enable automatic reading of new messages in the current chat"
 msgstr "လက်ရှိချတ်တွင် မက်ဆေ့ဂျ်အသစ်များ အလိုအလျောက်ဖတ်ခြင်းကို ဖွင့်ပါ။"
 
-#: addon\appModules\unigram.py:3676
+#: addon\appModules\unigram.py:3653
 msgid "Automatic reading of messages is enabled"
 msgstr "မက်ဆေ့ဂျ်များကို အလိုအလျောက်ဖတ်ခြင်းကို ဖွင့်ထားသည်။"
 
-#: addon\appModules\unigram.py:3677
+#: addon\appModules\unigram.py:3654
 msgid "Automatic reading of new messages is disabled"
 msgstr "မက်ဆေ့ဂျ်အသစ်များကို အလိုအလျောက်ဖတ်ရှုခြင်းကို ပိတ်ထားသည်။"
 
-#: addon\appModules\unigram.py:3681
+#: addon\appModules\unigram.py:3658
 msgid "Toggle whether message headers are announced before or after the message content"
 msgstr "မက်ဆေ့ချ်ခေါင်းစီးများကို မက်ဆေ့ချ်အကြောင်းအရာ၏ ရှေ့ သို့မဟုတ် နောက်တွင် ဖတ်ပြခြင်းကို ပြောင်းလဲပါ"
 
-#: addon\appModules\unigram.py:3688
+#: addon\appModules\unigram.py:3665
 msgid "Message headers will be announced after the message content"
 msgstr "မက်ဆေ့ချ်ခေါင်းစီးများကို မက်ဆေ့ချ်အကြောင်းအရာပြီးနောက် ဖတ်ပြပါမည်"
 
-#: addon\appModules\unigram.py:3690
+#: addon\appModules\unigram.py:3667
 msgid "Message headers will be announced before the message content"
 msgstr "မက်ဆေ့ချ်ခေါင်းစီးများကို မက်ဆေ့ချ်အကြောင်းအရာမတိုင်မီ ဖတ်ပြပါမည်"
 
-#: addon\appModules\unigram.py:3695
+#: addon\appModules\unigram.py:3672
 msgid "Announce the Unigram and UnigramPlus version numbers"
 msgstr "Unigram နှင့် UnigramPlus ဗားရှင်းနံပါတ်များကို ကြေညာရန်"
 
-#: addon\appModules\unigram.py:3718
+#: addon\appModules\unigram.py:3695
 #, python-brace-format
 msgid "Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
 msgstr "Unigram ဗားရှင်း: {unigramVersion}. UnigramPlus ဗားရှင်း: {addonVersion}."
 
-#: addon\appModules\unigram.py:3724
+#: addon\appModules\unigram.py:3701
 msgid "Show a list of all UnigramPlus shortcuts"
 msgstr "UnigramPlus ဖြတ်လမ်းများ အားလုံး၏ စာရင်းကို ပြပါ။"
 
-#: addon\appModules\unigram.py:3732
+#: addon\appModules\unigram.py:3709
 msgid "List of shortcuts"
 msgstr "ဖြတ်လမ်းများစာရင်း"
 
-#: addon\appModules\unigram.py:3734
+#: addon\appModules\unigram.py:3711
 msgid "Go to the list with search results"
 msgstr "ရှာဖွေမှုရလဒ်များနှင့်အတူ စာရင်းသို့သွားပါ။"
 
-#: addon\appModules\unigram.py:3786 addon\appModules\unigram.py:3799
+#: addon\appModules\unigram.py:3763 addon\appModules\unigram.py:3776
 msgid "No search results"
 msgstr "ရှာဖွေမှုရလဒ် မရှိပါ"
 
-#: addon\appModules\unigram.py:3855
+#: addon\appModules\unigram.py:3832
 msgid "Go to the next search result"
 msgstr "နောက်ရှာဖွေမှုရလဒ်သို့ သွားပါ။"
 
-#: addon\appModules\unigram.py:3861
+#: addon\appModules\unigram.py:3838
 msgid "No next search result"
 msgstr "နောက်ရှာဖွေမှုရလဒ်မရှိပါ။"
 
-#: addon\appModules\unigram.py:3864
+#: addon\appModules\unigram.py:3841
 msgid "Go to the previous search result"
 msgstr "ယခင်ရှာဖွေမှုရလဒ်သို့ သွားပါ။"
 
-#: addon\appModules\unigram.py:3870
+#: addon\appModules\unigram.py:3847
 msgid "No previous search result"
 msgstr "ယခင်ရှာဖွေမှုရလဒ်မရှိပါ။"
 
@@ -941,18 +942,20 @@ msgstr "UnigramPlus"
 
 #: buildVars.py:19
 msgid ""
-"This add-on adds a lot of hotkeys for quick navigation through the main elements of the Unigram application, convenient interaction with Chat messages, and also adds "
-"many small improvements that make working in Unigram much easier"
+"This add-on adds a lot of hotkeys for quick navigation through the main elements of the Unigram application, convenient interaction with Chat messages, and also "
+"adds many small improvements that make working in Unigram much easier"
 msgstr ""
 "ဤ add-on သည် Unigram အပလီကေးရှင်း၏ အဓိက အစိတ်အပိုင်းများမှတစ်ဆင့် အမြန်လမ်းညွှန်မှု၊ Chat မက်ဆေ့ဂျ်များနှင့် အဆင်ပြေသော အပြန်အလှန် ဆက်သွယ်မှုများအတွက် ကီးများစွာကို ပေါင်းထည့်ကာ Unigram တွင် အလုပ်လုပ်ရန် ပိုမိုလွယ်ကူစေမည့် "
 "သေးငယ်သော တိုးတက်မှုများစွာကိုလည်း ပေါင်းထည့်ထားသည်။"
 
 #: changelog.py:5
 msgid ""
-"- Fixed Alt+C failing when WhatsApp Enhancer is installed due to an appModules helper module name collision.\n"
-"- Changed the shortcut for announcing the installed Unigram and UnigramPlus versions from NVDA+Shift+V to NVDA+Alt+V to avoid shortcut conflicts.\n"
-"- Fixed Shift+Delete for deleting chats and leaving groups or channels in current Unigram versions, including automatic popup confirmation handling."
+"- Fixed an error that could occur when NVDA entered a secure desktop, such as a UAC prompt, while UnigramPlus background message tracking was enabled.\n"
+"- Removed the obsolete Saved Messages topic name workaround; current Unigram versions now provide accessible names for Saved Messages chats natively.\n"
+"- Updated compatibility for NVDA 2026.2.\n"
+"- Updated Polish and Burmese translations."
 msgstr ""
-"- appModules helper module name collision ကြောင့် WhatsApp Enhancer ကို ထည့်သွင်းသည့်အခါ Alt+C ချို့ယွင်းမှုကို ပြင်ဆင်ပြီးပါပြီ။\\n\n"
-"- ဖြတ်လမ်းပဋိပက္ခများကို ရှောင်ရှားရန် ထည့်သွင်းထားသော Unigram နှင့် UnigramPlus ဗားရှင်းများကို ကြေငြာရန်အတွက် shortcut ကို NVDA+Shift+V မှ NVDA+Alt+V သို့ ပြောင်းလဲခဲ့သည်။\\n\n"
-"- လက်ရှိ Unigram ဗားရှင်းများတွင် ချက်တင်များကို ဖျက်ခြင်းနှင့် အဖွဲ့များ သို့မဟုတ် ချန်နယ်များမှ ထွက်ခွာခြင်းအတွက် Shift+Delete ကို ပြင်ဆင်ပြီးဖြစ်ပြီး၊ အလိုအလျောက် popup အတည်ပြုချက် ကိုင်တွယ်ခြင်း ပါဝင်သည်။"
+"- UnigramPlus နောက်ခံ မက်ဆေ့ချ် ခြေရာခံခြင်းကို ဖွင့်ထားစဉ် NVDA သည် UAC prompt ကဲ့သို့သော လုံခြုံသော desktop တစ်ခုထဲသို့ ဝင်ရောက်သည့်အခါ ဖြစ်ပွားနိုင်သည့် အမှားကို ပြင်ဆင်ပြီးဖြစ်သည်။\n"
+"- ခေတ်မမီတော့သော Saved Messages ခေါင်းစဉ်အမည် ဖြေရှင်းနည်းကို ဖယ်ရှားလိုက်ပါပြီ။ လက်ရှိ Unigram ဗားရှင်းများသည် Saved Messages chats များအတွက် မူရင်းအတိုင်း အသုံးပြုနိုင်သော အမည်များကို ပေးထားပါသည်။\n"
+"- NVDA 2026.2 အတွက် လိုက်ဖက်ညီမှုကို အပ်ဒိတ်လုပ်ထားသည်။\n"
+"- ပိုလန်နှင့် မြန်မာဘာသာပြန်များကို အပ်ဒိတ်လုပ်ထားသည်။"
