@@ -184,7 +184,7 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 ### Versión 5.6.9
 
 * Se corrigió un error que podía producirse cuando NVDA entraba en un escritorio seguro, por ejemplo, en una solicitud de UAC, mientras estaba activado el seguimiento de mensajes en segundo plano de UnigramPlus.
-* Se restauró la detección fiable de la grabación de mensajes de voz y se evitaron las comprobaciones innecesarias de UI Automation al final del chat que podían retrasar la navegación por mensajes.
+* Se restauró la detección fiable de la grabación de mensajes de voz y se evitaron las comprobaciones innecesarias de UI Automation al final del chat que podían retrasar la navegación por mensajes; las filas de la pestaña Mensajes guardados del perfil ahora conservan la información de accesibilidad nativa de Unigram en vez de provocar demoras al analizar todo el árbol del mensaje.
 * Se eliminó la solución provisional obsoleta para los nombres de temas de Mensajes guardados; las versiones actuales de Unigram ahora proporcionan nombres accesibles de forma nativa para los chats de Mensajes guardados.
 * Se actualizó la compatibilidad con NVDA 2026.2.
 * Se actualizaron las traducciones al polaco y al birmano.

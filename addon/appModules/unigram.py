@@ -86,6 +86,8 @@ _CONTEXT_MENU_RAW_TEXT_LIMIT = 64
 _MAIN_WINDOW_AUTOMATION_IDS = frozenset(("ChatsList", "Messages", "TextField", "Navigation"))
 _CALL_WINDOW_AUTOMATION_IDS = frozenset(("ActiveButtons", "BottomRoot"))
 _WINDOW_SURFACE_AUTOMATION_IDS = _MAIN_WINDOW_AUTOMATION_IDS | _CALL_WINDOW_AUTOMATION_IDS
+_SAVED_MESSAGES_TAB_LIST_MARKER = "_unigramPlusSavedMessagesTabList"
+_SAVED_MESSAGES_TAB_ROW_MARKER = "_unigramPlusNativeSavedMessagesTabRow"
 
 
 def _get_end_of_chat_sound_path():
@@ -464,6 +466,28 @@ def _find_ancestor_by_automation_id(obj, automation_ids, max_depth=6):
 		except Exception:
 			return None
 	return None
+
+
+def _is_saved_messages_tab_list(obj):
+	"""Identify the Messages list embedded in Unigram's profile Saved tab.
+
+	Current Unigram removes the message list's own ScrollViewer in this tab and
+	uses ProfilePage.ScrollingHost instead.  A normal chat keeps its internal
+	ScrollViewer (automation id ``ScrollViewer``), so it has no higher
+	``ScrollingHost`` ancestor.  This structural marker is stable across display
+	languages and avoids reviving the removed SavedMessagesTopic name workaround.
+	"""
+	try:
+		if getattr(obj, "UIAAutomationId", "") != "Messages":
+			return False
+		parent = obj.parent
+	except Exception:
+		return False
+	return _find_ancestor_by_automation_id(
+		parent,
+		("ScrollingHost",),
+		max_depth=16,
+	) is not None
 
 
 def _is_message_list_item(obj):
@@ -2875,6 +2899,12 @@ class AppModule(appModuleHandler.AppModule):
 		elif self.isDelete and self.deleteMessageAndChat(obj):
 			return
 		if obj.role == Role.LISTITEM:
+			# The profile Saved tab already exposes complete native row names and
+			# positions.  Keep its focus event entirely native: action_message_focus
+			# walks each message subtree and is the source of the navigation delay.
+			if getattr(obj, _SAVED_MESSAGES_TAB_ROW_MARKER, False):
+				nextHandler()
+				return
 			speech.cancelSpeech()
 			if self.is_message_object(obj):
 				self.saved_items.save("last focus object", obj)
@@ -3004,12 +3034,35 @@ class AppModule(appModuleHandler.AppModule):
 			# This hook runs for every materialized UIA object. Only stable marker
 			# objects can identify the chat window without a parent walk; focused
 			# descendants are handled once in event_gainFocus instead.
-			if getattr(obj, "UIAAutomationId", "") in _WINDOW_SURFACE_AUTOMATION_IDS:
+			automation_id = getattr(obj, "UIAAutomationId", "")
+			if automation_id in _WINDOW_SURFACE_AUTOMATION_IDS:
 				self._classify_window_surface(obj)
+				if automation_id == "Messages":
+					# Classify the list once.  Child rows reuse this NVDA parent
+					# object, avoiding an ancestor walk on every arrow press.
+					is_saved_messages_tab = _is_saved_messages_tab_list(obj)
+					setattr(
+						obj,
+						_SAVED_MESSAGES_TAB_LIST_MARKER,
+						is_saved_messages_tab,
+					)
+					if is_saved_messages_tab:
+						log.debug(
+							"Using native accessibility for Saved Messages profile-tab rows"
+						)
 			if is_recording_button(obj):
 				self._voiceRecordingButton = obj
 			if obj.role == Role.LISTITEM and obj.isFocusable:
 				parent = obj.parent
+				if (
+					getattr(parent, "UIAAutomationId", "") == "Messages"
+					and getattr(parent, _SAVED_MESSAGES_TAB_LIST_MARKER, False)
+				):
+					# Do not attach Message_list_item here.  Apart from its costly
+					# focus parser, that overlay replaces the native positionInfo
+					# and binds Down to an unnecessary end-of-chat UIA probe.
+					setattr(obj, _SAVED_MESSAGES_TAB_ROW_MARKER, True)
+					return
 				if parent.UIAAutomationId == "ChatFolders":
 					self.tabs_folder_element = parent
 					if conf.get("voiceFolderNames") and State.SELECTED in obj.states: self.change_chats_folder(obj, parent.UIAAutomationId)

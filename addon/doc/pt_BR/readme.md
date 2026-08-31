@@ -182,7 +182,7 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 ### Versão 5.6.9
 
 * Corrigido um erro que poderia ocorrer quando o NVDA entrava em uma área de trabalho segura, como em um aviso do UAC, enquanto o rastreamento de mensagens em segundo plano do UnigramPlus estava ativado.
-* Restaurada a detecção confiável da gravação de mensagens de voz e evitadas verificações desnecessárias da Automação da Interface do Usuário no fim da conversa que poderiam atrasar a navegação por mensagens.
+* Restaurada a detecção confiável da gravação de mensagens de voz e evitadas verificações desnecessárias da Automação da Interface do Usuário no fim da conversa que poderiam atrasar a navegação por mensagens; as linhas da guia Mensagens salvas do perfil agora preservam as informações de acessibilidade nativas do Unigram em vez de causar atrasos com a análise completa da árvore da mensagem.
 * Removida a solução alternativa obsoleta para nomes de tópicos de Mensagens salvas; as versões atuais do Unigram agora fornecem nativamente nomes acessíveis para conversas de Mensagens salvas.
 * Atualizada a compatibilidade com o NVDA 2026.2.
 * Atualizadas as traduções para polonês e birmanês.

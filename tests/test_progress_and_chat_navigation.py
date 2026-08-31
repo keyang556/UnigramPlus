@@ -576,7 +576,8 @@ def test_overlay_selection_only_probes_direct_main_window_markers():
 	)
 	source = ast.unparse(chooser)
 
-	assert "getattr(obj, 'UIAAutomationId', '') in _WINDOW_SURFACE_AUTOMATION_IDS" in source
+	assert "automation_id = getattr(obj, 'UIAAutomationId', '')" in source
+	assert "automation_id in _WINDOW_SURFACE_AUTOMATION_IDS" in source
 
 
 def test_call_control_detection_never_enumerates_siblings():

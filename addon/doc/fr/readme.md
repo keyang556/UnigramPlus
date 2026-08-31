@@ -182,7 +182,7 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 ### Version 5.6.9
 
 * Correction d’une erreur pouvant survenir lorsque NVDA entrait dans un bureau sécurisé, par exemple lors d’une invite UAC, alors que le suivi des messages en arrière-plan d’UnigramPlus était activé.
-* Rétablissement de la détection fiable de l’enregistrement des messages vocaux et suppression des vérifications UI Automation inutiles en fin de discussion susceptibles de ralentir la navigation dans les messages.
+* Rétablissement de la détection fiable de l’enregistrement des messages vocaux et suppression des vérifications UI Automation inutiles en fin de discussion susceptibles de ralentir la navigation dans les messages ; les lignes de l’onglet Messages enregistrés du profil conservent désormais les informations d’accessibilité natives d’Unigram au lieu de provoquer des délais dus à l’analyse complète de l’arborescence des messages.
 * Suppression de l’ancien correctif de nom des rubriques Messages enregistrés ; les versions actuelles d’Unigram fournissent désormais nativement des noms accessibles pour les discussions Messages enregistrés.
 * Mise à jour de la compatibilité avec NVDA 2026.2.
 * Mise à jour des traductions polonaise et birmane.
