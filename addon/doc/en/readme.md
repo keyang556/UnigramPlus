@@ -184,6 +184,7 @@ And remember that everyone who read this line thought that someone will definite
 ### Version 5.6.9
 
 * Fixed an error that could occur when NVDA entered a secure desktop, such as a UAC prompt, while UnigramPlus background message tracking was enabled.
+* Fixed Saved Messages topic rows in Unigram 12.10.1+ being treated as messages merely because their native summaries contain sent or received timestamps.
 * Removed the obsolete Saved Messages topic name workaround; current Unigram versions now provide accessible names for Saved Messages chats natively.
 * Updated compatibility for NVDA 2026.2.
 * Updated Polish and Burmese translations.

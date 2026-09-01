@@ -185,6 +185,7 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 ### Verzija 5.6.9
 
 * Ispravljena je pogreška koja se mogla pojaviti kada je NVDA ušao u sigurnu radnu površinu, primjerice pri UAC upitu, dok je bilo uključeno UnigramPlus praćenje poruka u pozadini.
+* Ispravljeno je da se retci tema Spremljenih poruka u Unigramu 12.10.1+ tretiraju kao poruke samo zato što njihovi izvorni sažeci sadrže vremenske oznake slanja ili primanja.
 * Uklonjeno je zastarjelo zaobilazno rješenje za nazive tema Spremljenih poruka; trenutne verzije Unigrama sada izvorno pružaju pristupačne nazive za razgovore Spremljenih poruka.
 * Ažurirana je kompatibilnost s NVDA 2026.2.
 * Ažurirani su poljski i burmanski prijevodi.
