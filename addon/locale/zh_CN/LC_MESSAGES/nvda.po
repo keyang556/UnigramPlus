@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.8\n"
+"Project-Id-Version: UnigramPlus 5.7.0\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2026-05-24 00:00+0800\n"
 "PO-Revision-Date: 2026-05-24 00:00+0800\n"
@@ -1045,3 +1045,11 @@ msgstr ""
 "- 修复了使用上、下箭头在消息间移动时，NVDA 偶尔会在消息前读出“列表”的问题。\n"
 "- 新增 Alt+[ 功能的设置：在消息内容之后读出消息标头；该功能默认关闭。\n"
 "- 新增到达聊天末尾时的可选声音提示。"
+
+#: changelog.py:5
+msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
+msgstr "恢复了切换文件夹时播报非零未读数的功能，同时保留文件传输进度跟踪器的保护范围。"
+
+#: changelog.py:7
+msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
+msgstr "已根据当前 Unigram 源代码更新快捷键列表，并标识出尚未列入 Unigram 官方 Shortcuts.md 的内置快捷键。"

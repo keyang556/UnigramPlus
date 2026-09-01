@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.8\n"
+"Project-Id-Version: UnigramPlus 5.7.0\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2022-08-13 21:15+0300\n"
 "PO-Revision-Date: 2022-08-14 23:15+0430\n"
@@ -1019,3 +1019,11 @@ msgstr ""
 "- مشکل گاه‌به‌گاهی که NVDA هنگام پیمایش با کلیدهای پیکان بالا و پایین پیش از پیام «فهرست» را می‌خواند، برطرف شد.\n"
 "- تنظیمی برای رفتار Alt+[ که سرآیندهای پیام را پس از محتوای آن‌ها می‌خواند افزوده شد؛ این گزینه به‌طور پیش‌فرض غیرفعال است.\n"
 "- اعلان صوتی اختیاری برای رسیدن به پایان یک گفت‌وگو افزوده شد."
+
+#: changelog.py:5
+msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
+msgstr "اعلام هنگام تغییر پوشه با شمارش خوانده‌نشدهٔ غیرصفر بازگردانده شد، در حالی که تدابیر محافظتی رهگیری پیشرفت انتقال فایل حفظ شده‌اند."
+
+#: changelog.py:7
+msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
+msgstr "فهرست کلیدهای میانبر بر اساس منبع فعلی Unigram به‌روزرسانی شد و میانبرهای داخلی که هنوز در فایل رسمی Shortcuts.md‏ Unigram فهرست نشده‌اند مشخص شدند."

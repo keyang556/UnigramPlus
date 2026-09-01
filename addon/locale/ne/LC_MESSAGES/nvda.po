@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.8\n"
+"Project-Id-Version: UnigramPlus 5.7.0\n"
 "POT-Creation-Date: 2022-10-07 22:33+0300\n"
 "PO-Revision-Date: 2022-10-20 12:30+0300\n"
 "Last-Translator: samrat kc <samrat.kc7@gmail.com>\n"
@@ -972,3 +972,11 @@ msgstr ""
 "- माथि र तल एरो कुञ्जीबाट सन्देशहरूमा सर्दा NVDA ले सन्देशअघि कहिलेकाहीँ “सूची” पढ्ने समस्या समाधान गरियो।\n"
 "- Alt+[ को व्यवहारका लागि, जसले सन्देश हेडरलाई सामग्रीपछि पढ्छ, सेटिङ थपियो; यो पूर्वनिर्धारित रूपमा निष्क्रिय छ।\n"
 "- च्याटको अन्त्यमा पुग्दा बज्ने वैकल्पिक ध्वनि सूचना थपियो।"
+
+#: changelog.py:5
+msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
+msgstr "शून्य नभएको नपढिएको सङ्ख्यासहित फोल्डर बदल्दा हुने घोषणा पुनःस्थापित गरिएको छ, साथै फाइल स्थानान्तरण प्रगति ट्र्याकरका सुरक्षा उपायहरू कायम राखिएको छ।"
+
+#: changelog.py:7
+msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
+msgstr "हालको Unigram स्रोतबाट सर्टकट सूचीहरू अद्यावधिक गरिएका छन् र Unigram को आधिकारिक Shortcuts.md मा अझै समावेश नभएका अन्तर्निर्मित सर्टकटहरू पहिचान गरिएका छन्।"

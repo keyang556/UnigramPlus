@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.9\n"
+"Project-Id-Version: UnigramPlus 5.7.0\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2026-09-01 01:58+0630\n"
 "PO-Revision-Date: 2026-09-01 02:04+0630\n"
@@ -959,3 +959,11 @@ msgstr ""
 "- ခေတ်မမီတော့သော Saved Messages ခေါင်းစဉ်အမည် ဖြေရှင်းနည်းကို ဖယ်ရှားလိုက်ပါပြီ။ လက်ရှိ Unigram ဗားရှင်းများသည် Saved Messages chats များအတွက် မူရင်းအတိုင်း အသုံးပြုနိုင်သော အမည်များကို ပေးထားပါသည်။\n"
 "- NVDA 2026.2 အတွက် လိုက်ဖက်ညီမှုကို အပ်ဒိတ်လုပ်ထားသည်။\n"
 "- ပိုလန်နှင့် မြန်မာဘာသာပြန်များကို အပ်ဒိတ်လုပ်ထားသည်။"
+
+#: changelog.py:5
+msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
+msgstr "ဖတ်မထားသေးသော အရေအတွက် သုညမဟုတ်သည့်အခါ ဖိုလ်ဒါပြောင်းလဲမှု အသိပေးချက်များကို ဖိုင်လွှဲပြောင်းမှု တိုးတက်မှု ခြေရာခံခြင်း၏ ကာကွယ်မှုများကို ထိန်းသိမ်းထားပြီး ပြန်လည်ထည့်သွင်းခဲ့သည်။"
+
+#: changelog.py:7
+msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
+msgstr "လက်ရှိ Unigram ရင်းမြစ်ကုဒ်အတိုင်း ဖြတ်လမ်းစာရင်းများကို အပ်ဒိတ်လုပ်ပြီး Unigram ၏ တရားဝင် Shortcuts.md ဖိုင်တွင် မဖော်ပြရသေးသော ပါဝင်ပြီးသား ဖြတ်လမ်းများကို သတ်မှတ်ဖော်ပြခဲ့သည်။"

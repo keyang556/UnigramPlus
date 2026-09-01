@@ -31,6 +31,8 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 
 > 「類別」欄位中，「UnigramPlus」表示附加元件提供的快速鍵，「Unigram」表示 Unigram 內建的快速鍵。
 
+> 「Unigram（官方說明未列出）」表示目前 Unigram 原始碼已實作、但官方 Shortcuts.md 尚未列出的快速鍵。
+
 > [!TIP]
 > 您可以透過「NVDA 功能表 → 偏好 → 輸入手勢」自訂 UnigramPlus 快速鍵。
 
@@ -40,6 +42,8 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | 下一個聊天 |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | 上一個聊天 |
+| **Ctrl+Alt+Home** | Unigram（官方說明未列出） | 第一個聊天室 |
+| **Ctrl+Alt+End** | Unigram（官方說明未列出） | 最後一個聊天室 |
 | **Ctrl+Alt+Up/Down** | UnigramPlus | 移到下一個或上一個含未讀提及的聊天 |
 | **ALT+1** | UnigramPlus | 將焦點移到聊天清單 |
 | **ALT+2** | UnigramPlus | 將焦點移到已開啟聊天中的最後一則訊息 |
@@ -55,6 +59,8 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 |---|---|---|
 | **Ctrl+E** | Unigram | 搜尋聊天 |
 | **Ctrl+F** | Unigram | 搜尋目前聊天中的訊息 |
+| **Ctrl+Shift+F** | Unigram（官方說明未列出） | 搜尋聊天 |
+| **Search key** | Unigram（官方說明未列出） | 搜尋目前頁面 |
 | **ALT+I** | UnigramPlus | 移至搜尋結果清單 |
 | **F3** | UnigramPlus | 移至下一個搜尋結果 |
 | **Shift+F3** | UnigramPlus | 移至上一個搜尋結果 |
@@ -65,6 +71,8 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 |---|---|---|
 | **Ctrl+Z** | Unigram | 復原 |
 | **Ctrl+Y** | Unigram | 取消復原 |
+| **Ctrl+Shift+Z** | Unigram（官方說明未列出） | 重做 |
+| **Alt+X** | Unigram（官方說明未列出） | 將選取的四位十六進位數字轉換為對應字元 |
 | **Ctrl+X** | Unigram | 剪下 |
 | **Ctrl+C** | Unigram | 複製 |
 | **Ctrl+V** | Unigram | 貼上 |
@@ -92,6 +100,8 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 | **Ctrl+7** | Unigram | 第七個資料夾 |
 | **Ctrl+8** | Unigram | 第八個資料夾 |
 | **Ctrl+9** | Unigram | 封存 |
+| **Ctrl+Shift+Down** | Unigram（官方說明未列出） | 下一個資料夾 |
+| **Ctrl+Shift+Up** | Unigram（官方說明未列出） | 上一個資料夾 |
 
 ### 訊息操作
 
@@ -102,6 +112,7 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 | **ALT+Q** | UnigramPlus | 若目前訊息包含「即時檢視」按鈕，則按下它 |
 | **ALT+Delete** | UnigramPlus | 刪除訊息或聊天 |
 | **Shift+Delete** | UnigramPlus | 在雙方刪除訊息或聊天 |
+| **Delete** | Unigram（官方說明未列出） | 刪除選取或焦點所在的訊息 |
 | **Ctrl+ALT+C** | UnigramPlus | 開啟留言 |
 | **Enter** | UnigramPlus | 回覆訊息 |
 | **ALT+F** | UnigramPlus | 轉傳訊息 |
@@ -117,6 +128,10 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 | **ALT+[** | UnigramPlus | 切換在訊息內容之前或之後讀出訊息標頭 |
 | **NVDA+Ctrl+0-9** | UnigramPlus | 讀出最近十則訊息之一；1 是最新訊息，0 是第十則訊息 |
 | **Ctrl+Shift+A** | UnigramPlus | 按下「附加檔案」按鈕 |
+| **Ctrl+Shift+E** | Unigram（官方說明未列出） | 開啟表情符號選擇器 |
+| **Ctrl+Shift+G** | Unigram（官方說明未列出） | 開啟 GIF 選擇器 |
+| **Ctrl+Shift+S** | Unigram（官方說明未列出） | 開啟貼圖選擇器 |
+| **Ctrl+O** | Unigram（官方說明未列出） | 開啟檔案選擇器以傳送檔案 |
 | **Ctrl+N** | UnigramPlus | 按下「新增對話」按鈕 |
 | **Arrow Up** | Unigram | 編輯上一則已傳送訊息 |
 | **Ctrl+Arrow Up** | Unigram | 回覆上一則已傳送訊息 |
@@ -166,6 +181,11 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 | **Ctrl+W** | Unigram | 關閉目前視窗 |
 | **Ctrl+Q** | Unigram | 關閉 Unigram（僅限主視窗） |
 | **Ctrl+Shift+Y** | Unigram | 變更狀態 |
+| **Ctrl+Shift+W** | Unigram（官方說明未列出） | 停止媒體播放 |
+| **Ctrl+F4** | Unigram（官方說明未列出） | 關閉目前視窗 |
+| **Ctrl+L** | Unigram（官方說明未列出） | 鎖定 Unigram |
+| **Ctrl+M** | Unigram（官方說明未列出） | 最小化 Unigram |
+| **Ctrl+J** | Unigram（官方說明未列出） | 開啟下載 |
 | **ALT+T** | UnigramPlus | 讀出已開啟聊天的名稱與狀態 |
 | **NVDA+Alt+V** | UnigramPlus | 讀出 Unigram 與 UnigramPlus 版本號碼 |
 | **ALT+M** | UnigramPlus | 開啟導覽功能表 |
@@ -178,6 +198,11 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 <!-- shortcut-table-end -->
 
 ## 版本變更
+
+### 版本 5.7.0
+
+* 已恢復切換資料夾時讀出非零未讀數的功能，同時保留檔案傳輸進度追蹤器的保護範圍。
+* 已依據目前的 Unigram 原始碼更新快速鍵清單，並標示官方 Shortcuts.md 尚未列出的內建快速鍵。
 
 ### 版本 5.6.9
 

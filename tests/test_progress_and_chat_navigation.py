@@ -180,6 +180,96 @@ def test_focus_handler_does_not_search_message_subtrees_for_file_transfers():
 	assert "_find_transfer_button" not in method.__code__.co_names
 
 
+def test_file_transfer_tracker_keeps_unigram_and_messages_scope_restrictions():
+	tracker = _class_ast("File_transfer_progress_tracking")
+	transfer_button = next(
+		node
+		for node in tracker.body
+		if isinstance(node, ast.FunctionDef) and node.name == "_is_transfer_button"
+	)
+	tick = next(
+		node
+		for node in tracker.body
+		if isinstance(node, ast.FunctionDef) and node.name == "tick"
+	)
+	handle_progress = next(
+		node
+		for node in tracker.body
+		if isinstance(node, ast.FunctionDef) and node.name == "handle_progress"
+	)
+
+	assert "_is_inside_messages" in ast.unparse(transfer_button)
+	assert "_is_unigram_object" in ast.unparse(handle_progress)
+	assert "_is_unigram_object" in ast.unparse(tick)
+	assert "_is_transfer_button" in ast.unparse(tick)
+
+
+def test_chat_folder_unread_count_parses_only_a_trailing_badge():
+	get_unread_count = _load_module_function("_get_chat_folder_unread_count", {"re": re})
+	get_folder_name = _load_app_method("_get_chat_folder_name", {"re": re})
+	instance = SimpleNamespace()
+
+	assert get_unread_count("All, 538") == "538"
+	assert get_unread_count("All 538") is None
+	assert get_unread_count("(All, 538)") == "538"
+	assert get_unread_count("Personal, 1") == "1"
+	assert get_unread_count("Unread, 0") is None
+	assert get_unread_count("Personal") is None
+	assert get_unread_count("Project 2024") is None
+	assert get_unread_count("Folder 12 notes") is None
+	assert get_folder_name(instance, "All, 538") == "All"
+	assert get_folder_name(instance, "All 538") == "All 538"
+	assert get_folder_name(instance, "(All, 538)") == "All"
+	assert get_folder_name(instance, "Personal, 1") == "Personal"
+	assert get_folder_name(instance, "Unread, 0") == "Unread"
+	assert get_folder_name(instance, "Personal") == "Personal"
+	assert get_folder_name(instance, "Project 2024") == "Project 2024"
+
+
+def test_change_chats_folder_announces_nonzero_unread_count_once():
+	announcements = []
+	saved = {"last selected folder": "All"}
+	instance = SimpleNamespace(
+		saved_items=SimpleNamespace(
+			get=lambda key: saved.get(key),
+			save=lambda key, value: saved.__setitem__(key, value),
+		),
+	)
+	get_name = _load_app_method("_get_chat_folder_name", {"re": re})
+	instance._get_chat_folder_name = lambda name: get_name(instance, name)
+	change_folder = _load_app_method(
+		"change_chats_folder",
+		{
+			"_get_chat_folder_unread_count": _load_module_function(
+				"_get_chat_folder_unread_count", {"re": re}
+			),
+			"message": lambda text: announcements.append(text),
+			"queueHandler": SimpleNamespace(
+				eventQueue=object(),
+				queueFunction=lambda queue, callback, text: callback(text),
+			),
+		},
+	)
+
+	change_folder(instance, SimpleNamespace(name="Unread, 538"), None)
+	assert saved["last selected folder"] == "Unread"
+	assert announcements == ["Unread, 538"]
+
+	saved["last selected folder"] = "All"
+	change_folder(instance, SimpleNamespace(name="Unread, 0"), None)
+	change_folder(instance, SimpleNamespace(name="Personal"), None)
+	assert saved["last selected folder"] == "Personal"
+	assert announcements == ["Unread, 538", "Unread", "Personal"]
+
+	change_folder(instance, SimpleNamespace(name="Personal, 12"), None)
+	assert announcements == ["Unread, 538", "Unread", "Personal"]
+
+	saved["last selected folder"] = "All"
+	change_folder(instance, SimpleNamespace(name="Project 2024"), None)
+	assert saved["last selected folder"] == "Project 2024"
+	assert announcements == ["Unread, 538", "Unread", "Personal", "Project 2024"]
+
+
 def test_all_recurring_uia_pollers_use_the_nvda_main_loop():
 	for class_name in ("Title_change_tracking", "Typing_sound_tracking", "Chat_update"):
 		class_node = _class_ast(class_name)

@@ -31,6 +31,8 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 
 > “类别”栏中，“UnigramPlus”表示插件提供的快捷键，“Unigram”表示 Unigram 内置的快捷键。
 
+> 「Unigram（官方文档未列出）」表示当前 Unigram 源码已实现、但官方 Shortcuts.md 尚未列出的快捷键。
+
 > [!TIP]
 > 您可以通过“NVDA 菜单 → 选项 → 输入手势”自定义 UnigramPlus 快捷键。
 
@@ -40,6 +42,8 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | 下一个聊天 |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | 上一个聊天 |
+| **Ctrl+Alt+Home** | Unigram（官方文档未列出） | 第一个聊天 |
+| **Ctrl+Alt+End** | Unigram（官方文档未列出） | 最后一个聊天 |
 | **Ctrl+Alt+Up/Down** | UnigramPlus | 移到下一个或上一个含未读提及的聊天 |
 | **ALT+1** | UnigramPlus | 将焦点移到聊天列表 |
 | **ALT+2** | UnigramPlus | 将焦点移到已打开聊天中的最后一条消息 |
@@ -55,6 +59,8 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 |---|---|---|
 | **Ctrl+E** | Unigram | 搜索聊天 |
 | **Ctrl+F** | Unigram | 搜索当前聊天中的消息 |
+| **Ctrl+Shift+F** | Unigram（官方文档未列出） | 搜索聊天 |
+| **Search key** | Unigram（官方文档未列出） | 在当前页面中搜索 |
 | **ALT+I** | UnigramPlus | 转到搜索结果列表 |
 | **F3** | UnigramPlus | 转到下一个搜索结果 |
 | **Shift+F3** | UnigramPlus | 转到上一个搜索结果 |
@@ -65,6 +71,8 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 |---|---|---|
 | **Ctrl+Z** | Unigram | 撤消 |
 | **Ctrl+Y** | Unigram | 重做 |
+| **Ctrl+Shift+Z** | Unigram（官方文档未列出） | 重做 |
+| **Alt+X** | Unigram（官方文档未列出） | 将选中的四位十六进制数字转换为对应字符 |
 | **Ctrl+X** | Unigram | 剪切 |
 | **Ctrl+C** | Unigram | 复制 |
 | **Ctrl+V** | Unigram | 粘贴 |
@@ -92,6 +100,8 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 | **Ctrl+7** | Unigram | 第七个文件夹 |
 | **Ctrl+8** | Unigram | 第八个文件夹 |
 | **Ctrl+9** | Unigram | 归档 |
+| **Ctrl+Shift+Down** | Unigram（官方文档未列出） | 下一个文件夹 |
+| **Ctrl+Shift+Up** | Unigram（官方文档未列出） | 上一个文件夹 |
 
 ### 消息操作
 
@@ -102,6 +112,7 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 | **ALT+Q** | UnigramPlus | 如果当前消息中包含“即时预览”按钮，则按下它 |
 | **ALT+Delete** | UnigramPlus | 删除消息或聊天 |
 | **Shift+Delete** | UnigramPlus | 为双方删除消息或聊天 |
+| **Delete** | Unigram（官方文档未列出） | 删除选中或焦点所在的消息 |
 | **Ctrl+ALT+C** | UnigramPlus | 打开评论 |
 | **Enter** | UnigramPlus | 回复消息 |
 | **ALT+F** | UnigramPlus | 转发消息 |
@@ -117,6 +128,10 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 | **ALT+[** | UnigramPlus | 切换在消息内容之前或之后读出消息标头 |
 | **NVDA+Ctrl+0-9** | UnigramPlus | 读出最近十条消息之一；1 是最新消息，0 是第十条消息 |
 | **Ctrl+Shift+A** | UnigramPlus | 按下“附加文件”按钮 |
+| **Ctrl+Shift+E** | Unigram（官方文档未列出） | 打开表情符号选择器 |
+| **Ctrl+Shift+G** | Unigram（官方文档未列出） | 打开 GIF 选择器 |
+| **Ctrl+Shift+S** | Unigram（官方文档未列出） | 打开贴纸选择器 |
+| **Ctrl+O** | Unigram（官方文档未列出） | 打开文件选择器以发送文件 |
 | **Ctrl+N** | UnigramPlus | 按下“新建对话”按钮 |
 | **Arrow Up** | Unigram | 编辑上一条已发送消息 |
 | **Ctrl+Arrow Up** | Unigram | 回复上一条已发送消息 |
@@ -166,6 +181,11 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 | **Ctrl+W** | Unigram | 关闭当前窗口 |
 | **Ctrl+Q** | Unigram | 关闭 Unigram（仅限主窗口） |
 | **Ctrl+Shift+Y** | Unigram | 更改状态 |
+| **Ctrl+Shift+W** | Unigram（官方文档未列出） | 停止媒体播放 |
+| **Ctrl+F4** | Unigram（官方文档未列出） | 关闭当前窗口 |
+| **Ctrl+L** | Unigram（官方文档未列出） | 锁定 Unigram |
+| **Ctrl+M** | Unigram（官方文档未列出） | 最小化 Unigram |
+| **Ctrl+J** | Unigram（官方文档未列出） | 打开下载 |
 | **ALT+T** | UnigramPlus | 读出已打开聊天的名称和状态 |
 | **NVDA+Alt+V** | UnigramPlus | 读出 Unigram 和 UnigramPlus 版本号 |
 | **ALT+M** | UnigramPlus | 打开导航菜单 |
@@ -178,6 +198,11 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 <!-- shortcut-table-end -->
 
 ## 版本变更
+
+### 版本 5.7.0
+
+* 恢复了切换文件夹时朗读非零未读数量的功能，同时保留文件传输进度跟踪器的保护范围。
+* 根据当前 Unigram 源码更新了快捷键列表，并标明官方 Shortcuts.md 尚未列出的内置快捷键。
 
 ### 版本 5.6.9
 

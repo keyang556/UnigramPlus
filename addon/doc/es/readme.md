@@ -1,4 +1,4 @@
-﻿# Unigram Plus
+# Unigram Plus
 
 * Autor: Kostya Gladkiy (Ucrania)
 * [Canal en Telegram](https://t.me/unigramPlus)
@@ -33,6 +33,8 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 
 > In the Category column, `UnigramPlus` identifies shortcuts provided by the add-on and `Unigram` identifies shortcuts built into Unigram.
 
+> `Unigram (sin documentar)` identifica los atajos implementados en el código fuente actual de Unigram que aún no figuran en su Shortcuts.md oficial.
+
 > [!TIP]
 > You can customize UnigramPlus shortcuts from NVDA menu > Preferences > Input gestures.
 
@@ -42,6 +44,8 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **Ctrl+Alt+Home** | Unigram (sin documentar) | Primer chat |
+| **Ctrl+Alt+End** | Unigram (sin documentar) | Último chat |
 | **Ctrl+Alt+Up/Down** | UnigramPlus | Ir al chat siguiente o anterior con menciones sin leer |
 | **ALT+1** | UnigramPlus | Mover el foco a la lista de chats |
 | **ALT+2** | UnigramPlus | Mover el foco al último mensaje en el chat actual |
@@ -57,6 +61,8 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 |---|---|---|
 | **Ctrl+E** | Unigram | Chat search |
 | **Ctrl+F** | Unigram | Messages search per chat |
+| **Ctrl+Shift+F** | Unigram (sin documentar) | Chat search |
+| **Search key** | Unigram (sin documentar) | Buscar en la página actual |
 | **ALT+I** | UnigramPlus | Ir a la lista de resultados de búsqueda |
 | **F3** | UnigramPlus | Ir al siguiente resultado de búsqueda |
 | **Shift+F3** | UnigramPlus | Ir al resultado de búsqueda anterior |
@@ -67,6 +73,8 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 |---|---|---|
 | **Ctrl+Z** | Unigram | Undo |
 | **Ctrl+Y** | Unigram | Redo |
+| **Ctrl+Shift+Z** | Unigram (sin documentar) | Rehacer |
+| **Alt+X** | Unigram (sin documentar) | Convertir cuatro dígitos hexadecimales seleccionados en su carácter correspondiente |
 | **Ctrl+X** | Unigram | Cut |
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
@@ -94,6 +102,8 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 | **Ctrl+7** | Unigram | Seventh folder |
 | **Ctrl+8** | Unigram | Eighth folder |
 | **Ctrl+9** | Unigram | Archive |
+| **Ctrl+Shift+Down** | Unigram (sin documentar) | Carpeta siguiente |
+| **Ctrl+Shift+Up** | Unigram (sin documentar) | Carpeta anterior |
 
 ### Acciones de mensajes
 
@@ -104,6 +114,7 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 | **ALT+Q** | UnigramPlus | Presionar el botón vista rápida, si el mensaje actual lo incluye |
 | **ALT+Delete** | UnigramPlus | Eliminar mensaje o chat |
 | **Shift+Delete** | UnigramPlus | Eliminar mensaje o chat para ambos participantes |
+| **Delete** | Unigram (sin documentar) | Eliminar el mensaje seleccionado o enfocado |
 | **Ctrl+ALT+C** | UnigramPlus | Abrir comentarios |
 | **Enter** | UnigramPlus | Responder al mensaje |
 | **ALT+F** | UnigramPlus | Reenviar mensaje |
@@ -119,6 +130,10 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 | **ALT+[** | UnigramPlus | Alternar si los encabezados de los mensajes se anuncian antes o después del contenido del mensaje |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | Presionar el botón "adjuntar |
+| **Ctrl+Shift+E** | Unigram (sin documentar) | Abrir el selector de emojis |
+| **Ctrl+Shift+G** | Unigram (sin documentar) | Abrir el selector de GIF |
+| **Ctrl+Shift+S** | Unigram (sin documentar) | Abrir el selector de stickers |
+| **Ctrl+O** | Unigram (sin documentar) | Abrir el selector de archivos para enviar documentos |
 | **Ctrl+N** | UnigramPlus | Presionar el botón "nuevo chat" |
 | **Arrow Up** | Unigram | Edit last sent message |
 | **Ctrl+Arrow Up** | Unigram | Reply to last sent message |
@@ -168,6 +183,11 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 | **Ctrl+W** | Unigram | Close current window |
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
+| **Ctrl+Shift+W** | Unigram (sin documentar) | Detener la reproducción multimedia |
+| **Ctrl+F4** | Unigram (sin documentar) | Close current window |
+| **Ctrl+L** | Unigram (sin documentar) | Bloquear Unigram |
+| **Ctrl+M** | Unigram (sin documentar) | Minimizar Unigram |
+| **Ctrl+J** | Unigram (sin documentar) | Abrir descargas |
 | **ALT+T** | UnigramPlus | Anunciar nombre y estado del chat actual |
 | **NVDA+Alt+V** | UnigramPlus | Anunciar los números de versión de Unigram y UnigramPlus |
 | **ALT+M** | UnigramPlus | Abrir menú de navegación |
@@ -180,6 +200,11 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 <!-- shortcut-table-end -->
 
 ##Lista de cambios:
+
+### Versión 5.7.0
+
+* Se restauraron los anuncios al cambiar de carpeta con un recuento de no leídos distinto de cero, manteniendo las protecciones del rastreador de progreso de transferencia de archivos.
+* Se actualizó la lista de atajos a partir del código fuente actual de Unigram y se identificaron los atajos integrados que aún no aparecen en su Shortcuts.md oficial.
 
 ### Versión 5.6.9
 

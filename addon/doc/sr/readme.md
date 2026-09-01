@@ -36,6 +36,8 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će neko sigurno po
 
 > In the Category column, `UnigramPlus` identifies shortcuts provided by the add-on and `Unigram` identifies shortcuts built into Unigram.
 
+> `Unigram (nedokumentovano)` označava prečice ugrađene u trenutni izvorni kod Unigrama koje još nisu navedene u zvaničnom Shortcuts.md dokumentu.
+
 > [!TIP]
 > You can customize UnigramPlus shortcuts from NVDA menu > Preferences > Input gestures.
 
@@ -45,6 +47,8 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će neko sigurno po
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **Ctrl+Alt+Home** | Unigram (nedokumentovano) | Prvi razgovor |
+| **Ctrl+Alt+End** | Unigram (nedokumentovano) | Poslednji razgovor |
 | **Ctrl+Alt+Up/Down** | UnigramPlus | Prelazak na sledeće ili prethodno ćaskanje sa nepročitanim pominjanjima |
 | **ALT+1** | UnigramPlus | Pomeranje fokusa u listu ćaskanja |
 | **ALT+2** | UnigramPlus | Pomeranje fokusa na poslednju poruku u ćaskanju |
@@ -60,6 +64,8 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će neko sigurno po
 |---|---|---|
 | **Ctrl+E** | Unigram | Chat search |
 | **Ctrl+F** | Unigram | Messages search per chat |
+| **Ctrl+Shift+F** | Unigram (nedokumentovano) | Chat search |
+| **Search key** | Unigram (nedokumentovano) | Pretraži trenutnu stranicu |
 | **ALT+I** | UnigramPlus | Idite na listu sa rezultatima pretrage |
 | **F3** | UnigramPlus | Idi na sledeći rezultat pretrage |
 | **Shift+F3** | UnigramPlus | Idite na prethodni rezultat pretrage |
@@ -70,6 +76,8 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će neko sigurno po
 |---|---|---|
 | **Ctrl+Z** | Unigram | Undo |
 | **Ctrl+Y** | Unigram | Redo |
+| **Ctrl+Shift+Z** | Unigram (nedokumentovano) | Ponovi |
+| **Alt+X** | Unigram (nedokumentovano) | Pretvori četiri izabrane heksadecimalne cifre u odgovarajući znak |
 | **Ctrl+X** | Unigram | Cut |
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
@@ -97,6 +105,8 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će neko sigurno po
 | **Ctrl+7** | Unigram | Seventh folder |
 | **Ctrl+8** | Unigram | Eighth folder |
 | **Ctrl+9** | Unigram | Archive |
+| **Ctrl+Shift+Down** | Unigram (nedokumentovano) | Sledeća fascikla |
+| **Ctrl+Shift+Up** | Unigram (nedokumentovano) | Prethodna fascikla |
 
 ### Radnje sa porukama
 
@@ -107,6 +117,7 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će neko sigurno po
 | **ALT+Q** | UnigramPlus | Pritisni instant viev ako se nalazi u trenutnoj poruci |
 | **ALT+Delete** | UnigramPlus | Brisanje poruke ili ćaskanja |
 | **Shift+Delete** | UnigramPlus | Brisanje poruke ili ćaskanja obe strane |
+| **Delete** | Unigram (nedokumentovano) | Obriši izabranu ili fokusiranu poruku |
 | **Ctrl+ALT+C** | UnigramPlus | Otvori komentare |
 | **Enter** | UnigramPlus | Odgovori na poruku |
 | **ALT+F** | UnigramPlus | Prosledi poruku |
@@ -122,6 +133,10 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će neko sigurno po
 | **ALT+[** | UnigramPlus | Prebacuje izgovaranje zaglavlja poruka pre ili posle sadržaja poruke |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | Pritisni priloži datoteku dugme |
+| **Ctrl+Shift+E** | Unigram (nedokumentovano) | Otvori birač emodžija |
+| **Ctrl+Shift+G** | Unigram (nedokumentovano) | Otvori birač GIF-ova |
+| **Ctrl+Shift+S** | Unigram (nedokumentovano) | Otvori birač stikera |
+| **Ctrl+O** | Unigram (nedokumentovano) | Otvori birač datoteka za slanje dokumenata |
 | **Ctrl+N** | UnigramPlus | Pritisni novi razgovor dugme |
 | **Arrow Up** | Unigram | Edit last sent message |
 | **Ctrl+Arrow Up** | Unigram | Reply to last sent message |
@@ -171,6 +186,11 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će neko sigurno po
 | **Ctrl+W** | Unigram | Close current window |
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
+| **Ctrl+Shift+W** | Unigram (nedokumentovano) | Zaustavi reprodukciju medija |
+| **Ctrl+F4** | Unigram (nedokumentovano) | Close current window |
+| **Ctrl+L** | Unigram (nedokumentovano) | Zaključaj Unigram |
+| **Ctrl+M** | Unigram (nedokumentovano) | Umanji Unigram |
+| **Ctrl+J** | Unigram (nedokumentovano) | Otvori preuzimanja |
 | **ALT+T** | UnigramPlus | Najavi ime i status otvorenog ćaskanja |
 | **NVDA+Alt+V** | UnigramPlus | Izgovori brojeve verzija programa Unigram i dodatka UnigramPlus |
 | **ALT+M** | UnigramPlus | Otvori meni za navigaciju |
@@ -453,6 +473,11 @@ This update adds a combination that press "Instant View" button in the message, 
 Added Turkish localization
 
 
+
+###Verzija 5.7.0
+
+* Vraćene su najave pri promeni fascikle sa nenultim brojem nepročitanih, uz zadržavanje zaštita praćenja napretka prenosa datoteka.
+* Lista prečica je ažurirana prema trenutnom izvornom kodu Unigrama i označene su ugrađene prečice koje još nisu u zvaničnom Shortcuts.md dokumentu.
 
 ### Verzija 5.6.9
 

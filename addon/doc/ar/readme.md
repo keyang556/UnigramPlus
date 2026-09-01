@@ -34,6 +34,8 @@
 
 > In the Category column, `UnigramPlus` identifies shortcuts provided by the add-on and `Unigram` identifies shortcuts built into Unigram.
 
+> يشير `Unigram (غير موثق)` إلى الاختصارات المطبقة في مصدر Unigram الحالي ولكنها غير مدرجة بعد في ملف Shortcuts.md الرسمي.
+
 > [!TIP]
 > You can customize UnigramPlus shortcuts from NVDA menu > Preferences > Input gestures.
 
@@ -43,6 +45,8 @@
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **Ctrl+Alt+Home** | Unigram (غير موثق) | الدردشة الأولى |
+| **Ctrl+Alt+End** | Unigram (غير موثق) | الدردشة الأخيرة |
 | **Ctrl+Alt+Up/Down** | UnigramPlus | الانتقال إلى الدردشة التالية أو السابقة التي تحتوي على إشارات غير مقروءة |
 | **ALT+1** | UnigramPlus | نقل التركيز إلى قائمة الدردشات |
 | **ALT+2** | UnigramPlus | نقل التركيز إلى الرسالة الأخيرة في الدردشة |
@@ -58,6 +62,8 @@
 |---|---|---|
 | **Ctrl+E** | Unigram | Chat search |
 | **Ctrl+F** | Unigram | Messages search per chat |
+| **Ctrl+Shift+F** | Unigram (غير موثق) | Chat search |
+| **Search key** | Unigram (غير موثق) | البحث في الصفحة الحالية |
 | **ALT+I** | UnigramPlus | الانتقال إلى القائمة التي تحتوي على نتائج البحث |
 | **F3** | UnigramPlus | الانتقال إلى نتيجة البحث التالية |
 | **Shift+F3** | UnigramPlus | الانتقال إلى نتيجة البحث السابقة |
@@ -68,6 +74,8 @@
 |---|---|---|
 | **Ctrl+Z** | Unigram | Undo |
 | **Ctrl+Y** | Unigram | Redo |
+| **Ctrl+Shift+Z** | Unigram (غير موثق) | إعادة |
+| **Alt+X** | Unigram (غير موثق) | تحويل أربعة أرقام سداسية عشرية محددة إلى الحرف المقابل |
 | **Ctrl+X** | Unigram | Cut |
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
@@ -95,6 +103,8 @@
 | **Ctrl+7** | Unigram | Seventh folder |
 | **Ctrl+8** | Unigram | Eighth folder |
 | **Ctrl+9** | Unigram | Archive |
+| **Ctrl+Shift+Down** | Unigram (غير موثق) | المجلد التالي |
+| **Ctrl+Shift+Up** | Unigram (غير موثق) | المجلد السابق |
 
 ### إجراءات الرسائل
 
@@ -105,6 +115,7 @@
 | **ALT+Q** | UnigramPlus | الضغط على زر "استعراض فوري" إذا كان موجودًا في الرسالة الحالية |
 | **ALT+Delete** | UnigramPlus | حذف الرسالة أو الدردشة |
 | **Shift+Delete** | UnigramPlus | حذف الرسالة أو الدردشة على كلا الجانبين |
+| **Delete** | Unigram (غير موثق) | حذف الرسالة المحددة أو التي عليها التركيز |
 | **Ctrl+ALT+C** | UnigramPlus | فتح التعليقات |
 | **Enter** | UnigramPlus | الرَدُّ على الرسالة |
 | **ALT+F** | UnigramPlus | تحويل الرسالة |
@@ -120,6 +131,10 @@
 | **ALT+[** | UnigramPlus | التبديل بين الإعلان عن رؤوس الرسائل قبل محتوى الرسالة أو بعده |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | الضغط على زر "إرفاق ملف" |
+| **Ctrl+Shift+E** | Unigram (غير موثق) | فتح منتقي الرموز التعبيرية |
+| **Ctrl+Shift+G** | Unigram (غير موثق) | فتح منتقي صور GIF |
+| **Ctrl+Shift+S** | Unigram (غير موثق) | فتح منتقي الملصقات |
+| **Ctrl+O** | Unigram (غير موثق) | فتح منتقي الملفات لإرسال المستندات |
 | **Ctrl+N** | UnigramPlus | الضغط على زر "محادثة جديدة" |
 | **Arrow Up** | Unigram | Edit last sent message |
 | **Ctrl+Arrow Up** | Unigram | Reply to last sent message |
@@ -169,6 +184,11 @@
 | **Ctrl+W** | Unigram | Close current window |
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
+| **Ctrl+Shift+W** | Unigram (غير موثق) | إيقاف تشغيل الوسائط |
+| **Ctrl+F4** | Unigram (غير موثق) | Close current window |
+| **Ctrl+L** | Unigram (غير موثق) | قفل Unigram |
+| **Ctrl+M** | Unigram (غير موثق) | تصغير Unigram |
+| **Ctrl+J** | Unigram (غير موثق) | فتح التنزيلات |
 | **ALT+T** | UnigramPlus | الإعلان عن اسم وحالة الدردشة المفتوحة حاليًّا |
 | **NVDA+Alt+V** | UnigramPlus | الإعلان عن أرقام إصدار Unigram وUnigramPlus |
 | **ALT+M** | UnigramPlus | فتح قائمة التنقل |
@@ -181,6 +201,11 @@
 <!-- shortcut-table-end -->
 
 ## قائمة التغييرات:
+
+### الإصدار 5.7.0
+
+* استُعيد الإعلان عند تبديل المجلدات مع عدد الرسائل غير المقروءة غير الصفري، مع الإبقاء على ضمانات متعقب تقدّم نقل الملفات.
+* حُدّثت قوائم الاختصارات من مصدر Unigram الحالي، مع تمييز الاختصارات المدمجة غير المدرجة بعد في ملف Shortcuts.md الرسمي.
 
 ### الإصدار 5.6.9
 

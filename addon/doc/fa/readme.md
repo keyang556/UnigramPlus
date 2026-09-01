@@ -32,6 +32,8 @@
 
 > In the Category column, `UnigramPlus` identifies shortcuts provided by the add-on and `Unigram` identifies shortcuts built into Unigram.
 
+> `Unigram (بدون مستندات)` میانبرهایی را مشخص می‌کند که در کد منبع فعلی Unigram پیاده‌سازی شده‌اند اما هنوز در Shortcuts.md رسمی آن فهرست نشده‌اند.
+
 > [!TIP]
 > You can customize UnigramPlus shortcuts from NVDA menu > Preferences > Input gestures.
 
@@ -41,6 +43,8 @@
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **Ctrl+Alt+Home** | Unigram (بدون مستندات) | اولین گفتگو |
+| **Ctrl+Alt+End** | Unigram (بدون مستندات) | آخرین گفتگو |
 | **Ctrl+Alt+Up/Down** | UnigramPlus | رفتن به گفت‌وگوی بعدی یا قبلی دارای اشارهٔ خوانده‌نشده |
 | **ALT+1** | UnigramPlus | قرار دادن مکان نما بر روی لیست گفت و گوها. |
 | **ALT+2** | UnigramPlus | بردن مکاننما به روی آخرین پیام در گفت و گو. |
@@ -56,6 +60,8 @@
 |---|---|---|
 | **Ctrl+E** | Unigram | Chat search |
 | **Ctrl+F** | Unigram | Messages search per chat |
+| **Ctrl+Shift+F** | Unigram (بدون مستندات) | Chat search |
+| **Search key** | Unigram (بدون مستندات) | جستجو در صفحهٔ فعلی |
 | **ALT+I** | UnigramPlus | Go to the list with search results |
 | **F3** | UnigramPlus | Go to the next search result |
 | **Shift+F3** | UnigramPlus | Go to the previous search result |
@@ -66,6 +72,8 @@
 |---|---|---|
 | **Ctrl+Z** | Unigram | Undo |
 | **Ctrl+Y** | Unigram | Redo |
+| **Ctrl+Shift+Z** | Unigram (بدون مستندات) | انجام دوباره |
+| **Alt+X** | Unigram (بدون مستندات) | تبدیل چهار رقم شانزده‌هشتیِ انتخاب‌شده به نویسهٔ متناظر |
 | **Ctrl+X** | Unigram | Cut |
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
@@ -93,6 +101,8 @@
 | **Ctrl+7** | Unigram | Seventh folder |
 | **Ctrl+8** | Unigram | Eighth folder |
 | **Ctrl+9** | Unigram | Archive |
+| **Ctrl+Shift+Down** | Unigram (بدون مستندات) | پوشهٔ بعدی |
+| **Ctrl+Shift+Up** | Unigram (بدون مستندات) | پوشهٔ قبلی |
 
 ### عملیات پیام
 
@@ -103,6 +113,7 @@
 | **ALT+Q** | UnigramPlus | فشار دادن دکمه ی مشاهده ی سریع اگر در این پیام موجود باشد. |
 | **ALT+Delete** | UnigramPlus | پاک کردن پیام یا گفتوگو. |
 | **Shift+Delete** | UnigramPlus | پاک کردن پیام یا گفتوگو برای دو طرف. |
+| **Delete** | Unigram (بدون مستندات) | حذف پیام انتخاب‌شده یا دارای تمرکز |
 | **Ctrl+ALT+C** | UnigramPlus | باز کردن بخش نظرات. |
 | **Enter** | UnigramPlus | پاسخ بده به پیام. |
 | **ALT+F** | UnigramPlus | پیام را هدایت کن. |
@@ -118,6 +129,10 @@
 | **ALT+[** | UnigramPlus | تغییر محل خواندن سرآیندهای پیام به پیش یا پس از محتوای پیام |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | فشار دادن دکمه "ضمیمه کردن رسانه" |
+| **Ctrl+Shift+E** | Unigram (بدون مستندات) | باز کردن انتخاب‌گر شکلک |
+| **Ctrl+Shift+G** | Unigram (بدون مستندات) | باز کردن انتخاب‌گر GIF |
+| **Ctrl+Shift+S** | Unigram (بدون مستندات) | باز کردن انتخاب‌گر برچسب |
+| **Ctrl+O** | Unigram (بدون مستندات) | باز کردن انتخاب‌گر فایل برای ارسال اسناد |
 | **Ctrl+N** | UnigramPlus | فشار دادن دکمه "گفتگوی جدید " |
 | **Arrow Up** | Unigram | Edit last sent message |
 | **Ctrl+Arrow Up** | Unigram | Reply to last sent message |
@@ -167,6 +182,11 @@
 | **Ctrl+W** | Unigram | Close current window |
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
+| **Ctrl+Shift+W** | Unigram (بدون مستندات) | توقف پخش رسانه |
+| **Ctrl+F4** | Unigram (بدون مستندات) | Close current window |
+| **Ctrl+L** | Unigram (بدون مستندات) | قفل کردن Unigram |
+| **Ctrl+M** | Unigram (بدون مستندات) | کمینه کردن Unigram |
+| **Ctrl+J** | Unigram (بدون مستندات) | باز کردن دانلودها |
 | **ALT+T** | UnigramPlus | نام و وضعیت گفتوگوی باز شده را بگو |
 | **NVDA+Alt+V** | UnigramPlus | اعلام شماره نسخه‌های Unigram و UnigramPlus |
 | **ALT+M** | UnigramPlus | باز کردن فهرست مسیریابی. |
@@ -395,6 +415,11 @@
 بومی سازی ترکی اضافه شد.
 
 
+
+###نسخه 5.7.0
+
+* اعلان تغییر پوشه همراه با تعداد غیرصفر پیام‌های خوانده‌نشده بازگردانده شد و محافظ‌های ردیاب پیشرفت انتقال فایل حفظ شدند.
+* فهرست میانبرها از کد منبع فعلی Unigram به‌روز شد و میانبرهای داخلی که هنوز در Shortcuts.md رسمی آن نیستند مشخص شدند.
 
 ### نسخه 5.6.9
 

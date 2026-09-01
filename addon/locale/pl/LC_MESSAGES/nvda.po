@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.8\n"
+"Project-Id-Version: UnigramPlus 5.7.0\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2026-08-20 08:52+0000\n"
 "PO-Revision-Date: 2026-08-29 14:55+0200\n"
@@ -1257,3 +1257,11 @@ msgstr ""
 #~ "- Dodano ustawienie zachowania Alt+[, które ogłasza nagłówki wiadomości "
 #~ "po ich treści; domyślnie jest wyłączone.\n"
 #~ "- Dodano opcjonalne powiadomienie dźwiękowe po osiągnięciu końca czatu."
+
+#: changelog.py:5
+msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
+msgstr "Przywrócono komunikaty przy przełączaniu folderów z niezerową liczbą nieprzeczytanych wiadomości, zachowując zabezpieczenia monitora postępu transferu plików."
+
+#: changelog.py:7
+msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
+msgstr "Zaktualizowano listy skrótów na podstawie bieżącego kodu źródłowego Unigramu i wskazano wbudowane skróty, których nie ma jeszcze w oficjalnym pliku Shortcuts.md Unigramu."

@@ -30,6 +30,8 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 
 > In the Category column, `UnigramPlus` identifies shortcuts provided by the add-on and `Unigram` identifies shortcuts built into Unigram.
 
+> `Unigram (belgelenmemiş)`, mevcut Unigram kaynak kodunda uygulanmış ancak resmî Shortcuts.md dosyasında henüz listelenmemiş kısayolları belirtir.
+
 > [!TIP]
 > You can customize UnigramPlus shortcuts from NVDA menu > Preferences > Input gestures.
 
@@ -39,6 +41,8 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **Ctrl+Alt+Home** | Unigram (belgelenmemiş) | İlk sohbet |
+| **Ctrl+Alt+End** | Unigram (belgelenmemiş) | Son sohbet |
 | **Ctrl+Alt+Up/Down** | UnigramPlus | Okunmamış bahsetmeleri olan sonraki veya önceki sohbete git |
 | **ALT+1** | UnigramPlus | Odağı sohbet listesine taşı |
 | **ALT+2** | UnigramPlus | Odağı sohbetteki son mesaja taşı |
@@ -54,6 +58,8 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 |---|---|---|
 | **Ctrl+E** | Unigram | Chat search |
 | **Ctrl+F** | Unigram | Messages search per chat |
+| **Ctrl+Shift+F** | Unigram (belgelenmemiş) | Chat search |
+| **Search key** | Unigram (belgelenmemiş) | Geçerli sayfada ara |
 | **ALT+I** | UnigramPlus | Arama sonuçlarını içeren listeye gid |
 | **F3** | UnigramPlus | Bir sonraki arama sonucuna git |
 | **Shift+F3** | UnigramPlus | Bir önceki arama sonucuna git |
@@ -64,6 +70,8 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 |---|---|---|
 | **Ctrl+Z** | Unigram | Undo |
 | **Ctrl+Y** | Unigram | Redo |
+| **Ctrl+Shift+Z** | Unigram (belgelenmemiş) | Yinele |
+| **Alt+X** | Unigram (belgelenmemiş) | Seçili dört onaltılık basamağı karşılık gelen karaktere dönüştür |
 | **Ctrl+X** | Unigram | Cut |
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
@@ -91,6 +99,8 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 | **Ctrl+7** | Unigram | Seventh folder |
 | **Ctrl+8** | Unigram | Eighth folder |
 | **Ctrl+9** | Unigram | Archive |
+| **Ctrl+Shift+Down** | Unigram (belgelenmemiş) | Sonraki klasör |
+| **Ctrl+Shift+Up** | Unigram (belgelenmemiş) | Önceki klasör |
 
 ### Mesaj işlemleri
 
@@ -101,6 +111,7 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 | **ALT+Q** | UnigramPlus | Mevcut mesajda "Anlık görünüm" düğmesi varsa, tıklayın |
 | **ALT+Delete** | UnigramPlus | Mesajı veya sohbeti kaldır |
 | **Shift+Delete** | UnigramPlus | Her iki taraf için mesajı veya sohbeti kaldır |
+| **Delete** | Unigram (belgelenmemiş) | Seçili veya odaklanmış iletiyi sil |
 | **Ctrl+ALT+C** | UnigramPlus | Yorumları aç |
 | **Enter** | UnigramPlus | Mesajı yanıtla |
 | **ALT+F** | UnigramPlus | Mesajı ilet |
@@ -116,6 +127,10 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 | **ALT+[** | UnigramPlus | Mesaj başlıklarının mesaj içeriğinden önce veya sonra seslendirilmesini değiştir |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | "Dosya ekle" düğmesine basın |
+| **Ctrl+Shift+E** | Unigram (belgelenmemiş) | Emoji seçiciyi aç |
+| **Ctrl+Shift+G** | Unigram (belgelenmemiş) | GIF seçiciyi aç |
+| **Ctrl+Shift+S** | Unigram (belgelenmemiş) | Çıkartma seçiciyi aç |
+| **Ctrl+O** | Unigram (belgelenmemiş) | Belge göndermek için dosya seçiciyi aç |
 | **Ctrl+N** | UnigramPlus | "Yeni sohbet" düğmesine basın |
 | **Arrow Up** | Unigram | Edit last sent message |
 | **Ctrl+Arrow Up** | Unigram | Reply to last sent message |
@@ -165,6 +180,11 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 | **Ctrl+W** | Unigram | Close current window |
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
+| **Ctrl+Shift+W** | Unigram (belgelenmemiş) | Medya oynatmayı durdur |
+| **Ctrl+F4** | Unigram (belgelenmemiş) | Close current window |
+| **Ctrl+L** | Unigram (belgelenmemiş) | Unigram'ı kilitle |
+| **Ctrl+M** | Unigram (belgelenmemiş) | Unigram'ı simge durumuna küçült |
+| **Ctrl+J** | Unigram (belgelenmemiş) | İndirilenleri aç |
 | **ALT+T** | UnigramPlus | Açık bir sohbetin adını ve durumunu duyur |
 | **NVDA+Alt+V** | UnigramPlus | Unigram ve UnigramPlus sürüm numaralarını duyur |
 | **ALT+M** | UnigramPlus | Gezinti menüsünü aç |
@@ -177,6 +197,11 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 <!-- shortcut-table-end -->
 
 ##Değişiklik listesi:
+
+### Sürüm 5.7.0
+
+* Dosya aktarımı ilerleme izleyicisinin korumaları korunurken, sıfır olmayan okunmamış sayısıyla klasör değiştirme duyuruları geri getirildi.
+* Kısayol listesi mevcut Unigram kaynak kodundan güncellendi ve resmî Shortcuts.md dosyasında henüz olmayan yerleşik kısayollar belirtildi.
 
 ### Sürüm 5.6.9
 

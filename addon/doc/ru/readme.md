@@ -33,6 +33,8 @@
 
 > In the Category column, `UnigramPlus` identifies shortcuts provided by the add-on and `Unigram` identifies shortcuts built into Unigram.
 
+> `Unigram (не документировано)` обозначает сочетания клавиш, реализованные в текущем исходном коде Unigram, но ещё не указанные в официальном файле Shortcuts.md.
+
 > [!TIP]
 > You can customize UnigramPlus shortcuts from NVDA menu > Preferences > Input gestures.
 
@@ -42,6 +44,8 @@
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **Ctrl+Alt+Home** | Unigram (не документировано) | Первый чат |
+| **Ctrl+Alt+End** | Unigram (не документировано) | Последний чат |
 | **Ctrl+Alt+Up/Down** | UnigramPlus | Перейти к следующему или предыдущему чату с непрочитанными упоминаниями |
 | **ALT+1** | UnigramPlus | Переместить фокус в список чатов |
 | **ALT+2** | UnigramPlus | Переместить фокус к последнему сообщению в открытом чате |
@@ -57,6 +61,8 @@
 |---|---|---|
 | **Ctrl+E** | Unigram | Chat search |
 | **Ctrl+F** | Unigram | Messages search per chat |
+| **Ctrl+Shift+F** | Unigram (не документировано) | Chat search |
+| **Search key** | Unigram (не документировано) | Искать на текущей странице |
 | **ALT+I** | UnigramPlus | Перейти к списку с результатами поиска |
 | **F3** | UnigramPlus | Перейти к следующему результату поиска |
 | **Shift+F3** | UnigramPlus | Перейти к предыдущему результату поиска |
@@ -67,6 +73,8 @@
 |---|---|---|
 | **Ctrl+Z** | Unigram | Undo |
 | **Ctrl+Y** | Unigram | Redo |
+| **Ctrl+Shift+Z** | Unigram (не документировано) | Повторить |
+| **Alt+X** | Unigram (не документировано) | Преобразовать четыре выделенные шестнадцатеричные цифры в соответствующий символ |
 | **Ctrl+X** | Unigram | Cut |
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
@@ -94,6 +102,8 @@
 | **Ctrl+7** | Unigram | Seventh folder |
 | **Ctrl+8** | Unigram | Eighth folder |
 | **Ctrl+9** | Unigram | Archive |
+| **Ctrl+Shift+Down** | Unigram (не документировано) | Следующая папка |
+| **Ctrl+Shift+Up** | Unigram (не документировано) | Предыдущая папка |
 
 ### Действия с сообщениями
 
@@ -104,6 +114,7 @@
 | **ALT+Q** | UnigramPlus | Нажать кнопку "Мгновенный просмотр" если она есть в текущем сообщении |
 | **ALT+Delete** | UnigramPlus | Удалить сообщение или чат |
 | **Shift+Delete** | UnigramPlus | Удалить сообщение или чат с обеих сторон |
+| **Delete** | Unigram (не документировано) | Удалить выбранное или находящееся в фокусе сообщение |
 | **Ctrl+ALT+C** | UnigramPlus | Открыть комментарии |
 | **Enter** | UnigramPlus | Ответить на сообщение |
 | **ALT+F** | UnigramPlus | Переслать сообщение |
@@ -119,6 +130,10 @@
 | **ALT+[** | UnigramPlus | Переключить озвучивание заголовков сообщений до или после содержимого сообщения |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | Нажать кнопку "Прикрепить файл" |
+| **Ctrl+Shift+E** | Unigram (не документировано) | Открыть выбор эмодзи |
+| **Ctrl+Shift+G** | Unigram (не документировано) | Открыть выбор GIF |
+| **Ctrl+Shift+S** | Unigram (не документировано) | Открыть выбор стикеров |
+| **Ctrl+O** | Unigram (не документировано) | Открыть диалог выбора файлов для отправки документов |
 | **Ctrl+N** | UnigramPlus | Нажать кнопку "Новая беседа" |
 | **Arrow Up** | Unigram | Edit last sent message |
 | **Ctrl+Arrow Up** | Unigram | Reply to last sent message |
@@ -168,6 +183,11 @@
 | **Ctrl+W** | Unigram | Close current window |
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
+| **Ctrl+Shift+W** | Unigram (не документировано) | Остановить воспроизведение медиа |
+| **Ctrl+F4** | Unigram (не документировано) | Close current window |
+| **Ctrl+L** | Unigram (не документировано) | Заблокировать Unigram |
+| **Ctrl+M** | Unigram (не документировано) | Свернуть Unigram |
+| **Ctrl+J** | Unigram (не документировано) | Открыть загрузки |
 | **ALT+T** | UnigramPlus | Произнести название и статус открытого чата |
 | **NVDA+Alt+V** | UnigramPlus | Объявить номера версий Unigram и UnigramPlus |
 | **ALT+M** | UnigramPlus | Открыть меню навигации |
@@ -467,6 +487,11 @@
 Добавлена Турецкая локализация.
 
 
+
+###Версия 5.7.0
+
+* Восстановлено объявление при переключении папок с ненулевым количеством непрочитанных, при этом сохранены ограничения трекера прогресса передачи файлов.
+* Список сочетаний клавиш обновлён по текущему исходному коду Unigram; отмечены встроенные сочетания, которых ещё нет в официальном Shortcuts.md.
 
 ### Версия 5.6.9
 

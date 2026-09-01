@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.8\n"
+"Project-Id-Version: UnigramPlus 5.7.0\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 06:02+0100\n"
@@ -1116,3 +1116,11 @@ msgstr ""
 "- Ispravljen je povremeni problem zbog kojeg je NVDA izgovarao „lista” pre poruke pri kretanju strelicama gore i dole.\n"
 "- Dodato je podešavanje za ponašanje Alt+[ koje izgovara zaglavlja poruka posle njihovog sadržaja; podrazumevano je isključeno.\n"
 "- Dodato je opcionalno zvučno obaveštenje pri dostizanju kraja ćaskanja."
+
+#: changelog.py:5
+msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
+msgstr "Vraćene su najave pri promeni fascikle sa brojem nepročitanih poruka različitim od nule, uz zadržavanje zaštitnih mera praćenja napretka prenosa datoteka."
+
+#: changelog.py:7
+msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
+msgstr "Ažurirane su liste prečica prema trenutnom izvornom kodu Unigrama i označene su ugrađene prečice koje još nisu navedene u zvaničnoj datoteci Shortcuts.md za Unigram."

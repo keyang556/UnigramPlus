@@ -99,9 +99,30 @@ def test_all_readmes_have_complete_integrated_shortcut_tables():
 		assert text.count("|---|---|---|") == 9, readme
 		assert text.count("| Unigram |") == 44, readme
 		assert text.count("| UnigramPlus |") == 53, readme
+		undocumented_shortcuts = [
+			line
+			for line in shortcut_table.splitlines()
+			if line.startswith("|")
+			and len(line.split("|")) == 5
+			and line.split("|")[2].strip().startswith("Unigram")
+			and line.split("|")[2].strip() not in ("Unigram", "UnigramPlus")
+		]
+		assert len(undocumented_shortcuts) == 18, readme
 		assert "| **Ctrl+Shift+.** | Unigram |" in text, readme
 		assert "| **Ctrl+U** | Unigram |" in text, readme
+		assert any("**Ctrl+F4**" in line for line in undocumented_shortcuts), readme
+		assert any("**Ctrl+Shift+Down**" in line for line in undocumented_shortcuts), readme
+		assert any("**Ctrl+O**" in line for line in undocumented_shortcuts), readme
+		assert any("**Ctrl+Shift+E**" in line for line in undocumented_shortcuts), readme
+		assert any("**Ctrl+Shift+G**" in line for line in undocumented_shortcuts), readme
+		assert any("**Ctrl+Shift+S**" in line for line in undocumented_shortcuts), readme
+		assert any("**Ctrl+Shift+Z**" in line for line in undocumented_shortcuts), readme
+		assert any("**Alt+X**" in line for line in undocumented_shortcuts), readme
+		assert any("**Delete**" in line for line in undocumented_shortcuts), readme
+		assert not any("**Ctrl+1 through Ctrl+5**" in line for line in undocumented_shortcuts), readme
+		assert "| Search the current page || **ALT+T**" not in text, readme
 		assert "| **ALT+End** |" not in text, readme
+		assert "5.7.0" in text, readme
 		assert "5.6.9" in text, readme
 		assert "5.6.8" in text, readme
 		assert "| **NVDA+Alt+V** | UnigramPlus |" in text, readme

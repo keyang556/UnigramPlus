@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.8\n"
+"Project-Id-Version: UnigramPlus 5.7.0\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 03:31-0500\n"
@@ -1041,3 +1041,11 @@ msgstr ""
 "- Se corrigió un problema intermitente por el que NVDA anunciaba «lista» antes de un mensaje al navegar con las teclas de flecha arriba y abajo.\n"
 "- Se añadió un ajuste para el comportamiento de Alt+[ que anuncia los encabezados de los mensajes después de su contenido; está desactivado de forma predeterminada.\n"
 "- Se añadió una notificación sonora opcional al llegar al final de un chat."
+
+#: changelog.py:5
+msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
+msgstr "Se restauraron los anuncios al cambiar de carpeta con un recuento de mensajes sin leer distinto de cero, conservando las salvaguardas del seguimiento del progreso de transferencia de archivos."
+
+#: changelog.py:7
+msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
+msgstr "Se actualizaron las listas de atajos a partir del código fuente actual de Unigram y se identificaron los atajos integrados que aún no aparecen en el archivo Shortcuts.md oficial de Unigram."

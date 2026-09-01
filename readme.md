@@ -33,6 +33,8 @@ And remember that everyone who read this line thought that someone will definite
 
 > In the Category column, `UnigramPlus` identifies shortcuts provided by the add-on and `Unigram` identifies shortcuts built into Unigram.
 
+> `Unigram (undocumented)` identifies shortcuts implemented by the current Unigram source but not yet listed in its official Shortcuts.md.
+
 > [!TIP]
 > You can customize UnigramPlus shortcuts from NVDA menu > Preferences > Input gestures.
 
@@ -42,6 +44,8 @@ And remember that everyone who read this line thought that someone will definite
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **Ctrl+Alt+Home** | Unigram (undocumented) | First chat |
+| **Ctrl+Alt+End** | Unigram (undocumented) | Last chat |
 | **Ctrl+Alt+Up/Down** | UnigramPlus | Move to the next or previous chat with unread mentions |
 | **ALT+1** | UnigramPlus | Move focus to chat list |
 | **ALT+2** | UnigramPlus | Move focus to the last message in an open chat |
@@ -57,6 +61,8 @@ And remember that everyone who read this line thought that someone will definite
 |---|---|---|
 | **Ctrl+E** | Unigram | Chat search |
 | **Ctrl+F** | Unigram | Messages search per chat |
+| **Ctrl+Shift+F** | Unigram (undocumented) | Chat search |
+| **Search key** | Unigram (undocumented) | Search the current page |
 | **ALT+I** | UnigramPlus | Go to the list with search results |
 | **F3** | UnigramPlus | Go to the next search result |
 | **Shift+F3** | UnigramPlus | Go to the previous search result |
@@ -67,6 +73,8 @@ And remember that everyone who read this line thought that someone will definite
 |---|---|---|
 | **Ctrl+Z** | Unigram | Undo |
 | **Ctrl+Y** | Unigram | Redo |
+| **Ctrl+Shift+Z** | Unigram (undocumented) | Redo |
+| **Alt+X** | Unigram (undocumented) | Convert four selected hexadecimal digits to their corresponding character |
 | **Ctrl+X** | Unigram | Cut |
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
@@ -94,6 +102,8 @@ And remember that everyone who read this line thought that someone will definite
 | **Ctrl+7** | Unigram | Seventh folder |
 | **Ctrl+8** | Unigram | Eighth folder |
 | **Ctrl+9** | Unigram | Archive |
+| **Ctrl+Shift+Down** | Unigram (undocumented) | Next folder |
+| **Ctrl+Shift+Up** | Unigram (undocumented) | Previous folder |
 
 ### Message actions
 
@@ -104,6 +114,7 @@ And remember that everyone who read this line thought that someone will definite
 | **ALT+Q** | UnigramPlus | Press "Instant view" button, if it is included in the current message |
 | **ALT+Delete** | UnigramPlus | Delete a message or chat |
 | **Shift+Delete** | UnigramPlus | Delete message or chat from both sides |
+| **Delete** | Unigram (undocumented) | Delete the selected or focused message |
 | **Ctrl+ALT+C** | UnigramPlus | Open comments |
 | **Enter** | UnigramPlus | Reply to message |
 | **ALT+F** | UnigramPlus | Forward message |
@@ -119,6 +130,10 @@ And remember that everyone who read this line thought that someone will definite
 | **ALT+[** | UnigramPlus | Toggle whether message headers are announced before or after the message content |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | Press "Attach file" button |
+| **Ctrl+Shift+E** | Unigram (undocumented) | Open emoji picker |
+| **Ctrl+Shift+G** | Unigram (undocumented) | Open GIF picker |
+| **Ctrl+Shift+S** | Unigram (undocumented) | Open sticker picker |
+| **Ctrl+O** | Unigram (undocumented) | Open file picker to send documents |
 | **Ctrl+N** | UnigramPlus | Press "New conversation" button |
 | **Arrow Up** | Unigram | Edit last sent message |
 | **Ctrl+Arrow Up** | Unigram | Reply to last sent message |
@@ -168,6 +183,11 @@ And remember that everyone who read this line thought that someone will definite
 | **Ctrl+W** | Unigram | Close current window |
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
+| **Ctrl+Shift+W** | Unigram (undocumented) | Stop media playback |
+| **Ctrl+F4** | Unigram (undocumented) | Close current window |
+| **Ctrl+L** | Unigram (undocumented) | Lock Unigram |
+| **Ctrl+M** | Unigram (undocumented) | Minimize Unigram |
+| **Ctrl+J** | Unigram (undocumented) | Open downloads |
 | **ALT+T** | UnigramPlus | Announce the name and status of an open chat |
 | **NVDA+Alt+V** | UnigramPlus | Announce the Unigram and UnigramPlus version numbers |
 | **ALT+M** | UnigramPlus | Open navigation menu |
@@ -180,6 +200,11 @@ And remember that everyone who read this line thought that someone will definite
 <!-- shortcut-table-end -->
 
 ## List of changes:
+
+### Version 5.7.0
+
+* Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards.
+* Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md.
 
 ### Version 5.6.9
 
