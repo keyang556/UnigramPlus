@@ -3,6 +3,7 @@ def _(t): return t
 
 value = _(
 	"- Fixed an error that could occur when NVDA entered a secure desktop, such as a UAC prompt, while UnigramPlus background message tracking was enabled.\n"
+	"- Fixed Saved Messages topic rows in Unigram 12.10.1+ being treated as messages merely because their native summaries contain sent or received timestamps.\n"
 	"- Removed the obsolete Saved Messages topic name workaround; current Unigram versions now provide accessible names for Saved Messages chats natively.\n"
 	"- Updated compatibility for NVDA 2026.2.\n"
 	"- Updated Polish and Burmese translations."

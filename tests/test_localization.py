@@ -99,6 +99,7 @@ def test_current_release_changelog_comes_from_the_changelog_source():
 	changelog = (ROOT / "changelog.py").read_text(encoding="utf-8")
 
 	assert "secure desktop" in changelog
+	assert "native summaries contain sent or received timestamps" in changelog
 	assert "Saved Messages topic name workaround" in changelog
 	assert "NVDA 2026.2" in changelog
 	assert "Polish and Burmese translations" in changelog
@@ -131,7 +132,8 @@ def test_every_localized_manual_has_569_through_559_and_updated_558_changelogs()
 		section_562 = text[version_562:version_561]
 		section_561 = text[version_561:version_560]
 		section_560 = text[version_560:version_559]
-		assert section_569.count("\n* ") == 4, manual
+		assert "12.10.1+" in section_569, manual
+		assert section_569.count("\n* ") == 5, manual
 		assert "Alt+C" in section_568, manual
 		assert "WhatsApp Enhancer" in section_568, manual
 		assert section_568.count("\n* ") == 1, manual

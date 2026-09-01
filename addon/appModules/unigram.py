@@ -474,12 +474,27 @@ def _is_message_list_item(obj):
 		if automation_id == "Message_item":
 			# Preserve the exact marker used by released Unigram versions.
 			return True
+		raw_class_name = ""
+		try:
+			# App-module overlay selection runs immediately after UIA's own
+			# findOverlayClasses(), where NVDA intentionally uses this cached value.
+			raw_class_name = obj.UIAElement.cachedClassName
+		except Exception:
+			pass
+		if not raw_class_name:
+			# Some current Unigram controls have no cached class during overlay
+			# selection even though their live UIA class is already available.
+			raw_class_name = getattr(obj, "UIAClassName", "")
 		class_name = (
-			str(getattr(obj, "UIAClassName", "") or "")
+			str(raw_class_name or "")
 			.replace(":", ".")
 			.rsplit(".", 1)[-1]
 		)
-		if automation_id != "MessageSelector" and class_name != "MessageSelector":
+		# MessageSelector uses ToggleButtonAutomationPeer in Unigram 12.10.2,
+		# so UIA exposes actual message rows as ToggleButton controls. Keep both
+		# current markers inside the Messages list; unrelated ToggleButton rows
+		# (calls, settings, and scrolling hosts) must not receive message scripts.
+		if automation_id != "MessageSelector" and class_name not in ("MessageSelector", "ToggleButton"):
 			return False
 		return _find_ancestor_by_automation_id(obj, ("Messages",), max_depth=8) is not None
 	except Exception:
@@ -870,7 +885,6 @@ class Message_list_item(ListItem):
 	selected_media = -1
 	media = None
 	list_media = []
-	UIAAutomationId = "Message_item"
 	scriptCategory = "UnigramPlus"
 	last_part_in_message = None
 	index_last_part_in_message = 0
@@ -3001,18 +3015,14 @@ class AppModule(appModuleHandler.AppModule):
 					return
 				elif parent.UIAAutomationId == "TopicList": return
 				elif obj.name.startswith("forumTopic {"): return
-				# We check whether the element contains phrases that will help us identify it as a message.
-				# Service and blank final messages can have no accessible name, but their
-				# Message_item id and Messages-row ancestry still identify them reliably.
-				keywords = keywordsInMessages.get(conf.get("lang"), keywordsInMessages["en"])
-				name = (obj.name or "")[-200:]
-				self.sender_message = "received" if keywords[3] in name else "send" if keywords[2] in name else ""
-				self.end_text = name
-				if (
-					_is_message_list_item(obj)
-					or self.sender_message
-					or (parent.role == Role.LISTITEM and parent.location.width > 800)
-				):
+				# Accessible names are localized summaries and are shared by chat and
+				# Saved Messages topic rows. Only Unigram's stable UIA markers identify
+				# an actual message; this also covers blank service and media messages.
+				if _is_message_list_item(obj):
+					keywords = keywordsInMessages.get(conf.get("lang"), keywordsInMessages["en"])
+					name = (obj.name or "")[-200:]
+					self.sender_message = "received" if keywords[3] in name else "send" if keywords[2] in name else ""
+					self.end_text = name
 					clsList.insert(0, Message_list_item)
 			elif conf.get("action_when_pressing_up_arrow_in_text_field") != "normal" and obj.role == Role.EDITABLETEXT and obj.UIAAutomationId == "TextField":
 				# Add processing for pressing the up arrow key to the message input field

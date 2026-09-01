@@ -184,6 +184,7 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 ### Versión 5.6.9
 
 * Se corrigió un error que podía producirse cuando NVDA entraba en un escritorio seguro, por ejemplo, en una solicitud de UAC, mientras estaba activado el seguimiento de mensajes en segundo plano de UnigramPlus.
+* Se corrigió que las filas de temas de Mensajes guardados de Unigram 12.10.1+ se trataran como mensajes solo porque sus resúmenes nativos incluyen marcas de tiempo de envío o recepción.
 * Se eliminó la solución provisional obsoleta para los nombres de temas de Mensajes guardados; las versiones actuales de Unigram ahora proporcionan nombres accesibles de forma nativa para los chats de Mensajes guardados.
 * Se actualizó la compatibilidad con NVDA 2026.2.
 * Se actualizaron las traducciones al polaco y al birmano.

@@ -1034,8 +1034,6 @@ msgstr ""
 "kanałów w aktualnych wersjach Unigramu, w tym automatyczną obsługę okna "
 "potwierdzenia."
 
-#, fuzzy
-#~| msgid "Announce all progress bars"
 #~ msgid "Announce some progress bars"
 #~ msgstr "czytanie wszystkich pasków postępu"
 
@@ -1064,8 +1062,6 @@ msgstr ""
 #~ msgid "Message copied"
 #~ msgstr "Wiadomość skopiowana"
 
-#, fuzzy
-#~| msgid "Copy message if it contains text"
 #~ msgid "Copy messages while maintaining formatting"
 #~ msgstr "Skopiuj wiadomość, jeśli zawiera tekst"
 
@@ -1116,8 +1112,6 @@ msgstr ""
 #~ msgid "Inline results not detected"
 #~ msgstr "Nie wykryto wyników inline"
 
-#, fuzzy
-#~| msgid "This message does not contain text"
 #~ msgid "This message is not playing"
 #~ msgstr "Ta wiadomość nie zawiera tekstu"
 
