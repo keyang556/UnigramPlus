@@ -474,12 +474,16 @@ def _is_message_list_item(obj):
 		if automation_id == "Message_item":
 			# Preserve the exact marker used by released Unigram versions.
 			return True
+		raw_class_name = ""
 		try:
 			# App-module overlay selection runs immediately after UIA's own
 			# findOverlayClasses(), where NVDA intentionally uses this cached value.
-			# Reading UIAClassName first can return an empty or stale value here.
 			raw_class_name = obj.UIAElement.cachedClassName
 		except Exception:
+			pass
+		if not raw_class_name:
+			# Some current Unigram controls have no cached class during overlay
+			# selection even though their live UIA class is already available.
 			raw_class_name = getattr(obj, "UIAClassName", "")
 		class_name = (
 			str(raw_class_name or "")
@@ -487,13 +491,10 @@ def _is_message_list_item(obj):
 			.rsplit(".", 1)[-1]
 		)
 		# MessageSelector uses ToggleButtonAutomationPeer in Unigram 12.10.2,
-		# so UIA exposes actual message rows as focusable ListItem/ToggleButton
-		# controls. Its parent link is not always available while NVDA selects an
-		# overlay, so ToggleButton is a direct provider marker. Chat and Saved
-		# Messages topic rows remain ListViewItem controls instead.
-		if class_name == "ToggleButton":
-			return True
-		if automation_id != "MessageSelector" and class_name != "MessageSelector":
+		# so UIA exposes actual message rows as ToggleButton controls. Keep both
+		# current markers inside the Messages list; unrelated ToggleButton rows
+		# (calls, settings, and scrolling hosts) must not receive message scripts.
+		if automation_id != "MessageSelector" and class_name not in ("MessageSelector", "ToggleButton"):
 			return False
 		return _find_ancestor_by_automation_id(obj, ("Messages",), max_depth=8) is not None
 	except Exception:

@@ -5,6 +5,7 @@ from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_PATH = ROOT / "addon" / "appModules" / "unigram.py"
+_UNSET = object()
 
 
 class Node:
@@ -15,7 +16,7 @@ class Node:
 		role="listItem",
 		automation_id="",
 		class_name="",
-		cached_class_name=None,
+		cached_class_name=_UNSET,
 		name="",
 		focusable=True,
 	):
@@ -24,7 +25,7 @@ class Node:
 		self.UIAAutomationId = automation_id
 		self.UIAClassName = class_name
 		self.UIAElement = SimpleNamespace(
-			cachedClassName=class_name if cached_class_name is None else cached_class_name
+			cachedClassName=class_name if cached_class_name is _UNSET else cached_class_name
 		)
 		self.name = name
 		self.isFocusable = focusable
@@ -120,7 +121,7 @@ def test_current_message_selector_and_toggle_button_receive_message_overlay():
 	for automation_id, class_name, parent in (
 		("MessageSelector", "", messages),
 		("", "MessageSelector", messages),
-		("", "ToggleButton", Node(automation_id="ScrollingHost")),
+		("", "ToggleButton", messages),
 	):
 		message = Node(
 			parent=parent,
@@ -143,12 +144,27 @@ def test_legacy_message_marker_and_blank_service_messages_remain_messages():
 	assert message_overlay in classes
 
 
-def test_cached_uia_class_name_identifies_current_message_during_overlay_selection():
-	message = Node(parent=Node(), class_name="", cached_class_name="ToggleButton")
+def test_empty_cached_uia_class_falls_back_to_the_live_message_class():
+	messages = Node(automation_id="Messages", role="list")
+	for cached_class_name, class_name in (("", "ToggleButton"), (None, "MessageSelector")):
+		message = Node(
+			parent=messages,
+			class_name=class_name,
+			cached_class_name=cached_class_name,
+		)
 
-	assert _message_predicate()(message)
-	classes, _app, message_overlay, _chat_overlay = _overlay_classes_for(message)
-	assert message_overlay in classes
+		assert _message_predicate()(message)
+		classes, _app, message_overlay, _chat_overlay = _overlay_classes_for(message)
+		assert message_overlay in classes
+
+
+def test_toggle_button_list_items_outside_messages_do_not_receive_message_overlay():
+	for automation_id in ("CallsList", "SettingsList", "ScrollingHost"):
+		control = Node(parent=Node(automation_id=automation_id), class_name="ToggleButton")
+
+		assert not _message_predicate()(control)
+		classes, _app, message_overlay, _chat_overlay = _overlay_classes_for(control)
+		assert message_overlay not in classes
 
 
 def test_chat_rows_with_message_like_summaries_keep_the_chat_overlay():
