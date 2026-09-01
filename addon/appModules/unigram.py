@@ -126,6 +126,18 @@ def _normalized_text(text):
 	return str(text).translate(_APP_MODULE_NAME_IGNORED_CHARS).strip().casefold()
 
 
+def _get_chat_folder_unread_count(name):
+	"""Return a nonzero unread badge explicitly appended to a folder name."""
+	name = str(name or "").strip()
+	if name.startswith("(") and name.endswith(")"):
+		name = name[1:-1].strip()
+	match = re.search(r",\s*(\d+)$", name)
+	if not match:
+		return None
+	count = match.group(1)
+	return count if int(count) else None
+
+
 def _context_menu_raw_probe_hint_priority(obj):
 	"""Rank popup hints so a generic app window cannot replace a flyout root."""
 	if obj is None:
@@ -3467,15 +3479,17 @@ class AppModule(appModuleHandler.AppModule):
 		if last_selected_folder != selected_folder:
 			self.saved_items.save("last selected folder", selected_folder)
 		else: return False
-		text = self.saved_items.get("last selected folder")
+		text = selected_folder
+		count = _get_chat_folder_unread_count(obj.name)
+		if count:
+			text += ", " + count
 		queueHandler.queueFunction(queueHandler.eventQueue, message, text)
 
 	def _get_chat_folder_name(self, name):
 		name = str(name or "").strip()
 		if name.startswith("(") and name.endswith(")"):
 			name = name[1:-1].strip()
-		name = name.split(", ")[0].strip()
-		name = re.sub(r"\s+\d+$", "", name).strip()
+		name = re.sub(r",\s*\d+$", "", name).strip()
 		return name
 
 	# Data copy function for broadcasting

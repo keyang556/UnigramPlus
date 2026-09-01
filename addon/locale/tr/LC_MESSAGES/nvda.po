@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.8\n"
+"Project-Id-Version: UnigramPlus 5.7.0\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 00:48+0300\n"
@@ -1141,3 +1141,11 @@ msgstr ""
 "- Yukarı ve aşağı ok tuşlarıyla iletiler arasında gezinirken NVDA'nın iletiden önce ara sıra “liste” demesi sorunu düzeltildi.\n"
 "- İleti başlıklarını içerikten sonra seslendiren Alt+[ davranışı için bir ayar eklendi; varsayılan olarak devre dışıdır.\n"
 "- Sohbetin sonuna ulaşıldığında isteğe bağlı bir sesli bildirim eklendi."
+
+#: changelog.py:5
+msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
+msgstr "Sıfır olmayan okunmamış ileti sayısıyla klasör değiştirirken yapılan duyurular, dosya aktarımı ilerleme izleyicisinin korumaları korunarak geri yüklendi."
+
+#: changelog.py:7
+msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
+msgstr "Kısayol listeleri mevcut Unigram kaynak koduna göre güncellendi ve Unigramın resmi Shortcuts.md dosyasında henüz yer almayan yerleşik kısayollar belirtildi."

@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.8\n"
+"Project-Id-Version: UnigramPlus 5.7.0\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2026-05-24 00:00+0800\n"
 "PO-Revision-Date: 2026-06-14 20:36+0800\n"
@@ -1044,3 +1044,11 @@ msgstr ""
 "- 修正使用向上、向下方向鍵在訊息間移動時，NVDA 偶爾會在訊息前讀出「清單」的問題。\n"
 "- 新增 Alt+[ 功能的設定：在訊息內容之後讀出訊息標頭；此功能預設為關閉。\n"
 "- 新增到達聊天室末尾時的可選聲音提示。"
+
+#: changelog.py:5
+msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
+msgstr "已恢復切換資料夾時讀出非零未讀數的功能，同時保留檔案傳輸進度追蹤器的保護範圍。"
+
+#: changelog.py:7
+msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
+msgstr "已依據目前的 Unigram 原始碼更新快速鍵清單，並標示官方 Shortcuts.md 尚未列出的內建快速鍵。"

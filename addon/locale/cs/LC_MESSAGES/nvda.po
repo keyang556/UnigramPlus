@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.8\n"
+"Project-Id-Version: UnigramPlus 5.7.0\n"
 "POT-Creation-Date: 2022-06-30 15:13+0300\n"
 "PO-Revision-Date: 2022-06-30 15:13+0300\n"
 "Last-Translator: Petr Řehák\n"
@@ -855,3 +855,11 @@ msgstr ""
 "- Opraven přerušovaný problém, kdy NVDA při pohybu šipkami nahoru a dolů před zprávou oznamoval „seznam“.\n"
 "- Přidáno nastavení chování Alt+[, které oznamuje záhlaví zpráv po jejich obsahu; ve výchozím nastavení je vypnuté.\n"
 "- Přidáno volitelné zvukové upozornění při dosažení konce chatu."
+
+#: changelog.py:5
+msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
+msgstr "Obnoveno oznamování přepínání složek s nenulovým počtem nepřečtených zpráv při zachování ochranných opatření sledování průběhu přenosu souborů."
+
+#: changelog.py:7
+msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
+msgstr "Aktualizovány seznamy klávesových zkratek podle aktuálního zdrojového kódu Unigramu a označeny vestavěné zkratky, které dosud nejsou uvedeny v oficiálním souboru Shortcuts.md Unigramu."

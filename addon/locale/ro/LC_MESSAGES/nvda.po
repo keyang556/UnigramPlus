@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.8\n"
+"Project-Id-Version: UnigramPlus 5.7.0\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-05-08 21:23+0300\n"
 "PO-Revision-Date: 2023-05-08 21:25+0300\n"
@@ -1081,3 +1081,11 @@ msgstr ""
 "- A fost remediată o problemă intermitentă în care NVDA anunța „listă” înaintea unui mesaj la navigarea cu săgețile sus și jos.\n"
 "- A fost adăugată o setare pentru comportamentul Alt+[ care anunță anteturile mesajelor după conținutul lor; este dezactivată implicit.\n"
 "- A fost adăugată o notificare sonoră opțională la atingerea sfârșitului unui chat."
+
+#: changelog.py:5
+msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
+msgstr "Au fost restaurate anunțurile la schimbarea dosarelor cu un număr nenul de mesaje necitite, păstrând măsurile de protecție ale urmăritorului progresului transferului de fișiere."
+
+#: changelog.py:7
+msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
+msgstr "Listele de comenzi rapide au fost actualizate din sursa curentă Unigram și au fost identificate comenzile rapide integrate care nu sunt încă enumerate în fișierul Shortcuts.md oficial al Unigram."

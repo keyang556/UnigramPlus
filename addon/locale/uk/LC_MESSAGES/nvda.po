@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.6.8\n"
+"Project-Id-Version: UnigramPlus 5.7.0\n"
 "POT-Creation-Date: 2023-12-15 11:58+0200\n"
 "PO-Revision-Date: 2023-12-15 12:00+0200\n"
 "Last-Translator: \n"
@@ -1039,3 +1039,11 @@ msgstr ""
 "- Виправлено періодичну проблему, через яку NVDA промовляв «список» перед повідомленням під час навігації стрілками вгору та вниз.\n"
 "- Додано налаштування для функції Alt+[, яка озвучує заголовки повідомлень після їхнього вмісту; типово її вимкнено.\n"
 "- Додано необов’язкове звукове сповіщення про досягнення кінця чату."
+
+#: changelog.py:5
+msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
+msgstr "Відновлено оголошення під час перемикання папок із ненульовою кількістю непрочитаних повідомлень зі збереженням захисних обмежень відстежувача перебігу передавання файлів."
+
+#: changelog.py:7
+msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
+msgstr "Оновлено списки сполучень клавіш за поточним вихідним кодом Unigram і позначено вбудовані сполучення, яких ще немає в офіційному файлі Shortcuts.md Unigram."

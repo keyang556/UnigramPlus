@@ -32,6 +32,8 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 > In the Category column, `UnigramPlus` identifies shortcuts provided by the add-on and `Unigram` identifies shortcuts built into Unigram.
 
+> `Unigram (nedocumentat)` identifică scurtăturile implementate în sursa actuală Unigram, dar care nu sunt încă enumerate în Shortcuts.md oficial.
+
 > [!TIP]
 > You can customize UnigramPlus shortcuts from NVDA menu > Preferences > Input gestures.
 
@@ -41,6 +43,8 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **Ctrl+Alt+Home** | Unigram (nedocumentat) | Prima conversație |
+| **Ctrl+Alt+End** | Unigram (nedocumentat) | Ultima conversație |
 | **Ctrl+Alt+Up/Down** | UnigramPlus | Mergi la chatul următor sau anterior cu mențiuni necitite |
 | **ALT+1** | UnigramPlus | Mută focalizarea pe lista chat-urilor |
 | **ALT+2** | UnigramPlus | Mută focalizarea la ultimul mesaj dintr-un chat deschis |
@@ -56,6 +60,8 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 |---|---|---|
 | **Ctrl+E** | Unigram | Chat search |
 | **Ctrl+F** | Unigram | Messages search per chat |
+| **Ctrl+Shift+F** | Unigram (nedocumentat) | Chat search |
+| **Search key** | Unigram (nedocumentat) | Caută în pagina curentă |
 | **ALT+I** | UnigramPlus | Go to the list with search results |
 | **F3** | UnigramPlus | Go to the next search result |
 | **Shift+F3** | UnigramPlus | Go to the previous search result |
@@ -66,6 +72,8 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 |---|---|---|
 | **Ctrl+Z** | Unigram | Undo |
 | **Ctrl+Y** | Unigram | Redo |
+| **Ctrl+Shift+Z** | Unigram (nedocumentat) | Refă |
+| **Alt+X** | Unigram (nedocumentat) | Convertește patru cifre hexazecimale selectate în caracterul corespunzător |
 | **Ctrl+X** | Unigram | Cut |
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
@@ -93,6 +101,8 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 | **Ctrl+7** | Unigram | Seventh folder |
 | **Ctrl+8** | Unigram | Eighth folder |
 | **Ctrl+9** | Unigram | Archive |
+| **Ctrl+Shift+Down** | Unigram (nedocumentat) | Următorul dosar |
+| **Ctrl+Shift+Up** | Unigram (nedocumentat) | Dosarul anterior |
 
 ### Acțiuni pentru mesaje
 
@@ -103,6 +113,7 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 | **ALT+Q** | UnigramPlus | Apasă butonul "Instant View", dacă este inclus în mesajul curent |
 | **ALT+Delete** | UnigramPlus | Șterge un mesaj sau un chat |
 | **Shift+Delete** | UnigramPlus | Șterge mesajul sau chat-ul din ambele părți |
+| **Delete** | Unigram (nedocumentat) | Șterge mesajul selectat sau focalizat |
 | **Ctrl+ALT+C** | UnigramPlus | Deschide comentariile |
 | **Enter** | UnigramPlus | Răspunde la mesaj |
 | **ALT+F** | UnigramPlus | Redirecționează mesaj |
@@ -118,6 +129,10 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 | **ALT+[** | UnigramPlus | Comută anunțarea anteturilor mesajelor înainte sau după conținutul mesajului |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | Apasă butonul de atașare |
+| **Ctrl+Shift+E** | Unigram (nedocumentat) | Deschide selectorul de emoji |
+| **Ctrl+Shift+G** | Unigram (nedocumentat) | Deschide selectorul de GIF-uri |
+| **Ctrl+Shift+S** | Unigram (nedocumentat) | Deschide selectorul de stickere |
+| **Ctrl+O** | Unigram (nedocumentat) | Deschide selectorul de fișiere pentru a trimite documente |
 | **Ctrl+N** | UnigramPlus | Apasă butonul de chat nou |
 | **Arrow Up** | Unigram | Edit last sent message |
 | **Ctrl+Arrow Up** | Unigram | Reply to last sent message |
@@ -167,6 +182,11 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 | **Ctrl+W** | Unigram | Close current window |
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
+| **Ctrl+Shift+W** | Unigram (nedocumentat) | Oprește redarea media |
+| **Ctrl+F4** | Unigram (nedocumentat) | Close current window |
+| **Ctrl+L** | Unigram (nedocumentat) | Blochează Unigram |
+| **Ctrl+M** | Unigram (nedocumentat) | Minimizează Unigram |
+| **Ctrl+J** | Unigram (nedocumentat) | Deschide descărcările |
 | **ALT+T** | UnigramPlus | Anunță numele și starea unui chat deschis |
 | **NVDA+Alt+V** | UnigramPlus | Anunță numerele versiunilor Unigram și UnigramPlus |
 | **ALT+M** | UnigramPlus | Deschide meniul de navigare |
@@ -179,6 +199,11 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 <!-- shortcut-table-end -->
 
 ##Lista de modificări:
+
+### Versiunea 5.7.0
+
+* Au fost restabilite anunțurile la schimbarea dosarelor cu un număr nenul de necitite, păstrând protecțiile urmăririi progresului transferului de fișiere.
+* Lista de scurtături a fost actualizată din sursa actuală Unigram și au fost identificate scurtăturile integrate care nu sunt încă în Shortcuts.md oficial.
 
 ### Versiunea 5.6.9
 

@@ -31,6 +31,8 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 
 > In the Category column, `UnigramPlus` identifies shortcuts provided by the add-on and `Unigram` identifies shortcuts built into Unigram.
 
+> `Unigram (कागजातमा उल्लेख नभएको)` ले हालको Unigram स्रोतमा कार्यान्वयन गरिएका तर आधिकारिक Shortcuts.md मा अझै सूचीकृत नभएका सर्टकटहरू जनाउँछ।
+
 > [!TIP]
 > You can customize UnigramPlus shortcuts from NVDA menu > Preferences > Input gestures.
 
@@ -40,6 +42,8 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **Ctrl+Alt+Home** | Unigram (कागजातमा उल्लेख नभएको) | पहिलो च्याट |
+| **Ctrl+Alt+End** | Unigram (कागजातमा उल्लेख नभएको) | अन्तिम च्याट |
 | **Ctrl+Alt+Up/Down** | UnigramPlus | नपढिएका उल्लेख भएको अर्को वा अघिल्लो च्याटमा जानुहोस् |
 | **ALT+1** | UnigramPlus | फोकस लाई च्याट सूचीमा लैजानुहोस |
 | **ALT+2** | UnigramPlus | हाल चलिरहेको च्याटमा फोकसलाई लैजानुहोस |
@@ -55,6 +59,8 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 |---|---|---|
 | **Ctrl+E** | Unigram | Chat search |
 | **Ctrl+F** | Unigram | Messages search per chat |
+| **Ctrl+Shift+F** | Unigram (कागजातमा उल्लेख नभएको) | Chat search |
+| **Search key** | Unigram (कागजातमा उल्लेख नभएको) | हालको पृष्ठमा खोज्नुहोस् |
 | **ALT+I** | UnigramPlus | Go to the list with search results |
 | **F3** | UnigramPlus | Go to the next search result |
 | **Shift+F3** | UnigramPlus | Go to the previous search result |
@@ -65,6 +71,8 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 |---|---|---|
 | **Ctrl+Z** | Unigram | Undo |
 | **Ctrl+Y** | Unigram | Redo |
+| **Ctrl+Shift+Z** | Unigram (कागजातमा उल्लेख नभएको) | पुनः गर्नुहोस् |
+| **Alt+X** | Unigram (कागजातमा उल्लेख नभएको) | चयन गरिएका चार हेक्साडेसिमल अङ्कलाई तिनको सम्बन्धित वर्णमा रूपान्तरण गर्नुहोस् |
 | **Ctrl+X** | Unigram | Cut |
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
@@ -92,6 +100,8 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 | **Ctrl+7** | Unigram | Seventh folder |
 | **Ctrl+8** | Unigram | Eighth folder |
 | **Ctrl+9** | Unigram | Archive |
+| **Ctrl+Shift+Down** | Unigram (कागजातमा उल्लेख नभएको) | अर्को फोल्डर |
+| **Ctrl+Shift+Up** | Unigram (कागजातमा उल्लेख नभएको) | अघिल्लो फोल्डर |
 
 ### सन्देश कार्यहरू
 
@@ -102,6 +112,7 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 | **ALT+Q** | UnigramPlus | यदि हालको सन्देशमा तत्काल हेर्ने विकल्प समावेश छभने, "तत्काल हेर्ने" बटन थिच्नुहोस् |
 | **ALT+Delete** | UnigramPlus | सन्देश वा कुराकानि मेटाउनुहोस् |
 | **Shift+Delete** | UnigramPlus | दुबै तर्फबाट सन्देश वा कुराकानि मेटाउनुहोस् |
+| **Delete** | Unigram (कागजातमा उल्लेख नभएको) | चयन गरिएको वा फोकसमा रहेको सन्देश मेटाउनुहोस् |
 | **Ctrl+ALT+C** | UnigramPlus | टिप्पणीहरू खोल्नुहोस् |
 | **Enter** | UnigramPlus | सन्देशको जवाफ दिनुहोस् |
 | **ALT+F** | UnigramPlus | सन्देश फर्वार्ड गर्नुहोस् |
@@ -117,6 +128,10 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 | **ALT+[** | UnigramPlus | सन्देश हेडरहरू सन्देशको सामग्रीभन्दा अघि वा पछि पढिने क्रम बदल्नुहोस् |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | "फाइल संलग्न गर्नुहोस्" बटन थिच्नुहोस् |
+| **Ctrl+Shift+E** | Unigram (कागजातमा उल्लेख नभएको) | इमोजी चयनकर्ता खोल्नुहोस् |
+| **Ctrl+Shift+G** | Unigram (कागजातमा उल्लेख नभएको) | GIF चयनकर्ता खोल्नुहोस् |
+| **Ctrl+Shift+S** | Unigram (कागजातमा उल्लेख नभएको) | स्टिकर चयनकर्ता खोल्नुहोस् |
+| **Ctrl+O** | Unigram (कागजातमा उल्लेख नभएको) | कागजात पठाउन फाइल चयनकर्ता खोल्नुहोस् |
 | **Ctrl+N** | UnigramPlus | "नयाँ कुराकानी" बटन थिच्नुहोस् |
 | **Arrow Up** | Unigram | Edit last sent message |
 | **Ctrl+Arrow Up** | Unigram | Reply to last sent message |
@@ -166,6 +181,11 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 | **Ctrl+W** | Unigram | Close current window |
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
+| **Ctrl+Shift+W** | Unigram (कागजातमा उल्लेख नभएको) | मिडिया प्लेब्याक रोक्नुहोस् |
+| **Ctrl+F4** | Unigram (कागजातमा उल्लेख नभएको) | Close current window |
+| **Ctrl+L** | Unigram (कागजातमा उल्लेख नभएको) | Unigram लक गर्नुहोस् |
+| **Ctrl+M** | Unigram (कागजातमा उल्लेख नभएको) | Unigram सानो बनाउनुहोस् |
+| **Ctrl+J** | Unigram (कागजातमा उल्लेख नभएको) | डाउनलोडहरू खोल्नुहोस् |
 | **ALT+T** | UnigramPlus | हाल खुला रहेको च्याटको नाम र स्थिति घोषणा गर्नुहोस् |
 | **NVDA+Alt+V** | UnigramPlus | Unigram र UnigramPlus का संस्करण नम्बरहरू घोषणा गर्नुहोस् |
 | **ALT+M** | UnigramPlus | नेभिगेसन मेनु खोल्नुहोस् |
@@ -399,6 +419,11 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 ###संस्करण १.१.७
 
 टर्की स्थानीयकरण थपियो।
+
+### Version 5.7.0
+
+* शून्यभन्दा बढी नपढिएका सन्देशहरू भएको फोल्डर परिवर्तनको घोषणा पुनर्स्थापित गरियो र फाइल स्थानान्तरण प्रगति ट्र्याकरका सुरक्षाहरू कायम राखियो।
+* हालको Unigram स्रोतबाट सर्टकट सूची अद्यावधिक गरियो र आधिकारिक Shortcuts.md मा नपरेका अन्तर्निर्मित सर्टकटहरू पहिचान गरियो।
 
 ### Version 5.6.9
 

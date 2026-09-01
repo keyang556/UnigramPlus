@@ -31,6 +31,8 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 
 > In the Category column, `UnigramPlus` identifies shortcuts provided by the add-on and `Unigram` identifies shortcuts built into Unigram.
 
+> `Unigram (non documenté)` désigne les raccourcis implémentés dans le code source actuel d’Unigram mais pas encore répertoriés dans son Shortcuts.md officiel.
+
 > [!TIP]
 > You can customize UnigramPlus shortcuts from NVDA menu > Preferences > Input gestures.
 
@@ -40,6 +42,8 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 |---|---|---|
 | **Ctrl+Tab / Alt+Arrow Up / Ctrl+Page Up** | Unigram | Next chat |
 | **Ctrl+Shift+Tab / Alt+Arrow Down / Ctrl+Page Down** | Unigram | Previous chat |
+| **Ctrl+Alt+Home** | Unigram (non documenté) | Première discussion |
+| **Ctrl+Alt+End** | Unigram (non documenté) | Dernière discussion |
 | **Ctrl+Alt+Up/Down** | UnigramPlus | Aller à l’échange suivant ou précédent contenant des mentions non lues |
 | **ALT+1** | UnigramPlus | Déplacer le focus vers la liste des échanges |
 | **ALT+2** | UnigramPlus | Déplace le focus au dernier message d'un échange ouvert |
@@ -55,6 +59,8 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 |---|---|---|
 | **Ctrl+E** | Unigram | Chat search |
 | **Ctrl+F** | Unigram | Messages search per chat |
+| **Ctrl+Shift+F** | Unigram (non documenté) | Chat search |
+| **Search key** | Unigram (non documenté) | Rechercher dans la page actuelle |
 | **ALT+I** | UnigramPlus | Go to the list with search results |
 | **F3** | UnigramPlus | Go to the next search result |
 | **Shift+F3** | UnigramPlus | Go to the previous search result |
@@ -65,6 +71,8 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 |---|---|---|
 | **Ctrl+Z** | Unigram | Undo |
 | **Ctrl+Y** | Unigram | Redo |
+| **Ctrl+Shift+Z** | Unigram (non documenté) | Rétablir |
+| **Alt+X** | Unigram (non documenté) | Convertir quatre chiffres hexadécimaux sélectionnés en leur caractère correspondant |
 | **Ctrl+X** | Unigram | Cut |
 | **Ctrl+C** | Unigram | Copy |
 | **Ctrl+V** | Unigram | Paste |
@@ -92,6 +100,8 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 | **Ctrl+7** | Unigram | Seventh folder |
 | **Ctrl+8** | Unigram | Eighth folder |
 | **Ctrl+9** | Unigram | Archive |
+| **Ctrl+Shift+Down** | Unigram (non documenté) | Dossier suivant |
+| **Ctrl+Shift+Up** | Unigram (non documenté) | Dossier précédent |
 
 ### Actions sur les messages
 
@@ -102,6 +112,7 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 | **ALT+Q** | UnigramPlus | Activer le bouton "affichage instantanée" s'il est inclus dans le message courant. |
 | **ALT+Delete** | UnigramPlus | Supprimer un message ou un échange |
 | **Shift+Delete** | UnigramPlus | Supprimer un message ou un échange pour tout le monde |
+| **Delete** | Unigram (non documenté) | Supprimer le message sélectionné ou ayant le focus |
 | **Ctrl+ALT+C** | UnigramPlus | Ouvrir les commentaires |
 | **Enter** | UnigramPlus | Répondre au message |
 | **ALT+F** | UnigramPlus | Transférer le message |
@@ -117,6 +128,10 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 | **ALT+[** | UnigramPlus | Basculer l’annonce des en-têtes de message avant ou après le contenu du message |
 | **NVDA+Ctrl+0-9** | UnigramPlus | Review one of the ten most recent messages; 1 is the newest and 0 is the tenth newest |
 | **Ctrl+Shift+A** | UnigramPlus | Activer le bouton "joindre un fichier" |
+| **Ctrl+Shift+E** | Unigram (non documenté) | Ouvrir le sélecteur d’emojis |
+| **Ctrl+Shift+G** | Unigram (non documenté) | Ouvrir le sélecteur de GIF |
+| **Ctrl+Shift+S** | Unigram (non documenté) | Ouvrir le sélecteur de stickers |
+| **Ctrl+O** | Unigram (non documenté) | Ouvrir le sélecteur de fichiers pour envoyer des documents |
 | **Ctrl+N** | UnigramPlus | Activer le bouton "nouvel échange" |
 | **Arrow Up** | Unigram | Edit last sent message |
 | **Ctrl+Arrow Up** | Unigram | Reply to last sent message |
@@ -166,6 +181,11 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 | **Ctrl+W** | Unigram | Close current window |
 | **Ctrl+Q** | Unigram | Close Unigram (main window only) |
 | **Ctrl+Shift+Y** | Unigram | Change status |
+| **Ctrl+Shift+W** | Unigram (non documenté) | Arrêter la lecture du média |
+| **Ctrl+F4** | Unigram (non documenté) | Close current window |
+| **Ctrl+L** | Unigram (non documenté) | Verrouiller Unigram |
+| **Ctrl+M** | Unigram (non documenté) | Réduire Unigram |
+| **Ctrl+J** | Unigram (non documenté) | Ouvrir les téléchargements |
 | **ALT+T** | UnigramPlus | Annoncer le nom et l'état d'un échange ouvert |
 | **NVDA+Alt+V** | UnigramPlus | Annoncer les numéros de version d’Unigram et d’UnigramPlus |
 | **ALT+M** | UnigramPlus | Ouvrir le menu de navigation |
@@ -178,6 +198,11 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 <!-- shortcut-table-end -->
 
 ##Liste des changements :
+
+### Version 5.7.0
+
+* Les annonces de changement de dossier avec un nombre de non-lus non nul ont été rétablies, tout en conservant les protections du suivi de progression des transferts de fichiers.
+* La liste des raccourcis a été mise à jour d’après le code source actuel d’Unigram et les raccourcis intégrés absents de son Shortcuts.md officiel ont été identifiés.
 
 ### Version 5.6.9
 
