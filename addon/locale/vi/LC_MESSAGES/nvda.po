@@ -1,0 +1,1053 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the unigramPlus package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: unigramPlus 5.7.0\n"
+"Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
+"POT-Creation-Date: 2026-09-01 10:36+0000\n"
+"PO-Revision-Date: 2026-09-02 11:18+0700\n"
+"Last-Translator: nguyenninhhoang <nguyenninhhoang2005@gmail.com>\n"
+"Language-Team: \n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.9\n"
+
+#: addon/appModules/cnf.py:10
+msgid "Arabic"
+msgstr "Tiếng Ả Rập"
+
+#: addon/appModules/cnf.py:11
+msgid "Belarus"
+msgstr "Tiếng Belarus"
+
+#: addon/appModules/cnf.py:12
+msgid "Burmese"
+msgstr "Tiếng Miến Điện"
+
+#: addon/appModules/cnf.py:13
+msgid "Czech"
+msgstr "Tiếng Séc"
+
+#: addon/appModules/cnf.py:14
+msgid "English"
+msgstr "Tiếng Anh"
+
+#: addon/appModules/cnf.py:15
+msgid "French"
+msgstr "Tiếng Pháp"
+
+#: addon/appModules/cnf.py:16
+msgid "Finnish"
+msgstr "Tiếng Phần Lan"
+
+#: addon/appModules/cnf.py:17
+msgid "Slovak"
+msgstr "Tiếng Slovak"
+
+#: addon/appModules/cnf.py:18
+msgid "Norwegian"
+msgstr "Tiếng Na Uy"
+
+#: addon/appModules/cnf.py:19
+msgid "German"
+msgstr "Tiếng Đức"
+
+#: addon/appModules/cnf.py:20
+msgid "Italian"
+msgstr "Tiếng Ý"
+
+#: addon/appModules/cnf.py:21
+msgid "Persian"
+msgstr "Tiếng Ba Tư"
+
+#: addon/appModules/cnf.py:22
+msgid "Polish"
+msgstr "Tiếng Ba Lan"
+
+#: addon/appModules/cnf.py:23
+msgid "Portuguese"
+msgstr "Tiếng Bồ Đào Nha"
+
+#: addon/appModules/cnf.py:24
+msgid "Russian"
+msgstr "Tiếng Nga"
+
+#: addon/appModules/cnf.py:25
+msgid "Spanish"
+msgstr "Tiếng Tây Ban Nha"
+
+#: addon/appModules/cnf.py:26
+msgid "Turkish"
+msgstr "Tiếng Thổ Nhĩ Kỳ"
+
+#: addon/appModules/cnf.py:27
+msgid "Ukrainian"
+msgstr "Tiếng Ukraina"
+
+#: addon/appModules/cnf.py:28
+msgid "Croatian"
+msgstr "Tiếng Croatia"
+
+#: addon/appModules/cnf.py:29
+msgid "Serbian"
+msgstr "Tiếng Serbia"
+
+#: addon/appModules/cnf.py:30
+msgid "Chinese (Traditional)"
+msgstr "Tiếng Trung (Phồn thể)"
+
+#: addon/appModules/cnf.py:31
+msgid "Chinese (Simplified)"
+msgstr "Tiếng Trung(giản Thể)"
+
+#: addon/appModules/cnf.py:32
+msgid "Romanian"
+msgstr "Tiếng Rumani"
+
+#: addon/appModules/data.py:48
+msgid "Back"
+msgstr "Quay lại"
+
+#: addon/appModules/data.py:49
+msgid "Menu"
+msgstr "Trình đơn"
+
+#: addon/appModules/data.py:50
+msgid "Attach"
+msgstr "Đính kèm"
+
+#: addon/appModules/data.py:51
+msgid "Edit"
+msgstr "Chỉnh sửa"
+
+#: addon/appModules/data.py:52 addon/appModules/unigram.py:965
+msgid "Photo"
+msgstr "Ảnh đại diện"
+
+#: addon/appModules/data.py:53 addon/appModules/unigram.py:2903
+msgid "Image"
+msgstr "Hình ảnh"
+
+#: addon/appModules/data.py:54
+msgid "Invite link"
+msgstr "Liên kết mời"
+
+#: addon/appModules/data.py:55
+msgid "Choose time"
+msgstr "Chọn thời gian"
+
+#: addon/appModules/data.py:56
+msgid "Title field"
+msgstr "Trường tiêu đề"
+
+#: addon/appModules/data.py:60
+msgid "Go to next reaction"
+msgstr "Đi đến phản ứng tiếp theo"
+
+#: addon/appModules/data.py:61
+msgid "Insert emojis"
+msgstr "Chèn biểu tượng cảm xúc"
+
+#: addon/appModules/data.py:62
+msgid "Done"
+msgstr "Xong"
+
+#: addon/appModules/data.py:63
+msgid "Next"
+msgstr "Tiếp"
+
+#: addon/appModules/data.py:64
+msgid "Merge files"
+msgstr "Hợp nhất tập tin"
+
+#: addon/appModules/data.py:65
+msgid "Search"
+msgstr "Tìm kiếm"
+
+#: addon/appModules/data.py:66
+msgid "Delete"
+msgstr "Xóa"
+
+#: addon/appModules/data.py:67
+msgid "Close"
+msgstr "Đóng"
+
+#: addon/appModules/unigram.py:737
+#, python-format
+msgid "%d percent"
+msgstr "%d phần trăm"
+
+#: addon/appModules/unigram.py:885 addon/appModules/unigram.py:2340
+#: addon/appModules/unigram.py:2983
+msgid "Microphone on"
+msgstr "Bật micro"
+
+#: addon/appModules/unigram.py:885 addon/appModules/unigram.py:2340
+#: addon/appModules/unigram.py:2983
+msgid "Microphone muted"
+msgstr "Đã tắt tiếng micro"
+
+#: addon/appModules/unigram.py:886 addon/appModules/unigram.py:888
+#: addon/appModules/unigram.py:2366 addon/appModules/unigram.py:2377
+#: addon/appModules/unigram.py:2984
+msgid "Camera off"
+msgstr "Tắt camera"
+
+#: addon/appModules/unigram.py:886 addon/appModules/unigram.py:888
+#: addon/appModules/unigram.py:2366 addon/appModules/unigram.py:2376
+#: addon/appModules/unigram.py:2984
+msgid "Camera on"
+msgstr "Bật camera"
+
+#: addon/appModules/unigram.py:904
+msgid "Announce the original message, the message that was replied to"
+msgstr "Thông báo tin nhắn gốc, tin nhắn đã được trả lời"
+
+#: addon/appModules/unigram.py:915
+msgid "Show message text in popup window"
+msgstr "Hiển thị văn bản tin nhắn trong cửa sổ popup"
+
+#: addon/appModules/unigram.py:920
+msgid "Rich message"
+msgstr "Rich message"
+
+#: addon/appModules/unigram.py:920 addon/appModules/unigram.py:2412
+msgid "message text"
+msgstr "tin nhắn văn bản"
+
+#: addon/appModules/unigram.py:923 addon/appModules/unigram.py:2399
+#: addon/appModules/unigram.py:2413
+msgid "This message does not contain text"
+msgstr "Tin nhắn này không chứa văn bản"
+
+#: addon/appModules/unigram.py:927
+msgid "Open comments"
+msgstr "Mở bình luận"
+
+#: addon/appModules/unigram.py:933
+msgid "Button to open comments not found"
+msgstr "Không tìm thấy nút để mở bình luận."
+
+#: addon/appModules/unigram.py:935
+msgid "Edit message"
+msgstr "Chỉnh sửa tin nhắn"
+
+#: addon/appModules/unigram.py:939
+msgid "Reply to message"
+msgstr "Trả lời đến tin nhắn"
+
+#: addon/appModules/unigram.py:966 addon/appModules/unigram.py:2516
+msgid "Video"
+msgstr "Video"
+
+#: addon/appModules/unigram.py:972
+msgid ""
+"Announces the time a message was sent or received, as well as a list of "
+"reactions. Double-clicking toggles the announcement mode for this "
+"information."
+msgstr ""
+"Thông báo thời gian tin nhắn được gửi hoặc nhận, cũng như danh sách các phản"
+" ứng. Nhấp đúp chuột sẽ bật/tắt chế độ thông báo cho thông tin này."
+
+#: addon/appModules/unigram.py:978
+msgid ""
+"The display of message sending or receiving time and the list of installed "
+"emojis is enabled."
+msgstr ""
+"Chức năng hiển thị thời gian gửi/nhận tin nhắn và danh sách biểu tượng cảm "
+"xúc đã cài đặt được bật."
+
+#: addon/appModules/unigram.py:979
+msgid ""
+"The display of message sending or receiving time and the list of installed "
+"emojis is  disabled."
+msgstr ""
+"Chức năng hiển thị thời gian gửi/nhận tin nhắn và danh sách biểu tượng cảm "
+"xúc đã cài đặt đã tắt."
+
+#. message(obj.name)
+#: addon/appModules/unigram.py:1039
+msgid "Explanation"
+msgstr "Explanation"
+
+#: addon/appModules/unigram.py:1386
+msgid "No more chats with unread mentions in this direction"
+msgstr ""
+"Sẽ không còn cuộc trò chuyện nào với những tin nhắn chưa đọc theo kiểu này "
+"nữa"
+
+#: addon/appModules/unigram.py:1391
+msgid "Move to the next or previous chat with unread mentions"
+msgstr ""
+"Di chuyển đến cuộc trò chuyện có nhắc đến chưa đọc tiếp theo hoặc trước đó"
+
+#. The function of changing the playback speed of a voice message
+#: addon/appModules/unigram.py:1882
+msgid "Increase/decrease the playback speed of voice messages"
+msgstr "Tăng/giảm tốc độ phát tin nhắn thoại"
+
+#: addon/appModules/unigram.py:1888 addon/appModules/unigram.py:1900
+#: addon/appModules/unigram.py:1910 addon/appModules/unigram.py:3564
+#: addon/appModules/unigram.py:3581 addon/appModules/unigram.py:3596
+msgid "Nothing is playing right now"
+msgstr "Hiện không có gì đang phát"
+
+#. Audio player close function
+#: addon/appModules/unigram.py:1891
+msgid "Close audio player"
+msgstr "Đóng trình phát âm thanh"
+
+#: addon/appModules/unigram.py:1899
+msgid "The audio player has been closed"
+msgstr "Trình phát âm thanh đã được đóng"
+
+#. Voice message pause function
+#: addon/appModules/unigram.py:1903
+msgid "Play/pause the voice message currently playing"
+msgstr "Phát/tạm dừng tin nhắn thoại đang phát"
+
+#. Go to chat list
+#: addon/appModules/unigram.py:1946
+msgid "Move focus to chat list"
+msgstr "Di chuyển tiêu điểm đến danh sách cuộc trò chuyện"
+
+#. contacts_list = self.get_contacts_list()
+#. if contacts_list:
+#. contacts_list.setFocus()
+#. return True
+#: addon/appModules/unigram.py:1965
+msgid "Chat list not found"
+msgstr "Không tìm thấy danh sách cuộc trò chuyện"
+
+#: addon/appModules/unigram.py:1973
+msgid "Chat list is empty"
+msgstr "Danh sách cuộc trò chuyện trống"
+
+#. Go to the last message in the chat
+#: addon/appModules/unigram.py:1977
+msgid "Move focus to the last message in an open chat"
+msgstr ""
+"Di chuyển tiêu điểm đến tin nhắn cuối cùng trong cuộc trò chuyện đang mở"
+
+#: addon/appModules/unigram.py:2006 addon/appModules/unigram.py:2269
+#: addon/appModules/unigram.py:2748 addon/appModules/unigram.py:2761
+msgid "This chat is empty"
+msgstr "Cuộc trò chuyện này trống"
+
+#: addon/appModules/unigram.py:2020 addon/appModules/unigram.py:2260
+#: addon/appModules/unigram.py:2268 addon/appModules/unigram.py:2480
+#: addon/appModules/unigram.py:2744
+msgid "No open chat"
+msgstr "Không có cuộc trò chuyện nào đang mở"
+
+#. Move focus to the list of chat folders
+#: addon/appModules/unigram.py:2030
+msgid "Move focus to list of chat folders"
+msgstr "Di chuyển tiêu điểm đến danh sách thư mục trò chuyện"
+
+#: addon/appModules/unigram.py:2036 addon/appModules/unigram.py:2044
+#: addon/appModules/unigram.py:2045
+msgid "Chat folder list not found"
+msgstr "Không tìm thấy danh sách thư mục trò chuyện"
+
+#: addon/appModules/unigram.py:2208
+msgid "Move focus to the list of group threads"
+msgstr "Di chuyển tiêu điểm đến danh sách chủ đề nhóm"
+
+#: addon/appModules/unigram.py:2212
+msgid "No list with threads was found"
+msgstr "Không tìm thấy danh sách chủ đề nào"
+
+#. Move focus to open profile
+#: addon/appModules/unigram.py:2233
+msgid "Move focus to open profile"
+msgstr "Di chuyển tiêu điểm đến hồ sơ đang mở"
+
+#: addon/appModules/unigram.py:2237
+msgid "There is no open profile"
+msgstr "Không có hồ sơ nào đang mở"
+
+#. Announces the profile name and status in an open chat
+#: addon/appModules/unigram.py:2240
+msgid "Announce the name and status of an open chat"
+msgstr "Thông báo tên và trạng thái của cuộc trò chuyện đang mở"
+
+#: addon/appModules/unigram.py:2243
+msgid "Chat activity tracking is enabled"
+msgstr "Đã bật theo dõi hoạt động trò chuyện"
+
+#: addon/appModules/unigram.py:2244
+msgid "Chat activity tracking is disabled"
+msgstr "Đã tắt theo dõi hoạt động trò chuyện"
+
+#. Go to "unread messages" label
+#: addon/appModules/unigram.py:2263
+msgid "Move focus to 'unread messages' label"
+msgstr "Di chuyển tiêu điểm đến nhãn \"tin nhắn chưa đọc\""
+
+#: addon/appModules/unigram.py:2278
+msgid "There are no unread messages in this chat"
+msgstr "Không có tin nhắn chưa đọc nào trong cuộc trò chuyện này"
+
+#. Call if it's a contact, or enter a voice chat if it's a group
+#: addon/appModules/unigram.py:2281
+msgid "Call if it's a contact, or enter a voice chat if it's a group"
+msgstr "Gọi điện nếu là liên hệ, hoặc tham gia trò chuyện thoại nếu là nhóm"
+
+#: addon/appModules/unigram.py:2286
+msgid "Call unavailable"
+msgstr "Không thể gọi điện"
+
+#. Make a video call if it's a contact
+#: addon/appModules/unigram.py:2289
+msgid "Press the video call button"
+msgstr "Nhấn nút gọi video"
+
+#: addon/appModules/unigram.py:2293
+msgid "Video call not available"
+msgstr "Không thể gọi video"
+
+#. Function to open instant view
+#: addon/appModules/unigram.py:2296
+msgid "Press \"Instant view\" button, if it is included in the current message"
+msgstr "Nhấn nút \"Xem nhanh\" nếu tin nhắn hiện tại có chứa nút này"
+
+#: addon/appModules/unigram.py:2307 addon/appModules/unigram.py:2440
+#: addon/appModules/unigram.py:2447 addon/appModules/unigram.py:2455
+#: addon/appModules/unigram.py:3672 addon/appModules/unigram.py:3800
+#: addon/appModules/unigram.py:3863 addon/appModules/unigram.py:3872
+msgid "Button not found"
+msgstr "Không tìm thấy nút"
+
+#. Mute/unmute the microphone
+#: addon/appModules/unigram.py:2327
+msgid "Press \"Mute/unmute microphone\" button"
+msgstr "Nhấn nút \"Tắt/bật tiếng micro\""
+
+#: addon/appModules/unigram.py:2351
+msgid "Microphone button not found"
+msgstr "Không tìm thấy nút micro"
+
+#. Turn off/on the camera
+#: addon/appModules/unigram.py:2354
+msgid "Press \"Enable/disable camera\" button"
+msgstr "Nhấn nút \"Bật/tắt camera\""
+
+#: addon/appModules/unigram.py:2383
+msgid "Camera button not found"
+msgstr "Không tìm thấy nút camera"
+
+#. Copy the focused link to the clipboard. For anything else we defer to
+#. Unigram's own
+#. Ctrl+C, so the shortcut is never handled twice (Unigram can't copy just a
+#. link, and
+#. its copy does not apply while the focus is on a link, so the two no longer
+#. conflict).
+#: addon/appModules/unigram.py:2388
+msgid ""
+"Copy the message if it contains text. If the focus is on a link, the link "
+"will be copied"
+msgstr ""
+"Sao chép tin nhắn nếu có chứa văn bản. Nếu tiêu điểm đang ở trên một liên "
+"kết, liên kết đó sẽ được sao chép"
+
+#: addon/appModules/unigram.py:2398
+msgid "Link copied"
+msgstr "Đã sao chép liên kết"
+
+#. Move the focus to the message input field. If the focus is already in this
+#. field, then move it to the last element that had focus before this field
+#: addon/appModules/unigram.py:2416
+msgid ""
+"Move the focus to the edit field. If the focus is already in the edit field,"
+" then after pressing the hotkey, it will move to where it was before"
+msgstr ""
+"Di chuyển tiêu điểm đến ô soạn thảo. Nếu tiêu điểm đã ở trong ô soạn thảo, "
+"sau khi nhấn phím tắt, tiêu điểm sẽ quay lại vị trí trước đó"
+
+#: addon/appModules/unigram.py:2433
+msgid "Message input field not found"
+msgstr "Không tìm thấy ô nhập tin nhắn"
+
+#. Press the "Attach media" button
+#: addon/appModules/unigram.py:2436
+msgid "Press \"Attach file\" button"
+msgstr "Nhấn nút \"Đính kèm tệp\""
+
+#. Press the "New Conversation" button
+#: addon/appModules/unigram.py:2443
+msgid "Press \"New conversation\" button"
+msgstr "Nhấn nút \"Cuộc trò chuyện mới\""
+
+#. Open navigation menu
+#: addon/appModules/unigram.py:2458
+msgid "Open navigation menu"
+msgstr "Mở menu điều hướng"
+
+#: addon/appModules/unigram.py:2464
+msgid "Navigation menu not available"
+msgstr "Không có menu điều hướng"
+
+#. Function to open the profile of the current chat
+#: addon/appModules/unigram.py:2467
+msgid "Open current chat profile"
+msgstr "Mở hồ sơ của cuộc trò chuyện hiện tại"
+
+#: addon/appModules/unigram.py:2490
+msgid "Record sent"
+msgstr "Đã gửi bản ghi âm"
+
+#: addon/appModules/unigram.py:2499
+msgid "Recording canceled"
+msgstr "Đã hủy ghi âm"
+
+#: addon/appModules/unigram.py:2516
+msgid "Audio"
+msgstr "Âm thanh"
+
+#: addon/appModules/unigram.py:2636
+msgid "Answer options"
+msgstr "Các phương án trả lời"
+
+#: addon/appModules/unigram.py:2666
+msgid "You"
+msgstr "Bạn"
+
+#. Check if a message is selected
+#: addon/appModules/unigram.py:2699
+msgid "Selected"
+msgstr "Đã chọn"
+
+#. Change the announce level of progress bars
+#: addon/appModules/unigram.py:2722
+msgid "Toggle progress bar announcements"
+msgstr "Bật/tắt thông báo thanh tiến trình"
+
+#: addon/appModules/unigram.py:2728
+msgid "Announce progress bars only during upload and download"
+msgstr "Chỉ thông báo thanh tiến trình khi tải lên và tải xuống"
+
+#: addon/appModules/unigram.py:2732
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:248
+msgid "Announce all progress bars"
+msgstr "Thông báo tất cả các thanh tiến trình"
+
+#: addon/appModules/unigram.py:2736
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:250
+msgid "Do not announce any progress bars"
+msgstr "Không thông báo bất kỳ thanh tiến trình nào"
+
+#: addon/appModules/unigram.py:2925
+msgid "Editing"
+msgstr "Đang chỉnh sửa"
+
+#: addon/appModules/unigram.py:2926
+msgid "Reply"
+msgstr "Trả lời"
+
+#: addon/appModules/unigram.py:2935
+msgid "Duration"
+msgstr "Thời lượng"
+
+#: addon/appModules/unigram.py:2936
+msgid "Size"
+msgstr "Kích thước"
+
+#: addon/appModules/unigram.py:2948
+msgid "Enable video"
+msgstr "Bật video"
+
+#: addon/appModules/unigram.py:2949
+msgid "Disable video"
+msgstr "Tắt video"
+
+#: addon/appModules/unigram.py:2960
+msgid "Recording a video message, elapsed time"
+msgstr "Đang ghi tin nhắn video, thời gian đã trôi qua"
+
+#: addon/appModules/unigram.py:2960
+msgid "Recording a voice message, elapsed time"
+msgstr "Đang ghi tin nhắn thoại, thời gian đã trôi qua"
+
+#: addon/appModules/unigram.py:2963
+msgid "Record a video message"
+msgstr "Ghi tin nhắn video"
+
+#: addon/appModules/unigram.py:2963
+msgid "Record a voice message"
+msgstr "Ghi tin nhắn thoại"
+
+#: addon/appModules/unigram.py:3142
+msgid "Delete a message or chat"
+msgstr "Xóa tin nhắn hoặc cuộc trò chuyện"
+
+#: addon/appModules/unigram.py:3145
+msgid "Delete message or chat from both sides"
+msgstr "Xóa tin nhắn hoặc cuộc trò chuyện ở cả hai phía"
+
+#: addon/appModules/unigram.py:3148
+msgid "Switch to selection mode"
+msgstr "Chuyển sang chế độ chọn"
+
+#: addon/appModules/unigram.py:3151
+msgid "Forward message"
+msgstr "Chuyển tiếp tin nhắn"
+
+#: addon/appModules/unigram.py:3154
+msgid "Mark a chat as read"
+msgstr "Đánh dấu cuộc trò chuyện là đã đọc"
+
+#: addon/appModules/unigram.py:3157
+msgid "Save file as..."
+msgstr "Lưu tệp thành..."
+
+#: addon/appModules/unigram.py:3160
+msgid "Pin a message or chat"
+msgstr "Ghim tin nhắn hoặc cuộc trò chuyện"
+
+#: addon/appModules/unigram.py:3429
+msgid "Message deleted on both sides"
+msgstr "Tin nhắn đã bị xóa ở cả hai phía"
+
+#: addon/appModules/unigram.py:3430
+msgid "Message deleted"
+msgstr "Tin nhắn đã bị xóa"
+
+#: addon/appModules/unigram.py:3433
+msgid "You left the group"
+msgstr "Bạn đã rời khỏi nhóm"
+
+#: addon/appModules/unigram.py:3434
+msgid "You left the channel"
+msgstr "Bạn đã rời khỏi kênh"
+
+#: addon/appModules/unigram.py:3435
+msgid "Bot removed and blocked"
+msgstr "Đã xóa và chặn bot"
+
+#: addon/appModules/unigram.py:3436
+msgid "Bot removed"
+msgstr "Đã xóa bot"
+
+#: addon/appModules/unigram.py:3437
+msgid "Chat deleted on both sides"
+msgstr "Cuộc trò chuyện đã bị xóa ở cả hai phía"
+
+#: addon/appModules/unigram.py:3438
+msgid "Chat deleted"
+msgstr "Cuộc trò chuyện đã bị xóa"
+
+#. Data copy function for broadcasting
+#: addon/appModules/unigram.py:3496
+msgid "Copy data for broadcasting to the clipboard"
+msgstr "Sao chép dữ liệu để phát sóng vào bảng nhớ tạm"
+
+#: addon/appModules/unigram.py:3500 addon/appModules/unigram.py:3504
+msgid "Broadcast window not found"
+msgstr "Không tìm thấy cửa sổ phát sóng"
+
+#: addon/appModules/unigram.py:3510
+msgid "%url and %key copied to clipboard"
+msgstr "%url và %key đã được sao chép vào bảng nhớ tạm"
+
+#: addon/appModules/unigram.py:3607
+msgid "Fast forward a voice message"
+msgstr "Tua nhanh tin nhắn thoại"
+
+#: addon/appModules/unigram.py:3611
+msgid "Rewind voice message"
+msgstr "Tua lại tin nhắn thoại"
+
+#: addon/appModules/unigram.py:3634
+msgid "Right answer"
+msgstr "Câu trả lời đúng"
+
+#. Converting voice messages to text
+#: addon/appModules/unigram.py:3657
+msgid "Convert voice message to text"
+msgstr "Chuyển đổi tin nhắn thoại thành văn bản"
+
+#: addon/appModules/unigram.py:3664
+msgid "This voice message is already converted to text"
+msgstr "Tin nhắn thoại này đã được chuyển đổi thành văn bản"
+
+#: addon/appModules/unigram.py:3665
+msgid "Converting this voice message is already in process"
+msgstr "Việc chuyển đổi tin nhắn thoại này đang được thực hiện"
+
+#: addon/appModules/unigram.py:3675
+msgid "Enable automatic reading of new messages in the current chat"
+msgstr "Bật đọc tự động tin nhắn mới trong cuộc trò chuyện hiện tại"
+
+#: addon/appModules/unigram.py:3677
+msgid "Automatic reading of messages is enabled"
+msgstr "Đã bật đọc tin nhắn tự động"
+
+#: addon/appModules/unigram.py:3678
+msgid "Automatic reading of new messages is disabled"
+msgstr "Đã tắt đọc tin nhắn mới tự động"
+
+#: addon/appModules/unigram.py:3682
+msgid ""
+"Toggle whether message headers are announced before or after the message "
+"content"
+msgstr ""
+"Bật/tắt việc thông báo tiêu đề tin nhắn trước hoặc sau nội dung tin nhắn"
+
+#: addon/appModules/unigram.py:3689
+msgid "Message headers will be announced after the message content"
+msgstr "Tiêu đề tin nhắn sẽ được thông báo sau nội dung tin nhắn"
+
+#: addon/appModules/unigram.py:3691
+msgid "Message headers will be announced before the message content"
+msgstr "Tiêu đề tin nhắn sẽ được thông báo trước nội dung tin nhắn"
+
+#: addon/appModules/unigram.py:3696
+msgid "Announce the Unigram and UnigramPlus version numbers"
+msgstr "Thông báo số phiên bản của Unigram và UnigramPlus"
+
+#: addon/appModules/unigram.py:3719
+#, python-brace-format
+msgid ""
+"Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
+msgstr ""
+"Phiên bản Unigram: {unigramVersion}. Phiên bản UnigramPlus: {addonVersion}."
+
+#: addon/appModules/unigram.py:3725
+msgid "Show a list of all UnigramPlus shortcuts"
+msgstr "Hiển thị danh sách tất cả các phím tắt của UnigramPlus"
+
+#: addon/appModules/unigram.py:3733
+msgid "List of shortcuts"
+msgstr "Danh sách phím tắt"
+
+#: addon/appModules/unigram.py:3735
+msgid "Go to the list with search results"
+msgstr "Đi đến danh sách kết quả tìm kiếm"
+
+#: addon/appModules/unigram.py:3787 addon/appModules/unigram.py:3800
+msgid "No search results"
+msgstr "Không có kết quả tìm kiếm"
+
+#: addon/appModules/unigram.py:3856
+msgid "Go to the next search result"
+msgstr "Đi đến kết quả tìm kiếm tiếp theo"
+
+#: addon/appModules/unigram.py:3862
+msgid "No next search result"
+msgstr "Không có kết quả tìm kiếm tiếp theo"
+
+#: addon/appModules/unigram.py:3865
+msgid "Go to the previous search result"
+msgstr "Đi đến kết quả tìm kiếm trước đó"
+
+#: addon/appModules/unigram.py:3871
+msgid "No previous search result"
+msgstr "Không có kết quả tìm kiếm trước đó"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:33
+msgid "No updates available"
+msgstr "Không có bản cập nhật nào"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:34
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:98
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:171
+msgid "UnigramPlus update"
+msgstr "Cập nhật UnigramPlus"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:94
+msgid "Unable to open UnigramPlus sounds folder"
+msgstr "Không thể mở thư mục âm thanh của UnigramPlus"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:99
+msgid ""
+"A new version of the add-on is available. Do you want to update UnigramPlus "
+"to version %version?"
+msgstr ""
+"Đã có phiên bản mới của tiện ích bổ sung. Bạn có muốn cập nhật UnigramPlus "
+"lên phiên bản %version không?"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:100
+msgid "Changes in this version:"
+msgstr "Thay đổi trong phiên bản này:"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:101
+msgid "No update information"
+msgstr "Không có thông tin cập nhật"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:111
+msgid "Yes, update"
+msgstr "Có, cập nhật"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:112
+msgid "No, not now"
+msgstr "Không, để sau"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:126
+msgid "Download in progress"
+msgstr "Đang tải xuống"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:170
+msgid ""
+"The new version of UnigramPlus is not compatible with this version of NVDA. "
+"Please update NVDA first."
+msgstr ""
+"Phiên bản mới của UnigramPlus không tương thích với phiên bản NVDA này. Vui "
+"lòng cập nhật NVDA trước."
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:200
+msgid "Open UnigramPlus settings window"
+msgstr "Mở cửa sổ cài đặt UnigramPlus"
+
+#. Call answer
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:205
+msgid "Accept call"
+msgstr "Chấp nhận cuộc gọi"
+
+#. End a call, decline call, or leave a voice chat
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:216
+msgid ""
+"Press \"Decline call\" button  if there is an incoming call, \"End call\" "
+"button if a call is in progress or leave voice chat if it is active."
+msgstr ""
+"Nhấn nút \"Từ chối cuộc gọi\" nếu có cuộc gọi đến, nút \"Kết thúc cuộc gọi\""
+" nếu cuộc gọi đang diễn ra, hoặc rời khỏi trò chuyện thoại nếu đang hoạt "
+"động."
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:238
+msgid "Before chat name"
+msgstr "Trước tên cuộc trò chuyện"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:239
+msgid "After chat name"
+msgstr "Sau tên cuộc trò chuyện"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:240
+msgid "Do not speak chat type"
+msgstr "Không đọc loại cuộc trò chuyện"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:243
+msgid "Revert to standard voice message recording behavior"
+msgstr "Khôi phục hành vi ghi âm tin nhắn thoại tiêu chuẩn"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:244
+msgid "Text notification"
+msgstr "Thông báo bằng văn bản"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:245
+msgid "sound notification"
+msgstr "thông báo bằng âm thanh"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:249
+msgid "Only announce progress bars during file uploads and downloads"
+msgstr "Chỉ thông báo thanh tiến trình khi tải tệp lên và xuống"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:254
+msgid "Do not say at all"
+msgstr "Không đọc gì cả"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:255
+msgid "Only in sent messages"
+msgstr "Chỉ trong tin nhắn đã gửi"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:256
+msgid "Only in received messages"
+msgstr "Chỉ trong tin nhắn đã nhận"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:257
+msgid "In all messages"
+msgstr "Trong tất cả tin nhắn"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:260
+msgid "Do nothing"
+msgstr "Không làm gì cả"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:261
+msgid "Activate editing of last sent message"
+msgstr "Kích hoạt chỉnh sửa tin nhắn đã gửi gần nhất"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:262
+msgid "Move focus to the last message in a chat"
+msgstr "Di chuyển tiêu điểm đến tin nhắn cuối cùng trong cuộc trò chuyện"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:263
+msgid "Move focus to the last focused message in a chat"
+msgstr ""
+"Di chuyển tiêu điểm đến tin nhắn được lấy tiêu điểm gần nhất trong cuộc trò "
+"chuyện"
+
+#. Selecting an interface language
+#. self.lang = settingsSizerHelper.addLabeledControl(_("Interface language in
+#. Unigram:"), wx.Choice, choices=[listLanguages[item] for item in
+#. listLanguages])
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:270
+msgid "Interface language in Unigram:"
+msgstr "Ngôn ngữ giao diện trong Unigram:"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:274
+msgid "Automatically move focus to the chat list when Unigram starts"
+msgstr ""
+"Tự động di chuyển tiêu điểm đến danh sách cuộc trò chuyện khi Unigram khởi "
+"động"
+
+#. Chat type announce mode
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:278
+msgid "Speak the type of chat in the chat list:"
+msgstr "Đọc loại cuộc trò chuyện trong danh sách cuộc trò chuyện:"
+
+#. Message sender announcement
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:281
+msgid "Say the sender's name in:"
+msgstr "Đọc tên người gửi trong:"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:285
+msgid "Action when pressing the up arrow in the message edit field"
+msgstr "Hành động khi nhấn mũi tên lên trong ô soạn thảo tin nhắn"
+
+#. Report not seen before message content
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:288
+msgid "Speak \"Not Seen\" before reading contents of a message"
+msgstr "Đọc \"Chưa xem\" trước khi đọc nội dung tin nhắn"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:293
+msgid "Announce message headers after the message content"
+msgstr "Thông báo tiêu đề tin nhắn sau nội dung tin nhắn"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:297
+msgid ""
+"Announce the phrases \"Administrator\" and \"Owner\" on messages in "
+"communities"
+msgstr ""
+"Thông báo cụm từ \"Quản trị viên\" và \"Chủ sở hữu\" trên tin nhắn trong "
+"cộng đồng"
+
+#. Speak active folder name when switching between them
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:301
+msgid "Speak folder names when switching between them"
+msgstr "Đọc tên thư mục khi chuyển đổi giữa các thư mục"
+
+#. Delete alert type
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:304
+msgid "Notify about deleting a message and chat with a sound"
+msgstr "Thông báo bằng âm thanh khi xóa tin nhắn và cuộc trò chuyện"
+
+#. Show confirmation window when deleting
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:307
+msgid "Display confirmation dialog when deleting messages and chats"
+msgstr "Hiển thị hộp thoại xác nhận khi xóa tin nhắn và cuộc trò chuyện"
+
+#. Type of notification when recording voice messages
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:310
+msgid "Set voice message recording notification method as:"
+msgstr "Đặt phương thức thông báo ghi âm tin nhắn thoại là:"
+
+#. Progress bar announce
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:313
+msgid "Select the progress bar notification level:"
+msgstr "Chọn mức độ thông báo thanh tiến trình:"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:316
+msgid "File transfer progress announcement interval (percent):"
+msgstr "Khoảng thời gian thông báo tiến trình truyền tệp (phần trăm):"
+
+#. Processing messages containing links
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:319
+msgid "Read description of URLs attached to messages"
+msgstr "Đọc mô tả của URL đính kèm trong tin nhắn"
+
+#. Announcement of the full description of YouTube links
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:322
+msgid "Read full video description in YouTube URLs"
+msgstr "Đọc đầy đủ mô tả video trong URL YouTube"
+
+#. Report if the group has replies for you
+#. self.isAnnouncesAnswers = settingsSizerHelper.addItem(wx.CheckBox(self,
+#. label=_("Announce if there is a reply in the group")))
+#. self.isAnnouncesAnswers.SetValue(conf.get("isAnnouncesAnswers"))
+#. Report information about premium and verified accounts
+#. self.report_premium_accounts =
+#. settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Announce premium and
+#. confirmed accounts")))
+#. self.report_premium_accounts.SetValue(conf.get("report premium accounts"))
+#. Report if the message contains a reaction
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:331
+msgid "Announce if the message contains a reaction"
+msgstr "Thông báo nếu tin nhắn có chứa phản ứng"
+
+#. Fix toggle buttons for some users
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:334
+msgid ""
+"Check this box if the voice message recording function or the voice message "
+"playback speed change function does not work properly"
+msgstr ""
+"Đánh dấu vào ô này nếu chức năng ghi âm tin nhắn thoại hoặc chức năng thay "
+"đổi tốc độ phát tin nhắn thoại hoạt động không đúng"
+
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:338
+msgid "Play a sound when reaching the end of a chat"
+msgstr "Phát âm thanh khi đến cuối cuộc trò chuyện"
+
+#. Play looped Typing.wav while the other side is typing/recording in the open
+#. chat
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:341
+msgid "Play a sound while the other side is typing in the open chat"
+msgstr ""
+"Phát âm thanh khi phía bên kia đang nhập trong cuộc trò chuyện đang mở"
+
+#. Button to open the bundled sounds folder
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:344
+msgid "Open UnigramPlus sounds folder"
+msgstr "Mở thư mục âm thanh của UnigramPlus"
+
+#. Checking for Updates on NVDA Startup
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:347
+msgid "Check for UnigramPlus updates on NVDA startup"
+msgstr "Kiểm tra cập nhật UnigramPlus khi NVDA khởi động"
+
+#. Button to check for updates
+#: addon/GlobalPlugins/UnigramPlus/__init__.py:350
+msgid "Check for &updates"
+msgstr "Kiểm tra &cập nhật"
+
+#. Add-on summary/title, usually the user visible name of the add-on
+#. Translators: Summary/title for this add-on
+#. to be shown on installation and add-on information found in add-on store.
+#: buildVars.py:15
+msgid "UnigramPlus"
+msgstr "UnigramPlus"
+
+#: buildVars.py:19
+msgid ""
+"This add-on adds a lot of hotkeys for quick navigation through the main "
+"elements of the Unigram application, convenient interaction with Chat "
+"messages, and also adds many small improvements that make working in Unigram"
+" much easier"
+msgstr ""
+"Tiện ích bổ sung này thêm nhiều phím tắt để điều hướng nhanh qua các thành "
+"phần chính của ứng dụng Unigram, tương tác thuận tiện với tin nhắn trò "
+"chuyện, đồng thời bổ sung nhiều cải tiến nhỏ giúp việc sử dụng Unigram dễ "
+"dàng hơn nhiều"
+
+#: changelog.py:5
+msgid ""
+"- Restored folder-switch announcements with a nonzero unread count while "
+"retaining the file-transfer progress tracker safeguards."
+msgstr ""
+"- Khôi phục thông báo chuyển đổi thư mục khi có số tin nhắn chưa đọc khác 0,"
+" đồng thời vẫn giữ nguyên các biện pháp bảo vệ trình theo dõi tiến trình "
+"truyền tệp."
+
+#: changelog.py:7
+msgid ""
+"- Updated the shortcut lists from the current Unigram source and identified "
+"built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
+msgstr ""
+"- Cập nhật danh sách phím tắt từ mã nguồn Unigram hiện tại và xác định các "
+"phím tắt tích hợp sẵn chưa được liệt kê trong tệp Shortcuts.md chính thức "
+"của Unigram."
