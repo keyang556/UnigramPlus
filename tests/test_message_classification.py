@@ -17,6 +17,8 @@ class Node:
 		automation_id="",
 		class_name="",
 		cached_class_name=_UNSET,
+		selection_item_pattern=_UNSET,
+		toggle_pattern=_UNSET,
 		name="",
 		focusable=True,
 	):
@@ -27,6 +29,10 @@ class Node:
 		self.UIAElement = SimpleNamespace(
 			cachedClassName=class_name if cached_class_name is _UNSET else cached_class_name
 		)
+		if selection_item_pattern is not _UNSET:
+			self.UIASelectionItemPattern = selection_item_pattern
+		if toggle_pattern is not _UNSET:
+			self.UIATogglePattern = toggle_pattern
 		self.name = name
 		self.isFocusable = focusable
 		self.states = set()
@@ -116,15 +122,14 @@ def test_saved_messages_topics_with_received_or_sent_dates_are_not_messages():
 		assert app.end_text == "unchanged"
 
 
-def test_current_message_selector_and_toggle_button_receive_message_overlay():
+def test_current_message_selectors_receive_message_overlay():
 	messages = Node(automation_id="Messages", role="list")
-	for automation_id, class_name, parent in (
-		("MessageSelector", "", messages),
-		("", "MessageSelector", messages),
-		("", "ToggleButton", messages),
+	for automation_id, class_name in (
+		("MessageSelector", ""),
+		("", "MessageSelector"),
 	):
 		message = Node(
-			parent=parent,
+			parent=messages,
 			automation_id=automation_id,
 			class_name=class_name,
 			name="Message body, Received at 2026/08/31 23:22",
@@ -134,6 +139,20 @@ def test_current_message_selector_and_toggle_button_receive_message_overlay():
 		classes, app, message_overlay, _chat_overlay = _overlay_classes_for(message)
 		assert message_overlay in classes
 		assert app.sender_message == "received"
+
+
+def test_current_toggle_button_message_selector_receives_message_overlay():
+	"""Unigram 12.10.2 exposes MessageSelector as a ToggleButton with selection support."""
+	message = Node(
+		parent=Node(automation_id="Messages", role="list"),
+		class_name="ToggleButton",
+		selection_item_pattern=object(),
+		toggle_pattern=None,
+	)
+
+	assert _message_predicate()(message)
+	classes, _app, message_overlay, _chat_overlay = _overlay_classes_for(message)
+	assert message_overlay in classes
 
 
 def test_legacy_message_marker_and_blank_service_messages_remain_messages():
@@ -146,16 +165,57 @@ def test_legacy_message_marker_and_blank_service_messages_remain_messages():
 
 def test_empty_cached_uia_class_falls_back_to_the_live_message_class():
 	messages = Node(automation_id="Messages", role="list")
-	for cached_class_name, class_name in (("", "ToggleButton"), (None, "MessageSelector")):
+	for cached_class_name, class_name, selection_item_pattern, toggle_pattern in (
+		("", "ToggleButton", object(), None),
+		(None, "MessageSelector", _UNSET, _UNSET),
+	):
 		message = Node(
 			parent=messages,
 			class_name=class_name,
 			cached_class_name=cached_class_name,
+			selection_item_pattern=selection_item_pattern,
+			toggle_pattern=toggle_pattern,
 		)
 
 		assert _message_predicate()(message)
 		classes, _app, message_overlay, _chat_overlay = _overlay_classes_for(message)
 		assert message_overlay in classes
+
+
+def test_unigram_12102_reaction_toggle_button_does_not_receive_message_overlay():
+	"""5.6.9/5.7.0 misclassified reactions as messages; keep their native Toggle semantics."""
+	reaction = Node(
+		parent=Node(automation_id="Messages", role="list"),
+		class_name="ToggleButton",
+		selection_item_pattern=None,
+		toggle_pattern=object(),
+		name="43 people reacted with grinning face",
+	)
+
+	assert not _message_predicate()(reaction)
+	classes, _app, message_overlay, _chat_overlay = _overlay_classes_for(reaction)
+	assert message_overlay not in classes
+
+
+def test_generic_message_subtree_toggle_button_does_not_receive_message_overlay():
+	control = Node(
+		parent=Node(automation_id="Messages", role="list"),
+		class_name="ToggleButton",
+		selection_item_pattern=None,
+		toggle_pattern=object(),
+	)
+
+	assert not _message_predicate()(control)
+	classes, _app, message_overlay, _chat_overlay = _overlay_classes_for(control)
+	assert message_overlay not in classes
+
+
+def test_toggle_button_with_unavailable_pattern_information_fails_closed():
+	control = Node(parent=Node(automation_id="Messages", role="list"), class_name="ToggleButton")
+
+	assert not _message_predicate()(control)
+	classes, _app, message_overlay, _chat_overlay = _overlay_classes_for(control)
+	assert message_overlay not in classes
 
 
 def test_toggle_button_list_items_outside_messages_do_not_receive_message_overlay():

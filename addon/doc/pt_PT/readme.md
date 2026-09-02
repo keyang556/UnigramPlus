@@ -199,6 +199,10 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 
 ## Lista de alterações:
 
+### Versão 5.7.1
+
+* Corrigido o tratamento dos botões de reação do Unigram 12.10.2 como mensagens, para que os atalhos de navegação por mensagens deixem de substituir a respetiva ação de alternância nativa.
+
 ### Versão 5.7.0
 
 * Foram restaurados os anúncios ao mudar de pasta com uma contagem de não lidas diferente de zero, mantendo as proteções do monitor de progresso de transferência de ficheiros.

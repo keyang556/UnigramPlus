@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.7.0\n"
+"Project-Id-Version: UnigramPlus 5.7.1\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 00:48+0300\n"
@@ -17,6 +17,10 @@ msgstr ""
 "X-Poedit-SearchPath-0: appModules\n"
 "X-Poedit-SearchPath-1: GlobalPlugins\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+
+#: changelog.py:5
+msgid "- Fixed Unigram 12.10.2 reaction buttons being treated as messages, so message navigation shortcuts no longer override their native Toggle action."
+msgstr "- Unigram 12.10.2’de tepki düğmelerinin ileti olarak işlenmesi düzeltildi; böylece ileti gezinti kısayolları artık bunların yerel aç/kapat eylemini geçersiz kılmıyor."
 
 #: addon\appModules\cnf.py:12
 msgid "Arabic"

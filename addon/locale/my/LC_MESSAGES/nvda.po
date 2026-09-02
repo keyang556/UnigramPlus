@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.7.0\n"
+"Project-Id-Version: UnigramPlus 5.7.1\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2026-09-01 01:58+0630\n"
 "PO-Revision-Date: 2026-09-01 02:04+0630\n"
@@ -17,6 +17,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.9\n"
+
+#: changelog.py:5
+msgid "- Fixed Unigram 12.10.2 reaction buttons being treated as messages, so message navigation shortcuts no longer override their native Toggle action."
+msgstr "- Unigram 12.10.2 ရှိ တုံ့ပြန်မှုခလုတ်များကို မက်ဆေ့ချ်များအဖြစ် မှားယွင်းစွာ ကိုင်တွယ်နေသည့် ပြဿနာကို ပြင်ဆင်ခဲ့သည်။ ထို့ကြောင့် မက်ဆေ့ချ် လမ်းညွှန် ဖြတ်လမ်းများက ၎င်းတို့၏ မူလ Toggle လုပ်ဆောင်ချက်ကို မအစားထိုးတော့ပါ။"
 
 #: addon\appModules\cnf.py:10
 msgid "Arabic"

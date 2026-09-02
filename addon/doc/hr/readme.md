@@ -202,6 +202,10 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 
 ##Popis promjena:
 
+### Verzija 5.7.1
+
+* Ispravljeno je da se gumbi reakcija u Unigramu 12.10.2 tretiraju kao poruke, pa prečaci za navigaciju porukama više ne poništavaju njihovu izvornu radnju prebacivanja.
+
 ### Verzija 5.7.0
 
 * Vraćene su najave pri promjeni mape s brojem nepročitanih većim od nule, uz zadržavanje zaštita praćenja napretka prijenosa datoteka.

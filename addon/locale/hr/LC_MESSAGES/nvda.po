@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.7.0\n"
+"Project-Id-Version: UnigramPlus 5.7.1\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 17:29+0100\n"
@@ -18,6 +18,10 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Generator: Poedit 3.4.1\n"
 "X-Poedit-Bookmarks: -1,116,-1,-1,-1,-1,-1,-1,-1,-1\n"
+
+#: changelog.py:5
+msgid "- Fixed Unigram 12.10.2 reaction buttons being treated as messages, so message navigation shortcuts no longer override their native Toggle action."
+msgstr "- Ispravljeno je da se gumbi reakcija u Unigramu 12.10.2 tretiraju kao poruke, pa prečaci za navigaciju porukama više ne poništavaju njihovu izvornu radnju prebacivanja."
 
 #: addon\appModules\cnf.py:12
 msgid "Arabic"

@@ -199,6 +199,10 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 
 ##Liste des changements :
 
+### Version 5.7.1
+
+* Correction du traitement des boutons de réaction d’Unigram 12.10.2 comme des messages : les raccourcis de navigation entre les messages ne remplacent plus leur action bascule native.
+
 ### Version 5.7.0
 
 * Les annonces de changement de dossier avec un nombre de non-lus non nul ont été rétablies, tout en conservant les protections du suivi de progression des transferts de fichiers.

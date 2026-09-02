@@ -502,11 +502,20 @@ def _is_message_list_item(obj):
 			.replace(":", ".")
 			.rsplit(".", 1)[-1]
 		)
-		# MessageSelector uses ToggleButtonAutomationPeer in Unigram 12.10.2,
-		# so UIA exposes actual message rows as ToggleButton controls. Keep both
-		# current markers inside the Messages list; unrelated ToggleButton rows
-		# (calls, settings, and scrolling hosts) must not receive message scripts.
-		if automation_id != "MessageSelector" and class_name not in ("MessageSelector", "ToggleButton"):
+		# These are Unigram's explicit, stable message markers. They do not rely
+		# on UIA pattern availability, which can be transient during a UI update.
+		if automation_id == "MessageSelector" or class_name == "MessageSelector":
+			return _find_ancestor_by_automation_id(obj, ("Messages",), max_depth=8) is not None
+		if class_name != "ToggleButton":
+			return False
+		# Unigram 12.10.2 exposes MessageSelector through a
+		# ToggleButtonAutomationPeer. ReactionButton and other interactive controls
+		# in a bubble are also ToggleButtons, so accept the fallback only when UIA
+		# confirms the MessageSelector selection semantics. Missing or unreadable
+		# pattern data is ambiguous and must not receive message-only scripts.
+		selection_item_pattern = obj.UIASelectionItemPattern
+		toggle_pattern = obj.UIATogglePattern
+		if selection_item_pattern is None or toggle_pattern is not None:
 			return False
 		return _find_ancestor_by_automation_id(obj, ("Messages",), max_depth=8) is not None
 	except Exception:
