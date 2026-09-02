@@ -201,6 +201,10 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 
 ##Lista de cambios:
 
+### Versión 5.7.1
+
+* Se corrigió que los botones de reacción de Unigram 12.10.2 se trataran como mensajes, por lo que los atajos de navegación por mensajes ya no reemplazan su acción nativa de conmutación.
+
 ### Versión 5.7.0
 
 * Se restauraron los anuncios al cambiar de carpeta con un recuento de no leídos distinto de cero, manteniendo las protecciones del rastreador de progreso de transferencia de archivos.
@@ -571,4 +575,3 @@ Esta actualización agrega una combinación que presiona el botón "vista rápid
 ###Versión 1.1.7
 
 Se agregó traducción al turco
-

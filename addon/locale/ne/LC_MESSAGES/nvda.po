@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.7.0\n"
+"Project-Id-Version: UnigramPlus 5.7.1\n"
 "POT-Creation-Date: 2022-10-07 22:33+0300\n"
 "PO-Revision-Date: 2022-10-20 12:30+0300\n"
 "Last-Translator: samrat kc <samrat.kc7@gmail.com>\n"
@@ -16,6 +16,10 @@ msgstr ""
 "X-Poedit-SearchPath-0: appModules\n"
 "X-Poedit-SearchPath-1: GlobalPlugins\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+
+#: changelog.py:5
+msgid "- Fixed Unigram 12.10.2 reaction buttons being treated as messages, so message navigation shortcuts no longer override their native Toggle action."
+msgstr "- Unigram 12.10.2 का प्रतिक्रिया बटनहरूलाई सन्देशका रूपमा व्यवहार गर्ने समस्या समाधान गरियो, जसले गर्दा सन्देश नेभिगेसन सर्टकटहरूले अब तिनको मौलिक टगल कार्यलाई अधिलेखन गर्दैनन्।"
 
 #: GlobalPlugins/UnigramPlus/__init__.py:22
 msgid "No updates available"

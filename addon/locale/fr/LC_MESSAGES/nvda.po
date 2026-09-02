@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.7.0\n"
+"Project-Id-Version: UnigramPlus 5.7.1\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-02-12 12:42+0200\n"
 "PO-Revision-Date: 2023-02-27 09:28+0100\n"
@@ -17,6 +17,10 @@ msgstr ""
 "X-Poedit-SearchPath-0: appModules\n"
 "X-Poedit-SearchPath-1: GlobalPlugins\n"
 "X-Poedit-SourceCharset: UTF-8\n"
+
+#: changelog.py:5
+msgid "- Fixed Unigram 12.10.2 reaction buttons being treated as messages, so message navigation shortcuts no longer override their native Toggle action."
+msgstr "- Correction du traitement des boutons de réaction d’Unigram 12.10.2 comme des messages : les raccourcis de navigation entre les messages ne remplacent plus leur action bascule native."
 
 #: addon\appModules\cnf.py:12
 msgid "Arabic"
