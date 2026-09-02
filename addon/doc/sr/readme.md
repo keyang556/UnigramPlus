@@ -474,6 +474,10 @@ Added Turkish localization
 
 
 
+###Verzija 5.7.1
+
+* Ispravljeno je pogrešno prepoznavanje dugmadi za reakcije u Unigramu 12.10.2 kao poruka, zbog čega prečice za navigaciju kroz poruke više ne zamenjuju njihovu izvornu radnju prebacivanja.
+
 ###Verzija 5.7.0
 
 * Vraćene su najave pri promeni fascikle sa nenultim brojem nepročitanih, uz zadržavanje zaštita praćenja napretka prenosa datoteka.

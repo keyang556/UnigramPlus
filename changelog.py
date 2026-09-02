@@ -2,7 +2,5 @@
 def _(t): return t
 
 value = _(
-	"- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
-) + "\n" + _(
-	"- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
+	"- Fixed Unigram 12.10.2 reaction buttons being treated as messages, so message navigation shortcuts no longer override their native Toggle action."
 )

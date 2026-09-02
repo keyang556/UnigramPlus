@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.7.0\n"
+"Project-Id-Version: UnigramPlus 5.7.1\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2026-05-24 00:00+0800\n"
 "PO-Revision-Date: 2026-06-14 20:36+0800\n"
@@ -13,6 +13,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 3.9\n"
+
+#: changelog.py:5
+msgid "- Fixed Unigram 12.10.2 reaction buttons being treated as messages, so message navigation shortcuts no longer override their native Toggle action."
+msgstr "- 修正 Unigram 12.10.2 將表情回應按鈕視為訊息的問題，因此訊息導覽快速鍵不再覆蓋其原生切換動作。"
 
 #: addon\appModules\cnf.py:10
 msgid "Arabic"

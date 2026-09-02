@@ -198,6 +198,10 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 
 ##Değişiklik listesi:
 
+### Sürüm 5.7.1
+
+* Unigram 12.10.2’de tepki düğmelerinin ileti olarak işlenmesi düzeltildi; böylece ileti gezinti kısayolları artık bunların yerel aç/kapat eylemini geçersiz kılmıyor.
+
 ### Sürüm 5.7.0
 
 * Dosya aktarımı ilerleme izleyicisinin korumaları korunurken, sıfır olmayan okunmamış sayısıyla klasör değiştirme duyuruları geri getirildi.
@@ -571,4 +575,3 @@ Bu güncelleme, bir tane içeriyorsa, bildirimdeki "anlık görünüm" düğmesi
 
 ### Sürüm 1.1.7
 Türk lokalizasyonu eklendi.
-

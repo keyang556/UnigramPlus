@@ -201,6 +201,10 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
+### Version 5.7.1
+
+* Fixed Unigram 12.10.2 reaction buttons being treated as messages, so message navigation shortcuts no longer override their native Toggle action.
+
 ### Version 5.7.0
 
 * Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards.
@@ -611,4 +615,3 @@ This update adds a hotkey that clicks the "Instant View" button in a message if 
 ### Version 1.1.7
 
 Added Turkish localization.
-

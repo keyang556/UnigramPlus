@@ -200,6 +200,10 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 ##Lista de modificări:
 
+### Versiunea 5.7.1
+
+* A fost corectată tratarea butoanelor de reacție din Unigram 12.10.2 ca mesaje, astfel încât comenzile rapide de navigare între mesaje nu mai înlocuiesc acțiunea lor nativă de comutare.
+
 ### Versiunea 5.7.0
 
 * Au fost restabilite anunțurile la schimbarea dosarelor cu un număr nenul de necitite, păstrând protecțiile urmăririi progresului transferului de fișiere.
@@ -592,4 +596,3 @@ Această actualizare adaugă o tastă rapidă care face clic pe butonul "Vizuali
 ###Versiunea 1.1.7
 
 A fost adăugată localizarea în limba turcă.
-
