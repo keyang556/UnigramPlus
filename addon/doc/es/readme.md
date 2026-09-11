@@ -189,7 +189,7 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 | **Ctrl+M** | Unigram (sin documentar) | Minimizar Unigram |
 | **Ctrl+J** | Unigram (sin documentar) | Abrir descargas |
 | **ALT+T** | UnigramPlus | Anunciar nombre y estado del chat actual |
-| **NVDA+Alt+V** | UnigramPlus | Anunciar los números de versión de Unigram y UnigramPlus |
+| **NVDA+Alt+V** | UnigramPlus | Abrir la información de versión de Unigram y UnigramPlus en una ventana de solo lectura |
 | **ALT+M** | UnigramPlus | Abrir menú de navegación |
 | **ALT+Shift+P** | UnigramPlus | Abrir el perfil del chat actual |
 | **ALT+L** | UnigramPlus | Activar lectura automática de nuevos mensajes en el chat actual |
@@ -200,6 +200,10 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 <!-- shortcut-table-end -->
 
 ##Lista de cambios:
+
+### Versión 5.7.2
+
+* NVDA+Alt+V ahora abre la información de versión en una ventana de solo lectura y varias líneas.
 
 ### Versión 5.7.1
 

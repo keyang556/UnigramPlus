@@ -190,7 +190,7 @@
 | **Ctrl+M** | Unigram (غير موثق) | تصغير Unigram |
 | **Ctrl+J** | Unigram (غير موثق) | فتح التنزيلات |
 | **ALT+T** | UnigramPlus | الإعلان عن اسم وحالة الدردشة المفتوحة حاليًّا |
-| **NVDA+Alt+V** | UnigramPlus | الإعلان عن أرقام إصدار Unigram وUnigramPlus |
+| **NVDA+Alt+V** | UnigramPlus | فتح معلومات إصدار Unigram وUnigramPlus في نافذة للقراءة فقط |
 | **ALT+M** | UnigramPlus | فتح قائمة التنقل |
 | **ALT+Shift+P** | UnigramPlus | فتح ملف تعريف الدردشة الحالية |
 | **ALT+L** | UnigramPlus | تمكين القراءة التلقائية للرسائل الجديدة في الدردشة الحالية |
@@ -201,6 +201,10 @@
 <!-- shortcut-table-end -->
 
 ## قائمة التغييرات:
+
+### الإصدار 5.7.2
+
+* أصبح NVDA+Alt+V الآن يفتح معلومات الإصدار في نافذة متعددة الأسطر للقراءة فقط.
 
 ### الإصدار 5.7.1
 

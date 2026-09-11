@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.7.1\n"
+"Project-Id-Version: UnigramPlus 5.7.2\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2026-09-03 03:10+0630\n"
 "PO-Revision-Date: 2026-09-03 03:13+0630\n"
@@ -673,8 +673,8 @@ msgid "Message headers will be announced before the message content"
 msgstr "မက်ဆေ့ချ်ခေါင်းစီးများကို မက်ဆေ့ချ်အကြောင်းအရာမတိုင်မီ ဖတ်ပြပါမည်"
 
 #: addon\appModules\unigram.py:3705
-msgid "Announce the Unigram and UnigramPlus version numbers"
-msgstr "Unigram နှင့် UnigramPlus ဗားရှင်းနံပါတ်များကို ကြေညာရန်"
+msgid "Open Unigram and UnigramPlus version information in a read-only window"
+msgstr "Unigram နှင့် UnigramPlus ဗားရှင်းအချက်အလက်များကို ဖတ်ရန်သာ ဝင်းဒိုးတွင် ဖွင့်ပါ"
 
 #: addon\appModules\unigram.py:3728
 #, python-brace-format
@@ -967,9 +967,5 @@ msgstr ""
 "ကီးများစွာကို ပေါင်းထည့်ကာ Unigram တွင် အလုပ်လုပ်ရန် ပိုမိုလွယ်ကူစေမည့် သေးငယ်သော တိုးတက်မှုများစွာကိုလည်း ပေါင်းထည့်ထားသည်။"
 
 #: changelog.py:5
-msgid ""
-"- Fixed Unigram 12.10.2 reaction buttons being treated as messages, so message navigation shortcuts no longer "
-"override their native Toggle action."
-msgstr ""
-"- Unigram 12.10.2 ရှိ တုံ့ပြန်မှုခလုတ်များကို မက်ဆေ့ချ်များအဖြစ် မှားယွင်းစွာ ကိုင်တွယ်နေသည့် ပြဿနာကို ပြင်ဆင်ခဲ့သည်။ ထို့ကြောင့် မက်ဆေ့ချ် လမ်းညွှန် ဖြတ်လမ်းများက "
-"၎င်းတို့၏ မူလ Toggle လုပ်ဆောင်ချက်ကို မအစားထိုးတော့ပါ။"
+msgid "- NVDA+Alt+V now opens Unigram and UnigramPlus version information in a read-only, multiline window."
+msgstr "- NVDA+Alt+V သည် ယခု Unigram နှင့် UnigramPlus ဗားရှင်းအချက်အလက်များကို စာကြောင်းများစွာပါသော ဖတ်ရန်သာ ဝင်းဒိုးတွင် ဖွင့်ပေးသည်။"

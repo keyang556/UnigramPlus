@@ -192,7 +192,7 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će neko sigurno po
 | **Ctrl+M** | Unigram (nedokumentovano) | Umanji Unigram |
 | **Ctrl+J** | Unigram (nedokumentovano) | Otvori preuzimanja |
 | **ALT+T** | UnigramPlus | Najavi ime i status otvorenog ćaskanja |
-| **NVDA+Alt+V** | UnigramPlus | Izgovori brojeve verzija programa Unigram i dodatka UnigramPlus |
+| **NVDA+Alt+V** | UnigramPlus | Otvori informacije o verzijama programa Unigram i dodatka UnigramPlus u prozoru samo za čitanje |
 | **ALT+M** | UnigramPlus | Otvori meni za navigaciju |
 | **ALT+Shift+P** | UnigramPlus | Otvori trenutni profil za ćaskanje |
 | **ALT+L** | UnigramPlus | Omogući automatsko čitanje novih poruka u trenutnom ćaskanju |
@@ -473,6 +473,10 @@ This update adds a combination that press "Instant View" button in the message, 
 Added Turkish localization
 
 
+
+###Verzija 5.7.2
+
+* NVDA+Alt+V sada otvara informacije o verzijama u višerednom prozoru samo za čitanje.
 
 ###Verzija 5.7.1
 

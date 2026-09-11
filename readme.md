@@ -189,7 +189,7 @@ And remember that everyone who read this line thought that someone will definite
 | **Ctrl+M** | Unigram (undocumented) | Minimize Unigram |
 | **Ctrl+J** | Unigram (undocumented) | Open downloads |
 | **ALT+T** | UnigramPlus | Announce the name and status of an open chat |
-| **NVDA+Alt+V** | UnigramPlus | Announce the Unigram and UnigramPlus version numbers |
+| **NVDA+Alt+V** | UnigramPlus | Open Unigram and UnigramPlus version information in a read-only window |
 | **ALT+M** | UnigramPlus | Open navigation menu |
 | **ALT+Shift+P** | UnigramPlus | Open current chat profile |
 | **ALT+L** | UnigramPlus | Enable automatic reading of new messages in the current chat |
@@ -200,6 +200,10 @@ And remember that everyone who read this line thought that someone will definite
 <!-- shortcut-table-end -->
 
 ## List of changes:
+
+### Version 5.7.2
+
+* NVDA+Alt+V now opens Unigram and UnigramPlus version information in a read-only, multiline window.
 
 ### Version 5.7.1
 

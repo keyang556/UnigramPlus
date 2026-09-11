@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: unigramPlus 5.7.1\n"
+"Project-Id-Version: UnigramPlus 5.7.2\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2026-09-02 19:48+0700\n"
 "PO-Revision-Date: 2026-09-02 20:44+0700\n"
@@ -706,8 +706,8 @@ msgid "Message headers will be announced before the message content"
 msgstr "Tiêu đề tin nhắn sẽ được thông báo trước nội dung tin nhắn"
 
 #: addon\appModules\unigram.py:3705
-msgid "Announce the Unigram and UnigramPlus version numbers"
-msgstr "Thông báo số phiên bản của Unigram và UnigramPlus"
+msgid "Open Unigram and UnigramPlus version information in a read-only window"
+msgstr "Mở thông tin phiên bản Unigram và UnigramPlus trong cửa sổ chỉ đọc"
 
 #: addon\appModules\unigram.py:3728
 #, python-brace-format
@@ -1023,13 +1023,8 @@ msgstr ""
 "dàng hơn nhiều"
 
 #: changelog.py:5
-msgid ""
-"- Fixed Unigram 12.10.2 reaction buttons being treated as messages, so "
-"message navigation shortcuts no longer override their native Toggle action."
-msgstr ""
-"- Đã khắc phục lỗi các nút phản ứng trong Unigram 12.10.2 bị xử lý như tin "
-"nhắn, do đó các phím tắt điều hướng tin nhắn không còn ghi đè lên hành động "
-"Chuyển đổi mặc định của chúng nữa."
+msgid "- NVDA+Alt+V now opens Unigram and UnigramPlus version information in a read-only, multiline window."
+msgstr "- NVDA+Alt+V giờ mở thông tin phiên bản Unigram và UnigramPlus trong cửa sổ nhiều dòng, chỉ đọc."
 
 #~ msgid ""
 #~ "- Restored folder-switch announcements with a nonzero unread count while "

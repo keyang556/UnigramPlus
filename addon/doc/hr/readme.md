@@ -190,7 +190,7 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 | **Ctrl+M** | Unigram (nedokumentirano) | Minimiziraj Unigram |
 | **Ctrl+J** | Unigram (nedokumentirano) | Otvori preuzimanja |
 | **ALT+T** | UnigramPlus | Najavljuje naziv i status otvorenog razgovora |
-| **NVDA+Alt+V** | UnigramPlus | Izgovori brojeve verzija programa Unigram i dodatka UnigramPlus |
+| **NVDA+Alt+V** | UnigramPlus | Otvori podatke o verziji programa Unigram i dodatka UnigramPlus u prozoru samo za čitanje |
 | **ALT+M** | UnigramPlus | Otvara navigacijski izbornik |
 | **ALT+Shift+P** | UnigramPlus | Otvara profil trenutnog razgovora |
 | **ALT+L** | UnigramPlus | Omogućava automatsko čitanje novih poruka u trenutnom razgovoru |
@@ -201,6 +201,10 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 <!-- shortcut-table-end -->
 
 ##Popis promjena:
+
+### Verzija 5.7.2
+
+* NVDA+Alt+V sada otvara podatke o verziji u višerednom prozoru samo za čitanje.
 
 ### Verzija 5.7.1
 

@@ -187,7 +187,7 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 | **Ctrl+M** | Unigram (non documenté) | Réduire Unigram |
 | **Ctrl+J** | Unigram (non documenté) | Ouvrir les téléchargements |
 | **ALT+T** | UnigramPlus | Annoncer le nom et l'état d'un échange ouvert |
-| **NVDA+Alt+V** | UnigramPlus | Annoncer les numéros de version d’Unigram et d’UnigramPlus |
+| **NVDA+Alt+V** | UnigramPlus | Ouvrir les informations de version d’Unigram et d’UnigramPlus dans une fenêtre en lecture seule |
 | **ALT+M** | UnigramPlus | Ouvrir le menu de navigation |
 | **ALT+Shift+P** | UnigramPlus | Ouvrir le profil de l'échange en cours |
 | **ALT+L** | UnigramPlus | Activer la lecture automatique des nouveaux messages dans l'échange courant |
@@ -198,6 +198,10 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 <!-- shortcut-table-end -->
 
 ##Liste des changements :
+
+### Version 5.7.2
+
+* NVDA+Alt+V ouvre maintenant les informations de version dans une fenêtre multiligne en lecture seule.
 
 ### Version 5.7.1
 

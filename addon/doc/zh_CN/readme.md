@@ -187,7 +187,7 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 | **Ctrl+M** | Unigram（官方文档未列出） | 最小化 Unigram |
 | **Ctrl+J** | Unigram（官方文档未列出） | 打开下载 |
 | **ALT+T** | UnigramPlus | 读出已打开聊天的名称和状态 |
-| **NVDA+Alt+V** | UnigramPlus | 读出 Unigram 和 UnigramPlus 版本号 |
+| **NVDA+Alt+V** | UnigramPlus | 在只读窗口中打开 Unigram 和 UnigramPlus 的版本信息 |
 | **ALT+M** | UnigramPlus | 打开导航菜单 |
 | **ALT+Shift+P** | UnigramPlus | 打开当前聊天的个人资料 |
 | **ALT+L** | UnigramPlus | 启用当前聊天中新消息的自动读出 |
@@ -198,6 +198,10 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 <!-- shortcut-table-end -->
 
 ## 版本变更
+
+### 版本 5.7.2
+
+* NVDA+Alt+V 现在会在只读多行窗口中打开版本信息。
 
 ### 版本 5.7.1
 

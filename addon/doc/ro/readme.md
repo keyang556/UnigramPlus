@@ -188,7 +188,7 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 | **Ctrl+M** | Unigram (nedocumentat) | Minimizează Unigram |
 | **Ctrl+J** | Unigram (nedocumentat) | Deschide descărcările |
 | **ALT+T** | UnigramPlus | Anunță numele și starea unui chat deschis |
-| **NVDA+Alt+V** | UnigramPlus | Anunță numerele versiunilor Unigram și UnigramPlus |
+| **NVDA+Alt+V** | UnigramPlus | Deschide informațiile despre versiunile Unigram și UnigramPlus într-o fereastră doar în citire |
 | **ALT+M** | UnigramPlus | Deschide meniul de navigare |
 | **ALT+Shift+P** | UnigramPlus | Deschide profilul de chat curent |
 | **ALT+L** | UnigramPlus | Activează citirea automată a mesajelor într-un chat |
@@ -199,6 +199,10 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 <!-- shortcut-table-end -->
 
 ##Lista de modificări:
+
+### Versiunea 5.7.2
+
+* NVDA+Alt+V deschide acum informațiile despre versiuni într-o fereastră cu mai multe linii, doar în citire.
 
 ### Versiunea 5.7.1
 

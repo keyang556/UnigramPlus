@@ -187,7 +187,7 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 | **Ctrl+M** | Unigram (कागजातमा उल्लेख नभएको) | Unigram सानो बनाउनुहोस् |
 | **Ctrl+J** | Unigram (कागजातमा उल्लेख नभएको) | डाउनलोडहरू खोल्नुहोस् |
 | **ALT+T** | UnigramPlus | हाल खुला रहेको च्याटको नाम र स्थिति घोषणा गर्नुहोस् |
-| **NVDA+Alt+V** | UnigramPlus | Unigram र UnigramPlus का संस्करण नम्बरहरू घोषणा गर्नुहोस् |
+| **NVDA+Alt+V** | UnigramPlus | Unigram र UnigramPlus का संस्करण जानकारी पढ्ने-मात्र विन्डोमा खोल्नुहोस् |
 | **ALT+M** | UnigramPlus | नेभिगेसन मेनु खोल्नुहोस् |
 | **ALT+Shift+P** | UnigramPlus | हाल च्याट गरिरहेको प्रोफाइल खोल्नुहोस् |
 | **ALT+L** | UnigramPlus | हाल चलिरहेको च्याटमा नयाँ सन्देशहरूको स्वचालित पठन सक्षम गर्नुहोस् |
@@ -419,6 +419,10 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 ###संस्करण १.१.७
 
 टर्की स्थानीयकरण थपियो।
+
+### Version 5.7.2
+
+* NVDA+Alt+V ले अब संस्करण जानकारीलाई बहु-पङ्क्ति पढ्ने-मात्र विन्डोमा खोल्छ।
 
 ### Version 5.7.1
 

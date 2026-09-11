@@ -188,7 +188,7 @@
 | **Ctrl+M** | Unigram (بدون مستندات) | کمینه کردن Unigram |
 | **Ctrl+J** | Unigram (بدون مستندات) | باز کردن دانلودها |
 | **ALT+T** | UnigramPlus | نام و وضعیت گفتوگوی باز شده را بگو |
-| **NVDA+Alt+V** | UnigramPlus | اعلام شماره نسخه‌های Unigram و UnigramPlus |
+| **NVDA+Alt+V** | UnigramPlus | نمایش اطلاعات نسخهٔ Unigram و UnigramPlus در پنجره‌ای فقط‌خواندنی |
 | **ALT+M** | UnigramPlus | باز کردن فهرست مسیریابی. |
 | **ALT+Shift+P** | UnigramPlus | باز کن پروفایل گفتوگویی را که باز است. |
 | **ALT+L** | UnigramPlus | Enable automatic reading of new messages in the current chat |
@@ -415,6 +415,10 @@
 بومی سازی ترکی اضافه شد.
 
 
+
+###نسخه 5.7.2
+
+* NVDA+Alt+V اکنون اطلاعات نسخه را در پنجره‌ای چندخطی و فقط‌خواندنی باز می‌کند.
 
 ###نسخه 5.7.1
 

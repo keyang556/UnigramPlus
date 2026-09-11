@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.7.1\n"
+"Project-Id-Version: UnigramPlus 5.7.2\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2026-08-20 08:52+0000\n"
 "PO-Revision-Date: 2026-08-29 14:55+0200\n"
@@ -20,8 +20,8 @@ msgstr ""
 "X-Poedit-SearchPath-1: GlobalPlugins/UnigramPlus\n"
 
 #: changelog.py:5
-msgid "- Fixed Unigram 12.10.2 reaction buttons being treated as messages, so message navigation shortcuts no longer override their native Toggle action."
-msgstr "- Naprawiono błędne traktowanie przycisków reakcji w Unigramie 12.10.2 jako wiadomości, dzięki czemu skróty nawigacji po wiadomościach nie zastępują już ich natywnej akcji przełączania."
+msgid "- NVDA+Alt+V now opens Unigram and UnigramPlus version information in a read-only, multiline window."
+msgstr "- NVDA+Alt+V otwiera teraz informacje o wersjach Unigramu i UnigramPlus w wielowierszowym oknie tylko do odczytu."
 
 #: addon/appModules/cnf.py:10
 msgid "Arabic"
@@ -709,8 +709,8 @@ msgid "Message headers will be announced before the message content"
 msgstr "Nagłówki wiadomości będą ogłaszane przed treścią wiadomości"
 
 #: addon/appModules/unigram.py:3695
-msgid "Announce the Unigram and UnigramPlus version numbers"
-msgstr "Ogłasza numery wersji Unigramu i UnigramPlus"
+msgid "Open Unigram and UnigramPlus version information in a read-only window"
+msgstr "Otwórz informacje o wersjach Unigramu i UnigramPlus w oknie tylko do odczytu"
 
 #: addon/appModules/unigram.py:3718
 #, python-brace-format

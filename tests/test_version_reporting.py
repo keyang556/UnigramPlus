@@ -19,38 +19,48 @@ def _version_script_node():
 	)
 
 
-def _load_version_script(addon_handler, announcements):
+def _load_version_script(addon_handler, text_windows):
 	method = _version_script_node()
 	method.decorator_list = []
 	namespace = {
 		"addonHandler": addon_handler,
-		"message": announcements.append,
+		"TextWindow": lambda *args, **kwargs: text_windows.append((args, kwargs)),
 		"_": lambda text: text,
 	}
 	exec(compile(ast.Module(body=[method], type_ignores=[]), str(SOURCE_PATH), "exec"), namespace)
 	return namespace["script_announceVersions"]
 
 
-def test_nvda_alt_v_announces_both_installed_versions():
-	announcements = []
+def test_nvda_alt_v_opens_both_installed_versions_in_a_read_only_window():
+	text_windows = []
 	addon_handler = SimpleNamespace(
 		getCodeAddon=lambda: SimpleNamespace(manifest={"version": "5.6.7"}),
 	)
-	script = _load_version_script(addon_handler, announcements)
+	script = _load_version_script(addon_handler, text_windows)
 
 	script(SimpleNamespace(app_version="12.9.1.0"), None)
 
-	assert announcements == ["Unigram version: 12.9.1.0. UnigramPlus version: 5.6.7."]
+	assert text_windows == [
+		(
+			("Unigram version: 12.9.1.0. UnigramPlus version: 5.6.7.", "UnigramPlus"),
+			{"readOnly": True},
+		)
+	]
 
 
-def test_version_announcement_uses_nvda_product_version_and_handles_missing_metadata():
-	announcements = []
+def test_version_window_uses_nvda_product_version_and_handles_missing_metadata():
+	text_windows = []
 	addon_handler = SimpleNamespace(getCodeAddon=lambda: (_ for _ in ()).throw(RuntimeError()))
-	script = _load_version_script(addon_handler, announcements)
+	script = _load_version_script(addon_handler, text_windows)
 
 	script(SimpleNamespace(app_version=" ", productVersion="12.9.1"), None)
 
-	assert announcements == ["Unigram version: 12.9.1. UnigramPlus version: -."]
+	assert text_windows == [
+		(
+			("Unigram version: 12.9.1. UnigramPlus version: -.", "UnigramPlus"),
+			{"readOnly": True},
+		)
+	]
 
 
 def test_version_script_has_the_requested_gesture_and_input_help_description():
@@ -65,4 +75,4 @@ def test_version_script_has_the_requested_gesture_and_input_help_description():
 	keywords = {keyword.arg: keyword.value for keyword in decorator.keywords}
 
 	assert keywords["gesture"].value == "kb:NVDA+alt+V"
-	assert "UnigramPlus version" in ast.unparse(keywords["description"])
+	assert "read-only window" in ast.unparse(keywords["description"])

@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.7.1\n"
+"Project-Id-Version: UnigramPlus 5.7.2\n"
 "POT-Creation-Date: 2022-06-30 15:13+0300\n"
 "PO-Revision-Date: 2022-06-30 15:13+0300\n"
 "Last-Translator: Petr Řehák\n"
@@ -18,8 +18,8 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: changelog.py:5
-msgid "- Fixed Unigram 12.10.2 reaction buttons being treated as messages, so message navigation shortcuts no longer override their native Toggle action."
-msgstr "- Opraveno nesprávné rozpoznávání tlačítek reakcí v Unigramu 12.10.2 jako zpráv, takže klávesové zkratky pro navigaci mezi zprávami již nepřepisují jejich nativní akci přepínače."
+msgid "- NVDA+Alt+V now opens Unigram and UnigramPlus version information in a read-only, multiline window."
+msgstr "- NVDA+Alt+V nyní otevírá informace o verzích Unigramu a UnigramPlus v okně jen pro čtení s více řádky."
 
 #: GlobalPlugins/UnigramPlus/__init__.py:21
 msgid "Arabic"
@@ -836,8 +836,8 @@ msgstr ""
 "- Režim webového zobrazení a jeho nastavení byly odstraněny; Alt+C nyní vždy otevře text zprávy v původním vyskakovacím okně wx.\n"
 "- Aktualizovány všechny překlady a příručky pro verzi 5.6.5."
 
-msgid "Announce the Unigram and UnigramPlus version numbers"
-msgstr "Oznámit čísla verzí aplikace Unigram a doplňku UnigramPlus"
+msgid "Open Unigram and UnigramPlus version information in a read-only window"
+msgstr "Otevřít informace o verzích Unigramu a UnigramPlus v okně jen pro čtení"
 
 msgid "Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
 msgstr "Verze aplikace Unigram: {unigramVersion}. Verze doplňku UnigramPlus: {addonVersion}."

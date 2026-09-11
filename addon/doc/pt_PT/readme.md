@@ -187,7 +187,7 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 | **Ctrl+M** | Unigram (não documentado) | Minimizar o Unigram |
 | **Ctrl+J** | Unigram (não documentado) | Abrir transferências |
 | **ALT+T** | UnigramPlus | Anunciar o nome e o status de uma conversa aberta |
-| **NVDA+Alt+V** | UnigramPlus | Anunciar os números de versão do Unigram e do UnigramPlus |
+| **NVDA+Alt+V** | UnigramPlus | Abrir informações de versão do Unigram e do UnigramPlus numa janela só de leitura |
 | **ALT+M** | UnigramPlus | Abrir menu de navegação |
 | **ALT+Shift+P** | UnigramPlus | Abrir o perfil da conversa atual |
 | **ALT+L** | UnigramPlus | Enable automatic reading of new messages in the current chat |
@@ -198,6 +198,10 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 <!-- shortcut-table-end -->
 
 ## Lista de alterações:
+
+### Versão 5.7.2
+
+* NVDA+Alt+V passa a abrir as informações de versão numa janela de várias linhas só de leitura.
 
 ### Versão 5.7.1
 

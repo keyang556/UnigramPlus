@@ -187,7 +187,7 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 | **Ctrl+M** | Unigram（官方說明未列出） | 最小化 Unigram |
 | **Ctrl+J** | Unigram（官方說明未列出） | 開啟下載 |
 | **ALT+T** | UnigramPlus | 讀出已開啟聊天的名稱與狀態 |
-| **NVDA+Alt+V** | UnigramPlus | 讀出 Unigram 與 UnigramPlus 版本號碼 |
+| **NVDA+Alt+V** | UnigramPlus | 在唯讀視窗中開啟 Unigram 與 UnigramPlus 的版本資訊 |
 | **ALT+M** | UnigramPlus | 開啟導覽功能表 |
 | **ALT+Shift+P** | UnigramPlus | 開啟目前聊天的個人資料 |
 | **ALT+L** | UnigramPlus | 啟用目前聊天中新訊息的自動讀出 |
@@ -198,6 +198,10 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 <!-- shortcut-table-end -->
 
 ## 版本變更
+
+### 版本 5.7.2
+
+* NVDA+Alt+V 現在會在唯讀多行視窗中開啟版本資訊。
 
 ### 版本 5.7.1
 

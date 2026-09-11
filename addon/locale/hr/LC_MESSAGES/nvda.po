@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.7.1\n"
+"Project-Id-Version: UnigramPlus 5.7.2\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 17:29+0100\n"
@@ -20,8 +20,8 @@ msgstr ""
 "X-Poedit-Bookmarks: -1,116,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: changelog.py:5
-msgid "- Fixed Unigram 12.10.2 reaction buttons being treated as messages, so message navigation shortcuts no longer override their native Toggle action."
-msgstr "- Ispravljeno je da se gumbi reakcija u Unigramu 12.10.2 tretiraju kao poruke, pa prečaci za navigaciju porukama više ne poništavaju njihovu izvornu radnju prebacivanja."
+msgid "- NVDA+Alt+V now opens Unigram and UnigramPlus version information in a read-only, multiline window."
+msgstr "- NVDA+Alt+V sada otvara podatke o verziji programa Unigram i dodatka UnigramPlus u višerednom prozoru samo za čitanje."
 
 #: addon\appModules\cnf.py:12
 msgid "Arabic"
@@ -1063,8 +1063,8 @@ msgstr ""
 "- Uklonjeni su način web-prikaza i njegova postavka; Alt+C sada uvijek otvara tekst poruke u izvornom wx skočnom prozoru.\n"
 "- Ažurirani su svi prijevodi i priručnici za verziju 5.6.5."
 
-msgid "Announce the Unigram and UnigramPlus version numbers"
-msgstr "Izgovori brojeve verzija programa Unigram i dodatka UnigramPlus"
+msgid "Open Unigram and UnigramPlus version information in a read-only window"
+msgstr "Otvori podatke o verziji programa Unigram i dodatka UnigramPlus u prozoru samo za čitanje"
 
 msgid "Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
 msgstr "Verzija programa Unigram: {unigramVersion}. Verzija dodatka UnigramPlus: {addonVersion}."

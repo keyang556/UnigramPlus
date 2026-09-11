@@ -3702,7 +3702,7 @@ class AppModule(appModuleHandler.AppModule):
 
 	# Translators: Input gesture description for NVDA+Alt+V in Unigram.
 	@script(
-		description=_("Announce the Unigram and UnigramPlus version numbers"),
+		description=_("Open Unigram and UnigramPlus version information in a read-only window"),
 		gesture="kb:NVDA+alt+V",
 	)
 	def script_announceVersions(self, gesture):
@@ -3722,14 +3722,15 @@ class AppModule(appModuleHandler.AppModule):
 			addon_version = str(manifest_version).strip() if manifest_version is not None else ""
 		except Exception:
 			addon_version = ""
-		# Translators: Reported when NVDA+Alt+V is pressed in Unigram. Keep the
+		# Translators: Shown when NVDA+Alt+V is pressed in Unigram. Keep the
 		# content inside braces unchanged; it is replaced with each installed version.
-		message(
-			_("Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}.").format(
-				unigramVersion=unigram_version or "-",
-				addonVersion=addon_version or "-",
-			)
+		version_text = _(
+			"Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
+		).format(
+			unigramVersion=unigram_version or "-",
+			addonVersion=addon_version or "-",
 		)
+		TextWindow(version_text, _("UnigramPlus"), readOnly=True)
 	
 	@script(description=_("Show a list of all UnigramPlus shortcuts"), gesture="kb:ALT+H")
 	def script_help(self, gesture):

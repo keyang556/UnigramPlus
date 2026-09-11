@@ -186,7 +186,7 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 | **Ctrl+M** | Unigram (belgelenmemiş) | Unigram'ı simge durumuna küçült |
 | **Ctrl+J** | Unigram (belgelenmemiş) | İndirilenleri aç |
 | **ALT+T** | UnigramPlus | Açık bir sohbetin adını ve durumunu duyur |
-| **NVDA+Alt+V** | UnigramPlus | Unigram ve UnigramPlus sürüm numaralarını duyur |
+| **NVDA+Alt+V** | UnigramPlus | Unigram ve UnigramPlus sürüm bilgilerini salt okunur bir pencerede aç |
 | **ALT+M** | UnigramPlus | Gezinti menüsünü aç |
 | **ALT+Shift+P** | UnigramPlus | Mevcut sohbetin profilini aç |
 | **ALT+L** | UnigramPlus | Mevcut sohbette yeni mesajların otomatik olarak okunmasını etkinleştir |
@@ -197,6 +197,10 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 <!-- shortcut-table-end -->
 
 ##Değişiklik listesi:
+
+### Sürüm 5.7.2
+
+* NVDA+Alt+V artık sürüm bilgilerini çok satırlı, salt okunur bir pencerede açıyor.
 
 ### Sürüm 5.7.1
 
