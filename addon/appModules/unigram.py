@@ -530,8 +530,14 @@ def _find_ancestor_by_automation_id(obj, automation_ids, max_depth=6):
 	"""Find a named UIA ancestor without materializing any sibling subtrees.
 
 	Each step is a cross-process parent lookup, and this runs for every object
-	NVDA materializes, so the answer is memoized per object and the walk stops
-	at the top-level window, which is always above the containers looked for.
+	NVDA materializes, so a found ancestor is memoized per object and the walk
+	stops at the top-level window, which is always above the containers looked
+	for.
+
+	A miss is never remembered. This hook first runs while NVDA is still
+	constructing the object, where the parent chain can be unreachable for a
+	moment; caching that answer left a realized message permanently
+	unrecognized, which silently disabled every message-only shortcut on it.
 	"""
 	start = obj
 	cache_key = "_upAncestorCache"
@@ -570,7 +576,7 @@ def _find_ancestor_by_automation_id(obj, automation_ids, max_depth=6):
 			obj = obj.parent
 		except Exception:
 			break
-	if memo is not None:
+	if memo is not None and result is not None:
 		try: memo[(tuple(automation_ids), max_depth)] = result
 		except Exception: pass
 	return result
@@ -629,15 +635,17 @@ def _is_message_list_item(obj):
 		except Exception:
 			return False
 
+	# Only a positive answer is remembered. A negative one can simply mean the
+	# object was not fully constructed yet when the question was first asked.
 	try:
-		cached = getattr(obj, "_upIsMessageItem", None)
-		if cached is not None:
-			return cached[0]
+		if getattr(obj, "_upIsMessageItem", False):
+			return True
 	except Exception:
 		return probe()
 	result = probe()
-	try: obj._upIsMessageItem = (result,)
-	except Exception: pass
+	if result:
+		try: obj._upIsMessageItem = True
+		except Exception: pass
 	return result
 
 
@@ -656,14 +664,14 @@ def _is_chat_list_item(obj):
 			return False
 
 	try:
-		cached = getattr(obj, "_upIsChatItem", None)
-		if cached is not None:
-			return cached[0]
+		if getattr(obj, "_upIsChatItem", False):
+			return True
 	except Exception:
 		return probe()
 	result = probe()
-	try: obj._upIsChatItem = (result,)
-	except Exception: pass
+	if result:
+		try: obj._upIsChatItem = True
+		except Exception: pass
 	return result
 
 
@@ -1542,6 +1550,7 @@ class AppModule(appModuleHandler.AppModule):
 		self._autoFocusChatListGeneration = 0
 		self._endOfChatProbeGeneration = 0
 		self._messagesButton = None
+		self._focusBeforeRecordButton = None
 		self._mainWindowHandle = None
 		self._callWindowHandles = set()
 		if not self.isUnigramWindow:
@@ -3050,6 +3059,33 @@ class AppModule(appModuleHandler.AppModule):
 		nextHandler()
 
 	# Focus change tracking
+	def _restore_focus_after_record_button(self, obj):
+		"""Keep the focus in the message field while recording, as 5.4 did.
+
+		5.4 never let the focus reach the record button: it pressed the button
+		itself and put the focus straight back, so the recording was announced
+		but the button was not. Unigram now moves the focus there on its own,
+		so send it back when the user asked for the old behavior.
+		"""
+		if not is_recording_button(obj):
+			return False
+		if conf.get("voiceRecordingButtonLabel") != "none":
+			return False
+		previous = getattr(self, "_focusBeforeRecordButton", None)
+		if previous is None:
+			return False
+		try:
+			location = previous.location
+			if not location or not location.width:
+				self._focusBeforeRecordButton = None
+				return False
+			speech.cancelSpeech()
+			previous.setFocus()
+			return True
+		except Exception:
+			self._focusBeforeRecordButton = None
+			return False
+
 	def event_gainFocus(self, obj, nextHandler):
 		if is_recording_button(obj):
 			self._voiceRecordingButton = obj
@@ -3063,6 +3099,11 @@ class AppModule(appModuleHandler.AppModule):
 					pass
 				nextHandler()
 				return
+		if self._restore_focus_after_record_button(obj):
+			return True
+		if obj.role == Role.EDITABLETEXT and obj.UIAAutomationId == "TextField":
+			# Where recording is started from, and where 5.4 left the focus.
+			self._focusBeforeRecordButton = obj
 		self._remember_messages_button(obj)
 		is_main_window = self._classify_window_surface(obj) == "main"
 		if is_main_window and conf.get("automatically announce new messages") and Chat_update.pouse:
