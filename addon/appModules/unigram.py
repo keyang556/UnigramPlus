@@ -534,17 +534,54 @@ def _get_raw_context_menu_focus(process_id=0):
 def _find_ancestor_by_automation_id(obj, automation_ids, max_depth=6):
 	"""Find a named UIA ancestor without materializing any sibling subtrees.
 
-	Each step is a cross-process parent lookup, and this runs for every object
-	NVDA materializes, so a found ancestor is memoized per object and the walk
-	stops at the top-level window, which is always above the containers looked
-	for.
-
-	A miss is never remembered. This hook first runs while NVDA is still
-	constructing the object, where the parent chain can be unreachable for a
-	moment; caching that answer left a realized message permanently
+	A found ancestor is memoized per object. A miss is never remembered: this
+	runs while NVDA is still constructing the object, where the answer can be
+	temporarily wrong, and remembering it left a realized message permanently
 	unrecognized, which silently disabled every message-only shortcut on it.
 	"""
+	class RawAncestor:
+		"""A UIA ancestor identified without building an NVDA object for it."""
+
+		def __init__(self, automation_id):
+			self.UIAAutomationId = automation_id
+
+	def raw_walk():
+		"""Walk the UIA element parents directly.
+
+		NVDA's own parent chain is not always usable while it is still
+		constructing an object, which is exactly when overlay selection asks
+		this question, and an answer of "no ancestor" there permanently decided
+		what a message could do. The raw element chain is available
+		immediately, and walking it is also cheaper, because no NVDA object is
+		created for any ancestor.
+		"""
+		try:
+			import UIAHandler
+			element = getattr(obj, "UIAElement", None)
+			if element is None:
+				return None
+			walker = UIAHandler.handler.baseTreeWalker
+			for _ in range(max_depth + 1):
+				try:
+					automation_id = element.CurrentAutomationId or ""
+				except Exception:
+					return None
+				if automation_id in automation_ids:
+					return RawAncestor(automation_id)
+				try:
+					element = walker.GetParentElement(element)
+				except Exception:
+					return None
+				if not element:
+					return None
+		except Exception:
+			return None
+		return None
+
 	start = obj
+	raw = raw_walk()
+	if raw is not None:
+		return raw
 	cache_key = "_upAncestorCache"
 	memo = None
 	try:

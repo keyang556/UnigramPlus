@@ -341,3 +341,47 @@ def test_a_recognized_message_is_not_re_probed():
 	# The answer is kept, so the ancestor walk is not paid for again.
 	message.parent = None
 	assert predicate(message)
+
+
+class _RawElement:
+	"""A UIA element chain, the way it is readable before NVDA builds objects."""
+
+	def __init__(self, automation_id="", parent=None):
+		self.CurrentAutomationId = automation_id
+		self._parent = parent
+
+
+class _RawWalker:
+	def GetParentElement(self, element):
+		return element._parent
+
+
+def test_the_messages_ancestor_is_found_through_raw_uia_before_nvda_objects_exist():
+	"""Overlay selection decides once, so it must not depend on NVDA's parents.
+
+	If the parent chain is unreachable at that moment, the message never gets
+	its overlay, and Enter, ALT+C and the message arrow keys stay dead on it for
+	as long as it lives. The raw element chain is readable right away.
+	"""
+	import sys
+	from types import SimpleNamespace
+
+	namespace = {"Role": SimpleNamespace(LISTITEM="listItem", WINDOW="window")}
+	_load_members({"_find_ancestor_by_automation_id"}, namespace)
+	find_ancestor = namespace["_find_ancestor_by_automation_id"]
+
+	messages_element = _RawElement("Messages")
+	row_element = _RawElement("", messages_element)
+	message = Node(class_name="ToggleButton")
+	message.parent = None  # NVDA cannot walk up yet
+	message.UIAElement = _RawElement("", row_element)
+
+	sys.modules["UIAHandler"] = SimpleNamespace(
+		handler=SimpleNamespace(baseTreeWalker=_RawWalker())
+	)
+	try:
+		found = find_ancestor(message, ("Messages",), max_depth=8)
+		assert found is not None
+		assert found.UIAAutomationId == "Messages"
+	finally:
+		del sys.modules["UIAHandler"]
