@@ -36,21 +36,25 @@ def _load_module_function(name, namespace):
 	return namespace[name]
 
 
-def _load_progress_tracker(monkeypatch, scheduled):
+def _fake_background_poller(scheduled):
+	"""Stand in for the shared poller and record what each sample scheduled."""
 	class ScheduledCall:
 		def __init__(self):
 			self.stopped = False
 
-		def Stop(self):
-			self.stopped = True
+	def schedule(key, delay, callback):
+		scheduled.append((round(delay * 1000), callback, ScheduledCall()))
 
-	def call_later(delay, callback):
-		call = ScheduledCall()
-		scheduled.append((delay, callback, call))
-		return call
+	def cancel(key):
+		for entry in scheduled:
+			entry[2].stopped = True
 
-	monkeypatch.setitem(sys.modules, "core", SimpleNamespace(callLater=call_later))
+	return SimpleNamespace(schedule=schedule, cancel=cancel)
+
+
+def _load_progress_tracker(monkeypatch, scheduled):
 	namespace = {
+		"_BackgroundPoller": _fake_background_poller(scheduled),
 		"Role": SimpleNamespace(LINK="link", BUTTON="button"),
 		"api": SimpleNamespace(getFocusObject=lambda: None),
 		"conf": SimpleNamespace(get=lambda key: "upload_download"),
@@ -90,7 +94,7 @@ def _load_chat_list_item():
 	return namespace["ChatListItem"]
 
 
-def test_progress_tracker_reuses_nvda_main_loop_without_timer_threads(monkeypatch):
+def test_progress_tracker_samples_off_the_main_loop_without_timer_threads(monkeypatch):
 	scheduled = []
 	tracker = _load_progress_tracker(monkeypatch, scheduled)
 
@@ -270,11 +274,15 @@ def test_change_chats_folder_announces_nonzero_unread_count_once():
 	assert announcements == ["Unread, 538", "Unread", "Personal", "Project 2024"]
 
 
-def test_all_recurring_uia_pollers_use_the_nvda_main_loop():
+def test_all_recurring_uia_pollers_sample_off_the_nvda_main_loop():
+	# These ticks issue cross-process UIA reads. Running them on NVDA's event
+	# loop stalls speech and keyboard handling for as long as Unigram takes to
+	# answer, so they belong on the shared background poller - which, unlike the
+	# original threading.Timer approach, does not create a thread per sample.
 	for class_name in ("Title_change_tracking", "Typing_sound_tracking", "Chat_update"):
 		class_node = _class_ast(class_name)
 		assert any(
-			isinstance(base, ast.Name) and base.id == "_MainLoopPoller"
+			isinstance(base, ast.Name) and base.id == "_BackgroundStatePoller"
 			for base in class_node.bases
 		)
 		assert "Timer" not in {
@@ -283,8 +291,28 @@ def test_all_recurring_uia_pollers_use_the_nvda_main_loop():
 			if isinstance(node, ast.Name)
 		}
 
-	poller_source = ast.unparse(_class_ast("_MainLoopPoller"))
-	assert "core.callLater" in poller_source
+	poller_source = ast.unparse(_class_ast("_BackgroundStatePoller"))
+	assert "_BackgroundPoller.schedule" in poller_source
+	assert "core.callLater" not in poller_source
+
+
+def test_pollers_hand_every_announcement_back_to_the_main_thread():
+	# Sampling happens off-thread, so anything that reaches NVDA's UI from a tick
+	# must be queued rather than called directly.
+	for class_name in ("Title_change_tracking", "Chat_update"):
+		tick = next(
+			node
+			for node in _class_ast(class_name).body
+			if isinstance(node, ast.FunctionDef) and node.name == "tick"
+		)
+		source = ast.unparse(tick)
+		assert "queueHandler.queueFunction" in source
+
+
+def test_background_poller_runs_one_shared_worker_thread():
+	poller_source = ast.unparse(_class_ast("_BackgroundPoller"))
+	assert "daemon=True" in poller_source
+	assert "threading.Thread" in poller_source
 
 
 def test_chat_mention_navigation_uses_the_stable_unigram_badge_glyph():
@@ -665,7 +693,9 @@ def test_overlay_selection_only_probes_direct_main_window_markers():
 	)
 	source = ast.unparse(chooser)
 
-	assert "getattr(obj, 'UIAAutomationId', '') in _WINDOW_SURFACE_AUTOMATION_IDS" in source
+	assert "automation_id in _WINDOW_SURFACE_AUTOMATION_IDS" in source
+	# An ancestor walk here would run for every object NVDA materializes.
+	assert "_find_ancestor_by_automation_id(obj, _WINDOW_SURFACE_AUTOMATION_IDS" not in source
 
 
 def test_call_control_detection_never_enumerates_siblings():

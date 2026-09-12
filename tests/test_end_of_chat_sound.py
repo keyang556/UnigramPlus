@@ -161,6 +161,7 @@ def _make_endpoint_app(messages, focus, button, settings=None):
 		"play_end_of_chat_sound": lambda: sounds.append(True),
 		"_END_OF_CHAT_PROBE_DELAY_MS": 50,
 	}
+	scheduled = _install_fake_poller(namespace)
 	method_names = (
 		"is_message_object",
 		"_same_uia_element",
@@ -171,6 +172,7 @@ def _make_endpoint_app(messages, focus, button, settings=None):
 		"_is_last_message_in_chat",
 		"_schedule_end_of_chat_confirmation",
 		"_confirm_end_of_chat",
+		"_apply_end_of_chat_result",
 	)
 	app = _bind_methods(SimpleNamespace(), _load_app_methods(method_names, namespace))
 	app._endOfChatProbeGeneration = 0
@@ -180,19 +182,26 @@ def _make_endpoint_app(messages, focus, button, settings=None):
 		AssertionError("end-of-chat checks must not walk the foreground UIA tree")
 	)
 	app.script_moveFocusToTextMessage = lambda gesture: moves.append(gesture)
+	app._scheduled_probes = scheduled
 	return app, api_state, settings, sounds, moves
 
 
-def _install_fake_core(monkeypatch):
+def _install_fake_poller(namespace):
+	"""Capture what the endpoint probe hands to the shared background poller.
+
+	The probe walks the message ancestry, so it must not run on NVDA's main
+	loop; the sound and the focus move it produces must go back to it.
+	"""
 	scheduled = []
-	monkeypatch.setitem(
-		sys.modules,
-		"core",
-		SimpleNamespace(
-			callLater=lambda delay, callback, *args: scheduled.append(
-				(delay, callback, args)
-			),
+	namespace["_BackgroundPoller"] = SimpleNamespace(
+		schedule=lambda key, delay, callback: scheduled.append(
+			(round(delay * 1000), callback, ())
 		),
+		cancel=lambda key: None,
+	)
+	namespace["queueHandler"] = SimpleNamespace(
+		eventQueue=object(),
+		queueFunction=lambda queue, callback, *args: callback(*args),
 	)
 	return scheduled
 
@@ -303,7 +312,7 @@ def test_candidate_falls_back_to_message_text_when_uia_ancestry_is_broken():
 	assert app._get_end_of_chat_candidate(focus) is None
 
 
-def test_confirmation_is_tied_to_the_original_row(monkeypatch):
+def test_confirmation_is_tied_to_the_original_row():
 	messages, row, focus = _endpoint_nodes()
 	button = _button(hidden=False)
 	settings = {
@@ -313,7 +322,7 @@ def test_confirmation_is_tied_to_the_original_row(monkeypatch):
 	app, _api_state, _settings, sounds, moves = _make_endpoint_app(
 		messages, focus, button, settings
 	)
-	scheduled = _install_fake_core(monkeypatch)
+	scheduled = app._scheduled_probes
 
 	assert app._schedule_end_of_chat_confirmation(focus, move_focus_to_text=True)
 	assert scheduled[0][0] == 50
@@ -323,12 +332,12 @@ def test_confirmation_is_tied_to_the_original_row(monkeypatch):
 	assert moves == [None]
 
 
-def test_confirmation_matches_russian_mod_when_auxiliary_states_are_unavailable(monkeypatch):
+def test_confirmation_matches_russian_mod_when_auxiliary_states_are_unavailable():
 	messages, _row, focus = _endpoint_nodes()
 	app, _api_state, _settings, sounds, _moves = _make_endpoint_app(
 		messages, focus, None
 	)
-	scheduled = _install_fake_core(monkeypatch)
+	scheduled = app._scheduled_probes
 
 	assert app._schedule_end_of_chat_confirmation(focus)
 	_, callback, args = scheduled[0]
@@ -337,12 +346,12 @@ def test_confirmation_matches_russian_mod_when_auxiliary_states_are_unavailable(
 	assert len(scheduled) == 1
 
 
-def test_scheduling_an_end_probe_does_not_read_uia_before_down_returns(monkeypatch):
+def test_scheduling_an_end_probe_does_not_read_uia_before_down_returns():
 	messages, _row, focus = _endpoint_nodes()
 	app, _api_state, _settings, _sounds, _moves = _make_endpoint_app(
 		messages, focus, None
 	)
-	scheduled = _install_fake_core(monkeypatch)
+	scheduled = app._scheduled_probes
 	app._get_end_of_chat_candidate = lambda *args: (_ for _ in ()).throw(
 		AssertionError("scheduling must not inspect UIA")
 	)
@@ -351,11 +360,11 @@ def test_scheduling_an_end_probe_does_not_read_uia_before_down_returns(monkeypat
 	assert scheduled[0][0] == 50
 
 
-def test_confirmation_cancels_when_source_is_not_slice_final(monkeypatch):
+def test_confirmation_cancels_when_source_is_not_slice_final():
 	messages, row, focus = _endpoint_nodes()
 	button = _button(hidden=True)
 	app, _api_state, _settings, sounds, _moves = _make_endpoint_app(messages, focus, button)
-	scheduled = _install_fake_core(monkeypatch)
+	scheduled = app._scheduled_probes
 
 	# Ordinary navigation may schedule a cheap callback, but it must not read the
 	# UIA tree or play a sound when the source is no longer the slice's last row.
