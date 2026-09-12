@@ -608,7 +608,13 @@ def _is_message_list_item(obj):
 			# on UIA pattern availability, which can be transient during a UI update.
 			if automation_id == "MessageSelector" or class_name == "MessageSelector":
 				return _find_ancestor_by_automation_id(obj, ("Messages",), max_depth=8) is not None
-			if class_name != "ToggleButton":
+			# A known class that is not Unigram's message peer settles it. The class
+			# is not always readable at all, though: a realized message row can
+			# report no cached and no live class, and rejecting it there left every
+			# message-only shortcut inactive on that message. The selection
+			# semantics checked below are the real discriminator, so fall through to
+			# them rather than guessing from a class name that is not there.
+			if class_name and class_name != "ToggleButton":
 				return False
 			# Unigram 12.10.2 exposes MessageSelector through a
 			# ToggleButtonAutomationPeer. ReactionButton and other interactive controls
@@ -2068,6 +2074,19 @@ class AppModule(appModuleHandler.AppModule):
 		else: message(_("Nothing is playing right now"))
 
 	# Playing and opening media with the space bar
+	# A voice message exposes its play control as "Button"; audio files and other
+	# attachments use "Download". The focus handler already knows both.
+	_MEDIA_BUTTON_AUTOMATION_IDS = ("Button", "Download")
+
+	def _is_media_button(self, obj):
+		try:
+			return (
+				obj.role in (Role.LINK, Role.BUTTON)
+				and obj.UIAAutomationId in self._MEDIA_BUTTON_AUTOMATION_IDS
+			)
+		except Exception:
+			return False
+
 	def _find_media_button_in_message(self, obj):
 		"""Return the play or download button of a message, and whether to keep focus."""
 		try:
@@ -2076,10 +2095,7 @@ class AppModule(appModuleHandler.AppModule):
 			media = None
 		if media:
 			targetButton = next(
-				(
-					item for item in media.children
-					if item.role in (Role.LINK, Role.BUTTON) and item.UIAAutomationId == "Button"
-				),
+				(item for item in media.children if self._is_media_button(item)),
 				None,
 			)
 			is_save_focus = True
@@ -2089,15 +2105,27 @@ class AppModule(appModuleHandler.AppModule):
 			except Exception:
 				pass
 			return targetButton, is_save_focus
+		# Direct children first, which is where every current template puts it.
 		item = obj.firstChild
 		while item:
-			try:
-				if item.role in (Role.LINK, Role.BUTTON) and item.UIAAutomationId == "Button":
-					location = item.location
-					return item, not (location and location.width > 150)
-			except Exception:
-				pass
-			item = item.next
+			if self._is_media_button(item):
+				try: location = item.location
+				except Exception: location = None
+				return item, not (location and location.width > 150)
+			try: item = item.next
+			except Exception: break
+		# Some templates wrap the control one level deeper.
+		item = obj.firstChild
+		while item:
+			try: children = tuple(item.children or ())
+			except Exception: children = ()
+			for child in children:
+				if self._is_media_button(child):
+					try: location = child.location
+					except Exception: location = None
+					return child, not (location and location.width > 150)
+			try: item = item.next
+			except Exception: break
 		return None, True
 
 	def script_actionMediaInMessage(self, gesture):
@@ -2108,6 +2136,7 @@ class AppModule(appModuleHandler.AppModule):
 		targetButton, is_save_focus = self._find_media_button_in_message(obj)
 		if not targetButton:
 			# Nothing to play here, so leave Space to Unigram.
+			log.debug("UnigramPlus: no media button in the focused message")
 			gesture.send()
 			return
 		# Current Unigram exposes a message as a ToggleButton, so passing Space on

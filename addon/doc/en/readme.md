@@ -205,6 +205,12 @@ And remember that everyone who read this line thought that someone will definite
 
 * Moved the add-on's recurring background checks off NVDA's main loop, so chat
   navigation, typing and speech are no longer delayed by Unigram's UIA replies.
+* Fixed message-only shortcuts silently doing nothing on messages whose UIA
+  class is not readable, which is how a realized voice message can present
+  itself. Space, Enter to reply, Backspace to edit, ALT+C and the arrow keys
+  were all inactive on such a message.
+* Fixed the space bar on music and file messages, whose play control is named
+  Download rather than Button.
 * Fixed the space bar playing voice messages and music again. Current Unigram
   exposes a message as a toggle button, so space selected the message, and the
   resulting state change made the add-on give up before pressing play.

@@ -250,3 +250,54 @@ def test_message_overlay_does_not_override_the_provider_automation_id():
 		and any(isinstance(target, ast.Name) and target.id == "UIAAutomationId" for target in node.targets)
 		for node in message_class.body
 	)
+
+
+def test_a_realized_message_with_no_readable_uia_class_is_still_a_message():
+	"""Taken from a live Unigram: a focused voice message reported no class at all.
+
+	Rejecting it there disabled every message-only shortcut on that message,
+	including Space to play it and Enter to reply. The selection semantics below
+	are the real discriminator, so an unreadable class must not decide the
+	question on its own.
+	"""
+	messages = Node(automation_id="Messages", role="list")
+	row = Node(parent=messages, class_name="ListViewItem")
+	message = Node(
+		parent=row,
+		class_name=None,
+		cached_class_name=None,
+		selection_item_pattern=object(),
+		toggle_pattern=None,
+		name="علی, Owner. Voice message, 00:18, Received at 3:30 PM",
+	)
+
+	assert _message_predicate()(message)
+	classes, _app, message_overlay, _chat_overlay = _overlay_classes_for(message)
+	assert message_overlay in classes
+
+
+def test_an_unreadable_class_without_selection_semantics_is_still_rejected():
+	# The reaction buttons fixed in 5.7.1 must not slip through the same gap.
+	messages = Node(automation_id="Messages", role="list")
+	for selection_item_pattern, toggle_pattern in ((None, object()), (None, None)):
+		control = Node(
+			parent=messages,
+			class_name=None,
+			cached_class_name=None,
+			selection_item_pattern=selection_item_pattern,
+			toggle_pattern=toggle_pattern,
+		)
+
+		assert not _message_predicate()(control)
+
+
+def test_an_unreadable_class_outside_messages_is_rejected():
+	control = Node(
+		parent=Node(automation_id="ScrollingHost"),
+		class_name=None,
+		cached_class_name=None,
+		selection_item_pattern=object(),
+		toggle_pattern=None,
+	)
+
+	assert not _message_predicate()(control)
