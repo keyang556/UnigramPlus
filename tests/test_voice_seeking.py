@@ -384,12 +384,25 @@ def _load_space_handler(namespace_extra=None):
 	namespace = {
 		"Role": SimpleNamespace(LINK="link", BUTTON="button"),
 		"api": SimpleNamespace(getFocusObject=lambda: namespace["_focus"]),
+		"log": SimpleNamespace(debug=lambda *args, **kwargs: None),
 	}
 	namespace.update(namespace_extra or {})
-	find_button, handler = _load_methods(
-		["_find_media_button_in_message", "script_actionMediaInMessage"], namespace
+	is_media_button, find_button, handler = _load_methods(
+		["_is_media_button", "_find_media_button_in_message", "script_actionMediaInMessage"],
+		namespace,
 	)
-	return namespace, find_button, handler
+	return namespace, (is_media_button, find_button), handler
+
+
+def _space_instance(namespace, methods, is_message=True):
+	is_media_button, find_button = methods
+	instance = SimpleNamespace(
+		is_message_object=lambda obj: is_message,
+		_MEDIA_BUTTON_AUTOMATION_IDS=("Button", "Download"),
+	)
+	instance._is_media_button = lambda obj: is_media_button(instance, obj)
+	instance._find_media_button_in_message = lambda obj: find_button(instance, obj)
+	return instance
 
 
 def test_space_plays_media_without_toggling_the_message():
@@ -404,12 +417,9 @@ def test_space_plays_media_without_toggling_the_message():
 	button = _media_child(automation_id="Button")
 	button.doAction = lambda: invoked.append("play")
 	message_item = _message([button, _media_child(automation_id="Progress", role="custom")])
-	namespace, find_button, handler = _load_space_handler()
+	namespace, methods, handler = _load_space_handler()
 	namespace["_focus"] = message_item
-	instance = SimpleNamespace(
-		is_message_object=lambda obj: True,
-		_find_media_button_in_message=lambda obj: find_button(instance, obj),
-	)
+	instance = _space_instance(namespace, methods)
 
 	handler(instance, SimpleNamespace(send=lambda: sent.append("space")))
 
@@ -420,12 +430,9 @@ def test_space_plays_media_without_toggling_the_message():
 def test_space_is_passed_through_when_the_message_has_nothing_to_play():
 	sent = []
 	message_item = _message([_media_child(automation_id="TextBlock", role="text")])
-	namespace, find_button, handler = _load_space_handler()
+	namespace, methods, handler = _load_space_handler()
 	namespace["_focus"] = message_item
-	instance = SimpleNamespace(
-		is_message_object=lambda obj: True,
-		_find_media_button_in_message=lambda obj: find_button(instance, obj),
-	)
+	instance = _space_instance(namespace, methods)
 
 	handler(instance, SimpleNamespace(send=lambda: sent.append("space")))
 
@@ -434,9 +441,9 @@ def test_space_is_passed_through_when_the_message_has_nothing_to_play():
 
 def test_space_outside_a_message_keeps_its_normal_behavior():
 	sent = []
-	namespace, _find_button, handler = _load_space_handler()
+	namespace, methods, handler = _load_space_handler()
 	namespace["_focus"] = SimpleNamespace()
-	instance = SimpleNamespace(is_message_object=lambda obj: False)
+	instance = _space_instance(namespace, methods, is_message=False)
 
 	handler(instance, SimpleNamespace(send=lambda: sent.append("space")))
 
@@ -490,3 +497,19 @@ def test_the_seek_shortcut_still_works_while_the_modifiers_stay_held():
 	assert physical[codes["ctrl"]] and physical[codes["alt"]], (
 		"the modifiers must be held again after each press, or the shortcut stops repeating"
 	)
+
+
+def test_space_plays_a_music_or_file_message_whose_button_is_named_download():
+	invoked = []
+	sent = []
+	button = _media_child(automation_id="Download", role="link")
+	button.doAction = lambda: invoked.append("play")
+	message_item = _message([_media_child(automation_id="PhotoRoot", role="link"), button])
+	namespace, methods, handler = _load_space_handler()
+	namespace["_focus"] = message_item
+	instance = _space_instance(namespace, methods)
+
+	handler(instance, SimpleNamespace(send=lambda: sent.append("space")))
+
+	assert invoked == ["play"]
+	assert sent == []
