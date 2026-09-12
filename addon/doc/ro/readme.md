@@ -200,6 +200,10 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 ##Lista de modificări:
 
+### Versiunea 5.7.3
+
+* NVDA+Alt+V afișează acum versiunea UnigramPlus pe un rând nou.
+
 ### Versiunea 5.7.2
 
 * NVDA+Alt+V deschide acum informațiile despre versiuni într-o fereastră cu mai multe linii, doar în citire.

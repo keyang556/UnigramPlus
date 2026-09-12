@@ -3725,7 +3725,7 @@ class AppModule(appModuleHandler.AppModule):
 		# Translators: Shown when NVDA+Alt+V is pressed in Unigram. Keep the
 		# content inside braces unchanged; it is replaced with each installed version.
 		version_text = _(
-			"Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
+			"Unigram version: {unigramVersion}.\nUnigramPlus version: {addonVersion}."
 		).format(
 			unigramVersion=unigram_version or "-",
 			addonVersion=addon_version or "-",

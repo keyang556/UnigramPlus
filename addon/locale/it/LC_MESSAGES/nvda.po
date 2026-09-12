@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.7.2\n"
+"Project-Id-Version: UnigramPlus 5.7.3\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-14 22:27+0100\n"
@@ -19,8 +19,8 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: changelog.py:5
-msgid "- NVDA+Alt+V now opens Unigram and UnigramPlus version information in a read-only, multiline window."
-msgstr "- NVDA+Alt+V ora apre le informazioni sulla versione di Unigram e UnigramPlus in una finestra multilinea di sola lettura."
+msgid "- NVDA+Alt+V displays the UnigramPlus version on a new line."
+msgstr "- NVDA+Alt+V ora mostra la versione di UnigramPlus su una nuova riga."
 
 #: addon\appModules\cnf.py:12
 msgid "Arabic"
@@ -1172,8 +1172,8 @@ msgstr ""
 msgid "Open Unigram and UnigramPlus version information in a read-only window"
 msgstr "Apri le informazioni sulla versione di Unigram e UnigramPlus in una finestra di sola lettura"
 
-msgid "Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
-msgstr "Versione di Unigram: {unigramVersion}. Versione di UnigramPlus: {addonVersion}."
+msgid "Unigram version: {unigramVersion}.\nUnigramPlus version: {addonVersion}."
+msgstr "Versione di Unigram: {unigramVersion}.\nVersione di UnigramPlus: {addonVersion}."
 
 msgid ""
 "- Added NVDA+Shift+V to announce the installed Unigram and UnigramPlus versions.\n"

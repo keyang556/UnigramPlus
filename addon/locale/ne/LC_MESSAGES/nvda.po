@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.7.2\n"
+"Project-Id-Version: UnigramPlus 5.7.3\n"
 "POT-Creation-Date: 2022-10-07 22:33+0300\n"
 "PO-Revision-Date: 2022-10-20 12:30+0300\n"
 "Last-Translator: samrat kc <samrat.kc7@gmail.com>\n"
@@ -18,8 +18,8 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: changelog.py:5
-msgid "- NVDA+Alt+V now opens Unigram and UnigramPlus version information in a read-only, multiline window."
-msgstr "- NVDA+Alt+V ले अब Unigram र UnigramPlus का संस्करण जानकारी बहु-पङ्क्ति पढ्ने-मात्र विन्डोमा खोल्छ।"
+msgid "- NVDA+Alt+V displays the UnigramPlus version on a new line."
+msgstr "- NVDA+Alt+V ले अब UnigramPlus संस्करणलाई नयाँ लाइनमा देखाउँछ।"
 
 #: GlobalPlugins/UnigramPlus/__init__.py:22
 msgid "No updates available"
@@ -956,8 +956,8 @@ msgstr ""
 msgid "Open Unigram and UnigramPlus version information in a read-only window"
 msgstr "Unigram र UnigramPlus का संस्करण जानकारी पढ्ने-मात्र विन्डोमा खोल्नुहोस्"
 
-msgid "Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
-msgstr "Unigram संस्करण: {unigramVersion}. UnigramPlus संस्करण: {addonVersion}."
+msgid "Unigram version: {unigramVersion}.\nUnigramPlus version: {addonVersion}."
+msgstr "Unigram संस्करण: {unigramVersion}.\nUnigramPlus संस्करण: {addonVersion}."
 
 msgid ""
 "- Added NVDA+Shift+V to announce the installed Unigram and UnigramPlus versions.\n"

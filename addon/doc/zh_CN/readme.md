@@ -199,6 +199,10 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 
 ## 版本变更
 
+### 版本 5.7.3
+
+* NVDA+Alt+V 现在会在新的一行显示 UnigramPlus 版本。
+
 ### 版本 5.7.2
 
 * NVDA+Alt+V 现在会在只读多行窗口中打开版本信息。

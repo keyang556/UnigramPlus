@@ -420,6 +420,10 @@ UnigramPlus sound files are stored in the add-on's `appModules\media` folder. Op
 
 टर्की स्थानीयकरण थपियो।
 
+### Version 5.7.3
+
+* NVDA+Alt+V ले अब UnigramPlus संस्करणलाई नयाँ लाइनमा देखाउँछ।
+
 ### Version 5.7.2
 
 * NVDA+Alt+V ले अब संस्करण जानकारीलाई बहु-पङ्क्ति पढ्ने-मात्र विन्डोमा खोल्छ।

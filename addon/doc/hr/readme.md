@@ -202,6 +202,10 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 
 ##Popis promjena:
 
+### Verzija 5.7.3
+
+* NVDA+Alt+V sada prikazuje verziju programa UnigramPlus u novom retku.
+
 ### Verzija 5.7.2
 
 * NVDA+Alt+V sada otvara podatke o verziji u višerednom prozoru samo za čitanje.

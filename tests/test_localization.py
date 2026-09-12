@@ -5,10 +5,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 LOCALE_DIR = ROOT / "addon" / "locale"
 DOC_DIR = ROOT / "addon" / "doc"
-VERSION_REPORT = "Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
+VERSION_REPORT = "Unigram version: {unigramVersion}.\nUnigramPlus version: {addonVersion}."
 VERSION_WINDOW_DESCRIPTION = "Open Unigram and UnigramPlus version information in a read-only window"
 RELEASE_CHANGELOG = (
-	"- NVDA+Alt+V now opens Unigram and UnigramPlus version information in a read-only, multiline window."
+	"- NVDA+Alt+V displays the UnigramPlus version on a new line."
 )
 
 # Only active runtime strings belong here. Historical release notes and removed
@@ -81,23 +81,23 @@ def test_required_strings_are_translated_in_every_locale():
 			)
 
 
-def test_release_version_is_572():
+def test_release_version_is_573():
 	build_vars = (ROOT / "buildVars.py").read_text(encoding="utf-8")
 	manifest = (ROOT / "addon" / "manifest.ini").read_text(encoding="utf-8")
 	pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
 	lockfile = (ROOT / "uv.lock").read_text(encoding="utf-8")
 
-	assert 'addon_version="5.7.2"' in build_vars
-	assert "version = 5.7.2" in manifest
-	assert 'version = "5.7.2"' in pyproject
-	assert 'name = "unigramplus"\nversion = "5.7.2"' in lockfile
+	assert 'addon_version="5.7.3"' in build_vars
+	assert "version = 5.7.3" in manifest
+	assert 'version = "5.7.3"' in pyproject
+	assert 'name = "unigramplus"\nversion = "5.7.3"' in lockfile
 
 
-def test_catalogs_keep_the_572_translation_metadata():
+def test_catalogs_keep_the_573_translation_metadata():
 	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
 		catalog_path = locale_dir / "LC_MESSAGES" / "nvda.po"
 		catalog = catalog_path.read_text(encoding="utf-8")
-		assert '"Project-Id-Version: UnigramPlus 5.7.2\\n"' in catalog
+		assert '"Project-Id-Version: UnigramPlus 5.7.3\\n"' in catalog
 		assert _parse_po(catalog_path)[RELEASE_CHANGELOG]
 
 
@@ -105,15 +105,16 @@ def test_current_release_changelog_comes_from_the_changelog_source():
 	changelog = (ROOT / "changelog.py").read_text(encoding="utf-8")
 
 	assert "NVDA+Alt+V" in changelog
-	assert "read-only" in changelog
+	assert "new line" in changelog
 
 
-def test_every_localized_manual_has_572_through_559_and_updated_558_changelogs():
+def test_every_localized_manual_has_573_through_559_and_updated_558_changelogs():
 	manuals = [ROOT / "readme.md", *sorted(DOC_DIR.glob("*/readme.md"))]
 	assert len(manuals) == 17
 	for manual in manuals:
 		text = manual.read_text(encoding="utf-8")
-		version_572 = text.index("5.7.2")
+		version_573 = text.index("5.7.3")
+		version_572 = text.index("5.7.2", version_573)
 		version_571 = text.index("5.7.1", version_572)
 		version_570 = text.index("5.7.0", version_571)
 		version_569 = text.index("5.6.9", version_570)
@@ -128,6 +129,7 @@ def test_every_localized_manual_has_572_through_559_and_updated_558_changelogs()
 		version_560 = text.index("5.6.0", version_561)
 		version_559 = text.index("5.5.9", version_560)
 		version_558 = text.index("5.5.8", version_559)
+		section_573 = text[version_573:version_572]
 		section_572 = text[version_572:version_571]
 		section_571 = text[version_571:version_570]
 		section_570 = text[version_570:version_569]
@@ -141,6 +143,8 @@ def test_every_localized_manual_has_572_through_559_and_updated_558_changelogs()
 		section_562 = text[version_562:version_561]
 		section_561 = text[version_561:version_560]
 		section_560 = text[version_560:version_559]
+		assert section_573.count("\n* ") == 1, manual
+		assert "NVDA+Alt+V" in section_573, manual
 		assert section_572.count("\n* ") == 1, manual
 		assert "NVDA+Alt+V" in section_572, manual
 		assert section_571.count("\n* ") == 1, manual

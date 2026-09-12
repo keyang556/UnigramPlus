@@ -198,6 +198,10 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 
 ##Değişiklik listesi:
 
+### Sürüm 5.7.3
+
+* NVDA+Alt+V artık UnigramPlus sürümünü yeni bir satırda gösteriyor.
+
 ### Sürüm 5.7.2
 
 * NVDA+Alt+V artık sürüm bilgilerini çok satırlı, salt okunur bir pencerede açıyor.

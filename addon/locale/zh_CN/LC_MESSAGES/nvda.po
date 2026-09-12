@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.7.2\n"
+"Project-Id-Version: UnigramPlus 5.7.3\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2026-05-24 00:00+0800\n"
 "PO-Revision-Date: 2026-05-24 00:00+0800\n"
@@ -15,8 +15,8 @@ msgstr ""
 "X-Generator: Codex\n"
 
 #: changelog.py:5
-msgid "- NVDA+Alt+V now opens Unigram and UnigramPlus version information in a read-only, multiline window."
-msgstr "- NVDA+Alt+V 现在会在只读多行窗口中打开 Unigram 和 UnigramPlus 的版本信息。"
+msgid "- NVDA+Alt+V displays the UnigramPlus version on a new line."
+msgstr "- NVDA+Alt+V 现在会在新的一行显示 UnigramPlus 版本。"
 
 #: addon\appModules\cnf.py:10
 msgid "Arabic"
@@ -1029,7 +1029,7 @@ msgstr ""
 msgid "Open Unigram and UnigramPlus version information in a read-only window"
 msgstr "在只读窗口中打开 Unigram 和 UnigramPlus 的版本信息"
 
-msgid "Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
+msgid "Unigram version: {unigramVersion}.\nUnigramPlus version: {addonVersion}."
 msgstr "Unigram 版本：{unigramVersion}。UnigramPlus 版本：{addonVersion}。"
 
 msgid ""

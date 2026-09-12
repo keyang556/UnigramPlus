@@ -201,6 +201,10 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
+### Version 5.7.3
+
+* NVDA+Alt+V displays the UnigramPlus version on a new line.
+
 ### Version 5.7.2
 
 * NVDA+Alt+V now opens Unigram and UnigramPlus version information in a read-only, multiline window.

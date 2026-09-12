@@ -199,6 +199,10 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 
 ##Liste des changements :
 
+### Version 5.7.3
+
+* NVDA+Alt+V affiche désormais la version d’UnigramPlus sur une nouvelle ligne.
+
 ### Version 5.7.2
 
 * NVDA+Alt+V ouvre maintenant les informations de version dans une fenêtre multiligne en lecture seule.

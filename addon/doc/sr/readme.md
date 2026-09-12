@@ -474,6 +474,10 @@ Added Turkish localization
 
 
 
+###Verzija 5.7.3
+
+* NVDA+Alt+V sada prikazuje verziju dodatka UnigramPlus u novom redu.
+
 ###Verzija 5.7.2
 
 * NVDA+Alt+V sada otvara informacije o verzijama u višerednom prozoru samo za čitanje.

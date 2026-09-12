@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.7.2\n"
+"Project-Id-Version: UnigramPlus 5.7.3\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2026-09-03 03:10+0630\n"
 "PO-Revision-Date: 2026-09-03 03:13+0630\n"
@@ -678,8 +678,8 @@ msgstr "Unigram နှင့် UnigramPlus ဗားရှင်းအချက
 
 #: addon\appModules\unigram.py:3728
 #, python-brace-format
-msgid "Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
-msgstr "Unigram ဗားရှင်း: {unigramVersion}. UnigramPlus ဗားရှင်း: {addonVersion}."
+msgid "Unigram version: {unigramVersion}.\nUnigramPlus version: {addonVersion}."
+msgstr "Unigram ဗားရှင်း: {unigramVersion}.\nUnigramPlus ဗားရှင်း: {addonVersion}."
 
 #: addon\appModules\unigram.py:3734
 msgid "Show a list of all UnigramPlus shortcuts"
@@ -967,5 +967,5 @@ msgstr ""
 "ကီးများစွာကို ပေါင်းထည့်ကာ Unigram တွင် အလုပ်လုပ်ရန် ပိုမိုလွယ်ကူစေမည့် သေးငယ်သော တိုးတက်မှုများစွာကိုလည်း ပေါင်းထည့်ထားသည်။"
 
 #: changelog.py:5
-msgid "- NVDA+Alt+V now opens Unigram and UnigramPlus version information in a read-only, multiline window."
-msgstr "- NVDA+Alt+V သည် ယခု Unigram နှင့် UnigramPlus ဗားရှင်းအချက်အလက်များကို စာကြောင်းများစွာပါသော ဖတ်ရန်သာ ဝင်းဒိုးတွင် ဖွင့်ပေးသည်။"
+msgid "- NVDA+Alt+V displays the UnigramPlus version on a new line."
+msgstr "- NVDA+Alt+V သည် UnigramPlus ဗားရှင်းကို လိုင်းအသစ်တွင် ပြသသည်။"

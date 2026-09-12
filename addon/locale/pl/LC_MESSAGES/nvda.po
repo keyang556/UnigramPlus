@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.7.2\n"
+"Project-Id-Version: UnigramPlus 5.7.3\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2026-08-20 08:52+0000\n"
 "PO-Revision-Date: 2026-08-29 14:55+0200\n"
@@ -20,8 +20,8 @@ msgstr ""
 "X-Poedit-SearchPath-1: GlobalPlugins/UnigramPlus\n"
 
 #: changelog.py:5
-msgid "- NVDA+Alt+V now opens Unigram and UnigramPlus version information in a read-only, multiline window."
-msgstr "- NVDA+Alt+V otwiera teraz informacje o wersjach Unigramu i UnigramPlus w wielowierszowym oknie tylko do odczytu."
+msgid "- NVDA+Alt+V displays the UnigramPlus version on a new line."
+msgstr "- NVDA+Alt+V wyświetla teraz wersję UnigramPlus w nowej linii."
 
 #: addon/appModules/cnf.py:10
 msgid "Arabic"
@@ -714,8 +714,8 @@ msgstr "Otwórz informacje o wersjach Unigramu i UnigramPlus w oknie tylko do od
 
 #: addon/appModules/unigram.py:3718
 #, python-brace-format
-msgid "Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
-msgstr "Wersja Unigramu: {unigramVersion}. Wersja UnigramPlus: {addonVersion}."
+msgid "Unigram version: {unigramVersion}.\nUnigramPlus version: {addonVersion}."
+msgstr "Wersja Unigramu: {unigramVersion}.\nWersja UnigramPlus: {addonVersion}."
 
 #: addon/appModules/unigram.py:3724
 msgid "Show a list of all UnigramPlus shortcuts"

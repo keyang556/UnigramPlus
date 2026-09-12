@@ -199,6 +199,10 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 
 ## 版本變更
 
+### 版本 5.7.3
+
+* NVDA+Alt+V 現在會在新的一行顯示 UnigramPlus 版本。
+
 ### 版本 5.7.2
 
 * NVDA+Alt+V 現在會在唯讀多行視窗中開啟版本資訊。

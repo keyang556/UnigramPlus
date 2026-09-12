@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.7.2\n"
+"Project-Id-Version: UnigramPlus 5.7.3\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2026-09-02 19:48+0700\n"
 "PO-Revision-Date: 2026-09-02 20:44+0700\n"
@@ -711,9 +711,9 @@ msgstr "Mở thông tin phiên bản Unigram và UnigramPlus trong cửa sổ ch
 
 #: addon\appModules\unigram.py:3728
 #, python-brace-format
-msgid "Unigram version: {unigramVersion}. UnigramPlus version: {addonVersion}."
+msgid "Unigram version: {unigramVersion}.\nUnigramPlus version: {addonVersion}."
 msgstr ""
-"Phiên bản Unigram: {unigramVersion}. Phiên bản UnigramPlus: {addonVersion}."
+"Phiên bản Unigram: {unigramVersion}.\nPhiên bản UnigramPlus: {addonVersion}."
 
 #: addon\appModules\unigram.py:3734
 msgid "Show a list of all UnigramPlus shortcuts"
@@ -1023,8 +1023,8 @@ msgstr ""
 "dàng hơn nhiều"
 
 #: changelog.py:5
-msgid "- NVDA+Alt+V now opens Unigram and UnigramPlus version information in a read-only, multiline window."
-msgstr "- NVDA+Alt+V giờ mở thông tin phiên bản Unigram và UnigramPlus trong cửa sổ nhiều dòng, chỉ đọc."
+msgid "- NVDA+Alt+V displays the UnigramPlus version on a new line."
+msgstr "- NVDA+Alt+V giờ hiển thị phiên bản UnigramPlus trên một dòng mới."
 
 #~ msgid ""
 #~ "- Restored folder-switch announcements with a nonzero unread count while "

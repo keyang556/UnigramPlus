@@ -42,7 +42,7 @@ def test_nvda_alt_v_opens_both_installed_versions_in_a_read_only_window():
 
 	assert text_windows == [
 		(
-			("Unigram version: 12.9.1.0. UnigramPlus version: 5.6.7.", "UnigramPlus"),
+			("Unigram version: 12.9.1.0.\nUnigramPlus version: 5.6.7.", "UnigramPlus"),
 			{"readOnly": True},
 		)
 	]
@@ -57,7 +57,7 @@ def test_version_window_uses_nvda_product_version_and_handles_missing_metadata()
 
 	assert text_windows == [
 		(
-			("Unigram version: 12.9.1. UnigramPlus version: -.", "UnigramPlus"),
+			("Unigram version: 12.9.1.\nUnigramPlus version: -.", "UnigramPlus"),
 			{"readOnly": True},
 		)
 	]

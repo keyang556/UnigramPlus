@@ -201,6 +201,10 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 
 ##Lista de cambios:
 
+### Versión 5.7.3
+
+* NVDA+Alt+V ahora muestra la versión de UnigramPlus en una nueva línea.
+
 ### Versión 5.7.2
 
 * NVDA+Alt+V ahora abre la información de versión en una ventana de solo lectura y varias líneas.
