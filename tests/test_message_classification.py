@@ -301,3 +301,43 @@ def test_an_unreadable_class_outside_messages_is_rejected():
 	)
 
 	assert not _message_predicate()(control)
+
+
+def test_a_message_is_recognized_once_its_parent_chain_becomes_reachable():
+	"""Overlay selection runs while NVDA is still constructing the object.
+
+	The parent chain can be unreachable for that moment. Remembering that miss
+	made the message permanently unrecognized, so Space, Enter, ALT+D and every
+	other message-only shortcut stayed inactive on it for as long as the object
+	lived.
+	"""
+	messages = Node(automation_id="Messages", role="list")
+	message = Node(
+		class_name="ToggleButton",
+		selection_item_pattern=object(),
+		toggle_pattern=None,
+	)
+	message.parent = None  # not reachable yet
+
+	predicate = _message_predicate()
+	assert not predicate(message)
+
+	message.parent = messages  # NVDA finished building it
+	assert predicate(message)
+
+
+def test_a_recognized_message_is_not_re_probed():
+	messages = Node(automation_id="Messages", role="list")
+	message = Node(
+		parent=messages,
+		class_name="ToggleButton",
+		selection_item_pattern=object(),
+		toggle_pattern=None,
+	)
+	predicate = _message_predicate()
+
+	assert predicate(message)
+
+	# The answer is kept, so the ancestor walk is not paid for again.
+	message.parent = None
+	assert predicate(message)

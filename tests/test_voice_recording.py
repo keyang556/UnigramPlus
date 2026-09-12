@@ -431,3 +431,68 @@ def test_recording_transitions_keep_text_and_audio_notifications():
 	assert sounds[0][0].endswith("start_recording_voice_message.wav")
 	assert sounds[1][0].endswith("send_voice_message.wav")
 	assert sounds[2][0].endswith("cancel_voice_message_recording.wav")
+
+
+def _record_button(location_width=40):
+	return SimpleNamespace(
+		UIAAutomationId="btnVoiceMessage",
+		location=SimpleNamespace(width=location_width),
+	)
+
+
+def _load_record_focus_restore(setting):
+	restored = []
+	namespace = {
+		"is_recording_button": is_recording_button,
+		"conf": SimpleNamespace(get=lambda key: setting),
+		"speech": SimpleNamespace(cancelSpeech=lambda: restored.append("cancelSpeech")),
+	}
+	method = _load_method("_restore_focus_after_record_button", namespace)
+	return method, restored
+
+
+def test_the_54_option_keeps_the_focus_in_the_message_field():
+	"""5.4 pressed the record button itself and put the focus straight back."""
+	method, events = _load_record_focus_restore("none")
+	field = SimpleNamespace(
+		location=SimpleNamespace(width=300),
+		setFocus=lambda: events.append("backToField"),
+	)
+	instance = SimpleNamespace(_focusBeforeRecordButton=field)
+
+	assert method(instance, _record_button()) is True
+	assert events == ["cancelSpeech", "backToField"]
+
+
+def test_the_other_options_let_the_focus_reach_the_record_button():
+	for setting in ("withElapsedTime", "labelOnly"):
+		method, events = _load_record_focus_restore(setting)
+		field = SimpleNamespace(
+			location=SimpleNamespace(width=300),
+			setFocus=lambda: events.append("backToField"),
+		)
+		instance = SimpleNamespace(_focusBeforeRecordButton=field)
+
+		assert method(instance, _record_button()) is False
+		assert events == []
+
+
+def test_nothing_is_restored_without_a_remembered_message_field():
+	method, events = _load_record_focus_restore("none")
+	instance = SimpleNamespace(_focusBeforeRecordButton=None)
+
+	assert method(instance, _record_button()) is False
+	assert events == []
+
+
+def test_other_controls_are_never_bounced():
+	method, events = _load_record_focus_restore("none")
+	field = SimpleNamespace(
+		location=SimpleNamespace(width=300),
+		setFocus=lambda: events.append("backToField"),
+	)
+	instance = SimpleNamespace(_focusBeforeRecordButton=field)
+	other = SimpleNamespace(UIAAutomationId="ButtonAttach")
+
+	assert method(instance, other) is False
+	assert events == []

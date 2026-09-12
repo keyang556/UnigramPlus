@@ -259,7 +259,7 @@ class UnigramPlusSettings(SettingsPanel):
 	listVoiceRecordingButtonLabel = {
 		"withElapsedTime": _("Say \"Recording a voice message\" and the elapsed time"),
 		"labelOnly": _("Say \"Recording a voice message\" without the elapsed time"),
-		"none": _("Like version 5.4: leave Unigram's own name, such as \"Tn voice message\""),
+		"none": _("Like version 5.4: keep the focus in the message field and never announce the button"),
 	}
 	list_actions_when_pressing_up_arrow_in_text_field = {
 		"block": _("Do nothing"),
