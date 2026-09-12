@@ -201,38 +201,18 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
-### Unreleased
+### Version 5.8.0
 
-* Moved the add-on's recurring background checks off NVDA's main loop, so chat
-  navigation, typing and speech are no longer delayed by Unigram's UIA replies.
-* Canceling a voice recording is now announced about a second and a half after
-  it is stopped, instead of five seconds later.
-* Fixed message-only shortcuts silently doing nothing on realized messages.
-  Space to play, Enter to reply, Backspace to edit, ALT+C and ALT+D to return
-  from the message field were all inactive on an affected message.
-* Fixed message-only shortcuts silently doing nothing on messages whose UIA
-  class is not readable, which is how a realized voice message can present
-  itself. Space, Enter to reply, Backspace to edit, ALT+C and the arrow keys
-  were all inactive on such a message.
-* Fixed the space bar on music and file messages, whose play control is named
-  Download rather than Button.
-* Fixed the space bar playing voice messages and music again. Current Unigram
-  exposes a message as a toggle button, so space selected the message, and the
-  resulting state change made the add-on give up before pressing play.
-* Fixed Ctrl+ALT+Left and Ctrl+ALT+Right stopping after the first press while
-  the modifiers stay held.
-* Fixed ALT+E for closing the audio player. It looked for the player through a
-  ShuffleButton that current Unigram no longer has, so it always reported that
-  nothing was playing; the close button is now found by its own icon.
-* Fixed Ctrl+ALT+Left and Ctrl+ALT+Right for seeking through a voice message.
-  The modifiers the user is still holding are now lifted around the arrow key,
-  so Unigram receives the arrow instead of Ctrl+ALT+Arrow and ignoring it.
-* Every behavior added after 5.4 can now be turned on or off in UnigramPlus
-  settings: the voice message record button label, rich message text with ALT+C,
-  the profile identity button label, the replying and editing announcement in the
-  message field, the suppressed "list" announcement before messages, the live
-  microphone and camera state during calls, and the unread count when switching
-  chat folders. All of them keep their current behavior by default.
+* The add-on's recurring background checks no longer run on NVDA's main loop, so chat navigation, typing and speech are no longer held up while Unigram answers.
+* Every behavior added after 5.4 can now be turned on or off in UnigramPlus settings, gathered under one heading: how the voice message record button is announced, rich message text with ALT+C, the profile identity button label, the replying and editing announcement in the message field, the suppressed "list" announcement before messages, the live microphone and camera state during a call, and the unread count when switching chat folders. Each keeps its current behavior by default, and each label states which version 5.4 behavior it restores.
+* Fixed the space bar not playing voice messages, music and files.
+* Fixed Enter not replying to a message, Backspace not editing it, ALT+C not showing its text, and ALT+D not returning to it.
+* Fixed ALT+E not closing the audio player.
+* Fixed Ctrl+ALT+Left and Ctrl+ALT+Right not seeking voice message playback, including when the arrow is pressed again while the modifiers stay held.
+* Canceling a voice recording is announced about a second and a half after it stops, instead of five seconds later.
+* With the version 5.4 record button option selected, the focus stays in the message field when a recording starts, while Tab still reaches the record button.
+* Fixed a range of shortcuts failing silently when Unigram's tree was missing an element they assumed was there: ALT+3, ALT+4, ALT+5, ALT+6, ALT+Q, ALT+T, ALT+Shift+L, ALT+Shift+P, Shift+Delete, media navigation and the call controls.
+* Converting a voice message to text no longer starts a new thread every half second while it waits, and gives up instead of waiting for ever.
 
 ### Version 5.7.3
 

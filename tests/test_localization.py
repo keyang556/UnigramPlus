@@ -8,7 +8,9 @@ DOC_DIR = ROOT / "addon" / "doc"
 VERSION_REPORT = "Unigram version: {unigramVersion}.\nUnigramPlus version: {addonVersion}."
 VERSION_WINDOW_DESCRIPTION = "Open Unigram and UnigramPlus version information in a read-only window"
 RELEASE_CHANGELOG = (
-	"- NVDA+Alt+V displays the UnigramPlus version on a new line."
+	"""- Background checks no longer run on NVDA's main loop, so chat navigation and speech are no longer held up.
+- Every behavior added after 5.4 can now be turned on or off in UnigramPlus settings.
+- Fixed the space bar not playing voice messages and music, Enter not replying, ALT+E not closing the audio player, and Ctrl+ALT+Left/Right not seeking."""
 )
 
 # Only active runtime strings belong here. Historical release notes and removed
@@ -84,31 +86,40 @@ def test_required_strings_are_translated_in_every_locale():
 		)
 
 
-def test_release_version_is_573():
+def test_release_version_is_580():
 	build_vars = (ROOT / "buildVars.py").read_text(encoding="utf-8")
 	manifest = (ROOT / "addon" / "manifest.ini").read_text(encoding="utf-8")
 	pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
 	lockfile = (ROOT / "uv.lock").read_text(encoding="utf-8")
 
-	assert 'addon_version="5.7.3"' in build_vars
-	assert "version = 5.7.3" in manifest
-	assert 'version = "5.7.3"' in pyproject
-	assert 'name = "unigramplus"\nversion = "5.7.3"' in lockfile
+	assert 'addon_version="5.8.0"' in build_vars
+	assert "version = 5.8.0" in manifest
+	assert 'version = "5.8.0"' in pyproject
+	assert 'name = "unigramplus"\nversion = "5.8.0"' in lockfile
 
 
-def test_catalogs_keep_the_573_translation_metadata():
+def test_catalogs_keep_the_580_translation_metadata():
 	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
 		catalog_path = locale_dir / "LC_MESSAGES" / "nvda.po"
 		catalog = catalog_path.read_text(encoding="utf-8")
-		assert '"Project-Id-Version: UnigramPlus 5.7.3\\n"' in catalog
-		assert _parse_po(catalog_path)[RELEASE_CHANGELOG]
+		assert '"Project-Id-Version: UnigramPlus 5.8.0\\n"' in catalog
 
 
 def test_current_release_changelog_comes_from_the_changelog_source():
 	changelog = (ROOT / "changelog.py").read_text(encoding="utf-8")
 
-	assert "NVDA+Alt+V" in changelog
-	assert "new line" in changelog
+	assert "main loop" in changelog
+	assert "turned on or off in UnigramPlus settings" in changelog
+
+
+def test_the_english_manual_carries_the_current_release():
+	for manual in (ROOT / "readme.md", DOC_DIR / "en" / "readme.md"):
+		text = manual.read_text(encoding="utf-8")
+		version_580 = text.index("5.8.0")
+		section_580 = text[version_580:text.index("5.7.3", version_580)]
+		assert section_580.count("\n* ") == 10, manual
+		assert "main loop" in section_580, manual
+		assert "version 5.4" in section_580, manual
 
 
 def test_every_localized_manual_has_573_through_559_and_updated_558_changelogs():
