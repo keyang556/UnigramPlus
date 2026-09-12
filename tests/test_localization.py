@@ -79,6 +79,9 @@ def test_required_strings_are_translated_in_every_locale():
 			assert placeholder in entries[VERSION_REPORT], (
 				f"{locale_dir.name} version report is missing {placeholder}"
 			)
+		assert "\n" in entries[VERSION_REPORT], (
+			f"{locale_dir.name} version report does not put UnigramPlus on a new line"
+		)
 
 
 def test_release_version_is_573():

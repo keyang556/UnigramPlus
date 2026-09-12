@@ -1030,7 +1030,7 @@ msgid "Open Unigram and UnigramPlus version information in a read-only window"
 msgstr "在只读窗口中打开 Unigram 和 UnigramPlus 的版本信息"
 
 msgid "Unigram version: {unigramVersion}.\nUnigramPlus version: {addonVersion}."
-msgstr "Unigram 版本：{unigramVersion}。UnigramPlus 版本：{addonVersion}。"
+msgstr "Unigram 版本：{unigramVersion}。\nUnigramPlus 版本：{addonVersion}。"
 
 msgid ""
 "- Added NVDA+Shift+V to announce the installed Unigram and UnigramPlus versions.\n"
