@@ -354,6 +354,7 @@ def test_alt_c_always_uses_the_classic_wx_window():
 			"textInfos": SimpleNamespace(POSITION_ALL="all"),
 			"TextWindow": lambda *args, **kwargs: opened.append(("classic", args, kwargs)),
 			"message": lambda text: opened.append(("message", text)),
+			"conf": SimpleNamespace(get=lambda key: True),
 			"_": lambda text: text,
 		}
 		exec(compile(ast.Module(body=[method], type_ignores=[]), "unigram.py", "exec"), namespace)

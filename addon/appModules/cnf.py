@@ -69,7 +69,23 @@ spec = (
 	"action_when_pressing_up_arrow_in_text_field = string(default=normal)",
 	"announce_endthe_message = boolean(default=True)",
 	"play_end_of_chat_sound = boolean(default=True)",
-	"play_typing_sound = boolean(default=True)"
+	"play_typing_sound = boolean(default=True)",
+	# Everything below was added after 5.4 and is on by default, so upgrading
+	# changes nothing; each one can be turned off to get the older behavior back.
+	# How the voice/video record button is announced (5.5.7).
+	"voiceRecordingButtonLabel = string(default=withElapsedTime)",
+	# Rich message detection for announcements and ALT+C (5.5.9).
+	"richMessageSupport = boolean(default=True)",
+	# Name the profile identity button after the chat instead of "Identity root" (5.5.6).
+	"labelProfileIdentityButton = boolean(default=True)",
+	# Say "Reply"/"Editing" in the message field instead of the usual prompt (5.5.5).
+	"announceComposerState = boolean(default=True)",
+	# Suppress the transient "list" announcement before a message (5.6.3).
+	"suppressMessagesListAnnouncement = boolean(default=True)",
+	# Announce the live state of the call Mute and Camera toggles (5.5.8).
+	"announceCallControlState = boolean(default=True)",
+	# Append the unread count when switching chat folders (5.7.0).
+	"announceFolderUnreadCount = boolean(default=True)"
 )
 
 class cnf:

@@ -256,6 +256,11 @@ class UnigramPlusSettings(SettingsPanel):
 		"received": _("Only in received messages"),
 		"all": _("In all messages")
 	}
+	listVoiceRecordingButtonLabel = {
+		"withElapsedTime": _("Say the label and the elapsed time"),
+		"labelOnly": _("Say the label only"),
+		"none": _("Leave Unigram's own button name"),
+	}
 	list_actions_when_pressing_up_arrow_in_text_field = {
 		"block": _("Do nothing"),
 		"normal": _("Activate editing of last sent message"),
@@ -309,6 +314,12 @@ class UnigramPlusSettings(SettingsPanel):
 		# Type of notification when recording voice messages
 		self.voiceMessageRecordingIndicator = settingsSizerHelper.addLabeledControl(_("Set voice message recording notification method as:"), wx.Choice, choices=[self.listVoiceMessageRecordingIndicator[item] for item in self.listVoiceMessageRecordingIndicator])
 		self.voiceMessageRecordingIndicator.SetStringSelection(self.listVoiceMessageRecordingIndicator[conf.get("voiceMessageRecordingIndicator")])
+		# How the record button itself is announced (added in 5.5.7)
+		self.voiceRecordingButtonLabel = settingsSizerHelper.addLabeledControl(
+			_("Announce the voice message record button as:"), wx.Choice,
+			choices=list(self.listVoiceRecordingButtonLabel.values()))
+		self.voiceRecordingButtonLabel.SetStringSelection(
+			self.listVoiceRecordingButtonLabel[conf.get("voiceRecordingButtonLabel")])
 		# Progress bar announce
 		self.voicingPerformanceIndicators = settingsSizerHelper.addLabeledControl(_("Select the progress bar notification level:"), wx.Choice, choices=[self.listVoicingPerformanceIndicators[item] for item in self.listVoicingPerformanceIndicators])
 		self.voicingPerformanceIndicators.SetStringSelection(self.listVoicingPerformanceIndicators[conf.get("voicingPerformanceIndicators")])
@@ -340,6 +351,30 @@ class UnigramPlusSettings(SettingsPanel):
 		# Play looped Typing.wav while the other side is typing/recording in the open chat
 		self.play_typing_sound = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Play a sound while the other side is typing in the open chat")))
 		self.play_typing_sound.SetValue(conf.get("play_typing_sound"))
+		# Announce rich messages and open their text with ALT+C (added in 5.5.9)
+		self.richMessageSupport = settingsSizerHelper.addItem(wx.CheckBox(
+			self, label=_("Read the full text of rich messages with ALT+C")))
+		self.richMessageSupport.SetValue(conf.get("richMessageSupport"))
+		# Name the profile identity button after the chat (added in 5.5.6)
+		self.labelProfileIdentityButton = settingsSizerHelper.addItem(wx.CheckBox(
+			self, label=_("Announce the chat name and member count on the profile identity button")))
+		self.labelProfileIdentityButton.SetValue(conf.get("labelProfileIdentityButton"))
+		# Say "Reply"/"Editing" in the message field (added in 5.5.5)
+		self.announceComposerState = settingsSizerHelper.addItem(wx.CheckBox(
+			self, label=_("Announce replying and editing in the message edit field")))
+		self.announceComposerState.SetValue(conf.get("announceComposerState"))
+		# Suppress the transient "list" announcement before a message (added in 5.6.3)
+		self.suppressMessagesListAnnouncement = settingsSizerHelper.addItem(wx.CheckBox(
+			self, label=_('Do not announce "list" before a message while navigating a chat')))
+		self.suppressMessagesListAnnouncement.SetValue(conf.get("suppressMessagesListAnnouncement"))
+		# Live state of the call Mute and Camera toggles (added in 5.5.8)
+		self.announceCallControlState = settingsSizerHelper.addItem(wx.CheckBox(
+			self, label=_("Announce the current state of the microphone and camera buttons during a call")))
+		self.announceCallControlState.SetValue(conf.get("announceCallControlState"))
+		# Unread count when switching chat folders (added in 5.7.0)
+		self.announceFolderUnreadCount = settingsSizerHelper.addItem(wx.CheckBox(
+			self, label=_("Announce the unread count when switching between chat folders")))
+		self.announceFolderUnreadCount.SetValue(conf.get("announceFolderUnreadCount"))
 		# Button to open the bundled sounds folder
 		self.openSoundsFolder = settingsSizerHelper.addItem(wx.Button(self, label=_("Open UnigramPlus sounds folder")))
 		self.openSoundsFolder.Bind(wx.EVT_BUTTON, openSoundFolder)
@@ -379,6 +414,13 @@ class UnigramPlusSettings(SettingsPanel):
 		conf.set("play_end_of_chat_sound", self.play_end_of_chat_sound.IsChecked())
 		conf.set("play_typing_sound", self.play_typing_sound.IsChecked())
 		conf.set("is_automatically_check_for_updates", self.is_automatically_check_for_updates.IsChecked())
+		conf.set("voiceRecordingButtonLabel", self.get_key(self.listVoiceRecordingButtonLabel, self.voiceRecordingButtonLabel.GetStringSelection()))
+		conf.set("richMessageSupport", self.richMessageSupport.IsChecked())
+		conf.set("labelProfileIdentityButton", self.labelProfileIdentityButton.IsChecked())
+		conf.set("announceComposerState", self.announceComposerState.IsChecked())
+		conf.set("suppressMessagesListAnnouncement", self.suppressMessagesListAnnouncement.IsChecked())
+		conf.set("announceCallControlState", self.announceCallControlState.IsChecked())
+		conf.set("announceFolderUnreadCount", self.announceFolderUnreadCount.IsChecked())
 		# Sync the typing-sound tracker with the new setting
 		try:
 			from appModules.unigram import Typing_sound_tracking

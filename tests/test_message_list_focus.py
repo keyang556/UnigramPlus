@@ -7,6 +7,13 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE_PATH = ROOT / "addon" / "appModules" / "unigram.py"
 
 
+def _focus_namespace(suppress=True):
+	return {
+		"Role": SimpleNamespace(LIST="list"),
+		"conf": SimpleNamespace(get=lambda key: suppress),
+	}
+
+
 def _load_app_method(name, namespace):
 	module = ast.parse(SOURCE_PATH.read_text(encoding="utf-8"))
 	app_module = next(
@@ -24,7 +31,7 @@ def _load_app_method(name, namespace):
 
 def test_messages_list_focus_ancestor_is_suppressed_before_nvda_can_announce_it():
 	forwarded = []
-	method = _load_app_method("event_focusEntered", {"Role": SimpleNamespace(LIST="list")})
+	method = _load_app_method("event_focusEntered", _focus_namespace())
 	instance = SimpleNamespace(isUnigramWindow=True)
 	messages = SimpleNamespace(role="list", UIAAutomationId="Messages")
 
@@ -35,7 +42,7 @@ def test_messages_list_focus_ancestor_is_suppressed_before_nvda_can_announce_it(
 
 def test_other_list_ancestors_keep_their_standard_nvda_announcements():
 	forwarded = []
-	method = _load_app_method("event_focusEntered", {"Role": SimpleNamespace(LIST="list")})
+	method = _load_app_method("event_focusEntered", _focus_namespace())
 	instance = SimpleNamespace(isUnigramWindow=True)
 	chat_list = SimpleNamespace(role="list", UIAAutomationId="ChatsList")
 
@@ -46,7 +53,7 @@ def test_other_list_ancestors_keep_their_standard_nvda_announcements():
 
 def test_non_unigram_windows_continue_to_delegate_focus_entered_events_to_the_fallback():
 	delegated = []
-	method = _load_app_method("event_focusEntered", {"Role": SimpleNamespace(LIST="list")})
+	method = _load_app_method("event_focusEntered", _focus_namespace())
 	fallback = SimpleNamespace(
 		event_focusEntered=lambda obj, next_handler: delegated.append((obj, next_handler))
 	)
@@ -57,3 +64,15 @@ def test_non_unigram_windows_continue_to_delegate_focus_entered_events_to_the_fa
 	method(instance, obj, next_handler)
 
 	assert delegated == [(obj, next_handler)]
+
+
+def test_the_messages_list_announcement_can_be_restored_from_settings():
+	# Turning the setting off gives NVDA's standard behavior back.
+	forwarded = []
+	method = _load_app_method("event_focusEntered", _focus_namespace(suppress=False))
+	instance = SimpleNamespace(isUnigramWindow=True)
+	messages = SimpleNamespace(role="list", UIAAutomationId="Messages")
+
+	method(instance, messages, lambda: forwarded.append(messages))
+
+	assert forwarded == [messages]
