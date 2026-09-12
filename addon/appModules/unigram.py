@@ -2068,37 +2068,57 @@ class AppModule(appModuleHandler.AppModule):
 		else: message(_("Nothing is playing right now"))
 
 	# Playing and opening media with the space bar
+	def _find_media_button_in_message(self, obj):
+		"""Return the play or download button of a message, and whether to keep focus."""
+		try:
+			media = getattr(obj, "media", None)
+		except Exception:
+			media = None
+		if media:
+			targetButton = next(
+				(
+					item for item in media.children
+					if item.role in (Role.LINK, Role.BUTTON) and item.UIAAutomationId == "Button"
+				),
+				None,
+			)
+			is_save_focus = True
+			try:
+				if targetButton and targetButton.previous and targetButton.previous.UIAAutomationId != "Button":
+					is_save_focus = False
+			except Exception:
+				pass
+			return targetButton, is_save_focus
+		item = obj.firstChild
+		while item:
+			try:
+				if item.role in (Role.LINK, Role.BUTTON) and item.UIAAutomationId == "Button":
+					location = item.location
+					return item, not (location and location.width > 150)
+			except Exception:
+				pass
+			item = item.next
+		return None, True
+
 	def script_actionMediaInMessage(self, gesture):
 		obj = api.getFocusObject()
-		message_states = obj.states
-		gesture.send()
-		if not self.is_message_object(obj): return
-		def spechState():
-			is_save_focus = True
-			targetButton = None
-			if obj.states != message_states: return
-			if obj.media:
-				targetButton = next((item for item in obj.media.children if item.role in (Role.LINK, Role.BUTTON) and item.UIAAutomationId == "Button"), None)
-				if targetButton and targetButton.previous and targetButton.previous.UIAAutomationId != "Button": is_save_focus = False
-			else:
-				item = obj.firstChild
-				while item:
-					if item.role in (Role.LINK, Role.BUTTON) and item.UIAAutomationId == "Button":
-						targetButton = item
-						if item.location.width > 150: is_save_focus = False
-						break
-					# elif item.role == Role.CHECKBOX and item.simpleFirstChild.UIAAutomationId == "Button":
-						targetButton = item.simpleFirstChild
-						if targetButton.location.width > 150 or item.firstChild.UIAAutomationId != "Button": is_save_focus = False
-						break
-					item = item.next
-			if not targetButton: return
-			targetButton.doAction()
-			if is_save_focus:
-				obj.setFocus()
-			else:
-				self.is_exit_from_media = True
-		thr = Timer(.1, spechState).start()
+		if not self.is_message_object(obj):
+			gesture.send()
+			return
+		targetButton, is_save_focus = self._find_media_button_in_message(obj)
+		if not targetButton:
+			# Nothing to play here, so leave Space to Unigram.
+			gesture.send()
+			return
+		# Current Unigram exposes a message as a ToggleButton, so passing Space on
+		# would select the message instead of playing its media. That selection
+		# also changed the message state, which is what made the previous handler
+		# give up before it ever pressed this button.
+		targetButton.doAction()
+		if is_save_focus:
+			obj.setFocus()
+		else:
+			self.is_exit_from_media = True
 
 	# Go to chat list
 	@script(description=_("Move focus to chat list"), gesture="kb:ALT+1")
@@ -3797,7 +3817,10 @@ class AppModule(appModuleHandler.AppModule):
 			if code is None:
 				continue
 			try:
-				if winUser.getKeyState(code) & 32768:
+				# The asynchronous state is the physical one. getKeyState answers
+				# from this thread's message queue, which never received these
+				# keystrokes: they went to Unigram.
+				if winUser.getAsyncKeyState(code) & 32768:
 					held.append(code)
 			except Exception:
 				pass
@@ -3807,13 +3830,13 @@ class AppModule(appModuleHandler.AppModule):
 		try:
 			KeyboardInputGesture.fromName(key_name).send()
 		finally:
+			# Press back exactly what was lifted, unconditionally. Skipping this
+			# leaves the modifiers released while the user is still holding them,
+			# so the next arrow arrives without them and the shortcut stops
+			# repeating until the user lets go and presses it again.
 			for code in held:
-				try:
-					if winUser.getKeyState(code) & 32768:
-						continue
-					winUser.keybd_event(code, 0, 0, 0)
-				except Exception:
-					pass
+				try: winUser.keybd_event(code, 0, 0, 0)
+				except Exception: pass
 
 	def rewind_voice_message(self, direction):
 		slider = self._get_playback_slider()
