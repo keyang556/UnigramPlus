@@ -205,6 +205,12 @@ And remember that everyone who read this line thought that someone will definite
 
 * Moved the add-on's recurring background checks off NVDA's main loop, so chat
   navigation, typing and speech are no longer delayed by Unigram's UIA replies.
+* Fixed ALT+E for closing the audio player. It looked for the player through a
+  ShuffleButton that current Unigram no longer has, so it always reported that
+  nothing was playing; the close button is now found by its own icon.
+* Fixed Ctrl+ALT+Left and Ctrl+ALT+Right for seeking through a voice message.
+  The modifiers the user is still holding are now lifted around the arrow key,
+  so Unigram receives the arrow instead of Ctrl+ALT+Arrow and ignoring it.
 * Every behavior added after 5.4 can now be turned on or off in UnigramPlus
   settings: the voice message record button label, rich message text with ALT+C,
   the profile identity button label, the replying and editing announcement in the

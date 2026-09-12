@@ -2021,14 +2021,39 @@ class AppModule(appModuleHandler.AppModule):
 		else: message(_("Nothing is playing right now"))
 
 	# Audio player close function
+	def _get_audio_player_close_button(self):
+		"""Find the player's close button next to the playback controls.
+
+		The old lookup anchored on a ShuffleButton that current Unigram no longer
+		has, so it never found anything. The button itself carries no automation
+		id and its name is localized, which leaves its icon as the stable marker;
+		PlaybackButton is required first so an unrelated close button elsewhere in
+		the window cannot be picked while no player is open.
+		"""
+		elements = self.getElements()
+		if not next((item for item in elements if item.UIAAutomationId == "PlaybackButton"), None):
+			return None
+		close_icon = icons_in_audio_player["close"]
+		for item in elements:
+			try:
+				if item.role != Role.BUTTON or item.UIAAutomationId:
+					continue
+				first_child = item.firstChild
+				if first_child is not None and first_child.name == close_icon:
+					return item
+			except Exception:
+				continue
+		return None
+
 	@script(description=_("Close audio player"), gesture="kb:ALT+E")
 	def script_closingVoiceMessage(self, gesture, isMessage = True):
-		try: targetButton = next((item for item in self.getElements()[1:] if item.previous.role == Role.TOGGLEBUTTON and item.previous.UIAAutomationId == "ShuffleButton"), False)
-		except: targetButton = False
+		targetButton = self._get_audio_player_close_button()
 		if targetButton:
 			lastFocus = api.getFocusObject()
 			targetButton.doAction()
-			lastFocus.setFocus()
+			if lastFocus:
+				try: lastFocus.setFocus()
+				except Exception: pass
 			message(_("The audio player has been closed"))
 		else: message(_("Nothing is playing right now"))
 
@@ -3755,6 +3780,41 @@ class AppModule(appModuleHandler.AppModule):
 			return candidate
 		return None
 
+	_MODIFIER_KEYS = ("VK_CONTROL", "VK_MENU", "VK_SHIFT", "VK_LWIN", "VK_RWIN")
+
+	def _send_key_without_held_modifiers(self, key_name):
+		"""Send a bare key while the user still holds the shortcut's modifiers.
+
+		NVDA's gesture send() presses only the modifiers the gesture itself
+		names; the ones the user is physically holding stay down. Unigram's Seek
+		slider therefore received Ctrl+Alt+Left instead of Left and ignored it,
+		which is why seeking did nothing. Lift those modifiers around the key and
+		put back only the ones the user is still holding afterwards.
+		"""
+		held = []
+		for name in self._MODIFIER_KEYS:
+			code = getattr(winUser, name, None)
+			if code is None:
+				continue
+			try:
+				if winUser.getKeyState(code) & 32768:
+					held.append(code)
+			except Exception:
+				pass
+		for code in held:
+			try: winUser.keybd_event(code, 0, winUser.KEYEVENTF_KEYUP, 0)
+			except Exception: pass
+		try:
+			KeyboardInputGesture.fromName(key_name).send()
+		finally:
+			for code in held:
+				try:
+					if winUser.getKeyState(code) & 32768:
+						continue
+					winUser.keybd_event(code, 0, 0, 0)
+				except Exception:
+					pass
+
 	def rewind_voice_message(self, direction):
 		slider = self._get_playback_slider()
 		if not slider:
@@ -3764,7 +3824,7 @@ class AppModule(appModuleHandler.AppModule):
 		succeeded = False
 		try:
 			slider.setFocus()
-			KeyboardInputGesture.fromName(direction).send()
+			self._send_key_without_held_modifiers(direction)
 			succeeded = True
 		except Exception as error:
 			log.debug("Could not seek Unigram voice-message playback: %r" % error)
@@ -3778,11 +3838,6 @@ class AppModule(appModuleHandler.AppModule):
 			message(_("Nothing is playing right now"))
 			return False
 		speech.cancelSpeech()
-		if obj:
-			try:
-				obj.setFocus()
-			except Exception:
-				pass
 		return True
 
 	def script_rewind_voice_message(self, gesture):

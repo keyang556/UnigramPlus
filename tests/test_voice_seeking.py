@@ -161,6 +161,7 @@ def test_voice_seek_uses_current_slider_and_restores_playback_and_focus(directio
 	)
 	instance = SimpleNamespace(
 		_get_playback_slider=lambda: slider,
+		_send_key_without_held_modifiers=lambda key: events.append(key),
 	)
 
 	assert rewind(instance, direction) is True
@@ -169,7 +170,6 @@ def test_voice_seek_uses_current_slider_and_restores_playback_and_focus(directio
 		direction,
 		"restoreFocus",
 		"cancelSpeech",
-		"restoreFocus",
 	]
 	assert messages == []
 
@@ -215,7 +215,10 @@ def test_voice_seek_restores_focus_and_reports_once_when_slider_turns_stale():
 			"log": SimpleNamespace(debug=lambda *args: events.append("logged")),
 		},
 	)
-	instance = SimpleNamespace(_get_playback_slider=lambda: slider)
+	instance = SimpleNamespace(
+		_get_playback_slider=lambda: slider,
+		_send_key_without_held_modifiers=lambda key: events.append(key),
+	)
 
 	assert rewind(instance, "rightArrow") is False
 	assert events == ["logged", "restore"]
@@ -227,3 +230,130 @@ def test_playback_slider_detection_keeps_legacy_slider_role_compatibility():
 	legacy = _slider(role="slider", name="")
 
 	assert is_visible(None, legacy)
+
+
+def test_voice_seek_lifts_the_modifiers_the_user_is_holding():
+	"""Ctrl+Alt+Left/Right did nothing because the modifiers stayed down.
+
+	Unigram's Seek slider accepts a bare arrow key. NVDA's send() leaves the
+	modifiers the user physically holds pressed, so the app saw Ctrl+Alt+Left
+	and ignored it.
+	"""
+	events = []
+	codes = {"ctrl": 17, "alt": 18, "shift": 16, "lwin": 91, "rwin": 92}
+	state = {codes["ctrl"]: True, codes["alt"]: True}
+
+	def key_state(code):
+		return 32768 if state.get(code) else 0
+
+	def keybd_event(code, scan, flags, extra):
+		if flags & 2:
+			state[code] = False
+			events.append(("up", code))
+		else:
+			state[code] = True
+			events.append(("down", code))
+
+	win_user = SimpleNamespace(
+		VK_CONTROL=codes["ctrl"],
+		VK_MENU=codes["alt"],
+		VK_SHIFT=codes["shift"],
+		VK_LWIN=codes["lwin"],
+		VK_RWIN=codes["rwin"],
+		KEYEVENTF_KEYUP=2,
+		getKeyState=key_state,
+		keybd_event=keybd_event,
+	)
+
+	class Gesture:
+		def send(self):
+			# What the app really sees at this moment.
+			events.append(("key", tuple(sorted(c for c, held in state.items() if held))))
+
+	(send_key,) = _load_methods(
+		["_send_key_without_held_modifiers"],
+		{
+			"winUser": win_user,
+			"KeyboardInputGesture": SimpleNamespace(fromName=lambda name: Gesture()),
+		},
+	)
+	instance = SimpleNamespace(_MODIFIER_KEYS=("VK_CONTROL", "VK_MENU", "VK_SHIFT", "VK_LWIN", "VK_RWIN"))
+
+	send_key(instance, "leftArrow")
+
+	key_events = [event for event in events if event[0] == "key"]
+	assert key_events == [("key", ())], "the arrow must arrive with no modifier held"
+	assert state[codes["ctrl"]] and state[codes["alt"]], "modifiers must be put back"
+	assert not state.get(codes["shift"]), "a modifier the user never held must stay up"
+
+
+def test_seeking_focuses_the_slider_and_restores_the_previous_focus():
+	events = []
+	messages = []
+	focus = SimpleNamespace(setFocus=lambda: events.append("restoreFocus"))
+	slider = _slider(role="unknown")
+	slider.setFocus = lambda: events.append("sliderFocus")
+	(rewind,) = _load_methods(
+		["rewind_voice_message"],
+		{
+			"message": messages.append,
+			"_": lambda text: text,
+			"api": SimpleNamespace(getFocusObject=lambda: focus),
+			"speech": SimpleNamespace(cancelSpeech=lambda: events.append("cancelSpeech")),
+		},
+	)
+	instance = SimpleNamespace(
+		_get_playback_slider=lambda: slider,
+		_send_key_without_held_modifiers=lambda key: events.append(key),
+	)
+
+	assert rewind(instance, "rightArrow") is True
+	assert events == ["sliderFocus", "rightArrow", "restoreFocus", "cancelSpeech"]
+	assert messages == []
+
+
+def _player_button(automation_id="", role="button", glyph=None, name=""):
+	child = SimpleNamespace(name=glyph) if glyph is not None else None
+	return SimpleNamespace(
+		UIAAutomationId=automation_id,
+		role=role,
+		name=name,
+		firstChild=child,
+	)
+
+
+def _load_close_button_lookup(elements):
+	namespace = {
+		"Role": SimpleNamespace(BUTTON="button"),
+		"icons_in_audio_player": {"close": ""},
+	}
+	(lookup,) = _load_methods(["_get_audio_player_close_button"], namespace)
+	instance = SimpleNamespace(getElements=lambda: elements)
+	return lambda: lookup(instance)
+
+
+def test_close_audio_player_finds_the_button_by_its_icon():
+	"""Current Unigram has no ShuffleButton, which the old lookup anchored on."""
+	close = _player_button(glyph="", name="Close audio player")
+	elements = [
+		_player_button(automation_id="PreviousButton", glyph=""),
+		_player_button(automation_id="PlaybackButton", glyph=""),
+		_player_button(automation_id="SpeedButton", name="Speed"),
+		close,
+	]
+
+	assert _load_close_button_lookup(elements)() is close
+
+
+def test_close_audio_player_reports_nothing_playing_when_no_player_is_open():
+	# The close glyph alone is not enough: without PlaybackButton no player is up.
+	elements = [_player_button(glyph="", name="Close something else")]
+
+	assert _load_close_button_lookup(elements)() is None
+
+
+def test_close_audio_player_ignores_buttons_that_carry_an_automation_id():
+	labelled = _player_button(automation_id="Close", glyph="", name="Close Unigram")
+	elements = [_player_button(automation_id="PlaybackButton", glyph=""), labelled]
+
+	assert _load_close_button_lookup(elements)() is None
