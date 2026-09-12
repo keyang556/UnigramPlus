@@ -297,6 +297,7 @@ def test_shift_delete_uses_unigrams_native_delete_for_messages():
 		"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args)),
 		"_": lambda text: text,
 	}
+	_load_module_members({"_relative"}, namespace)
 	method = _load_app_method("startDeleteMessage", namespace)
 	instance = SimpleNamespace(
 		is_message_object=lambda obj: True,
@@ -330,6 +331,7 @@ def test_native_delete_preserves_the_confirmation_dialog_setting():
 		),
 		"_": lambda text: text,
 	}
+	_load_module_members({"_relative"}, namespace)
 	method = _load_app_method("startDeleteMessage", namespace)
 	instance = SimpleNamespace(
 		is_message_object=lambda obj: True,
@@ -357,6 +359,7 @@ def test_shift_delete_keeps_context_menu_fallback_for_chat_rows():
 		"icons_from_context_menu": {"delete": "delete"},
 		"_": lambda text: text,
 	}
+	_load_module_members({"_relative"}, namespace)
 	method = _load_app_method("startDeleteMessage", namespace)
 	instance = SimpleNamespace(
 		is_message_object=lambda obj: False,

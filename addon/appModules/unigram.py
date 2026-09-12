@@ -194,6 +194,32 @@ def play_end_of_chat_sound():
 		return False
 
 
+def _relative(obj, *steps):
+	"""Follow a chain of UIA relations, giving up at the first missing link.
+
+	Unigram rebuilds its templates constantly, so firstChild, next and parent
+	are all routinely absent. Written out inline, one missing link raises inside
+	a script and the shortcut dies with nothing announced.
+	"""
+	for step in steps:
+		if obj is None:
+			return None
+		try:
+			obj = getattr(obj, step)
+		except Exception:
+			return None
+	return obj
+
+
+def _is_on_screen(obj):
+	"""True when the object has a real location, tolerating a missing one."""
+	try:
+		location = obj.location if obj is not None else None
+		return bool(location and location.width)
+	except Exception:
+		return False
+
+
 def _normalized_text(text):
 	try: text = text or ""
 	except Exception: text = ""
@@ -1064,7 +1090,9 @@ class Audio_and_video_button:
 		if self.UIAAutomationId == "Mute": new_name = _("Microphone on") if toggled_on else _("Microphone muted")
 		elif self.UIAAutomationId == "Camera": new_name = _("Camera off") if toggled_on else _("Camera on")
 		elif self.UIAAutomationId == "Audio": new_name = self.next.name if self.next else self.name
-		elif self.UIAAutomationId == "Video": new_name = _("Camera on") if self.firstChild.name == "\ue964" else _("Camera off") if self.firstChild.name == "\ue963" else self.name
+		elif self.UIAAutomationId == "Video":
+			glyph = getattr(_relative(self, "firstChild"), "name", "")
+			new_name = _("Camera on") if glyph == "\ue964" else _("Camera off") if glyph == "\ue963" else self.name
 		_announce_call_state_later(new_name, 100)
 	
 	def initOverlayClass(self):
@@ -1141,8 +1169,9 @@ class Message_list_item(ListItem):
 			obj = self.list_media[self.selected_media]
 		if not obj: return
 		self.media = obj
-		if obj.firstChild.UIAAutomationId == "Subtitle": name = _("Photo")
-		elif obj.firstChild.UIAAutomationId == "Texture": name = _("Video")
+		first_child_id = _relative(obj, "firstChild", "UIAAutomationId")
+		if first_child_id == "Subtitle": name = _("Photo")
+		elif first_child_id == "Texture": name = _("Video")
 		else:
 			name = next((item.name for item in obj.children if item.UIAAutomationId in ("Title",)) , "Медіа")
 		message(name)
@@ -1198,7 +1227,8 @@ class Message_list_item(ListItem):
 class SettingsPanelListItem:
 
 	def script_activate_element(self, gesture):
-		self.firstChild.doAction()
+		if self.firstChild:
+			self.firstChild.doAction()
 		self.appModule.script_toLastMessage(gesture)
 
 	__gestures = {
@@ -1824,12 +1854,11 @@ class AppModule(appModuleHandler.AppModule):
 		else:
 			targetList = next((item for item in reversed(self.getElements()) if item.role == Role.TABCONTROL and item.UIAAutomationId == "rpMasterTitlebar"), False)
 			if not targetList: return False
-			targetList = next((item for item in targetList.firstChild.children if item.role == Role.LIST and 	item.UIAAutomationId == "ChatsList"), False)
+			first_child = _relative(targetList, "firstChild")
+			if not first_child: return False
+			targetList = next((item for item in first_child.children if item.role == Role.LIST and 	item.UIAAutomationId == "ChatsList"), False)
 		if targetList: self.saved_items.save("chats", targetList)
 		return targetList
-
-	def parse_version(v):
-		return list(map(int, v.split('.')))
 
 	def getElements(self):
 		try: return api.getForegroundObject().lastChild.previous.children
@@ -1841,24 +1870,52 @@ class AppModule(appModuleHandler.AppModule):
 
 
 	def get_settings_panel(self):
-		settings_panel = next((item for item in self.getElements() if item.role in (Role.PANE, Role.LIST) and item.UIAAutomationId in ("ScrollingHost", "List", "") and (item.previous.UIAAutomationId == "DetailHeaderPresenter"  or item.location.width > 320)), None)
+		settings_panel = next(
+			(
+				item for item in self.getElements()
+				if item.role in (Role.PANE, Role.LIST)
+				and item.UIAAutomationId in ("ScrollingHost", "List", "")
+				and (
+					# The first element of the window has no previous sibling.
+					_relative(item, "previous", "UIAAutomationId") == "DetailHeaderPresenter"
+					or (_is_on_screen(item) and item.location.width > 320)
+				)
+			),
+			None,
+		)
 		if not settings_panel: return False
 		return next(( item for item in settings_panel.children if State.FOCUSABLE in item.states), settings_panel.firstChild)
 
 	def get_contacts_list(self):
 		try:
-			message("11")
-			dialog = next((item for item in self.getElements() if item.role == Role.DIALOG and item.firstChild.next.UIAAutomationId == "SearchField" and item.firstChild.next.next.role == Role.LIST and item.firstChild.next.next.UIAAutomationId == "ScrollingHost"), None)
-			message("22")
-			first_item = next((item for item in dialog.children if item.role == Role.LISTITEM), None)
-			message("333")
-			return first_item
-		except Exception as e:
-			print(e)
+			dialog = next(
+				(
+					item for item in self.getElements()
+					if item.role == Role.DIALOG
+					and _relative(item, "firstChild", "next", "UIAAutomationId") == "SearchField"
+					and _relative(item, "firstChild", "next", "next", "role") == Role.LIST
+					and _relative(item, "firstChild", "next", "next", "UIAAutomationId") == "ScrollingHost"
+				),
+				None,
+			)
+			if not dialog:
+				return False
+			return next((item for item in dialog.children if item.role == Role.LISTITEM), None)
+		except Exception as error:
+			log.debug("Could not find the Unigram contacts list: %r" % error)
 			return False
 
 	def get_settings_list(self):
-		a = next((item for item in self.getElements() if item.role == Role.PANE and item.UIAAutomationId == "ScrollingHost" and item.firstChild.next.UIAAutomationId == "Title" and item.firstChild.next.next.UIAAutomationId == "Identity"), None)
+		a = next(
+			(
+				item for item in self.getElements()
+				if item.role == Role.PANE
+				and item.UIAAutomationId == "ScrollingHost"
+				and _relative(item, "firstChild", "next", "UIAAutomationId") == "Title"
+				and _relative(item, "firstChild", "next", "next", "UIAAutomationId") == "Identity"
+			),
+			None,
+		)
 		if not a:
 			return False
 		try: b = a.firstChild.next.next.next.next.firstChild
@@ -2289,8 +2346,9 @@ class AppModule(appModuleHandler.AppModule):
 	@script(description=_("Move focus to list of chat folders"), gesture="kb:ALT+4")
 	def script_to_tabs_folder(self, gesture):
 		obj = self.saved_items.get("tabs folder")
-		if obj and obj.location and obj.location.width:
-			el = next((item for item in self.tabs_folder_element.children if State.SELECTED in item.states), None)
+		folders = getattr(self, "tabs_folder_element", None)
+		if folders and _is_on_screen(obj):
+			el = next((item for item in folders.children if State.SELECTED in item.states), None)
 			if el: el.setFocus()
 			else: message(_("Chat folder list not found"))
 		else:
@@ -2304,14 +2362,19 @@ class AppModule(appModuleHandler.AppModule):
 			else: message(_("Chat folder list not found"))
 
 
-	def _find_descendant(self, root, role=None, automation_id=None, max_depth=6):
-		# Breadth-first walk for a descendant matching role and/or UIA automation id.
+	def _find_descendant(self, root, role=None, automation_id=None, max_depth=6, match=None):
+		# Breadth-first walk for a descendant matching role, UIA automation id
+		# and/or a caller-supplied test.
 		queue_list = [(root, 0)]
 		while queue_list:
 			obj, depth = queue_list.pop(0)
 			if depth > max_depth: continue
 			try:
-				if (role is None or obj.role == role) and (automation_id is None or obj.UIAAutomationId == automation_id):
+				if (
+					(role is None or obj.role == role)
+					and (automation_id is None or obj.UIAAutomationId == automation_id)
+					and (match is None or match(obj))
+				):
 					return obj
 			except: pass
 			try:
@@ -2438,42 +2501,51 @@ class AppModule(appModuleHandler.AppModule):
 					if first.role == Role.LISTITEM and self._looks_like_topic_item(first): return item
 			except: pass
 		# Last resort: BFS through everything reachable to find a topic-cell list.
-		try: root = api.getForegroundObject().lastChild.previous
-		except: root = None
+		root = _relative(api.getForegroundObject(), "lastChild", "previous")
 		if root:
-			candidate = self._find_topic_list_recursive(root, max_depth=10)
+			candidate = self._find_descendant(
+				root, Role.LIST, max_depth=10, match=self._is_topic_list
+			)
 			if candidate: return candidate
 		return False
 
-	def _find_topic_list_recursive(self, root, max_depth=10):
-		queue_list = [(root, 0)]
-		while queue_list:
-			obj, depth = queue_list.pop(0)
-			if depth > max_depth: continue
-			try:
-				if obj.role == Role.LIST and obj.UIAAutomationId != "ChatsList" and obj.firstChild:
-					first = obj.firstChild
-					if first.role == Role.LISTITEM and self._looks_like_topic_item(first):
-						return obj
-			except: pass
-			try:
-				child = obj.firstChild
-				while child:
-					queue_list.append((child, depth + 1))
-					child = child.next
-			except: pass
-		return False
+	def _is_topic_list(self, obj):
+		if obj.UIAAutomationId == "ChatsList":
+			return False
+		first = obj.firstChild
+		return bool(
+			first is not None
+			and first.role == Role.LISTITEM
+			and self._looks_like_topic_item(first)
+		)
 
 	@script(description=_("Move focus to the list of group threads"), gesture="kb:ALT+6")
 	def script_move_focus_to_list_threads(self, gesture):
 		branch_list = self.get_branch_list()
-		if branch_list: branch_list.firstChild.setFocus()
+		first_thread = _relative(branch_list, "firstChild")
+		if first_thread: first_thread.setFocus()
 		else: message(_("No list with threads was found"))
 
 	def get_profile_panel(self):
 		list = self.profile_panel_element
-		if not list or not list.location.width:
-			list = next((item for item in self.getElements() if (item.role == Role.LIST and item.UIAAutomationId == "ScrollingHost" and item.firstChild and item.firstChild.UIAAutomationId in ("Photo", "Segments")) or (item.role == Role.LINK and item.UIAAutomationId == "Photo" and item.next.UIAAutomationId == "Title")), None)
+		if not _is_on_screen(list):
+			list = next(
+				(
+					item for item in self.getElements()
+					if (
+						item.role == Role.LIST
+						and item.UIAAutomationId == "ScrollingHost"
+						and _relative(item, "firstChild", "UIAAutomationId") in ("Photo", "Segments")
+					)
+					or (
+						item.role == Role.LINK
+						and item.UIAAutomationId == "Photo"
+						# The last element has no next sibling to compare.
+						and _relative(item, "next", "UIAAutomationId") == "Title"
+					)
+				),
+				None,
+			)
 		if not list:
 			return False
 		if list.UIAAutomationId == "Photo":
@@ -2482,10 +2554,11 @@ class AppModule(appModuleHandler.AppModule):
 		self.profile_panel_element = list
 		list2 = list.firstChild
 		for i in range(15):
+			if list2 is None: break
 			if list2.role == Role.LIST:
 				# Now we find the selected element to set focus on it
 				return next((item for item in list2.children if State.SELECTED in item.states), list2.firstChild)
-			else: list2 = list2.next
+			else: list2 = _relative(list2, "next")
 		return list.firstChild
 
 	# Move focus to open profile
@@ -2505,14 +2578,14 @@ class AppModule(appModuleHandler.AppModule):
 		isGroupCall = False
 		title = False
 		obj = self.saved_items.get("profile name")
-		if obj and obj.location.width != 0:
+		if _is_on_screen(obj):
 			title = obj
 			message(obj.name)
 		for item in self.getElements():
 			if not title and item.role == Role.BUTTON and item.UIAAutomationId == "Profile":
 				message(item.name)
 				title = item
-			elif item.role == Role.LINK and item.UIAAutomationId == "GroupCall": isGroupCall = item.firstChild.name
+			elif item.role == Role.LINK and item.UIAAutomationId == "GroupCall": isGroupCall = getattr(_relative(item, "firstChild"), "name", "")
 		if title:
 			self.saved_items.save("profile name", title)
 			if isGroupCall: message(isGroupCall)
@@ -2528,11 +2601,18 @@ class AppModule(appModuleHandler.AppModule):
 			elif not messages.lastChild: message(_("This chat is empty"))
 			return False
 		targetButton = False
-		while lastObj:
-			if lastObj.firstChild.role== Role.BUTTON  and lastObj.firstChild.firstChild.next.name == "\ue0e5":
+		# Bounded, and tolerant of a row that does not have this child layout:
+		# one missing link used to raise and kill the shortcut silently, and a
+		# long history was walked to its very first message.
+		for _step in range(500):
+			if not lastObj: break
+			if (
+				_relative(lastObj, "firstChild", "role") == Role.BUTTON
+				and getattr(_relative(lastObj, "firstChild", "firstChild", "next"), "name", "") == "\ue0e5"
+			):
 				targetButton = lastObj
 				break
-			else: lastObj = lastObj.previous
+			lastObj = _relative(lastObj, "previous")
 		if targetButton: targetButton.setFocus()
 		else: message(_("There are no unread messages in this chat"))
 
@@ -2556,7 +2636,14 @@ class AppModule(appModuleHandler.AppModule):
 	def script_instantIew(self, gesture):
 		obj = api.getFocusObject()
 		if not self.is_message_object(obj): return
-		targetButton = next((item.next for item in obj.children if item.UIAAutomationId == "TextBlock" and item.next.lastChild and item.next.lastChild.UIAAutomationId == "Button"), False)
+		targetButton = next(
+			(
+				item.next for item in obj.children
+				if item.UIAAutomationId == "TextBlock"
+				and _relative(item, "next", "lastChild", "UIAAutomationId") == "Button"
+			),
+			False,
+		)
 		if targetButton:
 			targetButton.doAction()
 			targetList = next((item for item in self.getElements() if item.role == Role.LIST and item.UIAAutomationId == "ScrollingHost"), False)
@@ -2726,13 +2813,13 @@ class AppModule(appModuleHandler.AppModule):
 	@script(description=_("Open current chat profile"), gesture="kb:alt+shift+P")
 	def script_openProfile(self, gesture):
 		profile = self.saved_items.get("profile name")
-		if not profile or profile.location.width == 0:
+		if not _is_on_screen(profile):
 			# If the element was not cached, then we will try to find it in the window
 			profile = next((item for item in self.getElements() if item.role ==Role.BUTTON and item.UIAAutomationId == "Profile"), None)
 			if profile:
 				# If we managed to find the element, then we cache it
 				self.saved_items.save("profile name", profile)
-		if profile and profile.location.width != 0:
+		if _is_on_screen(profile):
 			self.isOpenProfile = api.getFocusObject()
 			profile.doAction()
 		else:
@@ -2908,12 +2995,12 @@ class AppModule(appModuleHandler.AppModule):
 				options, votes = "", ""
 				for el in obj.children:
 					if el.UIAAutomationId == "Votes": votes = ". "+el.name+". "
-					elif el.role == Role.TOGGLEBUTTON and el.firstChild.role == Role.PROGRESSBAR:
+					elif el.role == Role.TOGGLEBUTTON and _relative(el, "firstChild", "role") == Role.PROGRESSBAR:
 						if el.childCount == 3: options += self.processing_of_answer_options_in_surveys(el)
 						elif el.childCount == 2: options+=el.children[1].name+", "
 				if options: options = _("Answer options")+": "+options
 				obj.name = obj.name.replace(item.name+", ", item.name+votes+options)
-			elif conf.get("actionDescriptionForLinks")  and item.role == Role.LINK and len(item.name) > 30 and not item.UIAAutomationId and item.firstChild.UIAAutomationId == "Label":
+			elif conf.get("actionDescriptionForLinks")  and item.role == Role.LINK and len(item.name) > 30 and not item.UIAAutomationId and _relative(item, "firstChild", "UIAAutomationId") == "Label":
 				# Processing the description of the link contained in the message
 				description = item.name.strip()
 				if not conf.get("voiceFullDescriptionOfLinkToYoutube") and description.startswith("YouTube "):
@@ -2942,7 +3029,20 @@ class AppModule(appModuleHandler.AppModule):
 		# Checking Whether to Add a Message Sender Name
 		profile_name = self.saved_items.get("profile name")
 		if conf.get("saySenderName") in ("sent", "all") and sender_message == "send" and not header: sender = _("You")+".\n"
-		elif conf.get("saySenderName") in ("received", "all") and profile_name and obj.simpleFirstChild.UIAAutomationId not in ("Photo", "1HeaderLabel", "PhotoRoot") and obj.simpleFirstChild.location.left - obj.location.left < 35 and not header: sender = profile_name.firstChild.name+".\n"
+		elif conf.get("saySenderName") in ("received", "all") and profile_name and not header:
+			# A bubble whose first control or location is momentarily missing must
+			# not cost the whole message announcement.
+			bubble = _relative(obj, "simpleFirstChild")
+			sender_title = _relative(profile_name, "firstChild")
+			if (
+				bubble is not None
+				and sender_title is not None
+				and getattr(bubble, "UIAAutomationId", "") not in ("Photo", "1HeaderLabel", "PhotoRoot")
+				and _is_on_screen(bubble)
+				and _is_on_screen(obj)
+				and bubble.location.left - obj.location.left < 35
+			):
+				sender = sender_title.name+".\n"
 		
 		# Check the status of the message, whether it is read and sent
 		# Checking only sent messages
@@ -3182,7 +3282,7 @@ class AppModule(appModuleHandler.AppModule):
 		elif self.isOpenProfile:
 			self.isOpenProfile = False
 			panel = next((item for item in self.getElements() if item.UIAAutomationId == "ScrollingHost"), None)
-			if panel:
+			if panel and panel.firstChild:
 				self.profile_panel_element = panel
 				panel.firstChild.setFocus()
 		elif self.execute_context_menu_option:
@@ -3802,7 +3902,7 @@ class AppModule(appModuleHandler.AppModule):
 			# adjacent-item cache here performs extra synchronous UIA calls before the
 			# dialog opens and is unnecessary for Shift+Delete.
 			if not useNativeDelete:
-				if obj.parent.role == Role.LISTITEM: obj = obj.parent
+				if _relative(obj, "parent", "role") == Role.LISTITEM: obj = obj.parent
 				if obj.next and obj.next.role == Role.LISTITEM and obj.next.childCount > 1: self.isDelete["elements"].append(obj.next.firstChild)
 				if obj.previous and obj.previous.role == Role.LISTITEM and obj.previous.childCount > 1: self.isDelete["elements"].append(obj.previous.firstChild)
 				if obj.previous and obj.previous.previous and obj.previous.previous.role == Role.LISTITEM and obj.previous.previous.childCount > 1: self.isDelete["elements"].append(obj.previous.previous.firstChild)
@@ -3827,6 +3927,8 @@ class AppModule(appModuleHandler.AppModule):
 
 
 	def fixedDoAction(self, obj):
+		if not _is_on_screen(obj):
+			return False
 		p = obj.location.center
 		oldX, oldY = winUser.getCursorPos()
 		winUser.setCursorPos(p.x, p.y)
@@ -3866,12 +3968,17 @@ class AppModule(appModuleHandler.AppModule):
 			message(_("Broadcast window not found"))
 			return False
 		url = next((item for item in data_area.children if item.UIAAutomationId == "Presenter"), False)
-		key = url.next.next
-		result_message = f"{url.previous.name}: {url.name}\n{key.previous.name}: {key.name}"
+		key = _relative(url, "next", "next")
+		url_label = _relative(url, "previous")
+		key_label = _relative(key, "previous")
+		if not (url and key and url_label and key_label):
+			message(_("Broadcast window not found"))
+			return False
+		result_message = f"{url_label.name}: {url.name}\n{key_label.name}: {key.name}"
 		api.copyToClip(result_message.strip())
 		text_message = _("%url and %key copied to clipboard")
-		text_message = text_message.replace("%url", url.previous.name)
-		text_message = text_message.replace("%key", key.previous.name)
+		text_message = text_message.replace("%url", url_label.name)
+		text_message = text_message.replace("%key", key_label.name)
 		message(text_message)
 
 
@@ -4032,21 +4139,27 @@ class AppModule(appModuleHandler.AppModule):
 
 	# A timer that checks if the voice message has been converted to text
 	def waiting_for_recognition(self, obj):
+		# Runs on the shared background poller instead of creating a fresh native
+		# thread for every sample, and gives up rather than polling for ever when
+		# the transcription never arrives.
 		interval = .5
-		def tick(obj):
-			if not obj or not obj.next: return
-			if obj.next.UIAAutomationId == "RecognizedText" and obj.next.name:
-				def speak_result():
-					if obj and obj.next: text = obj.next.name
-					else: text = ""
-					queueHandler.queueFunction(queueHandler.eventQueue, message, text)
-				Timer(.4, speak_result).start()
+		limit = 120  # one minute
+		key = "recognition:%d" % id(obj)
+		state = {"polls": 0}
+		def tick():
+			state["polls"] += 1
+			if state["polls"] > limit:
+				return
+			recognized = _relative(obj, "next")
+			if recognized is None:
+				return
+			if getattr(recognized, "UIAAutomationId", "") == "RecognizedText" and recognized.name:
+				queueHandler.queueFunction(queueHandler.eventQueue, message, recognized.name)
 				try: playWaveFile(baseDir+"RecognitionFinish.wav")
 				except: pass
 				return
-			else: 
-				Timer(interval, tick, [obj]).start()
-		Timer(interval, tick, [obj]).start()
+			_BackgroundPoller.schedule(key, interval, tick)
+		_BackgroundPoller.schedule(key, interval, tick)
 
 	# Converting voice messages to text
 	@script(description=_("Convert voice message to text"), gesture="kb:NVDA+ALT+R")
@@ -4055,9 +4168,11 @@ class AppModule(appModuleHandler.AppModule):
 		button = next((item for item in obj.children if item.UIAAutomationId == "Recognize"), None)
 		if button:
 			# if button.next and button.next.UIAAutomationId == "RecognizedText":
-			if State.PRESSED in button.states or button.next and button.next.UIAAutomationId == "RecognizedText":
-				if button.next.UIAAutomationId == "RecognizedText" and button.next.name: message(_("This voice message is already converted to text"))
-				elif button.next.UIAAutomationId == "RecognizedText" and button.next.name == "": message(_("Converting this voice message is already in process"))
+			recognized = _relative(button, "next")
+			is_recognized_text = getattr(recognized, "UIAAutomationId", "") == "RecognizedText"
+			if State.PRESSED in button.states or is_recognized_text:
+				if is_recognized_text and recognized.name: message(_("This voice message is already converted to text"))
+				elif is_recognized_text: message(_("Converting this voice message is already in process"))
 				return
 			button.doAction()
 			obj.setFocus()
