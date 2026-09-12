@@ -201,6 +201,39 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
+### Unreleased
+
+* Moved the add-on's recurring background checks off NVDA's main loop, so chat
+  navigation, typing and speech are no longer delayed by Unigram's UIA replies.
+* Canceling a voice recording is now announced about a second and a half after
+  it is stopped, instead of five seconds later.
+* Fixed message-only shortcuts silently doing nothing on realized messages.
+  Space to play, Enter to reply, Backspace to edit, ALT+C and ALT+D to return
+  from the message field were all inactive on an affected message.
+* Fixed message-only shortcuts silently doing nothing on messages whose UIA
+  class is not readable, which is how a realized voice message can present
+  itself. Space, Enter to reply, Backspace to edit, ALT+C and the arrow keys
+  were all inactive on such a message.
+* Fixed the space bar on music and file messages, whose play control is named
+  Download rather than Button.
+* Fixed the space bar playing voice messages and music again. Current Unigram
+  exposes a message as a toggle button, so space selected the message, and the
+  resulting state change made the add-on give up before pressing play.
+* Fixed Ctrl+ALT+Left and Ctrl+ALT+Right stopping after the first press while
+  the modifiers stay held.
+* Fixed ALT+E for closing the audio player. It looked for the player through a
+  ShuffleButton that current Unigram no longer has, so it always reported that
+  nothing was playing; the close button is now found by its own icon.
+* Fixed Ctrl+ALT+Left and Ctrl+ALT+Right for seeking through a voice message.
+  The modifiers the user is still holding are now lifted around the arrow key,
+  so Unigram receives the arrow instead of Ctrl+ALT+Arrow and ignoring it.
+* Every behavior added after 5.4 can now be turned on or off in UnigramPlus
+  settings: the voice message record button label, rich message text with ALT+C,
+  the profile identity button label, the replying and editing announcement in the
+  message field, the suppressed "list" announcement before messages, the live
+  microphone and camera state during calls, and the unread count when switching
+  chat folders. All of them keep their current behavior by default.
+
 ### Version 5.7.3
 
 * NVDA+Alt+V displays the UnigramPlus version on a new line.
