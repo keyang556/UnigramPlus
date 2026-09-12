@@ -205,6 +205,8 @@ And remember that everyone who read this line thought that someone will definite
 
 * Moved the add-on's recurring background checks off NVDA's main loop, so chat
   navigation, typing and speech are no longer delayed by Unigram's UIA replies.
+* Canceling a voice recording is now announced about a second and a half after
+  it is stopped, instead of five seconds later.
 * Fixed message-only shortcuts silently doing nothing on realized messages.
   Space to play, Enter to reply, Backspace to edit, ALT+C and ALT+D to return
   from the message field were all inactive on an affected message.
