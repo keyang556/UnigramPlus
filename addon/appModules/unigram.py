@@ -3319,12 +3319,49 @@ class AppModule(appModuleHandler.AppModule):
 	@script(description=_("Pin a message or chat"))
 	def script_attach(self, gesture):
 		self.activate_option_for_menu((icons_from_context_menu["attach"], icons_from_context_menu["unpin"]))
+	def _find_context_menu_command(self, obj, icons):
+		"""Find a context-menu command next to whatever the flyout focused.
+
+		This is how the add-on worked up to 5.4: once Unigram moves focus inside
+		the open flyout, its commands are already realized as siblings, so the
+		command can be invoked straight away instead of arrowing towards it and
+		waiting for each move to be announced.
+		"""
+		try:
+			parent = obj.parent
+			siblings = list(parent.children or ()) if parent is not None else []
+		except Exception:
+			return None
+		for item in siblings:
+			try:
+				# The 5.4 rule: the command's icon glyph is the item's first child.
+				first_child = item.firstChild
+				if first_child is not None and first_child.name in icons:
+					return item
+			except Exception:
+				pass
+		for item in siblings:
+			# Current Unigram templates can nest the glyph one level deeper.
+			try:
+				if _menu_item_has_icon(item, icons):
+					return item
+			except Exception:
+				pass
+		return None
+
 	def _handle_pending_context_menu_focus(self, obj, nextHandler):
 		pending = self.execute_context_menu_option
 		if not pending:
 			return False
 		if pending.get("rawInvoked"):
 			nextHandler()
+			return True
+		# Try the direct path first. The fallbacks below only exist for the
+		# Unigram versions where the flyout does not realize its commands yet.
+		target = self._find_context_menu_command(obj, pending["icons"])
+		if target is not None:
+			self.execute_context_menu_option = False
+			core.callLater(_CONTEXT_MENU_STEP_DELAY_MS, self._invoke_context_menu_item, target)
 			return True
 		try:
 			obj_role = obj.role
