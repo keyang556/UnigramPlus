@@ -30,6 +30,12 @@ keywordsInMessages = {
 keywordsInMessages["zh_TW"] = (". 已讀", ". 未讀", ", 傳送於 ", ", 收到了 ", ", 傳送於 ", ", 收到了 ")
 keywordsInMessages["zh_CN"] = (". 已读", ". 未读", ", 已发送于 ", ", 已收到 ", ", 已发送于 ", ", 已收到 ")
 
+# Icons on the audio player header. Current Unigram gives its close button no
+# automation id and a localized name, so its glyph is what identifies it.
+icons_in_audio_player = {
+	"close": "",
+}
+
 icons_from_context_menu = {
 	"attach": "\ue840",
 	"unpin": "\ue77a",
