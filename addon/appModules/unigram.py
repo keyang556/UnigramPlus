@@ -18,6 +18,7 @@ import editableText
 addonHandler.initTranslation()
 import speech
 from  threading import Timer
+import threading
 import time
 import winsound
 from nvwave import playWaveFile
@@ -85,6 +86,74 @@ _CONTEXT_MENU_RAW_TEXT_LIMIT = 64
 _MAIN_WINDOW_AUTOMATION_IDS = frozenset(("ChatsList", "Messages", "TextField", "Navigation"))
 _CALL_WINDOW_AUTOMATION_IDS = frozenset(("ActiveButtons", "BottomRoot"))
 _WINDOW_SURFACE_AUTOMATION_IDS = _MAIN_WINDOW_AUTOMATION_IDS | _CALL_WINDOW_AUTOMATION_IDS
+
+
+class _BackgroundPoller:
+	"""Run the add-on's recurring UIA sampling off NVDA's main loop.
+
+	NVDA's event loop also drives speech, braille and keyboard handling, so a UIA
+	read issued from core.callLater blocks all of them until Unigram answers.
+	Sampling therefore happens on one shared daemon thread, the way the add-on
+	worked before, while every announcement is still handed back to the main
+	thread through queueHandler or core.callLater.
+
+	One shared worker replaces the old "a fresh threading.Timer per sample"
+	approach, so a 0.2 second poll no longer creates five threads a second.
+	"""
+	_lock = threading.RLock()
+	_wakeup = threading.Event()
+	_thread = None
+	_jobs = {}  # key -> [due monotonic time, callback]
+
+	@classmethod
+	def schedule(cls, key, delay, callback):
+		with cls._lock:
+			cls._jobs[key] = [time.monotonic() + max(0.0, delay), callback]
+			if cls._thread is None or not cls._thread.is_alive():
+				cls._thread = threading.Thread(
+					target=cls._run,
+					name="UnigramPlusPoller",
+					daemon=True,
+				)
+				cls._thread.start()
+		cls._wakeup.set()
+
+	@classmethod
+	def cancel(cls, key):
+		with cls._lock:
+			cls._jobs.pop(key, None)
+		cls._wakeup.set()
+
+	@classmethod
+	def _run(cls):
+		while True:
+			# Clear before reading the queue: a job added from now on always
+			# either shows up below or sets the event again before the wait.
+			cls._wakeup.clear()
+			with cls._lock:
+				if not cls._jobs:
+					cls._thread = None
+					return
+				now = time.monotonic()
+				due = [
+					(key, job[1])
+					for key, job in cls._jobs.items()
+					if job[0] <= now
+				]
+				for key, _callback in due:
+					cls._jobs.pop(key, None)
+				if due:
+					timeout = 0
+				else:
+					timeout = max(0.01, min(job[0] for job in cls._jobs.values()) - now)
+			for key, callback in due:
+				try:
+					callback()
+				except Exception as error:
+					try: log.debug("UnigramPlus background poll %r failed: %r" % (key, error))
+					except Exception: pass
+			if not due:
+				cls._wakeup.wait(timeout)
 
 
 def _get_end_of_chat_sound_path():
@@ -458,79 +527,138 @@ def _get_raw_context_menu_focus(process_id=0):
 
 
 def _find_ancestor_by_automation_id(obj, automation_ids, max_depth=6):
-	"""Find a named UIA ancestor without materializing any sibling subtrees."""
+	"""Find a named UIA ancestor without materializing any sibling subtrees.
+
+	Each step is a cross-process parent lookup, and this runs for every object
+	NVDA materializes, so the answer is memoized per object and the walk stops
+	at the top-level window, which is always above the containers looked for.
+	"""
+	start = obj
+	cache_key = "_upAncestorCache"
+	memo = None
+	try:
+		memo = getattr(start, cache_key, None)
+		if memo is None:
+			memo = {}
+			setattr(start, cache_key, memo)
+		key = (tuple(automation_ids), max_depth)
+		if key in memo:
+			return memo[key]
+	except Exception:
+		memo = None
+	result = None
 	seen = set()
 	for _ in range(max_depth + 1):
 		if not obj or id(obj) in seen:
-			return None
+			break
 		seen.add(id(obj))
 		try:
 			automation_id = obj.UIAAutomationId
 		except Exception:
 			automation_id = ""
 		if automation_id in automation_ids:
-			return obj
+			result = obj
+			break
+		try:
+			# ChatsList, Messages and the call surfaces all live below the window,
+			# so there is nothing left to find once the walk reaches it.
+			if obj.role == Role.WINDOW:
+				break
+		except Exception:
+			pass
 		try:
 			obj = obj.parent
 		except Exception:
-			return None
-	return None
+			break
+	if memo is not None:
+		try: memo[(tuple(automation_ids), max_depth)] = result
+		except Exception: pass
+	return result
 
 
 def _is_message_list_item(obj):
 	"""Recognize the focused message control exposed by current and older Unigram."""
-	try:
-		if obj.role != Role.LISTITEM:
-			return False
-		automation_id = str(getattr(obj, "UIAAutomationId", "") or "")
-		if automation_id == "Message_item":
-			# Preserve the exact marker used by released Unigram versions.
-			return True
-		raw_class_name = ""
+	# Both the overlay hook and the focus handler ask this about the same object,
+	# and the answer costs an ancestor walk plus two cross-process pattern queries.
+	def probe():
 		try:
-			# App-module overlay selection runs immediately after UIA's own
-			# findOverlayClasses(), where NVDA intentionally uses this cached value.
-			raw_class_name = obj.UIAElement.cachedClassName
-		except Exception:
-			pass
-		if not raw_class_name:
-			# Some current Unigram controls have no cached class during overlay
-			# selection even though their live UIA class is already available.
-			raw_class_name = getattr(obj, "UIAClassName", "")
-		class_name = (
-			str(raw_class_name or "")
-			.replace(":", ".")
-			.rsplit(".", 1)[-1]
-		)
-		# These are Unigram's explicit, stable message markers. They do not rely
-		# on UIA pattern availability, which can be transient during a UI update.
-		if automation_id == "MessageSelector" or class_name == "MessageSelector":
+			if obj.role != Role.LISTITEM:
+				return False
+			automation_id = str(getattr(obj, "UIAAutomationId", "") or "")
+			if automation_id == "Message_item":
+				# Preserve the exact marker used by released Unigram versions.
+				return True
+			raw_class_name = ""
+			try:
+				# App-module overlay selection runs immediately after UIA's own
+				# findOverlayClasses(), where NVDA intentionally uses this cached value.
+				raw_class_name = obj.UIAElement.cachedClassName
+			except Exception:
+				pass
+			if not raw_class_name:
+				# Some current Unigram controls have no cached class during overlay
+				# selection even though their live UIA class is already available.
+				raw_class_name = getattr(obj, "UIAClassName", "")
+			class_name = (
+				str(raw_class_name or "")
+				.replace(":", ".")
+				.rsplit(".", 1)[-1]
+			)
+			# These are Unigram's explicit, stable message markers. They do not rely
+			# on UIA pattern availability, which can be transient during a UI update.
+			if automation_id == "MessageSelector" or class_name == "MessageSelector":
+				return _find_ancestor_by_automation_id(obj, ("Messages",), max_depth=8) is not None
+			if class_name != "ToggleButton":
+				return False
+			# Unigram 12.10.2 exposes MessageSelector through a
+			# ToggleButtonAutomationPeer. ReactionButton and other interactive controls
+			# in a bubble are also ToggleButtons, so accept the fallback only when UIA
+			# confirms the MessageSelector selection semantics. Missing or unreadable
+			# pattern data is ambiguous and must not receive message-only scripts.
+			selection_item_pattern = obj.UIASelectionItemPattern
+			toggle_pattern = obj.UIATogglePattern
+			if selection_item_pattern is None or toggle_pattern is not None:
+				return False
 			return _find_ancestor_by_automation_id(obj, ("Messages",), max_depth=8) is not None
-		if class_name != "ToggleButton":
+		except Exception:
 			return False
-		# Unigram 12.10.2 exposes MessageSelector through a
-		# ToggleButtonAutomationPeer. ReactionButton and other interactive controls
-		# in a bubble are also ToggleButtons, so accept the fallback only when UIA
-		# confirms the MessageSelector selection semantics. Missing or unreadable
-		# pattern data is ambiguous and must not receive message-only scripts.
-		selection_item_pattern = obj.UIASelectionItemPattern
-		toggle_pattern = obj.UIATogglePattern
-		if selection_item_pattern is None or toggle_pattern is not None:
-			return False
-		return _find_ancestor_by_automation_id(obj, ("Messages",), max_depth=8) is not None
+
+	try:
+		cached = getattr(obj, "_upIsMessageItem", None)
+		if cached is not None:
+			return cached[0]
 	except Exception:
-		return False
+		return probe()
+	result = probe()
+	try: obj._upIsMessageItem = (result,)
+	except Exception: pass
+	return result
 
 
 def _is_chat_list_item(obj):
 	"""Recognize a chat row through Unigram's stable ChatsList boundary."""
+	def probe():
+		try:
+			if obj.role != Role.LISTITEM:
+				return False
+			# Almost every chat row is a direct child of the list; check that before
+			# paying for a walk that would otherwise run to its full depth on a miss.
+			if str(getattr(obj.parent, "UIAAutomationId", "") or "") == "ChatsList":
+				return True
+			return _find_ancestor_by_automation_id(obj, ("ChatsList",), max_depth=8) is not None
+		except Exception:
+			return False
+
 	try:
-		return (
-			obj.role == Role.LISTITEM
-			and _find_ancestor_by_automation_id(obj, ("ChatsList",), max_depth=8) is not None
-		)
+		cached = getattr(obj, "_upIsChatItem", None)
+		if cached is not None:
+			return cached[0]
 	except Exception:
-		return False
+		return probe()
+	result = probe()
+	try: obj._upIsChatItem = (result,)
+	except Exception: pass
+	return result
 
 
 def _announce_call_state_later(text, delay_ms=150):
@@ -624,12 +752,12 @@ class File_transfer_progress_tracking:
 	# changes directly and poll only a directly focused transfer control when
 	# Unigram does not raise a fresh event. Never search the focused message tree
 	# from this recurring callback: some XAML controls block for seconds while
-	# exposing their parent or children. Poll on NVDA's main event loop: using
-	# threading.Timer here creates a fresh native thread for every sample.
+	# exposing their parent or children. Sampling runs on the shared background
+	# poller, so a slow provider cannot stall NVDA's event loop, and the
+	# announcement itself is queued back onto the main thread.
 	active = False
 	interval = .35
 	app = None
-	_timer = None
 	_scheduled = False
 	_generation = 0
 	_step = 10
@@ -685,17 +813,9 @@ class File_transfer_progress_tracking:
 
 	@classmethod
 	def _is_inside_messages(cls, obj):
-		root = obj
-		for _ in range(10):
-			if not root:
-				return False
-			if cls._get_automation_id(root) == "Messages":
-				return True
-			try: parent = root.parent
-			except Exception: return False
-			if not parent or parent is root:
-				return False
-			root = parent
+		# Memoized and window-bounded: this predicate is reached for every button
+		# and link NVDA materializes, including outside the message history.
+		return _find_ancestor_by_automation_id(obj, ("Messages",), max_depth=10) is not None
 
 	@classmethod
 	def _is_unigram_object(cls, obj):
@@ -773,7 +893,7 @@ class File_transfer_progress_tracking:
 		if len(cls._last_value) > 128:
 			cls._last_value.pop(next(iter(cls._last_value)), None)
 		if should_speak:
-			try: log.info("File_transfer_progress_tracking: announcing %d%%" % percentage)
+			try: log.debug("File_transfer_progress_tracking: announcing %d%%" % percentage)
 			except: pass
 			queueHandler.queueFunction(queueHandler.eventQueue, speech.speakMessage, cls._format_percentage(percentage))
 		if percentage == 100:
@@ -806,7 +926,7 @@ class File_transfer_progress_tracking:
 			if cls._last_logged_id != obj_id:
 				cls._last_logged_id = obj_id
 				try:
-					log.info(
+					log.debug(
 						"File_transfer_progress_tracking: tracking aid=%r role=%r value=%r"
 						% (cls._get_automation_id(obj), obj.role, cls._read_fresh_value(obj))
 					)
@@ -823,7 +943,6 @@ class File_transfer_progress_tracking:
 		if generation != cls._generation:
 			return
 		cls._scheduled = False
-		cls._timer = None
 		cls.tick()
 
 	@classmethod
@@ -831,16 +950,15 @@ class File_transfer_progress_tracking:
 		if not cls.active or cls._scheduled:
 			return
 		try:
-			import core
 			generation = cls._generation
 			cls._scheduled = True
-			cls._timer = core.callLater(
-				round(cls.interval * 1000),
+			_BackgroundPoller.schedule(
+				"File_transfer_progress_tracking",
+				cls.interval,
 				lambda: cls._scheduled_tick(generation),
 			)
 		except Exception as e:
 			cls._scheduled = False
-			cls._timer = None
 			cls.active = False
 			try: log.debug("Could not schedule file-transfer progress tracking: %r" % e)
 			except Exception: pass
@@ -852,7 +970,7 @@ class File_transfer_progress_tracking:
 		cls.active = True
 		cls._last_value = {}
 		cls._last_logged_id = None
-		try: log.info("File_transfer_progress_tracking started (mode=%s)" % conf.get("voicingPerformanceIndicators"))
+		try: log.debug("File_transfer_progress_tracking started (mode=%s)" % conf.get("voicingPerformanceIndicators"))
 		except Exception: pass
 		cls._schedule_next()
 
@@ -860,12 +978,8 @@ class File_transfer_progress_tracking:
 	def stop(cls):
 		cls.active = False
 		cls._generation += 1
-		timer = cls._timer
-		cls._timer = None
 		cls._scheduled = False
-		if timer is not None:
-			try: timer.Stop()
-			except Exception: pass
+		_BackgroundPoller.cancel("File_transfer_progress_tracking")
 		cls._last_value = {}
 		cls._last_logged_id = None
 
@@ -1082,9 +1196,13 @@ class Saved_items:
 		self._items[window_handle][key] = obj
 
 
-class _MainLoopPoller:
-	"""Schedule UIA polling on NVDA's event loop, never a native Timer thread."""
-	_timer = None
+class _BackgroundStatePoller:
+	"""Sample Unigram's UIA state on the shared background poller.
+
+	Every announcement raised from tick() is queued onto NVDA's main thread, so
+	speech ordering is unchanged while the UIA reads themselves no longer stall
+	NVDA's event loop.
+	"""
 	_scheduled = False
 	_generation = 0
 
@@ -1093,7 +1211,6 @@ class _MainLoopPoller:
 		if generation != cls._generation:
 			return
 		cls._scheduled = False
-		cls._timer = None
 		cls.tick()
 
 	@classmethod
@@ -1101,28 +1218,23 @@ class _MainLoopPoller:
 		if not cls.active or cls.pouse or cls._scheduled:
 			return
 		try:
-			import core
 			generation = cls._generation
 			cls._scheduled = True
-			cls._timer = core.callLater(
-				round(cls.interval * 1000),
+			_BackgroundPoller.schedule(
+				cls.__name__,
+				cls.interval,
 				lambda: cls._scheduled_poll(generation),
 			)
 		except Exception as error:
 			cls._scheduled = False
-			cls._timer = None
 			try: log.debug("Could not schedule %s polling: %r" % (cls.__name__, error))
 			except Exception: pass
 
 	@classmethod
 	def _cancel_poll(cls):
 		cls._generation += 1
-		timer = cls._timer
-		cls._timer = None
 		cls._scheduled = False
-		if timer is not None:
-			try: timer.Stop()
-			except Exception: pass
+		_BackgroundPoller.cancel(cls.__name__)
 
 	@classmethod
 	def _restart_poll(cls):
@@ -1130,7 +1242,7 @@ class _MainLoopPoller:
 		cls._schedule_poll()
 
 
-class Title_change_tracking(_MainLoopPoller):
+class Title_change_tracking(_BackgroundStatePoller):
 	active = False
 	pouse = False
 	interval = .5
@@ -1179,7 +1291,7 @@ class Title_change_tracking(_MainLoopPoller):
 		cls._restart_poll()
 
 
-class Typing_sound_tracking(_MainLoopPoller):
+class Typing_sound_tracking(_BackgroundStatePoller):
 	# Polls the chat-title status and loops Typing.wav while the other side is typing/recording/etc.
 	active = False
 	pouse = False
@@ -1266,7 +1378,7 @@ class Typing_sound_tracking(_MainLoopPoller):
 		cls._restart_poll()
 
 
-class Chat_update(_MainLoopPoller):
+class Chat_update(_BackgroundStatePoller):
 	active = False
 	pouse = False
 	interval = .3
@@ -1284,12 +1396,15 @@ class Chat_update(_MainLoopPoller):
 			# The second item is the message index
 			last_saved_message = cls.app.saved_items.get("last message") or ("", "")
 			# If there is a problem getting the message index, terminate the function and call the next iteration
+			# positionInfo is a live UIA read, so sample it once per tick instead of
+			# five times; this runs several times a second while a chat is open.
 			try:
-				last_message.positionInfo["indexInGroup"]
-				last_message.positionInfo["similarItemsInGroup"]
+				position_info = last_message.positionInfo
+				index_in_group = position_info["indexInGroup"]
+				similar_items_in_group = position_info["similarItemsInGroup"]
 			except:
 				return
-			if last_message.positionInfo["indexInGroup"] != last_saved_message[1] and last_message.positionInfo["indexInGroup"] == last_message.positionInfo["similarItemsInGroup"]:
+			if index_in_group != last_saved_message[1] and index_in_group == similar_items_in_group:
 				try:
 					title = cls.app.saved_items.get("profile name").firstChild.name
 				except:
@@ -1299,8 +1414,7 @@ class Chat_update(_MainLoopPoller):
 					text = cls.app.action_message_focus(last_message.firstChild)
 					queueHandler.queueFunction(queueHandler.eventQueue, message, text)
 				try:
-					new_message = (title, last_message.positionInfo["indexInGroup"])
-					cls.app.saved_items.save("last message", new_message)
+					cls.app.saved_items.save("last message", (title, index_in_group))
 				except: pass
 		except Exception as error:
 			try: log.debug("Could not track new chat messages: %r" % error)
@@ -1455,9 +1569,11 @@ class AppModule(appModuleHandler.AppModule):
 
 	def terminate(self):
 		self._voiceRecordingMonitorRunning = False
+		_BackgroundPoller.cancel("voiceRecording:%d" % id(self))
 		self._autoFocusChatListGeneration += 1
 		self._autoFocusChatListScheduled = False
 		self._endOfChatProbeGeneration = getattr(self, "_endOfChatProbeGeneration", 0) + 1
+		_BackgroundPoller.cancel("endOfChat:%d" % id(self))
 		if getattr(self, "isUnigramWindow", False):
 			File_transfer_progress_tracking.stop()
 		super().terminate()
@@ -1849,13 +1965,12 @@ class AppModule(appModuleHandler.AppModule):
 		self._endOfChatProbeGeneration = getattr(self, "_endOfChatProbeGeneration", 0) + 1
 		generation = self._endOfChatProbeGeneration
 		try:
-			import core
-			core.callLater(
-				_END_OF_CHAT_PROBE_DELAY_MS,
-				self._confirm_end_of_chat,
-				generation,
-				source,
-				move_focus_to_text,
+			# Arrowing through a chat schedules this on every keystroke, and the
+			# check walks the message ancestry, so keep it off NVDA's main loop.
+			_BackgroundPoller.schedule(
+				"endOfChat:%d" % id(self),
+				_END_OF_CHAT_PROBE_DELAY_MS / 1000.0,
+				lambda: self._confirm_end_of_chat(generation, source, move_focus_to_text),
 			)
 			return True
 		except Exception:
@@ -1879,6 +1994,15 @@ class AppModule(appModuleHandler.AppModule):
 			log.debug("Could not confirm end-of-chat state", exc_info=True)
 			return
 		log.debug("End-of-chat probe matched Messages.lastChild")
+		# The probe runs on the background poller; the sound and the focus move
+		# belong to NVDA's main thread.
+		queueHandler.queueFunction(
+			queueHandler.eventQueue,
+			self._apply_end_of_chat_result,
+			move_focus_to_text,
+		)
+
+	def _apply_end_of_chat_result(self, move_focus_to_text=False):
 		if conf.get("play_end_of_chat_sound"):
 			play_end_of_chat_sound()
 		if (
@@ -2489,6 +2613,20 @@ class AppModule(appModuleHandler.AppModule):
 			message(_("No open chat"))
 
 	def _announceVoiceRecordingTransition(self, transition):
+		# The recording monitor samples on the background poller, so hand the
+		# announcement back to NVDA's main thread before touching its UI.
+		if not transition:
+			return
+		try:
+			queueHandler.queueFunction(
+				queueHandler.eventQueue,
+				self._doAnnounceVoiceRecordingTransition,
+				transition,
+			)
+		except Exception:
+			self._doAnnounceVoiceRecordingTransition(transition)
+
+	def _doAnnounceVoiceRecordingTransition(self, transition):
 		indicator = conf.get("voiceMessageRecordingIndicator")
 		if not transition or indicator == "none":
 			return
@@ -2527,9 +2665,11 @@ class AppModule(appModuleHandler.AppModule):
 	def _scheduleVoiceRecordingPoll(self):
 		if not self._voiceRecordingMonitorRunning:
 			return
-		import core
-
-		core.callLater(round(_VOICE_RECORDING_POLL_INTERVAL * 1000), self._pollVoiceRecordingState)
+		_BackgroundPoller.schedule(
+			"voiceRecording:%d" % id(self),
+			_VOICE_RECORDING_POLL_INTERVAL,
+			self._pollVoiceRecordingState,
+		)
 
 	def _getVoiceRecordingButton(self, focus):
 		button = self._voiceRecordingButton
@@ -2584,7 +2724,7 @@ class AppModule(appModuleHandler.AppModule):
 			markerChanged and is_recorded_message(lastMessage, self._voiceRecordingOutcome.video),
 		)
 		if transition:
-			log.info("Unigram voice-message recording outcome: %s" % transition)
+			log.debug("Unigram voice-message recording outcome: %s" % transition)
 			self._announceVoiceRecordingTransition(transition)
 
 	def _pollVoiceRecordingState(self):
@@ -2616,7 +2756,7 @@ class AppModule(appModuleHandler.AppModule):
 				return
 			transition = self._voiceRecordingState.visibilityChanged(active)
 			if transition:
-				log.info("Unigram voice-message recording transition: %s" % transition)
+				log.debug("Unigram voice-message recording transition: %s" % transition)
 			self._handleVoiceRecordingTransition(transition)
 		except Exception as error:
 			log.debug("Could not monitor Unigram voice-message recording UI: %r" % error)
@@ -3014,13 +3154,16 @@ class AppModule(appModuleHandler.AppModule):
 				except Exception: pass
 			return
 		try:
-			self._remember_messages_button(obj)
-			# This hook runs for every materialized UIA object. Only stable marker
-			# objects can identify the chat window without a parent walk; focused
-			# descendants are handled once in event_gainFocus instead.
-			if getattr(obj, "UIAAutomationId", "") in _WINDOW_SURFACE_AUTOMATION_IDS:
+			# This hook runs for every materialized UIA object, so read the
+			# automation id once and answer all three marker checks from it.
+			automation_id = str(getattr(obj, "UIAAutomationId", "") or "")
+			if automation_id == "MessagesButton":
+				self._messagesButton = obj
+			# Only stable marker objects can identify the chat window without a
+			# parent walk; focused descendants are handled once in event_gainFocus.
+			elif automation_id in _WINDOW_SURFACE_AUTOMATION_IDS:
 				self._classify_window_surface(obj)
-			if is_recording_button(obj):
+			elif is_recording_button(obj):
 				self._voiceRecordingButton = obj
 			if obj.role == Role.LISTITEM and obj.isFocusable:
 				parent = obj.parent

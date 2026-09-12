@@ -23,6 +23,15 @@ def _app_module_ast():
 	return next(node for node in module.body if isinstance(node, ast.ClassDef) and node.name == "AppModule")
 
 
+def _method_source(name):
+	method = next(
+		node
+		for node in _app_module_ast().body
+		if isinstance(node, ast.FunctionDef) and node.name == name
+	)
+	return ast.unparse(method)
+
+
 def _load_method(name, namespace):
 	method = next(
 		node
@@ -217,20 +226,29 @@ def test_recording_button_discovery_runs_only_once_for_the_same_focus():
 	assert searches == [True]
 
 
-def test_recording_monitor_schedules_on_nvda_main_loop_without_timer_threads(monkeypatch):
+def test_recording_monitor_samples_off_the_main_loop_without_timer_threads():
+	# The monitor reads Unigram's record button and message list, so it samples on
+	# the shared background poller rather than on NVDA's event loop, and never
+	# spawns a native Timer thread per sample.
 	scheduled = []
-	core = SimpleNamespace(callLater=lambda delay, callback: scheduled.append((delay, callback)))
-	monkeypatch.setitem(sys.modules, "core", core)
 	instance = SimpleNamespace(
 		_voiceRecordingMonitorRunning=True,
 		_pollVoiceRecordingState=lambda: None,
 	)
-	namespace = {"_VOICE_RECORDING_POLL_INTERVAL": 0.2}
+	namespace = {
+		"_VOICE_RECORDING_POLL_INTERVAL": 0.2,
+		"_BackgroundPoller": SimpleNamespace(
+			schedule=lambda key, delay, callback: scheduled.append((delay, callback)),
+			cancel=lambda key: None,
+		),
+	}
 	method = _load_method("_scheduleVoiceRecordingPoll", namespace)
 
 	method(instance)
 
-	assert scheduled == [(200, instance._pollVoiceRecordingState)]
+	assert scheduled == [(0.2, instance._pollVoiceRecordingState)]
+	assert "Timer" not in _method_source("_scheduleVoiceRecordingPoll")
+	assert "core.callLater" not in _method_source("_scheduleVoiceRecordingPoll")
 
 
 def test_app_transition_handler_captures_baseline_before_resolving_outcome():
@@ -272,7 +290,7 @@ def test_app_outcome_poll_announces_new_voice_message_as_sent():
 	)
 	namespace = {
 		"is_recorded_message": is_recorded_message,
-		"log": SimpleNamespace(info=logs.append),
+		"log": SimpleNamespace(debug=logs.append),
 	}
 	method = _load_method("_pollVoiceRecordingOutcome", namespace)
 
@@ -390,8 +408,16 @@ def test_recording_transitions_keep_text_and_audio_notifications():
 		"log": SimpleNamespace(debug=lambda text: None),
 		"_": lambda text: text,
 	}
+	namespace["queueHandler"] = SimpleNamespace(
+		eventQueue=object(),
+		queueFunction=lambda queue, callback, *args: callback(*args),
+	)
 	method = _load_method("_announceVoiceRecordingTransition", namespace)
+	do_announce = _load_method("_doAnnounceVoiceRecordingTransition", namespace)
 	instance = SimpleNamespace(_voiceRecordingButton=button)
+	instance._doAnnounceVoiceRecordingTransition = lambda transition: do_announce(
+		instance, transition
+	)
 
 	method(instance, "start")
 	method(instance, "sent")
