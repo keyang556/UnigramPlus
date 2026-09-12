@@ -61,9 +61,14 @@ _telegramDesktopFallbackLoadAttempted = False
 
 _APP_MODULE_NAME_IGNORED_CHARS = str.maketrans("", "", "\u200e\u200f\u2066\u2067\u2068\u2069")
 _VOICE_RECORDING_POLL_INTERVAL = .2
-# Allow Unigram time to finalize the recording and insert its outgoing message.
-# A sent message is still reported immediately; only cancellation waits this long.
-_VOICE_RECORDING_OUTCOME_POLL_LIMIT = 25  # 5 seconds at the interval above.
+# Allow Unigram time to insert its outgoing message before a stopped recording
+# is called off. Telegram adds that message optimistically, well before the
+# upload finishes, so this only has to cover the insertion itself. Five seconds
+# made every cancellation land long after the user had moved on.
+_VOICE_RECORDING_OUTCOME_POLL_LIMIT = 7  # 1.4 seconds at the interval above.
+# How long a focus change still counts as Unigram's own move on a recording
+# transition, rather than the user navigating to the button.
+_RECORD_TRANSITION_FOCUS_WINDOW = 1.5
 _AUTO_FOCUS_CHAT_LIST_DELAY_MS = 300
 _AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT = 10
 _END_OF_CHAT_PROBE_DELAY_MS = 50
@@ -1551,6 +1556,7 @@ class AppModule(appModuleHandler.AppModule):
 		self._endOfChatProbeGeneration = 0
 		self._messagesButton = None
 		self._focusBeforeRecordButton = None
+		self._recordTransitionTime = None
 		self._mainWindowHandle = None
 		self._callWindowHandles = set()
 		if not self.isUnigramWindow:
@@ -2782,6 +2788,9 @@ class AppModule(appModuleHandler.AppModule):
 			return None, None
 
 	def _handleVoiceRecordingTransition(self, transition):
+		if transition in ("start", "stopped"):
+			# Unigram moves the focus to the record button around these moments.
+			self._recordTransitionTime = time.monotonic()
 		if transition == "start":
 			try:
 				button = self._voiceRecordingButton
@@ -3060,16 +3069,20 @@ class AppModule(appModuleHandler.AppModule):
 
 	# Focus change tracking
 	def _restore_focus_after_record_button(self, obj):
-		"""Keep the focus in the message field while recording, as 5.4 did.
+		"""Keep the focus in the message field on Ctrl+R, as 5.4 did.
 
-		5.4 never let the focus reach the record button: it pressed the button
-		itself and put the focus straight back, so the recording was announced
-		but the button was not. Unigram now moves the focus there on its own,
-		so send it back when the user asked for the old behavior.
+		5.4 pressed the record button itself and put the focus straight back, so
+		the recording was announced but the button was not. Unigram now moves the
+		focus there on its own when a recording starts or stops, so only that
+		move is undone. Tabbing to the button reaches it as always, during a
+		recording as well: the user moving there is never overridden.
 		"""
 		if not is_recording_button(obj):
 			return False
 		if conf.get("voiceRecordingButtonLabel") != "none":
+			return False
+		moved = getattr(self, "_recordTransitionTime", None)
+		if moved is None or (time.monotonic() - moved) > _RECORD_TRANSITION_FOCUS_WINDOW:
 			return False
 		previous = getattr(self, "_focusBeforeRecordButton", None)
 		if previous is None:

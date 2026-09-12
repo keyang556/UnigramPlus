@@ -1,4 +1,5 @@
 import ast
+import time
 from pathlib import Path
 import sys
 from types import SimpleNamespace
@@ -159,12 +160,45 @@ def test_stopped_recording_without_a_new_recorded_message_is_canceled():
 	assert not outcome.pending
 
 
-def test_default_outcome_window_allows_slow_recording_finalization():
-	outcome = VoiceRecordingOutcome(poll_limit=25)
+def test_the_shipped_cancellation_window_is_short_enough_to_be_useful():
+	"""A cancellation announced five seconds late is announced after the fact.
+
+	Telegram inserts the outgoing message optimistically, so the window only
+	has to cover that insertion, not the upload.
+	"""
+	source = (ROOT / "addon" / "appModules" / "unigram.py").read_text(encoding="utf-8")
+	module = ast.parse(source)
+	limit = next(
+		node.value.value
+		for node in module.body
+		if isinstance(node, ast.Assign)
+		and any(getattr(t, "id", "") == "_VOICE_RECORDING_OUTCOME_POLL_LIMIT" for t in node.targets)
+	)
+	interval = next(
+		node.value.value
+		for node in module.body
+		if isinstance(node, ast.Assign)
+		and any(getattr(t, "id", "") == "_VOICE_RECORDING_POLL_INTERVAL" for t in node.targets)
+	)
+	seconds = limit * interval
+	assert 0.8 <= seconds <= 2.0, "cancellation is announced after %.1f s" % seconds
+
+
+def test_a_sent_recording_is_still_reported_before_the_window_closes():
+	outcome = VoiceRecordingOutcome(poll_limit=7)
 	outcome.started(("position", 8))
 	outcome.stopped()
 
-	for _ in range(24):
+	assert outcome.observe(("position", 9), is_recorded=True) == "sent"
+	assert not outcome.pending
+
+
+def test_cancellation_is_reported_once_the_window_closes():
+	outcome = VoiceRecordingOutcome(poll_limit=7)
+	outcome.started(("position", 8))
+	outcome.stopped()
+
+	for _ in range(6):
 		assert outcome.observe(("position", 8), is_recorded=False) is None
 	assert outcome.observe(("position", 8), is_recorded=False) == "canceled"
 
@@ -261,7 +295,7 @@ def test_app_transition_handler_captures_baseline_before_resolving_outcome():
 		_getVoiceRecordingLastMessage=lambda: (("position", 5), object()),
 		_announceVoiceRecordingTransition=announcements.append,
 	)
-	namespace = {"State": SimpleNamespace(PRESSED="pressed")}
+	namespace = {"State": SimpleNamespace(PRESSED="pressed"), "time": time}
 	method = _load_method("_handleVoiceRecordingTransition", namespace)
 
 	method(instance, "start")
@@ -446,32 +480,52 @@ def _load_record_focus_restore(setting):
 		"is_recording_button": is_recording_button,
 		"conf": SimpleNamespace(get=lambda key: setting),
 		"speech": SimpleNamespace(cancelSpeech=lambda: restored.append("cancelSpeech")),
+		"time": time,
+		"_RECORD_TRANSITION_FOCUS_WINDOW": 1.5,
 	}
 	method = _load_method("_restore_focus_after_record_button", namespace)
 	return method, restored
 
 
-def test_the_54_option_keeps_the_focus_in_the_message_field():
-	"""5.4 pressed the record button itself and put the focus straight back."""
-	method, events = _load_record_focus_restore("none")
-	field = SimpleNamespace(
+def _field(events):
+	return SimpleNamespace(
 		location=SimpleNamespace(width=300),
 		setFocus=lambda: events.append("backToField"),
 	)
-	instance = SimpleNamespace(_focusBeforeRecordButton=field)
+
+
+def test_the_54_option_keeps_the_focus_in_the_message_field():
+	"""5.4 pressed the record button itself and put the focus straight back."""
+	method, events = _load_record_focus_restore("none")
+	instance = SimpleNamespace(
+		_focusBeforeRecordButton=_field(events),
+		_recordTransitionTime=time.monotonic(),
+	)
 
 	assert method(instance, _record_button()) is True
 	assert events == ["cancelSpeech", "backToField"]
 
 
+def test_tabbing_to_the_record_button_always_reaches_it():
+	"""Only Unigram's own move is undone; the user navigating there is not."""
+	method, events = _load_record_focus_restore("none")
+	for transition_time in (None, time.monotonic() - 5):
+		instance = SimpleNamespace(
+			_focusBeforeRecordButton=_field(events),
+			_recordTransitionTime=transition_time,
+		)
+
+		assert method(instance, _record_button()) is False
+		assert events == []
+
+
 def test_the_other_options_let_the_focus_reach_the_record_button():
 	for setting in ("withElapsedTime", "labelOnly"):
 		method, events = _load_record_focus_restore(setting)
-		field = SimpleNamespace(
-			location=SimpleNamespace(width=300),
-			setFocus=lambda: events.append("backToField"),
+		instance = SimpleNamespace(
+			_focusBeforeRecordButton=_field(events),
+			_recordTransitionTime=time.monotonic(),
 		)
-		instance = SimpleNamespace(_focusBeforeRecordButton=field)
 
 		assert method(instance, _record_button()) is False
 		assert events == []
@@ -479,7 +533,7 @@ def test_the_other_options_let_the_focus_reach_the_record_button():
 
 def test_nothing_is_restored_without_a_remembered_message_field():
 	method, events = _load_record_focus_restore("none")
-	instance = SimpleNamespace(_focusBeforeRecordButton=None)
+	instance = SimpleNamespace(_focusBeforeRecordButton=None, _recordTransitionTime=time.monotonic())
 
 	assert method(instance, _record_button()) is False
 	assert events == []
@@ -487,11 +541,10 @@ def test_nothing_is_restored_without_a_remembered_message_field():
 
 def test_other_controls_are_never_bounced():
 	method, events = _load_record_focus_restore("none")
-	field = SimpleNamespace(
-		location=SimpleNamespace(width=300),
-		setFocus=lambda: events.append("backToField"),
+	instance = SimpleNamespace(
+		_focusBeforeRecordButton=_field(events),
+		_recordTransitionTime=time.monotonic(),
 	)
-	instance = SimpleNamespace(_focusBeforeRecordButton=field)
 	other = SimpleNamespace(UIAAutomationId="ButtonAttach")
 
 	assert method(instance, other) is False
