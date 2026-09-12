@@ -756,6 +756,7 @@ def test_context_menu_popup_focus_schedules_raw_probe_without_walking_nvda_objec
 		keys={},
 		_invoke_context_menu_item=lambda item: None,
 		_arm_context_menu_timeout=lambda pending, delay: None,
+		_find_context_menu_command=lambda obj, icons: None,
 		_schedule_context_menu_raw_probe=lambda obj, request: probes.append((obj, request)),
 	)
 	popup = Node(role="window", children=[Node(children=[Node(children=[Node()])])])
@@ -850,6 +851,7 @@ def test_context_menu_focused_item_is_invoked_by_unigrams_icon_not_its_translati
 		keys={},
 		_invoke_context_menu_item=lambda item: None,
 		_arm_context_menu_timeout=lambda pending, delay: None,
+		_find_context_menu_command=lambda obj, icons: None,
 	)
 
 	assert method(instance, item, lambda: None)
@@ -882,6 +884,7 @@ def test_context_menu_moves_one_item_at_a_time_until_read_icon_is_focused():
 			"escape": SimpleNamespace(send=lambda: sent.append("escape")),
 		},
 		_invoke_context_menu_item=lambda item: None,
+		_find_context_menu_command=lambda obj, icons: None,
 		_arm_context_menu_timeout=lambda pending, delay: armed.append((pending, delay)),
 		_send_pending_context_menu_navigation_key=lambda request: sent.append("down"),
 	)
@@ -921,6 +924,7 @@ def test_context_menu_moves_from_unigrams_reaction_link_to_the_first_command():
 			"escape": SimpleNamespace(send=lambda: sent.append("escape")),
 		},
 		_invoke_context_menu_item=lambda item: None,
+		_find_context_menu_command=lambda obj, icons: None,
 		_arm_context_menu_timeout=lambda pending, delay: armed.append((pending, delay)),
 		_send_pending_context_menu_navigation_key=lambda request: sent.append("down"),
 	)
@@ -1306,3 +1310,67 @@ def test_context_menu_timeout_arming_invalidates_the_previous_timer():
 		(10000, instance._expire_context_menu_option, pending, 1),
 		(3000, instance._expire_context_menu_option, pending, 2),
 	]
+
+
+def test_enter_invokes_reply_directly_like_version_54():
+	"""Enter must not arrow towards Reply once the flyout realized its commands.
+
+	Up to 5.4 the add-on scanned the realized flyout and invoked the command at
+	once. Arrowing towards it instead makes Enter appear not to work while every
+	intermediate item is announced.
+	"""
+	role = SimpleNamespace(MENUITEM="menuItem", LINK="link", BUTTON="button")
+	scheduled = []
+	namespace = _load_module_members(
+		{"_walk_bounded_descendants", "_menu_item_has_icon"},
+		{"Role": role},
+	)
+	namespace.update(
+		{
+			"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args)),
+			"_CONTEXT_MENU_STEP_DELAY_MS": 20,
+			"_CONTEXT_MENU_NAVIGATION_DELAY_MS": 250,
+			"_CONTEXT_MENU_NAVIGATION_LIMIT": 30,
+			"_CONTEXT_MENU_ACTIVITY_TIMEOUT_MS": 3000,
+		}
+	)
+	find_command = _load_app_method("_find_context_menu_command", namespace)
+	method = _load_app_method("_handle_pending_context_menu_focus", namespace)
+
+	reply = Node(name="Reply", role=role.MENUITEM, children=[Node(name="")])
+	flyout = Node(
+		role=role.MENUITEM,
+		children=[
+			Node(name="Copy", role=role.MENUITEM, children=[Node(name="")]),
+			reply,
+			Node(name="Delete", role=role.MENUITEM, children=[Node(name="")]),
+		],
+	)
+	focused = flyout.children[0]
+	pending = {"icons": ("",), "moves": 0}
+	sent = []
+	instance = SimpleNamespace(
+		execute_context_menu_option=pending,
+		keys={"downArrow": SimpleNamespace(send=lambda: sent.append("down"))},
+		_invoke_context_menu_item=lambda item: None,
+		_arm_context_menu_timeout=lambda pending, delay: None,
+	)
+	instance._find_context_menu_command = lambda obj, icons: find_command(instance, obj, icons)
+
+	assert method(instance, focused, lambda: None)
+
+	assert instance.execute_context_menu_option is False
+	assert scheduled == [(20, instance._invoke_context_menu_item, reply)]
+	assert sent == [], "Reply must be invoked directly, not reached with arrow keys"
+
+
+def test_a_reaction_link_still_falls_back_when_no_command_is_realized_yet():
+	role = SimpleNamespace(MENUITEM="menuItem", LINK="link", BUTTON="button")
+	namespace = _load_module_members(
+		{"_walk_bounded_descendants", "_menu_item_has_icon"},
+		{"Role": role},
+	)
+	find_command = _load_app_method("_find_context_menu_command", namespace)
+	reactions = Node(children=[Node(name="thumbs up", role=role.LINK)])
+
+	assert find_command(SimpleNamespace(), reactions.children[0], ("",)) is None

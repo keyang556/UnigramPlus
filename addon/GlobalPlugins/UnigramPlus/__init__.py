@@ -257,9 +257,9 @@ class UnigramPlusSettings(SettingsPanel):
 		"all": _("In all messages")
 	}
 	listVoiceRecordingButtonLabel = {
-		"withElapsedTime": _("Say the label and the elapsed time"),
-		"labelOnly": _("Say the label only"),
-		"none": _("Leave Unigram's own button name"),
+		"withElapsedTime": _("Say \"Recording a voice message\" and the elapsed time"),
+		"labelOnly": _("Say \"Recording a voice message\" without the elapsed time"),
+		"none": _("Like version 5.4: leave Unigram's own name, such as \"Tn voice message\""),
 	}
 	list_actions_when_pressing_up_arrow_in_text_field = {
 		"block": _("Do nothing"),
@@ -314,12 +314,6 @@ class UnigramPlusSettings(SettingsPanel):
 		# Type of notification when recording voice messages
 		self.voiceMessageRecordingIndicator = settingsSizerHelper.addLabeledControl(_("Set voice message recording notification method as:"), wx.Choice, choices=[self.listVoiceMessageRecordingIndicator[item] for item in self.listVoiceMessageRecordingIndicator])
 		self.voiceMessageRecordingIndicator.SetStringSelection(self.listVoiceMessageRecordingIndicator[conf.get("voiceMessageRecordingIndicator")])
-		# How the record button itself is announced (added in 5.5.7)
-		self.voiceRecordingButtonLabel = settingsSizerHelper.addLabeledControl(
-			_("Announce the voice message record button as:"), wx.Choice,
-			choices=list(self.listVoiceRecordingButtonLabel.values()))
-		self.voiceRecordingButtonLabel.SetStringSelection(
-			self.listVoiceRecordingButtonLabel[conf.get("voiceRecordingButtonLabel")])
 		# Progress bar announce
 		self.voicingPerformanceIndicators = settingsSizerHelper.addLabeledControl(_("Select the progress bar notification level:"), wx.Choice, choices=[self.listVoicingPerformanceIndicators[item] for item in self.listVoicingPerformanceIndicators])
 		self.voicingPerformanceIndicators.SetStringSelection(self.listVoicingPerformanceIndicators[conf.get("voicingPerformanceIndicators")])
@@ -351,29 +345,57 @@ class UnigramPlusSettings(SettingsPanel):
 		# Play looped Typing.wav while the other side is typing/recording in the open chat
 		self.play_typing_sound = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Play a sound while the other side is typing in the open chat")))
 		self.play_typing_sound.SetValue(conf.get("play_typing_sound"))
+		# Everything below was added after version 5.4. Group it under one heading so
+		# it is easy to find, and let each item be turned off to get 5.4 back.
+		newFeaturesSizer = wx.StaticBoxSizer(
+			wx.VERTICAL, self,
+			label=_("Behavior added after version 5.4 (uncheck an item to use the version 5.4 behavior)"))
+		newFeaturesBox = newFeaturesSizer.GetStaticBox()
+		newFeaturesHelper = settingsSizerHelper.addItem(
+			gui.guiHelper.BoxSizerHelper(self, sizer=newFeaturesSizer))
+		# How the record button itself is announced (added in 5.5.7)
+		self.voiceRecordingButtonLabel = newFeaturesHelper.addLabeledControl(
+			_("When the focus is on the voice message record button, announce it as:"), wx.Choice,
+			choices=list(self.listVoiceRecordingButtonLabel.values()))
+		self.voiceRecordingButtonLabel.SetStringSelection(
+			self.listVoiceRecordingButtonLabel[conf.get("voiceRecordingButtonLabel")])
 		# Announce rich messages and open their text with ALT+C (added in 5.5.9)
-		self.richMessageSupport = settingsSizerHelper.addItem(wx.CheckBox(
-			self, label=_("Read the full text of rich messages with ALT+C")))
+		self.richMessageSupport = newFeaturesHelper.addItem(wx.CheckBox(
+			newFeaturesBox, label=_(
+				"Read the full text of rich messages with ALT+C. "
+				"When unchecked, ALT+C works like version 5.4 and shows only the plain message text")))
 		self.richMessageSupport.SetValue(conf.get("richMessageSupport"))
 		# Name the profile identity button after the chat (added in 5.5.6)
-		self.labelProfileIdentityButton = settingsSizerHelper.addItem(wx.CheckBox(
-			self, label=_("Announce the chat name and member count on the profile identity button")))
+		self.labelProfileIdentityButton = newFeaturesHelper.addItem(wx.CheckBox(
+			newFeaturesBox, label=_(
+				"In a group or channel profile, announce the chat name and member count instead of "
+				"\"Identity root\" when tabbing past the name. When unchecked, version 5.4 behavior is used "
+				"and the button is announced as \"Identity root\"")))
 		self.labelProfileIdentityButton.SetValue(conf.get("labelProfileIdentityButton"))
 		# Say "Reply"/"Editing" in the message field (added in 5.5.5)
-		self.announceComposerState = settingsSizerHelper.addItem(wx.CheckBox(
-			self, label=_("Announce replying and editing in the message edit field")))
+		self.announceComposerState = newFeaturesHelper.addItem(wx.CheckBox(
+			newFeaturesBox, label=_(
+				"Announce \"Reply\" or \"Editing\" in the message edit field when a message is being "
+				"replied to or edited. When unchecked, version 5.4 behavior is used and the usual "
+				"message prompt is announced instead")))
 		self.announceComposerState.SetValue(conf.get("announceComposerState"))
 		# Suppress the transient "list" announcement before a message (added in 5.6.3)
-		self.suppressMessagesListAnnouncement = settingsSizerHelper.addItem(wx.CheckBox(
-			self, label=_('Do not announce "list" before a message while navigating a chat')))
+		self.suppressMessagesListAnnouncement = newFeaturesHelper.addItem(wx.CheckBox(
+			newFeaturesBox, label=_(
+				'Do not announce "list" before a message when moving through a chat with the arrow keys. '
+				'When unchecked, version 5.4 behavior is used and NVDA announces the message list as usual')))
 		self.suppressMessagesListAnnouncement.SetValue(conf.get("suppressMessagesListAnnouncement"))
 		# Live state of the call Mute and Camera toggles (added in 5.5.8)
-		self.announceCallControlState = settingsSizerHelper.addItem(wx.CheckBox(
-			self, label=_("Announce the current state of the microphone and camera buttons during a call")))
+		self.announceCallControlState = newFeaturesHelper.addItem(wx.CheckBox(
+			newFeaturesBox, label=_(
+				"During a call, announce whether the microphone and camera are currently on or off. "
+				"When unchecked, version 5.4 behavior is used and Unigram's own fixed button names are announced")))
 		self.announceCallControlState.SetValue(conf.get("announceCallControlState"))
 		# Unread count when switching chat folders (added in 5.7.0)
-		self.announceFolderUnreadCount = settingsSizerHelper.addItem(wx.CheckBox(
-			self, label=_("Announce the unread count when switching between chat folders")))
+		self.announceFolderUnreadCount = newFeaturesHelper.addItem(wx.CheckBox(
+			newFeaturesBox, label=_(
+				"When switching between chat folders, announce the number of unread chats after the folder name. "
+				"When unchecked, version 5.4 behavior is used and only the folder name is announced")))
 		self.announceFolderUnreadCount.SetValue(conf.get("announceFolderUnreadCount"))
 		# Button to open the bundled sounds folder
 		self.openSoundsFolder = settingsSizerHelper.addItem(wx.Button(self, label=_("Open UnigramPlus sounds folder")))
