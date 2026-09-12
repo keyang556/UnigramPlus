@@ -1037,7 +1037,7 @@ class Message_list_item(ListItem):
 
 	@script(description=_("Show message text in popup window"), gesture="kb:ALT+C")
 	def script_show_text_message(self, gesture):
-		rich_message = find_rich_message_root(self)
+		rich_message = find_rich_message_root(self) if conf.get("richMessageSupport") else None
 		message_text = extract_message_text(self)
 		rich_text = extract_rich_message_text(rich_message, textInfos.POSITION_ALL) if rich_message else ""
 		title = _("Rich message") if rich_message else _("message text")
@@ -2965,7 +2965,11 @@ class AppModule(appModuleHandler.AppModule):
 			nextHandler()
 			return
 		try:
-			if obj.role == Role.LIST and getattr(obj, "UIAAutomationId", "") == "Messages":
+			if (
+				conf.get("suppressMessagesListAnnouncement")
+				and obj.role == Role.LIST
+				and getattr(obj, "UIAAutomationId", "") == "Messages"
+			):
 				return
 		except Exception:
 			pass
@@ -3058,7 +3062,7 @@ class AppModule(appModuleHandler.AppModule):
 			try:
 				# If this message input field has a composer header attached (reply or edit),
 				# announce "Reply"/"Editing" instead of the usual "type a message" prompt.
-				if obj.UIAAutomationId == "TextField":
+				if obj.UIAAutomationId == "TextField" and conf.get("announceComposerState"):
 					# The composer header's cancel button sits a few siblings before the field
 					# (an extra ButtonMore/upload ring may come between), so scan back for it.
 					cancel = obj.previous
@@ -3103,11 +3107,14 @@ class AppModule(appModuleHandler.AppModule):
 				# would otherwise announce its automation id as "Tn voice message". Give it a
 				# clear label; while recording is in progress also read the elapsed time shown
 				# next to it (a pressed toggle means video-note mode, otherwise a voice message).
-				if obj.UIAAutomationId == "btnVoiceMessage":
+				if obj.UIAAutomationId == "btnVoiceMessage" and conf.get("voiceRecordingButtonLabel") != "none":
 					isVideo = State.PRESSED in obj.states
-					if obj.next and obj.next.UIAAutomationId == "ElapsedLabel":
+					withElapsed = conf.get("voiceRecordingButtonLabel") == "withElapsedTime"
+					if withElapsed and obj.next and obj.next.UIAAutomationId == "ElapsedLabel":
 						label = _("Recording a video message, elapsed time") if isVideo else _("Recording a voice message, elapsed time")
 						obj.name = label+" "+re.split(r"[.,]", obj.next.name)[0]
+					elif obj.next and obj.next.UIAAutomationId == "ElapsedLabel":
+						obj.name = _("Recording a video message") if isVideo else _("Recording a voice message")
 					else:
 						obj.name = _("Record a video message") if isVideo else _("Record a voice message")
 				else:
@@ -3120,12 +3127,12 @@ class AppModule(appModuleHandler.AppModule):
 		# focusable element after the chat name but carries no text of its own, so NVDA would
 		# otherwise announce its automation id ("Identity root"). Replace that with the chat
 		# name and member count read from the neighbouring Title and Subtitle.
-		if obj.UIAAutomationId == "IdentityRoot" and not obj.name:
+		if obj.UIAAutomationId == "IdentityRoot" and not obj.name and conf.get("labelProfileIdentityButton"):
 			obj.name = self._label_profile_identity(obj)
 		# In a 1:1 call the Mute/Camera toggles keep a static name, so make the announced label
 		# reflect the current state. Scope to the call button grid to avoid the story viewer's
 		# own "Mute" button.
-		if obj.UIAAutomationId in ("Mute", "Camera"):
+		if obj.UIAAutomationId in ("Mute", "Camera") and conf.get("announceCallControlState"):
 			try:
 				if _find_ancestor_by_automation_id(obj, ("ActiveButtons",), max_depth=4):
 					on = State.PRESSED in obj.states or State.CHECKED in obj.states
@@ -3632,9 +3639,10 @@ class AppModule(appModuleHandler.AppModule):
 			self.saved_items.save("last selected folder", selected_folder)
 		else: return False
 		text = selected_folder
-		count = _get_chat_folder_unread_count(obj.name)
-		if count:
-			text += ", " + count
+		if conf.get("announceFolderUnreadCount"):
+			count = _get_chat_folder_unread_count(obj.name)
+			if count:
+				text += ", " + count
 		queueHandler.queueFunction(queueHandler.eventQueue, message, text)
 
 	def _get_chat_folder_name(self, name):

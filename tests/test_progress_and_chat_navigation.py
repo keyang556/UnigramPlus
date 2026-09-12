@@ -248,6 +248,7 @@ def test_change_chats_folder_announces_nonzero_unread_count_once():
 				"_get_chat_folder_unread_count", {"re": re}
 			),
 			"message": lambda text: announcements.append(text),
+			"conf": SimpleNamespace(get=lambda key: True),
 			"queueHandler": SimpleNamespace(
 				eventQueue=object(),
 				queueFunction=lambda queue, callback, text: callback(text),
@@ -783,3 +784,34 @@ def test_chat_list_items_receive_the_mention_navigation_overlay():
 
 	assert "_is_chat_list_item(obj)" in source
 	assert "clsList.insert(0, ChatListItem)" in source
+
+
+def test_the_folder_unread_count_can_be_turned_off():
+	announcements = []
+	saved = {"last selected folder": "All"}
+	instance = SimpleNamespace(
+		saved_items=SimpleNamespace(
+			get=lambda key: saved.get(key),
+			save=lambda key, value: saved.__setitem__(key, value),
+		),
+	)
+	get_name = _load_app_method("_get_chat_folder_name", {"re": re})
+	instance._get_chat_folder_name = lambda name: get_name(instance, name)
+	change_folder = _load_app_method(
+		"change_chats_folder",
+		{
+			"_get_chat_folder_unread_count": _load_module_function(
+				"_get_chat_folder_unread_count", {"re": re}
+			),
+			"message": lambda text: announcements.append(text),
+			"conf": SimpleNamespace(get=lambda key: False),
+			"queueHandler": SimpleNamespace(
+				eventQueue=object(),
+				queueFunction=lambda queue, callback, text: callback(text),
+			),
+		},
+	)
+
+	change_folder(instance, SimpleNamespace(name="Unread, 538"), None)
+
+	assert announcements == ["Unread"]

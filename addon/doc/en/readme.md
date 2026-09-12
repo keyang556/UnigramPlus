@@ -201,6 +201,17 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
+### Unreleased
+
+* Moved the add-on's recurring background checks off NVDA's main loop, so chat
+  navigation, typing and speech are no longer delayed by Unigram's UIA replies.
+* Every behavior added after 5.4 can now be turned on or off in UnigramPlus
+  settings: the voice message record button label, rich message text with ALT+C,
+  the profile identity button label, the replying and editing announcement in the
+  message field, the suppressed "list" announcement before messages, the live
+  microphone and camera state during calls, and the unread count when switching
+  chat folders. All of them keep their current behavior by default.
+
 ### Version 5.7.3
 
 * NVDA+Alt+V displays the UnigramPlus version on a new line.
