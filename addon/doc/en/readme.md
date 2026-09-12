@@ -205,6 +205,11 @@ And remember that everyone who read this line thought that someone will definite
 
 * Moved the add-on's recurring background checks off NVDA's main loop, so chat
   navigation, typing and speech are no longer delayed by Unigram's UIA replies.
+* Fixed the space bar playing voice messages and music again. Current Unigram
+  exposes a message as a toggle button, so space selected the message, and the
+  resulting state change made the add-on give up before pressing play.
+* Fixed Ctrl+ALT+Left and Ctrl+ALT+Right stopping after the first press while
+  the modifiers stay held.
 * Fixed ALT+E for closing the audio player. It looked for the player through a
   ShuffleButton that current Unigram no longer has, so it always reported that
   nothing was playing; the close button is now found by its own icon.

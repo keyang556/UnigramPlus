@@ -261,7 +261,10 @@ def test_voice_seek_lifts_the_modifiers_the_user_is_holding():
 		VK_LWIN=codes["lwin"],
 		VK_RWIN=codes["rwin"],
 		KEYEVENTF_KEYUP=2,
-		getKeyState=key_state,
+		# getKeyState answers from this thread's queue, which never saw these
+		# keystrokes; reading it instead of the async state finds nothing held.
+		getKeyState=lambda code: 0,
+		getAsyncKeyState=key_state,
 		keybd_event=keybd_event,
 	)
 
@@ -357,3 +360,133 @@ def test_close_audio_player_ignores_buttons_that_carry_an_automation_id():
 	elements = [_player_button(automation_id="PlaybackButton", glyph=""), labelled]
 
 	assert _load_close_button_lookup(elements)() is None
+
+
+def _message(children, media=None):
+	obj = SimpleNamespace(media=media, children=children)
+	obj.firstChild = children[0] if children else None
+	for index, child in enumerate(children):
+		child.next = children[index + 1] if index + 1 < len(children) else None
+		child.previous = children[index - 1] if index else None
+	obj.setFocus = lambda: obj.__dict__.setdefault("focused", True)
+	return obj
+
+
+def _media_child(automation_id="", role="button", width=48):
+	return SimpleNamespace(
+		UIAAutomationId=automation_id,
+		role=role,
+		location=SimpleNamespace(width=width),
+	)
+
+
+def _load_space_handler(namespace_extra=None):
+	namespace = {
+		"Role": SimpleNamespace(LINK="link", BUTTON="button"),
+		"api": SimpleNamespace(getFocusObject=lambda: namespace["_focus"]),
+	}
+	namespace.update(namespace_extra or {})
+	find_button, handler = _load_methods(
+		["_find_media_button_in_message", "script_actionMediaInMessage"], namespace
+	)
+	return namespace, find_button, handler
+
+
+def test_space_plays_media_without_toggling_the_message():
+	"""Unigram exposes a message as a ToggleButton, so Space would select it.
+
+	The old handler passed Space on and then refused to act because that
+	selection had changed the message state, which is why voice messages and
+	music stopped playing.
+	"""
+	invoked = []
+	sent = []
+	button = _media_child(automation_id="Button")
+	button.doAction = lambda: invoked.append("play")
+	message_item = _message([button, _media_child(automation_id="Progress", role="custom")])
+	namespace, find_button, handler = _load_space_handler()
+	namespace["_focus"] = message_item
+	instance = SimpleNamespace(
+		is_message_object=lambda obj: True,
+		_find_media_button_in_message=lambda obj: find_button(instance, obj),
+	)
+
+	handler(instance, SimpleNamespace(send=lambda: sent.append("space")))
+
+	assert invoked == ["play"], "the play button must be pressed"
+	assert sent == [], "Space must not reach Unigram and select the message"
+
+
+def test_space_is_passed_through_when_the_message_has_nothing_to_play():
+	sent = []
+	message_item = _message([_media_child(automation_id="TextBlock", role="text")])
+	namespace, find_button, handler = _load_space_handler()
+	namespace["_focus"] = message_item
+	instance = SimpleNamespace(
+		is_message_object=lambda obj: True,
+		_find_media_button_in_message=lambda obj: find_button(instance, obj),
+	)
+
+	handler(instance, SimpleNamespace(send=lambda: sent.append("space")))
+
+	assert sent == ["space"]
+
+
+def test_space_outside_a_message_keeps_its_normal_behavior():
+	sent = []
+	namespace, _find_button, handler = _load_space_handler()
+	namespace["_focus"] = SimpleNamespace()
+	instance = SimpleNamespace(is_message_object=lambda obj: False)
+
+	handler(instance, SimpleNamespace(send=lambda: sent.append("space")))
+
+	assert sent == ["space"]
+
+
+def test_the_seek_shortcut_still_works_while_the_modifiers_stay_held():
+	"""Holding Ctrl+Alt and tapping the arrow again must keep seeking.
+
+	The modifiers have to be pressed back after the arrow. Leaving them up while
+	the user still holds them means the next arrow arrives on its own, so NVDA
+	never recognizes the shortcut again.
+	"""
+	codes = {"ctrl": 17, "alt": 18, "shift": 16, "lwin": 91, "rwin": 92}
+	physical = {codes["ctrl"]: True, codes["alt"]: True}
+	seen = []
+
+	def keybd_event(code, scan, flags, extra):
+		physical[code] = not (flags & 2)
+
+	win_user = SimpleNamespace(
+		VK_CONTROL=codes["ctrl"],
+		VK_MENU=codes["alt"],
+		VK_SHIFT=codes["shift"],
+		VK_LWIN=codes["lwin"],
+		VK_RWIN=codes["rwin"],
+		KEYEVENTF_KEYUP=2,
+		getKeyState=lambda code: 0,
+		getAsyncKeyState=lambda code: 32768 if physical.get(code) else 0,
+		keybd_event=keybd_event,
+	)
+
+	class Gesture:
+		def send(self):
+			seen.append(tuple(sorted(c for c, held in physical.items() if held)))
+
+	(send_key,) = _load_methods(
+		["_send_key_without_held_modifiers"],
+		{
+			"winUser": win_user,
+			"KeyboardInputGesture": SimpleNamespace(fromName=lambda name: Gesture()),
+		},
+	)
+	instance = SimpleNamespace(_MODIFIER_KEYS=("VK_CONTROL", "VK_MENU", "VK_SHIFT", "VK_LWIN", "VK_RWIN"))
+
+	# The user holds Ctrl+Alt throughout and taps the arrow three times.
+	for _ in range(3):
+		send_key(instance, "rightArrow")
+
+	assert seen == [(), (), ()], "every arrow must arrive with no modifier held"
+	assert physical[codes["ctrl"]] and physical[codes["alt"]], (
+		"the modifiers must be held again after each press, or the shortcut stops repeating"
+	)
