@@ -19,7 +19,6 @@ addonHandler.initTranslation()
 import languageHandler
 import queueHandler
 from logHandler import log
-from utils.security import objectBelowLockScreenAndWindowsIsLocked
 import threading, time, queue, random
 from appModules.cnf import conf, listLanguages
 from appModules.unigram import AppModule, baseDir
