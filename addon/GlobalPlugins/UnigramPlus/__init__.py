@@ -5,23 +5,19 @@ import addonHandler
 from scriptHandler import script
 import api
 import gui
-from gui import guiHelper, nvdaControls
 from gui.settingsDialogs import SettingsPanel
 import wx
 import urllib.request
 import urllib.parse
 import json
 import core
-import globalVars
 import os
 import re
 addonHandler.initTranslation()
-import languageHandler
-import queueHandler
 from logHandler import log
-import threading, time, queue, random
+import threading
 from appModules.cnf import conf, listLanguages
-from appModules.unigram import AppModule, baseDir
+from appModules.unigram import baseDir
 from ui import message
 
 UPDATE_REPO = "keyang556/UnigramPlus"

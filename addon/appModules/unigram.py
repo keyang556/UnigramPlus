@@ -11,13 +11,11 @@ from controlTypes import Role, State
 import scriptHandler
 from scriptHandler import script
 from NVDAObjects.UIA import UIA
-import languageHandler
 import addonHandler
 import textInfos
 import editableText
 addonHandler.initTranslation()
 import speech
-from  threading import Timer
 import threading
 import time
 import winsound
@@ -32,7 +30,7 @@ import importlib.util
 sys.path.insert(0, ".")
 from .data import *
 from .unigramplus_text_window import TextWindow
-from .cnf import conf, lang
+from .cnf import conf
 from .readme_shortcuts import extractShortcutText  # noqa: E402
 from .message_header import (  # noqa: E402
 	move_message_header_after_content,
