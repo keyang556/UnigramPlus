@@ -8,9 +8,9 @@ DOC_DIR = ROOT / "addon" / "doc"
 VERSION_REPORT = "Unigram version: {unigramVersion}.\nUnigramPlus version: {addonVersion}."
 VERSION_WINDOW_DESCRIPTION = "Open Unigram and UnigramPlus version information in a read-only window"
 RELEASE_CHANGELOG = (
-	"""- Background checks no longer run on NVDA's main loop, so chat navigation and speech are no longer held up.
-- Every behavior added after 5.4 can now be turned on or off in UnigramPlus settings.
-- Fixed the space bar not playing voice messages and music, Enter not replying, ALT+E not closing the audio player, and Ctrl+ALT+Left/Right not seeking."""
+	"""- Removed the call duration workaround: Unigram 12.10 and later announce a call message's duration themselves, so it is no longer announced twice.
+- Fixed the add-on failing to start on older NVDA versions that do not provide the utils.security module.
+- Updated the Vietnamese translation."""
 )
 
 # Only active runtime strings belong here. Historical release notes and removed
@@ -86,40 +86,80 @@ def test_required_strings_are_translated_in_every_locale():
 		)
 
 
-def test_release_version_is_580():
+def test_release_version_is_581():
 	build_vars = (ROOT / "buildVars.py").read_text(encoding="utf-8")
-	manifest = (ROOT / "addon" / "manifest.ini").read_text(encoding="utf-8")
 	pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
 	lockfile = (ROOT / "uv.lock").read_text(encoding="utf-8")
 
-	assert 'addon_version="5.8.0"' in build_vars
-	assert "version = 5.8.0" in manifest
-	assert 'version = "5.8.0"' in pyproject
-	assert 'name = "unigramplus"\nversion = "5.8.0"' in lockfile
+	assert 'addon_version="5.8.1"' in build_vars
+	assert 'version = "5.8.1"' in pyproject
+	assert 'name = "unigramplus"\nversion = "5.8.1"' in lockfile
+
+	# manifest.ini is written by the build, so it is only checked when it exists.
+	manifest = ROOT / "addon" / "manifest.ini"
+	if manifest.is_file():
+		assert "version = 5.8.1" in manifest.read_text(encoding="utf-8")
 
 
-def test_catalogs_keep_the_580_translation_metadata():
+def test_catalogs_keep_the_581_translation_metadata():
 	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
 		catalog_path = locale_dir / "LC_MESSAGES" / "nvda.po"
 		catalog = catalog_path.read_text(encoding="utf-8")
-		assert '"Project-Id-Version: UnigramPlus 5.8.0\\n"' in catalog
+		assert '"Project-Id-Version: UnigramPlus 5.8.1\\n"' in catalog
 
 
 def test_current_release_changelog_comes_from_the_changelog_source():
 	changelog = (ROOT / "changelog.py").read_text(encoding="utf-8")
 
-	assert "main loop" in changelog
-	assert "turned on or off in UnigramPlus settings" in changelog
+	assert "call duration workaround" in changelog
+	assert "utils.security" in changelog
+
+
+def test_every_catalog_translates_the_current_release_changelog():
+	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
+		entries = _parse_po(locale_dir / "LC_MESSAGES" / "nvda.po")
+		assert entries.get(RELEASE_CHANGELOG), locale_dir.name
 
 
 def test_the_english_manual_carries_the_current_release():
 	for manual in (ROOT / "readme.md", DOC_DIR / "en" / "readme.md"):
 		text = manual.read_text(encoding="utf-8")
-		version_580 = text.index("5.8.0")
+		version_581 = text.index("5.8.1")
+		version_580 = text.index("5.8.0", version_581)
+		section_581 = text[version_581:version_580]
 		section_580 = text[version_580:text.index("5.7.3", version_580)]
+		assert section_581.count("\n* ") == 4, manual
+		assert "call duration workaround" in section_581, manual
+		assert "utils.security" in section_581, manual
 		assert section_580.count("\n* ") == 10, manual
 		assert "main loop" in section_580, manual
 		assert "version 5.4" in section_580, manual
+
+
+def test_every_localized_manual_has_581_and_580_changelogs():
+	manuals = [ROOT / "readme.md", *sorted(DOC_DIR.glob("*/readme.md"))]
+	assert len(manuals) == 17
+	for manual in manuals:
+		text = manual.read_text(encoding="utf-8")
+		version_581 = text.index("5.8.1")
+		version_580 = text.index("5.8.0", version_581)
+		version_573 = text.index("5.7.3", version_580)
+		assert text[version_581:version_580].count("\n* ") == 4, manual
+		assert text[version_580:version_573].count("\n* ") == 10, manual
+		assert "12.10" in text[version_581:version_580], manual
+		assert "utils.security" in text[version_581:version_580], manual
+
+
+def test_the_call_duration_workaround_is_gone_everywhere():
+	"""Unigram 12.10 names the duration itself, so the add-on must not add it."""
+	source = (ROOT / "addon" / "appModules" / "unigram.py").read_text(encoding="utf-8-sig")
+	assert "Checking if a message is a call" not in source
+
+	feature = "the duration of this call is announced"
+	for manual in [ROOT / "readme.md", *sorted(DOC_DIR.glob("*/readme.md"))]:
+		text = manual.read_text(encoding="utf-8")
+		improvements = text[:text.index("## ", text.index("\n* "))]
+		assert feature not in improvements, manual
 
 
 def test_every_localized_manual_has_573_through_559_and_updated_558_changelogs():

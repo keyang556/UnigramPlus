@@ -10,7 +10,6 @@ Use o Unigram de uma forma mais confortável e produtiva. Este extra fornece mui
 * Quando o foco está na lista de chat, informações como "chat, separadores, lista selecionada" não são anunciadas e se o cursor estiver na lista de mensagens,  não ouvirá a palavra "Lista".
 * Quando o foco está no botão abrir ficheiro ou descarregar ficheiro, o nome e o tamanho do ficheiro serão falados, e se estiver no botão reproduzir de um ficheiro de áudio, ouvirá o seu nome e duração.
 * Quando estiver numa mensagem de voz que está a ser reproduzida, ouvirá primeiro o tempo de reprodução e, em seguida, o restante das informações relevantes.
-* Quando o foco fica numa mensagem contendo informações sobre uma chamada, a duração dessa chamada é anunciada.
 * Quando o foco está numa mensagem seleccionada de Conversas, primeiro ouvirá a informação se ela foi seleccionada e, em seguida, o conteúdo da mensagem.
 * Agora, ao rolar por uma lista de mensagens ou Conversas, não ouvirá a palavra "lida", mas "não lida" será falada antes de ler a mensagem em si. atualmente, esse recurso funciona apenas em inglês, russo e ucraniano.
 * A função de gravação de mensagem de voz foi significativamente modernizada. gravar, enviar e cancelar mensagens de voz são acompanhados por sons distintos. além disso, quando essas operações são realizadas, o foco permanece na mesma posição e não salta para o botão de gravação ou o campo de edição.
@@ -198,6 +197,26 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 <!-- shortcut-table-end -->
 
 ## Lista de alterações:
+
+### Versão 5.8.1
+
+* Removida a solução alternativa para a duração das chamadas. O Unigram 12.10 e posteriores anunciam sozinhos a duração de uma mensagem de chamada, então o UnigramPlus não a acrescenta mais e ela deixa de ser ouvida duas vezes.
+* Corrigido o complemento não iniciar em versões antigas do NVDA que não fornecem o módulo utils.security.
+* Removidas importações que o complemento não usa mais.
+* Atualizada a tradução vietnamita.
+
+### Versão 5.8.0
+
+* As verificações periódicas em segundo plano do complemento não são mais executadas no laço principal do NVDA, então a navegação pelos chats, a digitação e a fala não ficam mais travadas enquanto o Unigram responde.
+* Todos os comportamentos adicionados depois da versão 5.4 agora podem ser ativados ou desativados nas configurações do UnigramPlus, reunidos sob um único título: como o botão de gravar mensagem de voz é anunciado, o texto formatado das mensagens com ALT+C, o rótulo do botão de identidade do perfil, o anúncio de responder e editar no campo de mensagem, o anúncio suprimido de "lista" antes das mensagens, o estado ao vivo do microfone e da câmera durante uma chamada e a contagem de não lidas ao trocar de pasta de chats. Cada um mantém o comportamento atual por padrão, e cada rótulo informa qual comportamento da versão 5.4 ele restaura.
+* Corrigida a barra de espaço não reproduzir mensagens de voz, músicas e arquivos.
+* Corrigido o Enter não responder a uma mensagem, o Backspace não editá-la, o ALT+C não mostrar o texto dela e o ALT+D não voltar para ela.
+* Corrigido o ALT+E não fechar o reprodutor de áudio.
+* Corrigido o Ctrl+ALT+Esquerda e o Ctrl+ALT+Direita não avançarem nem retrocederem a reprodução da mensagem de voz, inclusive quando a seta é pressionada novamente com os modificadores ainda pressionados.
+* O cancelamento de uma gravação de voz é anunciado cerca de um segundo e meio depois de ela parar, em vez de cinco segundos depois.
+* Com a opção do botão de gravação da versão 5.4 selecionada, o foco permanece no campo de mensagem quando a gravação começa, enquanto o Tab continua alcançando o botão de gravar.
+* Corrigidos vários atalhos que falhavam silenciosamente quando faltava na árvore do Unigram um elemento que eles esperavam encontrar: ALT+3, ALT+4, ALT+5, ALT+6, ALT+Q, ALT+T, ALT+Shift+L, ALT+Shift+P, Shift+Delete, a navegação por mídias e os controles de chamada.
+* A conversão de uma mensagem de voz em texto não inicia mais uma thread nova a cada meio segundo enquanto espera, e desiste em vez de esperar para sempre.
 
 ### Versão 5.7.3
 

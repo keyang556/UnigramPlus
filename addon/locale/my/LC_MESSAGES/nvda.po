@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.0\n"
+"Project-Id-Version: UnigramPlus 5.8.1\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2026-09-03 03:10+0630\n"
 "PO-Revision-Date: 2026-09-03 03:13+0630\n"
@@ -967,5 +967,14 @@ msgstr ""
 "ကီးများစွာကို ပေါင်းထည့်ကာ Unigram တွင် အလုပ်လုပ်ရန် ပိုမိုလွယ်ကူစေမည့် သေးငယ်သော တိုးတက်မှုများစွာကိုလည်း ပေါင်းထည့်ထားသည်။"
 
 #: changelog.py:5
+msgid ""
+"- Removed the call duration workaround: Unigram 12.10 and later announce a call message's duration themselves, so it is no longer announced twice.\n"
+"- Fixed the add-on failing to start on older NVDA versions that do not provide the utils.security module.\n"
+"- Updated the Vietnamese translation."
+msgstr ""
+"- ခေါ်ဆိုမှုကြာချိန်အတွက် ယာယီဖြေရှင်းချက်ကို ဖယ်ရှားလိုက်ပါပြီ။ Unigram 12.10 နှင့် နောက်ပိုင်းဗားရှင်းများသည် ခေါ်ဆိုမှုမက်ဆေ့ချ်၏ ကြာချိန်ကို ကိုယ်တိုင်ဖတ်ပြသောကြောင့် နှစ်ကြိမ်ထပ်မဖတ်တော့ပါ။\n"
+"- utils.security မော်ဂျူးမပါသော NVDA ဗားရှင်းဟောင်းများတွင် အက်ဒွန်မစတင်နိုင်သည့် ပြဿနာကို ပြင်ဆင်ပြီးပါပြီ။\n"
+"- ဗီယက်နမ်ဘာသာပြန်ကို မွမ်းမံပြီးပါပြီ။"
+
 msgid "- NVDA+Alt+V displays the UnigramPlus version on a new line."
 msgstr "- NVDA+Alt+V သည် UnigramPlus ဗားရှင်းကို လိုင်းအသစ်တွင် ပြသသည်။"

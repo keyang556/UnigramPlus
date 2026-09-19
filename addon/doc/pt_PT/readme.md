@@ -10,7 +10,6 @@ Use o Unigram de uma forma mais confortável e produtiva. Este extra fornece mui
 * Quando o foco está na lista de chat, informações como "chat, separadores, lista selecionada" não são anunciadas e se o cursor estiver na lista de mensagens,  não ouvirá a palavra "Lista".
 * Quando o foco está no botão abrir ficheiro ou descarregar ficheiro, o nome e o tamanho do ficheiro serão falados, e se estiver no botão reproduzir de um ficheiro de áudio, ouvirá o seu nome e duração.
 * Quando estiver numa mensagem de voz que está a ser reproduzida, ouvirá primeiro o tempo de reprodução e, em seguida, o restante das informações relevantes.
-* Quando o foco fica numa mensagem contendo informações sobre uma chamada, a duração dessa chamada é anunciada.
 * Quando o foco está numa mensagem seleccionada de Conversas, primeiro ouvirá a informação se ela foi seleccionada e, em seguida, o conteúdo da mensagem.
 * Agora, ao rolar por uma lista de mensagens ou Conversas, não ouvirá a palavra "lida", mas "não lida" será falada antes de ler a mensagem em si. atualmente, esse recurso funciona apenas em inglês, russo e ucraniano.
 * A função de gravação de mensagem de voz foi significativamente modernizada. gravar, enviar e cancelar mensagens de voz são acompanhados por sons distintos. além disso, quando essas operações são realizadas, o foco permanece na mesma posição e não salta para o botão de gravação ou o campo de edição.
@@ -198,6 +197,26 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 <!-- shortcut-table-end -->
 
 ## Lista de alterações:
+
+### Versão 5.8.1
+
+* Removida a solução alternativa para a duração das chamadas. O Unigram 12.10 e posteriores anunciam por si próprios a duração de uma mensagem de chamada, pelo que o UnigramPlus já não a acrescenta e deixa de ser ouvida duas vezes.
+* Corrigido o complemento não arrancar em versões antigas do NVDA que não fornecem o módulo utils.security.
+* Removidas importações que o complemento já não utiliza.
+* Atualizada a tradução vietnamita.
+
+### Versão 5.8.0
+
+* As verificações periódicas em segundo plano do complemento deixaram de ser executadas no ciclo principal do NVDA, pelo que a navegação pelas conversas, a escrita e a fala já não ficam bloqueadas enquanto o Unigram responde.
+* Todos os comportamentos acrescentados depois da versão 5.4 podem agora ser ligados ou desligados nas definições do UnigramPlus, reunidos sob um único título: a forma como o botão de gravar mensagem de voz é anunciado, o texto formatado das mensagens com ALT+C, a etiqueta do botão de identidade do perfil, o anúncio de responder e editar no campo de mensagem, o anúncio suprimido de "lista" antes das mensagens, o estado em direto do microfone e da câmara durante uma chamada e a contagem de não lidas ao mudar de pasta de conversas. Cada um mantém o comportamento atual por predefinição e cada etiqueta indica que comportamento da versão 5.4 repõe.
+* Corrigida a barra de espaços que não reproduzia mensagens de voz, música e ficheiros.
+* Corrigido o Enter que não respondia a uma mensagem, o Backspace que não a editava, o ALT+C que não mostrava o respetivo texto e o ALT+D que não regressava a ela.
+* Corrigido o ALT+E que não fechava o reprodutor de áudio.
+* Corrigidos o Ctrl+ALT+Esquerda e o Ctrl+ALT+Direita que não avançavam nem recuavam a reprodução da mensagem de voz, incluindo quando a seta é premida novamente com os modificadores ainda premidos.
+* O cancelamento de uma gravação de voz é anunciado cerca de um segundo e meio depois de esta parar, em vez de cinco segundos depois.
+* Com a opção do botão de gravação da versão 5.4 selecionada, o foco permanece no campo de mensagem quando a gravação começa, continuando o Tab a alcançar o botão de gravar.
+* Corrigidos vários atalhos que falhavam em silêncio quando faltava na árvore do Unigram um elemento que esperavam encontrar: ALT+3, ALT+4, ALT+5, ALT+6, ALT+Q, ALT+T, ALT+Shift+L, ALT+Shift+P, Shift+Delete, a navegação por multimédia e os controlos de chamada.
+* A conversão de uma mensagem de voz em texto deixou de iniciar uma nova thread a cada meio segundo enquanto espera e desiste em vez de esperar indefinidamente.
 
 ### Versão 5.7.3
 

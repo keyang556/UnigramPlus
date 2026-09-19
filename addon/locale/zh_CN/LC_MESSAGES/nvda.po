@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.0\n"
+"Project-Id-Version: UnigramPlus 5.8.1\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2026-05-24 00:00+0800\n"
 "PO-Revision-Date: 2026-05-24 00:00+0800\n"
@@ -15,6 +15,15 @@ msgstr ""
 "X-Generator: Codex\n"
 
 #: changelog.py:5
+msgid ""
+"- Removed the call duration workaround: Unigram 12.10 and later announce a call message's duration themselves, so it is no longer announced twice.\n"
+"- Fixed the add-on failing to start on older NVDA versions that do not provide the utils.security module.\n"
+"- Updated the Vietnamese translation."
+msgstr ""
+"- 移除通话时长的临时处理：Unigram 12.10 及更高版本会自行读出通话消息的时长，因此不会再重复读出。\n"
+"- 修正在缺少 utils.security 模块的旧版 NVDA 上插件无法启动的问题。\n"
+"- 更新越南语翻译。"
+
 msgid "- NVDA+Alt+V displays the UnigramPlus version on a new line."
 msgstr "- NVDA+Alt+V 现在会在新的一行显示 UnigramPlus 版本。"
 
@@ -925,7 +934,6 @@ msgstr "录制语音消息"
 msgid "Record a video message"
 msgstr "录制视频消息"
 
-#: changelog.py:5
 msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
 msgstr "录制语音或视频消息时，NVDA 现在会朗读「正在录制语音消息」或「正在录制视频消息」并念出经过时间，而不再是「Tn voice message」。"
 
@@ -1050,10 +1058,8 @@ msgstr ""
 "- 新增 Alt+[ 功能的设置：在消息内容之后读出消息标头；该功能默认关闭。\n"
 "- 新增到达聊天末尾时的可选声音提示。"
 
-#: changelog.py:5
 msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
 msgstr "恢复了切换文件夹时播报非零未读数的功能，同时保留文件传输进度跟踪器的保护范围。"
 
-#: changelog.py:7
 msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
 msgstr "已根据当前 Unigram 源代码更新快捷键列表，并标识出尚未列入 Unigram 官方 Shortcuts.md 的内置快捷键。"

@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.0\n"
+"Project-Id-Version: UnigramPlus 5.8.1\n"
 "POT-Creation-Date: 2022-10-07 22:33+0300\n"
 "PO-Revision-Date: 2022-10-20 12:30+0300\n"
 "Last-Translator: samrat kc <samrat.kc7@gmail.com>\n"
@@ -18,6 +18,15 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: changelog.py:5
+msgid ""
+"- Removed the call duration workaround: Unigram 12.10 and later announce a call message's duration themselves, so it is no longer announced twice.\n"
+"- Fixed the add-on failing to start on older NVDA versions that do not provide the utils.security module.\n"
+"- Updated the Vietnamese translation."
+msgstr ""
+"- कल अवधिको अस्थायी समाधान हटाइयो: Unigram 12.10 र पछिका संस्करणहरूले कल सन्देशको अवधि आफैँ घोषणा गर्छन्, त्यसैले अब दुई पटक घोषणा हुँदैन।\n"
+"- utils.security मोड्युल नभएका पुराना NVDA संस्करणहरूमा औजार सुरु नहुने समस्या समाधान गरियो।\n"
+"- भियतनामी अनुवाद अद्यावधिक गरियो।"
+
 msgid "- NVDA+Alt+V displays the UnigramPlus version on a new line."
 msgstr "- NVDA+Alt+V ले अब UnigramPlus संस्करणलाई नयाँ लाइनमा देखाउँछ।"
 
@@ -852,7 +861,6 @@ msgstr "आवाज सन्देश रेकर्ड गर्नुहो
 msgid "Record a video message"
 msgstr "भिडियो सन्देश रेकर्ड गर्नुहोस्"
 
-#: changelog.py:5
 msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
 msgstr "आवाज वा भिडियो सन्देश रेकर्ड गर्दा, NVDA ले अब \"Tn voice message\" को सट्टा बितेको समयसहित \"आवाज सन्देश रेकर्ड गर्दै\" वा \"भिडियो सन्देश रेकर्ड गर्दै\" घोषणा गर्छ।"
 
@@ -977,10 +985,8 @@ msgstr ""
 "- Alt+[ को व्यवहारका लागि, जसले सन्देश हेडरलाई सामग्रीपछि पढ्छ, सेटिङ थपियो; यो पूर्वनिर्धारित रूपमा निष्क्रिय छ।\n"
 "- च्याटको अन्त्यमा पुग्दा बज्ने वैकल्पिक ध्वनि सूचना थपियो।"
 
-#: changelog.py:5
 msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
 msgstr "शून्य नभएको नपढिएको सङ्ख्यासहित फोल्डर बदल्दा हुने घोषणा पुनःस्थापित गरिएको छ, साथै फाइल स्थानान्तरण प्रगति ट्र्याकरका सुरक्षा उपायहरू कायम राखिएको छ।"
 
-#: changelog.py:7
 msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
 msgstr "हालको Unigram स्रोतबाट सर्टकट सूचीहरू अद्यावधिक गरिएका छन् र Unigram को आधिकारिक Shortcuts.md मा अझै समावेश नभएका अन्तर्निर्मित सर्टकटहरू पहिचान गरिएका छन्।"

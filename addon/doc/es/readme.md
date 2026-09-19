@@ -14,7 +14,6 @@ Utiliza Unigram De forma más cómoda y productiva. Este complemento proporciona
 * Cuando el foco se encuentra en la lista de chats, no se anuncian frases  tales como "Chats, pestaña, lista seleccionado" y si el cursor está en la lista de mensajes, no oirás la palabra "Lista".
 * Cuando el foco esté en el botón abrir archivo o descargar archivo, se verbalizará el nombre y tamaño del archivo, y si estás en el botón reproducir de un archivo de audio, escucharás su nombre y duración.
 * Cuando estés en un mensaje de voz que se esté reproduciendo actualmente,  oirás primero su tiempo de reproducción, y luego el resto de la información relevante.
-* cuando el foco esté en un mensaje que contenga información sobre una llamada, se anuncia la duración de dicha llamada.
 * Cuando el foco esté en un mensaje seleccionado de un chat, primero oirás la información de si está seleccionado, y luego el contenido del mensaje.
 * Ahora mientras te mueves por la lista de mensajes de un chat, Ya no oirás la palabra visto, sino que se verbalizará "no visto" antes de leer el mensaje propiamente dicho. Actualmente esta característica solo funciona en inglés, ruso, ucraniano, español, portugués, polaco, croata, turco y Persa.
 * Se a modernizado significativamente la función de grabación de mensajes de voz. la grabación, envío y cancelación de mensajes de voz se acompañan de sonidos distintivos. además, cuando se realizan estas operaciones, el foco permanece en la misma posición y no salta al botón de grabar ni al campo de edición.
@@ -200,6 +199,26 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 <!-- shortcut-table-end -->
 
 ##Lista de cambios:
+
+### Versión 5.8.1
+
+* Se ha eliminado la solución alternativa para la duración de las llamadas. Unigram 12.10 y posteriores anuncian por sí mismos la duración de un mensaje de llamada, por lo que UnigramPlus ya no la añade y deja de escucharse dos veces.
+* Corregido el fallo que impedía iniciar el complemento en versiones antiguas de NVDA que no incluyen el módulo utils.security.
+* Se han eliminado importaciones que el complemento ya no utiliza.
+* Actualizada la traducción al vietnamita.
+
+### Versión 5.8.0
+
+* Las comprobaciones periódicas en segundo plano del complemento ya no se ejecutan en el bucle principal de NVDA, por lo que la navegación por los chats, la escritura y la voz ya no se retrasan mientras Unigram responde.
+* Todos los comportamientos añadidos después de la versión 5.4 ahora se pueden activar o desactivar en las opciones de UnigramPlus, agrupados bajo un único encabezado: cómo se anuncia el botón de grabar mensaje de voz, el texto enriquecido de los mensajes con ALT+C, la etiqueta del botón de identidad del perfil, el anuncio de responder y editar en el campo de mensaje, el anuncio suprimido de "lista" antes de los mensajes, el estado en directo del micrófono y la cámara durante una llamada, y el número de mensajes no leídos al cambiar de carpeta de chats. Cada opción mantiene su comportamiento actual de forma predeterminada, y cada etiqueta indica qué comportamiento de la versión 5.4 restaura.
+* Corregido que la barra espaciadora no reprodujera mensajes de voz, música ni archivos.
+* Corregido que Enter no respondiera a un mensaje, Retroceso no lo editara, ALT+C no mostrara su texto y ALT+D no volviera a él.
+* Corregido que ALT+E no cerrara el reproductor de audio.
+* Corregido que Ctrl+ALT+Izquierda y Ctrl+ALT+Derecha no desplazaran la reproducción del mensaje de voz, incluso al pulsar de nuevo la flecha manteniendo pulsadas las teclas modificadoras.
+* La cancelación de una grabación de voz se anuncia alrededor de un segundo y medio después de detenerse, en lugar de cinco segundos más tarde.
+* Con la opción del botón de grabación de la versión 5.4 seleccionada, el foco permanece en el campo de mensaje al iniciarse una grabación, mientras que Tab sigue llegando al botón de grabar.
+* Corregidos varios atajos que fallaban en silencio cuando faltaba en el árbol de Unigram un elemento que daban por hecho: ALT+3, ALT+4, ALT+5, ALT+6, ALT+Q, ALT+T, ALT+Shift+L, ALT+Shift+P, Shift+Supr, la navegación por medios y los controles de llamada.
+* La conversión de un mensaje de voz a texto ya no inicia un hilo nuevo cada medio segundo mientras espera, y se rinde en lugar de esperar indefinidamente.
 
 ### Versión 5.7.3
 

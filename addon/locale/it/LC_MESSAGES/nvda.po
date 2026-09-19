@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.0\n"
+"Project-Id-Version: UnigramPlus 5.8.1\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-14 22:27+0100\n"
@@ -19,6 +19,15 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: changelog.py:5
+msgid ""
+"- Removed the call duration workaround: Unigram 12.10 and later announce a call message's duration themselves, so it is no longer announced twice.\n"
+"- Fixed the add-on failing to start on older NVDA versions that do not provide the utils.security module.\n"
+"- Updated the Vietnamese translation."
+msgstr ""
+"- Rimossa la soluzione alternativa per la durata delle chiamate: Unigram 12.10 e successivi annunciano da soli la durata di un messaggio di chiamata, quindi non viene più annunciata due volte.\n"
+"- Corretto l'avvio del componente aggiuntivo nelle versioni di NVDA più datate che non forniscono il modulo utils.security.\n"
+"- Aggiornata la traduzione vietnamita."
+
 msgid "- NVDA+Alt+V displays the UnigramPlus version on a new line."
 msgstr "- NVDA+Alt+V ora mostra la versione di UnigramPlus su una nuova riga."
 
@@ -1067,7 +1076,6 @@ msgstr "Registra un messaggio vocale"
 msgid "Record a video message"
 msgstr "Registra un messaggio video"
 
-#: changelog.py:5
 msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
 msgstr "Durante la registrazione di un messaggio vocale o video, NVDA ora annuncia \"Registrazione di un messaggio vocale\" o \"Registrazione di un messaggio video\" insieme al tempo trascorso, invece di \"Tn voice message\"."
 
@@ -1193,10 +1201,8 @@ msgstr ""
 "- Aggiunta un’impostazione per il comportamento di Alt+[ che annuncia le intestazioni dei messaggi dopo il contenuto; è disattivata per impostazione predefinita.\n"
 "- Aggiunta una notifica sonora facoltativa quando si raggiunge la fine di una chat."
 
-#: changelog.py:5
 msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
 msgstr "Ripristinati gli annunci durante il cambio di cartella con un numero di messaggi non letti diverso da zero, mantenendo le protezioni del rilevatore di avanzamento dei trasferimenti di file."
 
-#: changelog.py:7
 msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
 msgstr "Aggiornati gli elenchi delle scorciatoie in base al codice sorgente corrente di Unigram e identificate le scorciatoie integrate non ancora elencate nel file Shortcuts.md ufficiale di Unigram."

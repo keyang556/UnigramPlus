@@ -12,7 +12,6 @@ Unigram'da işinizi daha rahat hale getirin. Bu eklenti, Unigram'da hızlı ve k
 * Sohbet listesine odaklanırsanız,"sohbetler,kontrol sekmesi sekme sayfası seçili, "gibi ifadeleri kaldırır. Ayröca mesaj listesine odaklanırsanız, "liste" ifadesinide kaldırır.
 * "Dosyayı aç" veya "dosyayı indir" düğmesine odaklanırken, dosyanın adı ve boyutu duyulur ve ses dosyasındaki "oynat" düğmesine odaklanırken, dosyanın adı ve süresi duyulur.
 * Şu anda çalınmakta olan bir sesli mesaja odaklanırsanız, önce çalınan zaman hakkındaki bilgiler ve daha sonra geri kalan tüm bilgiler seslendirilir.
-* Bir çağrı hakkında bilgi içeren bir mesaja odaklanırsanız, bu çağrının süresi duyulur.
 * Sohbette bir Seçili   mesaja odaklanırsanız, önce Seçildiğine  dair bilgiler ve ardından mesajın içeriği duyulur.
 * Şimdi sohbette gezinirken, "okunan" ifadesi hiç duyulmayacak ve "okunmamış" ifadesi mesajın içeriğinden önce seslendirilecektir. Şimdilik, bu özellik yalnızca İngilizce, Rusça, Ukraynaca, İspanyolca, Portekizce, Hırvatça, Türkçe ve Farsça ile çalışır.
 * sesli mesaj kaydet, gönderme ve kayıt iptaline farklı sesler eşlik eder. Ayrıca, bu işlevler gerçekleştirilirken odak aynı konumda kalır ve Kayıt düğmesine veya düzenleme alanına atlamaz.
@@ -197,6 +196,26 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 <!-- shortcut-table-end -->
 
 ##Değişiklik listesi:
+
+### Sürüm 5.8.1
+
+* Çağrı süresi için kullanılan geçici çözüm kaldırıldı. Unigram 12.10 ve sonrası çağrı mesajının süresini kendisi duyurduğundan UnigramPlus artık onu eklemiyor ve süre iki kez duyulmuyor.
+* Eklentinin, utils.security modülünü içermeyen eski NVDA sürümlerinde başlatılamaması sorunu giderildi.
+* Eklentinin artık kullanmadığı içe aktarmalar kaldırıldı.
+* Vietnamca çeviri güncellendi.
+
+### Sürüm 5.8.0
+
+* Eklentinin düzenli arka plan denetimleri artık NVDA'nın ana döngüsünde çalışmıyor; böylece Unigram yanıt verirken sohbetlerde gezinme, yazma ve konuşma artık gecikmiyor.
+* 5.4'ten sonra eklenen tüm davranışlar artık UnigramPlus ayarlarından tek bir başlık altında açılıp kapatılabiliyor: sesli mesaj kayıt düğmesinin nasıl duyurulduğu, ALT+C ile zengin mesaj metni, profil kimlik düğmesi etiketi, mesaj alanındaki yanıtlama ve düzenleme duyurusu, mesajlardan önceki bastırılmış "liste" duyurusu, çağrı sırasında mikrofon ve kameranın anlık durumu ve sohbet klasörleri arasında geçiş yaparken okunmamış sayısı. Her biri varsayılan olarak mevcut davranışını korur ve her etiket, 5.4 sürümündeki hangi davranışı geri getirdiğini belirtir.
+* Boşluk tuşunun sesli mesajları, müziği ve dosyaları oynatmaması sorunu giderildi.
+* Enter'ın bir mesajı yanıtlamaması, Backspace'in mesajı düzenlememesi, ALT+C'nin metnini göstermemesi ve ALT+D'nin mesaja dönmemesi sorunları giderildi.
+* ALT+E'nin ses oynatıcıyı kapatmaması sorunu giderildi.
+* Ctrl+ALT+Sol ve Ctrl+ALT+Sağ tuşlarının sesli mesaj oynatmasında ileri geri sarmaması sorunu, değiştirici tuşlar basılı tutulurken ok tuşuna yeniden basılması durumu da dahil olmak üzere giderildi.
+* Sesli kaydın iptali, kayıt durduktan yaklaşık bir buçuk saniye sonra duyuruluyor; önceden beş saniye sonra duyuruluyordu.
+* 5.4 sürümündeki kayıt düğmesi seçeneği etkinken kayıt başladığında odak mesaj alanında kalır, Tab tuşu ise kayıt düğmesine ulaşmayı sürdürür.
+* Unigram'ın ağacında bekledikleri bir öğe bulunmadığında sessizce başarısız olan birçok kısayol düzeltildi: ALT+3, ALT+4, ALT+5, ALT+6, ALT+Q, ALT+T, ALT+Shift+L, ALT+Shift+P, Shift+Delete, medyada gezinme ve çağrı denetimleri.
+* Sesli mesajın metne dönüştürülmesi, beklerken artık her yarım saniyede bir yeni iş parçacığı başlatmıyor ve sonsuza kadar beklemek yerine vazgeçiyor.
 
 ### Sürüm 5.7.3
 

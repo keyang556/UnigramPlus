@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.0\n"
+"Project-Id-Version: UnigramPlus 5.8.1\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 02:57+0300\n"
@@ -19,6 +19,15 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: changelog.py:5
+msgid ""
+"- Removed the call duration workaround: Unigram 12.10 and later announce a call message's duration themselves, so it is no longer announced twice.\n"
+"- Fixed the add-on failing to start on older NVDA versions that do not provide the utils.security module.\n"
+"- Updated the Vietnamese translation."
+msgstr ""
+"- تمت إزالة الحل البديل الخاص بمدة المكالمة: يعلن Unigram 12.10 وما بعده عن مدة رسالة المكالمة بنفسه، لذلك لم تعد تُعلن مرتين.\n"
+"- تم إصلاح فشل تشغيل الإضافة على إصدارات NVDA الأقدم التي لا توفر الوحدة utils.security.\n"
+"- تم تحديث الترجمة الفيتنامية."
+
 msgid "- NVDA+Alt+V displays the UnigramPlus version on a new line."
 msgstr "- يعرض NVDA+Alt+V الآن إصدار UnigramPlus في سطر جديد."
 
@@ -1002,7 +1011,6 @@ msgstr "تسجيل رسالة صوتية"
 msgid "Record a video message"
 msgstr "تسجيل رسالة مرئية"
 
-#: changelog.py:5
 msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
 msgstr "عند تسجيل رسالة صوتية أو مرئية، يعلن NVDA الآن \"جارٍ تسجيل رسالة صوتية\" أو \"جارٍ تسجيل رسالة مرئية\" مع الوقت المنقضي، بدلاً من \"Tn voice message\"."
 
@@ -1127,10 +1135,8 @@ msgstr ""
 "- تمت إضافة إعداد لسلوك Alt+[ الذي ينطق رؤوس الرسائل بعد محتواها؛ وهو معطّل افتراضيًا.\n"
 "- تمت إضافة إشعار صوتي اختياري عند الوصول إلى نهاية الدردشة."
 
-#: changelog.py:5
 msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
 msgstr "تمت استعادة الإعلانات عند تبديل المجلدات مع عدد غير صفري من الرسائل غير المقروءة، مع الإبقاء على ضمانات متعقب تقدم نقل الملفات."
 
-#: changelog.py:7
 msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
 msgstr "تم تحديث قوائم الاختصارات من مصدر Unigram الحالي وتحديد الاختصارات المضمنة التي لم تُدرج بعد في ملف Shortcuts.md الرسمي لـ Unigram."

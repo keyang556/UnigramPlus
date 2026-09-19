@@ -14,7 +14,6 @@ Use Unigram in a more comfortable and productive way. This addon provides many h
 * When focus enters the list of chats, it removes such phrases as: "chats, tab, selected list". And when the focus hits the list of messages, the phrase "list".
 * The name and size of the file will be spoken when the cursor is focused on the "Open File" button or the "Download File" button, and when the cursor is focused on the play button of the audio file, you will hear its name and duration.
 * When focus is placed on a voice message that is currently being played, first information about the time of its playback is announced, and then all other information.
-* When the focus is on a message that contains information about a call, the duration of this call is announced.
 * When focusing on a selected message in a chat, you will first hear the information that it is selected, and then the content of the message.
 * Now, when moving in the chat, the phrase "Seen" will not be pronounced at all, and the phrase "Not seen" will be pronounced before the content of the message. This feature currently only works in English, Russian, Ukrainian, Spanish, Portuguese, Polish, Croatian, Turkish, and Persian.
 * Significantly improved the function of recording voice messages. Recording, sending and canceling the recording of a voice message are accompanied by characteristic sounds. Also, when performing these functions, the focus remains in its position and does not jump to either the record button or the message input field.
@@ -200,6 +199,13 @@ And remember that everyone who read this line thought that someone will definite
 <!-- shortcut-table-end -->
 
 ## List of changes:
+
+### Version 5.8.1
+
+* Removed the call duration workaround. Unigram 12.10 and later announce the duration of a call message themselves, so UnigramPlus no longer adds it and it is no longer heard twice.
+* Fixed the add-on failing to start on older NVDA versions that do not provide the utils.security module.
+* Removed imports that the add-on no longer uses.
+* Updated the Vietnamese translation.
 
 ### Version 5.8.0
 

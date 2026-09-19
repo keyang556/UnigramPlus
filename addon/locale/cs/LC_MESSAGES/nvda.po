@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.0\n"
+"Project-Id-Version: UnigramPlus 5.8.1\n"
 "POT-Creation-Date: 2022-06-30 15:13+0300\n"
 "PO-Revision-Date: 2022-06-30 15:13+0300\n"
 "Last-Translator: Petr Řehák\n"
@@ -18,6 +18,15 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: changelog.py:5
+msgid ""
+"- Removed the call duration workaround: Unigram 12.10 and later announce a call message's duration themselves, so it is no longer announced twice.\n"
+"- Fixed the add-on failing to start on older NVDA versions that do not provide the utils.security module.\n"
+"- Updated the Vietnamese translation."
+msgstr ""
+"- Odstraněno náhradní řešení pro délku hovoru: Unigram 12.10 a novější oznamuje délku zprávy o hovoru sám, takže se už neoznamuje dvakrát.\n"
+"- Opraveno spouštění doplňku ve starších verzích NVDA, které neobsahují modul utils.security.\n"
+"- Aktualizován vietnamský překlad."
+
 msgid "- NVDA+Alt+V displays the UnigramPlus version on a new line."
 msgstr "- NVDA+Alt+V nyní zobrazuje verzi UnigramPlus na novém řádku."
 
@@ -735,7 +744,6 @@ msgstr "Nahrát hlasovou zprávu"
 msgid "Record a video message"
 msgstr "Nahrát video zprávu"
 
-#: changelog.py:5
 msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
 msgstr "Při nahrávání hlasové nebo video zprávy nyní NVDA oznámí \"Nahrávání hlasové zprávy\" nebo \"Nahrávání video zprávy\" spolu s uplynulým časem namísto \"Tn voice message\"."
 
@@ -860,10 +868,8 @@ msgstr ""
 "- Přidáno nastavení chování Alt+[, které oznamuje záhlaví zpráv po jejich obsahu; ve výchozím nastavení je vypnuté.\n"
 "- Přidáno volitelné zvukové upozornění při dosažení konce chatu."
 
-#: changelog.py:5
 msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
 msgstr "Obnoveno oznamování přepínání složek s nenulovým počtem nepřečtených zpráv při zachování ochranných opatření sledování průběhu přenosu souborů."
 
-#: changelog.py:7
 msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
 msgstr "Aktualizovány seznamy klávesových zkratek podle aktuálního zdrojového kódu Unigramu a označeny vestavěné zkratky, které dosud nejsou uvedeny v oficiálním souboru Shortcuts.md Unigramu."

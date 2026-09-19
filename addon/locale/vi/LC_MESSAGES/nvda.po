@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.0\n"
+"Project-Id-Version: UnigramPlus 5.8.1\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2026-09-13 08:03+0700\n"
 "PO-Revision-Date: 2026-09-13 08:14+0700\n"
@@ -1123,6 +1123,15 @@ msgstr ""
 "dàng hơn nhiều"
 
 #: changelog.py:5
+msgid ""
+"- Removed the call duration workaround: Unigram 12.10 and later announce a call message's duration themselves, so it is no longer announced twice.\n"
+"- Fixed the add-on failing to start on older NVDA versions that do not provide the utils.security module.\n"
+"- Updated the Vietnamese translation."
+msgstr ""
+"- Đã gỡ bỏ giải pháp tạm thời cho thời lượng cuộc gọi: Unigram 12.10 trở lên tự thông báo thời lượng của tin nhắn cuộc gọi, nên nó không còn được thông báo hai lần nữa.\n"
+"- Đã sửa lỗi tiện ích không khởi động được trên các phiên bản NVDA cũ không có mô-đun utils.security.\n"
+"- Đã cập nhật bản dịch tiếng Việt."
+
 msgid ""
 "- Background checks no longer run on NVDA's main loop, so chat navigation "
 "and speech are no longer held up.\n"

@@ -12,7 +12,6 @@ Utilisez Unigram de manière plus confortable et plus productive. Cet extension 
 * Lorsque le focus est placé dans la liste des échanges, il supprime les termes superflus tels que : "échanges, onglet, liste sélectionnée" et sur la liste des messages, le mot "liste".
 * Lorsque le curseur est placé sur le bouton "Ouvrir fichier" ou "Télécharger fichier", le nom et la taille du fichier sont énoncés. De même, quand le curseur atteint le bouton de lecture d'un fichier audio, vous entendez son nom et sa durée.
 * Lorsque le focus est placé sur un message vocal en cours de lecture, vous entendez d'abord la durée de lecture écoulée, puis toutes les autres informations.
-* Lorsque le focus est placé sur un message contenant des informations relatives à un appel, la durée de celui-ci est annoncée.
 * Lorsque vous déplacez le focus sur un message au sein d'un échange, vous entendez d'abord l'information selon laquelle il est sélectionné, puis le contenu du message.
 * Désormais, lorsque vous vous déplacez dans un échange, le mot "vu" ne sera pas prononcé du tout et "non vu" sera énoncé avant le contenu du message.
 * Amélioration significative de la fonction d'enregistrement des messages vocaux. L'enregistrement, l'envoi et l'annulation de l'enregistrement d'un message vocal sont accompagnés de sons caractéristiques. De plus, lors de l'exécution de ces fonctions, le focus reste à sa position et ne saute ni sur le bouton d'enregistrement ni sur le champ de saisie du message.
@@ -198,6 +197,26 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 <!-- shortcut-table-end -->
 
 ##Liste des changements :
+
+### Version 5.8.1
+
+* Suppression du contournement relatif à la durée des appels. Unigram 12.10 et versions ultérieures annoncent eux-mêmes la durée d'un message d'appel ; UnigramPlus ne l'ajoute donc plus et elle n'est plus entendue deux fois.
+* Correction du démarrage impossible de l'extension sur les anciennes versions de NVDA qui ne fournissent pas le module utils.security.
+* Suppression des importations que l'extension n'utilise plus.
+* Mise à jour de la traduction vietnamienne.
+
+### Version 5.8.0
+
+* Les vérifications périodiques effectuées en arrière-plan par l'extension ne s'exécutent plus dans la boucle principale de NVDA : la navigation dans les échanges, la saisie et la parole ne sont donc plus retardées pendant qu'Unigram répond.
+* Tous les comportements ajoutés après la version 5.4 peuvent désormais être activés ou désactivés dans les paramètres d'UnigramPlus, regroupés sous un même intitulé : l'annonce du bouton d'enregistrement de message vocal, le texte enrichi des messages avec ALT+C, l'étiquette du bouton d'identité du profil, l'annonce de réponse et de modification dans le champ de message, la suppression de l'annonce « liste » avant les messages, l'état en direct du micro et de la caméra pendant un appel, ainsi que le nombre de messages non lus lors du changement de dossier. Chaque option conserve son comportement actuel par défaut et chaque libellé précise quel comportement de la version 5.4 elle rétablit.
+* Correction de la barre d'espace qui ne lisait pas les messages vocaux, la musique et les fichiers.
+* Correction d'Entrée qui ne répondait pas à un message, de Retour arrière qui ne le modifiait pas, d'ALT+C qui n'affichait pas son texte et d'ALT+D qui n'y revenait pas.
+* Correction d'ALT+E qui ne fermait pas le lecteur audio.
+* Correction de Ctrl+ALT+Gauche et Ctrl+ALT+Droite qui ne déplaçaient pas la lecture du message vocal, y compris lorsque la flèche est pressée de nouveau alors que les modificateurs restent enfoncés.
+* L'annulation d'un enregistrement vocal est annoncée environ une seconde et demie après son arrêt, au lieu de cinq secondes plus tard.
+* Avec l'option du bouton d'enregistrement de la version 5.4 sélectionnée, le focus reste dans le champ de message au démarrage d'un enregistrement, tandis que Tab atteint toujours le bouton d'enregistrement.
+* Correction de plusieurs raccourcis qui échouaient silencieusement lorsqu'un élément attendu manquait dans l'arborescence d'Unigram : ALT+3, ALT+4, ALT+5, ALT+6, ALT+Q, ALT+T, ALT+Maj+L, ALT+Maj+P, Maj+Suppr, la navigation dans les médias et les commandes d'appel.
+* La conversion d'un message vocal en texte ne lance plus un nouveau thread toutes les demi-secondes pendant l'attente et abandonne au lieu d'attendre indéfiniment.
 
 ### Version 5.7.3
 

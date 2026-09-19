@@ -13,7 +13,6 @@ Koristite Unigram na ugodniji i produktivniji način. Ovaj dodatak nudi mnoge ta
 * Kada se kursor fokusira na listu ćaskanja, informacije poput "ćaskanja, kartica, izabrana lista" se ne objavljuju, a kada se kursor nalazi na listi poruka, nećete čuti reč "Lista".
 * Kad se fokusirate na dugme Otvori datoteku ili dugme Preuzmi datoteku, izgovara će se naziv i veličina datoteke, a kada se fokusirate na dugme Reprodukuj na audio datoteci, čućete njen naziv i trajanje.
 * Kad se fokusirate na glasovnu poruku koja se trenutno reprodukuje, prvo ćete čuti vreme reprodukcije, a zatim ostatak relevantnih informacija.
-* Kada fokus pogodi poruku koja sadrži informacije o pozivu, objavljuje se trajanje tog poziva.
 * Kad se fokusirate na odabranu poruku u ćaskanju, prvo ćete čuti informacije da je odabrana, a zatim i sadržaj poruke.
 * Dok se krećete kroz listu poruka u ćaskanju, uopšte nećete čuti reč "Viđeno", ali reč "Nije viđeno" biće izgovorena pre čitanja same poruke. Trenutno ova funkcija radi samo na engleskom, ruskom, ukrajinskom, španskom, portugalskom, hrvatskom, turskom i persijskom jeziku.
 * funkcija snimanja glasovnih poruka značajno je modernizovana. Snimanje, slanje glasovne poruke i otkazivanje snimanja popraćeni su karakterističnim zvukovima. Nadalje, dok se ove funkcije izvode, fokus ostaje u istom položaju i ne skače na dugme Snimanje niti u polje za uređivanje.
@@ -473,6 +472,26 @@ This update adds a combination that press "Instant View" button in the message, 
 Added Turkish localization
 
 
+
+###Verzija 5.8.1
+
+* Uklonjeno zaobilazno rešenje za trajanje poziva. Unigram 12.10 i noviji sami objavljuju trajanje u poruci o pozivu, pa ga UnigramPlus više ne dodaje i ne čuje se dva puta.
+* Ispravljeno pokretanje dodatka na starijim verzijama NVDA koje nemaju modul utils.security.
+* Uklonjeni su uvozi koje dodatak više ne koristi.
+* Ažuriran vijetnamski prevod.
+
+###Verzija 5.8.0
+
+* Ponavljajuće pozadinske provere dodatka više se ne izvršavaju u glavnoj petlji NVDA, pa se kretanje kroz ćaskanja, kucanje i govor više ne zadržavaju dok Unigram odgovara.
+* Svako ponašanje dodato posle verzije 5.4 sada može da se uključi ili isključi u podešavanjima dodatka UnigramPlus, okupljeno pod jednim naslovom: kako se objavljuje dugme za snimanje glasovne poruke, obogaćeni tekst poruke pomoću ALT+C, oznaka dugmeta identiteta na profilu, objava odgovaranja i uređivanja u polju poruke, izostavljena objava "lista" pre poruka, trenutno stanje mikrofona i kamere tokom poziva i broj nepročitanih pri promeni fascikle ćaskanja. Svako podrazumevano zadržava svoje trenutno ponašanje, a svaka oznaka navodi koje ponašanje verzije 5.4 vraća.
+* Ispravljen razmak koji nije reprodukovao glasovne poruke, muziku i datoteke.
+* Ispravljeno da Enter nije odgovarao na poruku, Backspace je nije uređivao, ALT+C nije prikazivao njen tekst, a ALT+D se nije vraćao na nju.
+* Ispravljeno da ALT+E nije zatvarao audio plejer.
+* Ispravljeno da Ctrl+ALT+Levo i Ctrl+ALT+Desno nisu premotavali reprodukciju glasovne poruke, uključujući i kada se strelica ponovo pritisne dok su modifikatori i dalje pritisnuti.
+* Otkazivanje snimanja glasovne poruke objavljuje se otprilike sekundu i po nakon zaustavljanja, umesto pet sekundi kasnije.
+* Uz izabranu opciju dugmeta za snimanje iz verzije 5.4, fokus ostaje u polju poruke kada snimanje počne, dok Tab i dalje dolazi do dugmeta za snimanje.
+* Ispravljen niz prečica koje su tiho otkazivale kada je u stablu Unigrama nedostajao element koji su očekivale: ALT+3, ALT+4, ALT+5, ALT+6, ALT+Q, ALT+T, ALT+Shift+L, ALT+Shift+P, Shift+Delete, kretanje kroz medije i kontrole poziva.
+* Pretvaranje glasovne poruke u tekst više ne pokreće novu nit svakih pola sekunde dok čeka i odustaje umesto da čeka beskonačno.
 
 ###Verzija 5.7.3
 
