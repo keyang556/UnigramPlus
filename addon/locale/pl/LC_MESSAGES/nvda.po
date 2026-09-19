@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.0\n"
+"Project-Id-Version: UnigramPlus 5.8.1\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2026-08-20 08:52+0000\n"
 "PO-Revision-Date: 2026-08-29 14:55+0200\n"
@@ -20,6 +20,15 @@ msgstr ""
 "X-Poedit-SearchPath-1: GlobalPlugins/UnigramPlus\n"
 
 #: changelog.py:5
+msgid ""
+"- Removed the call duration workaround: Unigram 12.10 and later announce a call message's duration themselves, so it is no longer announced twice.\n"
+"- Fixed the add-on failing to start on older NVDA versions that do not provide the utils.security module.\n"
+"- Updated the Vietnamese translation."
+msgstr ""
+"- Usunięto obejście dotyczące czasu trwania połączenia: Unigram 12.10 i nowsze same odczytują czas trwania wiadomości o połączeniu, więc nie jest już odczytywany dwukrotnie.\n"
+"- Naprawiono uruchamianie dodatku w starszych wersjach NVDA, które nie udostępniają modułu utils.security.\n"
+"- Zaktualizowano tłumaczenie wietnamskie."
+
 msgid "- NVDA+Alt+V displays the UnigramPlus version on a new line."
 msgstr "- NVDA+Alt+V wyświetla teraz wersję UnigramPlus w nowej linii."
 
@@ -1021,7 +1030,6 @@ msgstr ""
 "wiadomości w czatach. Zawiera też wiele drobnych usprawnień, które znacznie "
 "ułatwiają korzystanie z Unigramu."
 
-#: changelog.py:5
 msgid ""
 "- Fixed Alt+C failing when WhatsApp Enhancer is installed due to an "
 "appModules helper module name collision.\n"
@@ -1262,10 +1270,8 @@ msgstr ""
 #~ "po ich treści; domyślnie jest wyłączone.\n"
 #~ "- Dodano opcjonalne powiadomienie dźwiękowe po osiągnięciu końca czatu."
 
-#: changelog.py:5
 msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
 msgstr "Przywrócono komunikaty przy przełączaniu folderów z niezerową liczbą nieprzeczytanych wiadomości, zachowując zabezpieczenia monitora postępu transferu plików."
 
-#: changelog.py:7
 msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
 msgstr "Zaktualizowano listy skrótów na podstawie bieżącego kodu źródłowego Unigramu i wskazano wbudowane skróty, których nie ma jeszcze w oficjalnym pliku Shortcuts.md Unigramu."

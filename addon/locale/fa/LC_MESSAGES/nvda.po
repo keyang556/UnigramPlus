@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.0\n"
+"Project-Id-Version: UnigramPlus 5.8.1\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2022-08-13 21:15+0300\n"
 "PO-Revision-Date: 2022-08-14 23:15+0430\n"
@@ -19,6 +19,15 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: changelog.py:5
+msgid ""
+"- Removed the call duration workaround: Unigram 12.10 and later announce a call message's duration themselves, so it is no longer announced twice.\n"
+"- Fixed the add-on failing to start on older NVDA versions that do not provide the utils.security module.\n"
+"- Updated the Vietnamese translation."
+msgstr ""
+"- راهکار موقت مدت تماس حذف شد: Unigram 12.10 و بالاتر خودشان مدت پیام تماس را اعلام می‌کنند، بنابراین دیگر دو بار اعلام نمی‌شود.\n"
+"- مشکل اجرا نشدن افزونه در نسخه‌های قدیمی‌تر NVDA که ماژول utils.security را ندارند برطرف شد.\n"
+"- ترجمهٔ ویتنامی به‌روزرسانی شد."
+
 msgid "- NVDA+Alt+V displays the UnigramPlus version on a new line."
 msgstr "- NVDA+Alt+V اکنون نسخهٔ UnigramPlus را در خط جدید نمایش می‌دهد."
 
@@ -899,7 +908,6 @@ msgstr "ضبط پیام صوتی"
 msgid "Record a video message"
 msgstr "ضبط پیام تصویری"
 
-#: changelog.py:5
 msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
 msgstr "هنگام ضبط پیام صوتی یا تصویری، NVDA اکنون به‌جای \"Tn voice message\" عبارت \"در حال ضبط پیام صوتی\" یا \"در حال ضبط پیام تصویری\" را همراه با زمان سپری‌شده اعلام می‌کند."
 
@@ -1024,10 +1032,8 @@ msgstr ""
 "- تنظیمی برای رفتار Alt+[ که سرآیندهای پیام را پس از محتوای آن‌ها می‌خواند افزوده شد؛ این گزینه به‌طور پیش‌فرض غیرفعال است.\n"
 "- اعلان صوتی اختیاری برای رسیدن به پایان یک گفت‌وگو افزوده شد."
 
-#: changelog.py:5
 msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
 msgstr "اعلام هنگام تغییر پوشه با شمارش خوانده‌نشدهٔ غیرصفر بازگردانده شد، در حالی که تدابیر محافظتی رهگیری پیشرفت انتقال فایل حفظ شده‌اند."
 
-#: changelog.py:7
 msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
 msgstr "فهرست کلیدهای میانبر بر اساس منبع فعلی Unigram به‌روزرسانی شد و میانبرهای داخلی که هنوز در فایل رسمی Shortcuts.md‏ Unigram فهرست نشده‌اند مشخص شدند."

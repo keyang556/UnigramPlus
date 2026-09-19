@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.0\n"
+"Project-Id-Version: UnigramPlus 5.8.1\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 00:48+0300\n"
@@ -19,6 +19,15 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: changelog.py:5
+msgid ""
+"- Removed the call duration workaround: Unigram 12.10 and later announce a call message's duration themselves, so it is no longer announced twice.\n"
+"- Fixed the add-on failing to start on older NVDA versions that do not provide the utils.security module.\n"
+"- Updated the Vietnamese translation."
+msgstr ""
+"- Çağrı süresi için kullanılan geçici çözüm kaldırıldı: Unigram 12.10 ve sonrası çağrı mesajının süresini kendisi duyurduğundan süre artık iki kez duyurulmuyor.\n"
+"- Eklentinin, utils.security modülünü içermeyen eski NVDA sürümlerinde başlatılamaması sorunu giderildi.\n"
+"- Vietnamca çeviri güncellendi."
+
 msgid "- NVDA+Alt+V displays the UnigramPlus version on a new line."
 msgstr "- NVDA+Alt+V artık UnigramPlus sürümünü yeni bir satırda gösteriyor."
 
@@ -1021,7 +1030,6 @@ msgstr "Sesli mesaj kaydet"
 msgid "Record a video message"
 msgstr "Görüntülü mesaj kaydet"
 
-#: changelog.py:5
 msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
 msgstr "Sesli veya görüntülü mesaj kaydederken NVDA artık \"Tn voice message\" yerine geçen süreyle birlikte \"Sesli mesaj kaydediliyor\" veya \"Görüntülü mesaj kaydediliyor\" anonsunu yapıyor."
 
@@ -1146,10 +1154,8 @@ msgstr ""
 "- İleti başlıklarını içerikten sonra seslendiren Alt+[ davranışı için bir ayar eklendi; varsayılan olarak devre dışıdır.\n"
 "- Sohbetin sonuna ulaşıldığında isteğe bağlı bir sesli bildirim eklendi."
 
-#: changelog.py:5
 msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
 msgstr "Sıfır olmayan okunmamış ileti sayısıyla klasör değiştirirken yapılan duyurular, dosya aktarımı ilerleme izleyicisinin korumaları korunarak geri yüklendi."
 
-#: changelog.py:7
 msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
 msgstr "Kısayol listeleri mevcut Unigram kaynak koduna göre güncellendi ve Unigramın resmi Shortcuts.md dosyasında henüz yer almayan yerleşik kısayollar belirtildi."

@@ -14,7 +14,6 @@ Utilizează Unigram într-un mod mai confortabil și mai productiv. Acest addon 
 * Atunci când focalizarea intră în lista de chat-uri, se elimină frazele inutile. atunci când focalizarea ajunge în lista de mesaje, se elimină fraza "listă".
 * Numele și dimensiunea fișierului vor fi rostite atunci când cursorul este focalizat pe butonul "Open File" (Deschidere fișier) sau pe butonul "Download File" (Descărcare fișier), iar atunci când cursorul este focalizat pe butonul de redare a fișierului audio, vei auzi numele și durata acestuia.
 * Atunci când focalizarea este pusă pe un mesaj vocal care este în curs de redare, se anunță mai întâi informațiile despre ora de redare a acestuia, apoi toate celelalte informații.
-* Atunci când focalizarea este pusă pe un mesaj care conține informații despre un apel, se anunță durata acestui apel.
 * Atunci când te focalizezi pe un mesaj selectat într-un chat, vei auzi mai întâi informația că este selectat și apoi conținutul mesajului.
 * Acum, atunci când te deplasezi în chat, fraza "Seen" nu va fi pronunțată deloc, iar fraza "Not seen" va fi pronunțată înainte de conținutul mesajului. Această caracteristică funcționează în prezent doar în limbile engleză, rusă, ucraineană, spaniolă, portugheză, poloneză, croată, turcă și persană.
 * Îmbunătățirea semnificativă a funcției de înregistrare a mesajelor vocale. Înregistrarea, trimiterea și anularea înregistrării unui mesaj vocal sunt însoțite de sunete caracteristice. De asemenea, atunci când se execută aceste funcții, focalizarea rămâne în poziția sa și nu sare nici la butonul de înregistrare, nici la câmpul de introducere a mesajului.
@@ -199,6 +198,26 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 <!-- shortcut-table-end -->
 
 ##Lista de modificări:
+
+### Versiunea 5.8.1
+
+* A fost eliminată soluția temporară pentru durata apelurilor. Unigram 12.10 și versiunile ulterioare anunță singure durata unui mesaj de apel, așa că UnigramPlus nu o mai adaugă și nu se mai aude de două ori.
+* A fost remediată imposibilitatea pornirii add-on-ului pe versiuni mai vechi de NVDA care nu oferă modulul utils.security.
+* Au fost eliminate importurile pe care add-on-ul nu le mai folosește.
+* A fost actualizată traducerea în vietnameză.
+
+### Versiunea 5.8.0
+
+* Verificările recurente din fundal ale add-on-ului nu mai rulează pe bucla principală a NVDA, așa că navigarea prin chat-uri, tastarea și vorbirea nu mai sunt întârziate cât timp Unigram răspunde.
+* Toate comportamentele adăugate după versiunea 5.4 pot fi acum activate sau dezactivate în setările UnigramPlus, grupate sub un singur titlu: modul în care este anunțat butonul de înregistrare a mesajelor vocale, textul îmbogățit al mesajelor cu ALT+C, eticheta butonului de identitate din profil, anunțarea răspunsului și a editării în câmpul de mesaj, anunțul suprimat "listă" dinaintea mesajelor, starea în timp real a microfonului și a camerei în timpul unui apel și numărul de mesaje necitite la schimbarea folderelor de chat. Fiecare își păstrează implicit comportamentul actual, iar fiecare etichetă precizează ce comportament din versiunea 5.4 restabilește.
+* A fost remediată bara de spațiu care nu reda mesajele vocale, muzica și fișierele.
+* A fost remediat Enter care nu răspundea la un mesaj, Backspace care nu îl edita, ALT+C care nu îi afișa textul și ALT+D care nu revenea la el.
+* A fost remediat ALT+E care nu închidea playerul audio.
+* Au fost remediate Ctrl+ALT+Stânga și Ctrl+ALT+Dreapta care nu derulau redarea mesajelor vocale, inclusiv atunci când săgeata este apăsată din nou în timp ce modificatorii rămân apăsați.
+* Anularea unei înregistrări vocale este anunțată la aproximativ o secundă și jumătate după ce se oprește, în loc de cinci secunde mai târziu.
+* Cu opțiunea pentru butonul de înregistrare din versiunea 5.4 selectată, focalizarea rămâne în câmpul de mesaj atunci când începe o înregistrare, iar Tab ajunge în continuare la butonul de înregistrare.
+* Au fost remediate mai multe scurtături care eșuau în tăcere când din arborele Unigram lipsea un element pe care îl presupuneau prezent: ALT+3, ALT+4, ALT+5, ALT+6, ALT+Q, ALT+T, ALT+Shift+L, ALT+Shift+P, Shift+Delete, navigarea prin media și comenzile de apel.
+* Conversia unui mesaj vocal în text nu mai pornește un fir nou la fiecare jumătate de secundă cât timp așteaptă și renunță în loc să aștepte la nesfârșit.
 
 ### Versiunea 5.7.3
 

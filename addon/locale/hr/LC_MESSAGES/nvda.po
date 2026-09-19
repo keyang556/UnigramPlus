@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.0\n"
+"Project-Id-Version: UnigramPlus 5.8.1\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 17:29+0100\n"
@@ -20,6 +20,15 @@ msgstr ""
 "X-Poedit-Bookmarks: -1,116,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: changelog.py:5
+msgid ""
+"- Removed the call duration workaround: Unigram 12.10 and later announce a call message's duration themselves, so it is no longer announced twice.\n"
+"- Fixed the add-on failing to start on older NVDA versions that do not provide the utils.security module.\n"
+"- Updated the Vietnamese translation."
+msgstr ""
+"- Uklonjeno zaobilazno rješenje za trajanje poziva: Unigram 12.10 i noviji sami najavljuju trajanje poruke o pozivu, pa se više ne najavljuje dvaput.\n"
+"- Ispravljeno pokretanje dodatka na starijim verzijama NVDA-a koje nemaju modul utils.security.\n"
+"- Ažuriran vijetnamski prijevod."
+
 msgid "- NVDA+Alt+V displays the UnigramPlus version on a new line."
 msgstr "- NVDA+Alt+V sada prikazuje verziju programa UnigramPlus u novom retku."
 
@@ -962,7 +971,6 @@ msgstr "Snimi glasovnu poruku"
 msgid "Record a video message"
 msgstr "Snimi videoporuku"
 
-#: changelog.py:5
 msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
 msgstr "Pri snimanju glasovne ili videoporuke NVDA sada najavljuje \"Snimanje glasovne poruke\" ili \"Snimanje videoporuke\" zajedno s proteklim vremenom umjesto \"Tn voice message\"."
 
@@ -1087,10 +1095,8 @@ msgstr ""
 "- Dodana je postavka za ponašanje Alt+[ koja izgovara zaglavlja poruka nakon njihova sadržaja; prema zadanim postavkama je isključena.\n"
 "- Dodana je neobavezna zvučna obavijest pri dosezanju kraja razgovora."
 
-#: changelog.py:5
 msgid "- Restored folder-switch announcements with a nonzero unread count while retaining the file-transfer progress tracker safeguards."
 msgstr "Vraćene su najave pri promjeni mape s brojem nepročitanih poruka različitim od nule, uz zadržavanje zaštitnih mjera praćenja napretka prijenosa datoteka."
 
-#: changelog.py:7
 msgid "- Updated the shortcut lists from the current Unigram source and identified built-in shortcuts not yet listed in Unigram's official Shortcuts.md."
 msgstr "Ažurirani su popisi prečaca prema trenutačnom izvornom kodu Unigrama te su označeni ugrađeni prečaci koji još nisu navedeni u službenoj datoteci Shortcuts.md za Unigram."
