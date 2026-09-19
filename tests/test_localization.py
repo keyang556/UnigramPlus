@@ -13,6 +13,29 @@ RELEASE_CHANGELOG = (
 - Updated the Vietnamese translation."""
 )
 
+# The call duration feature bullet each manual carried before Unigram 12.10
+# started announcing it natively. Keyed by manual language; the root readme.md
+# mirrors the English one.
+CALL_DURATION_FEATURE = {
+	"en": "the duration of this call is announced",
+	"NE": "कलको अवधि समेत घोषणा",
+	"ar": "يتم الإعلان عن مدة هذه المكالمة",
+	"es": "se anuncia la duración de dicha llamada",
+	"fa": "مدت زمان این تماس اعلام می شود",
+	"fr": "la durée de celui-ci est annoncée",
+	"hr": "najavljuje se trajanje tog poziva",
+	"pt_BR": "a duração dessa chamada é anunciada",
+	"pt_PT": "a duração dessa chamada é anunciada",
+	"ro": "se anunță durata acestui apel",
+	"ru": "объявляется продолжительность этого звонка",
+	"sr": "objavljuje se trajanje tog poziva",
+	"tr": "bu çağrının süresi duyulur",
+	"uk": "озвучується тривалість цьього дзвінка",
+	# Chinese stated it inside a combined sentence, so the removed words are the marker.
+	"zh_CN": "通话消息",
+	"zh_TW": "通話訊息",
+}
+
 # Only active runtime strings belong here. Historical release notes and removed
 # features may correctly be absent from the newest translator-maintained catalogs.
 REQUIRED_TRANSLATIONS = {
@@ -95,10 +118,10 @@ def test_release_version_is_581():
 	assert 'version = "5.8.1"' in pyproject
 	assert 'name = "unigramplus"\nversion = "5.8.1"' in lockfile
 
-	# manifest.ini is written by the build, so it is only checked when it exists.
-	manifest = ROOT / "addon" / "manifest.ini"
-	if manifest.is_file():
-		assert "version = 5.8.1" in manifest.read_text(encoding="utf-8")
+	# addon/manifest.ini is a gitignored build artifact and may be stale, so the
+	# template is what gets checked: it is what carries addon_version into the build.
+	template = (ROOT / "manifest.ini.tpl").read_text(encoding="utf-8")
+	assert "version = {addon_version}" in template
 
 
 def test_catalogs_keep_the_581_translation_metadata():
@@ -155,11 +178,15 @@ def test_the_call_duration_workaround_is_gone_everywhere():
 	source = (ROOT / "addon" / "appModules" / "unigram.py").read_text(encoding="utf-8-sig")
 	assert "Checking if a message is a call" not in source
 
-	feature = "the duration of this call is announced"
 	for manual in [ROOT / "readme.md", *sorted(DOC_DIR.glob("*/readme.md"))]:
+		language = "en" if manual.parent == ROOT else manual.parent.name
 		text = manual.read_text(encoding="utf-8")
-		improvements = text[:text.index("## ", text.index("\n* "))]
-		assert feature not in improvements, manual
+		# Everything before the current release notes: the feature list, the
+		# shortcut tables and every historical changelog entry. The phrase only
+		# ever appeared in the feature list, so it must not appear here at all.
+		# The 5.8.1 notes themselves do describe the removal, in Chinese using
+		# the same words, which is why they are excluded.
+		assert CALL_DURATION_FEATURE[language] not in text[:text.index("5.8.1")], manual
 
 
 def test_every_localized_manual_has_573_through_559_and_updated_558_changelogs():
@@ -237,6 +264,22 @@ def test_every_localized_manual_has_573_through_559_and_updated_558_changelogs()
 		assert section_560.count("\n* ") == 3, manual
 		assert "Alt+C" in text[version_559:version_558], manual
 		assert "GitHub" in text[version_558:text.find("5.5.7", version_558)], manual
+
+
+def test_every_manual_still_documents_the_file_duration_it_does_announce():
+	"""The audio file's own duration is a separate, still-present feature."""
+	kept = {
+		"en": "name and duration",
+		"es": "nombre y duración",
+		"fr": "son nom et sa durée",
+		"hr": "naziv i trajanje",
+		"ro": "numele și durata",
+		"ru": "название и продолжительность",
+		"uk": "назва і тривалість",
+	}
+	for language, phrase in kept.items():
+		manual = ROOT / "readme.md" if language == "en" else DOC_DIR / language / "readme.md"
+		assert phrase in manual.read_text(encoding="utf-8"), language
 
 
 def test_removed_web_view_setting_is_absent_but_historical_changelogs_remain():
