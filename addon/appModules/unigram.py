@@ -3238,17 +3238,15 @@ class AppModule(appModuleHandler.AppModule):
 					pass
 			nextHandler()
 			return
-		# The WinUI 3 Unigram also focuses objects that are not UIA: its window
-		# (IAccessible) when switching back to it, and NVDA's input composition and
-		# candidate objects while an IME is in use. Everything below identifies
-		# Unigram's controls by their UIA automation id, which these objects do not
-		# have, so leave them to NVDA.
-		if not isinstance(obj, UIA):
-			nextHandler()
-			return
 		if self._restore_focus_after_record_button(obj):
 			return True
-		if obj.role == Role.EDITABLETEXT and obj.UIAAutomationId == "TextField":
+		# The WinUI 3 Unigram also focuses objects that are not UIA: its window
+		# (IAccessible) when switching back to it, and NVDA's input composition and
+		# candidate objects while an IME is in use. They still tell which Unigram
+		# window is active, but they have no UIA automation id, which is how all
+		# the control handling below the window check recognizes Unigram's controls.
+		is_uia = isinstance(obj, UIA)
+		if is_uia and obj.role == Role.EDITABLETEXT and obj.UIAAutomationId == "TextField":
 			# Where recording is started from, and where 5.4 left the focus.
 			self._focusBeforeRecordButton = obj
 		self._remember_messages_button(obj)
@@ -3261,6 +3259,9 @@ class AppModule(appModuleHandler.AppModule):
 			Title_change_tracking.restore(self.saved_items)
 		if is_main_window and conf.get("play_typing_sound") and Typing_sound_tracking.pouse:
 			Typing_sound_tracking.restore(self.saved_items)
+		if not is_uia:
+			nextHandler()
+			return
 		if not File_transfer_progress_tracking.active:
 			try:
 				percentage = None

@@ -71,16 +71,58 @@ def _calls():
 	return calls, lambda: calls.append(True)
 
 
+class PausedJob:
+	"""Stands in for a background job that paused while Unigram was in the background."""
+
+	def __init__(self, restarted):
+		self.pouse = True
+		self.restarted = restarted
+
+	def restore(self, owner):
+		self.restarted.append(self)
+
+
+def _focus_without_uia(obj, surface):
+	"""Focus a non-UIA object in a window classified as ``surface``."""
+	restarted = []
+	namespace = _namespace()
+	jobs = [PausedJob(restarted) for _ in range(3)]
+	namespace.update(zip(("Chat_update", "Title_change_tracking", "Typing_sound_tracking"), jobs))
+	gain_focus = _load_app_method("event_gainFocus", namespace)
+	# Strict past the window check: the pending focus states and the control
+	# handling all identify Unigram's controls by UIA automation id.
+	app = StrictApp(
+		isUnigramWindow=True,
+		_restore_focus_after_record_button=lambda obj: False,
+		_remember_messages_button=lambda obj: False,
+		_classify_window_surface=lambda obj: surface,
+		saved_items=object(),
+	)
+	calls, next_handler = _calls()
+	gain_focus(app, obj, next_handler)
+	return calls, restarted, jobs
+
+
+NOT_UIA_FOCUS = (
+	("pane", ""),  # the WinUI 3 window, reached through IAccessible
+	("editableText", "ㄊ"),  # an IME composition in the message field
+	("listItem", "他"),  # an IME candidate
+)
+
+
 def test_focus_on_objects_that_are_not_uia_is_left_to_nvda():
-	gain_focus = _load_app_method("event_gainFocus", _namespace())
-	for obj in (
-		NotUIA("pane"),  # the WinUI 3 window, reached through IAccessible
-		NotUIA("editableText", "ㄊ"),  # an IME composition in the message field
-		NotUIA("listItem", "他"),  # an IME candidate
-	):
-		calls, next_handler = _calls()
-		gain_focus(StrictApp(isUnigramWindow=True), obj, next_handler)
-		assert calls == [True], obj.role
+	for role, name in NOT_UIA_FOCUS:
+		calls, restarted, _jobs = _focus_without_uia(NotUIA(role, name), None)
+		assert calls == [True], role
+		assert restarted == [], role
+
+
+def test_returning_to_the_main_window_without_uia_focus_restarts_paused_jobs():
+	"""The jobs pause while Unigram is in the background and resume on its next focus."""
+	for role, name in NOT_UIA_FOCUS:
+		calls, restarted, jobs = _focus_without_uia(NotUIA(role, name), "main")
+		assert calls == [True], role
+		assert restarted == jobs, role
 
 
 def test_uia_focus_still_reaches_unigramplus():
