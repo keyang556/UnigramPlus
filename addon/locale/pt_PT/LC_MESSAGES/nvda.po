@@ -21,10 +21,12 @@ msgstr ""
 msgid ""
 "- Fixed NVDA errors with the Unigram WinUI 3 beta each time you switched back to Unigram or typed with an input method (IME).\n"
 "- UnigramPlus no longer interferes with focus announcements in Telegram Desktop when the Telegram Desktop add-on is not installed.\n"
+"- Removed the notification when a voice or video message recording is canceled: Unigram 13.0 and later announce it themselves, so it is no longer heard twice.\n"
 "- Updated the Polish and Vietnamese translations."
 msgstr ""
 "- Corrigidos erros do NVDA na versão beta do Unigram em WinUI 3 que ocorriam sempre que se regressava ao Unigram ou se escrevia com um editor de método de introdução (IME).\n"
 "- O UnigramPlus já não interfere com os anúncios de foco do Telegram Desktop quando o complemento Telegram Desktop não está instalado.\n"
+"- Removida a notificação ao cancelar a gravação de uma mensagem de voz ou de vídeo: o Unigram 13.0 e posteriores anunciam-na por si próprios, pelo que já não é ouvida duas vezes.\n"
 "- Atualizadas as traduções polaca e vietnamita."
 
 msgid ""
@@ -203,12 +205,11 @@ msgstr "Notificar a eliminação de mensagens e conversas com um som"
 msgid "Display confirmation dialog when deleting messages and chats"
 msgstr "Mostrar diálogo de confirmação ao eliminar mensagens e conversas"
 
+#. Type of notification when a voice message recording starts or is sent.
+#. Unigram 13.0 announces a canceled recording itself.
 #: GlobalPlugins/UnigramPlus/__init__.py:192
-#, fuzzy
-#| msgid "Voice message recording notifications are set to sounds"
-msgid "Set voice message recording notification method as:"
-msgstr ""
-"As notificações de gravação de mensagens de voz estão definidas para sons"
+msgid "Notification when a voice message recording starts or is sent:"
+msgstr "Notificação ao iniciar ou enviar a gravação de uma mensagem de voz:"
 
 #: GlobalPlugins/UnigramPlus/__init__.py:195
 msgid "Select the progress bar notification level:"
@@ -565,12 +566,6 @@ msgstr ""
 #| msgid "Voice message recording has standard behavior"
 msgid "Recording voice messages has standard behavior"
 msgstr "A gravação de mensagens de voz tem um comportamento padrão"
-
-#: appModules/unigram.py:516
-#, fuzzy
-#| msgid "Record canceled"
-msgid "Recording canceled"
-msgstr "Gravação cancelada"
 
 #: appModules/unigram.py:544
 msgid "Right answer"

@@ -343,10 +343,6 @@ msgstr "Otwiera profil bieżącego czatu"
 msgid "Record sent"
 msgstr "Nagranie wysłane"
 
-#: addon/appModules/unigram.py:2857
-msgid "Recording canceled"
-msgstr "Nagrywanie anulowane"
-
 #: addon/appModules/unigram.py:2874
 msgid "Audio"
 msgstr "Dźwięk"
@@ -970,10 +966,11 @@ msgid "Display confirmation dialog when deleting messages and chats"
 msgstr ""
 "Pokazuj okno dialogowe potwierdzenia podczas usuwania wiadomości i czatów"
 
-#. Type of notification when recording voice messages
+#. Type of notification when a voice message recording starts or is sent.
+#. Unigram 13.0 announces a canceled recording itself.
 #: addon/GlobalPlugins/UnigramPlus/__init__.py:310
-msgid "Set voice message recording notification method as:"
-msgstr "Sposób powiadamiania o nagrywaniu wiadomości głosowych:"
+msgid "Notification when a voice message recording starts or is sent:"
+msgstr "Powiadomienie o rozpoczęciu lub wysłaniu nagrania wiadomości głosowej:"
 
 #. Progress bar announce
 #: addon/GlobalPlugins/UnigramPlus/__init__.py:313
@@ -1129,10 +1126,12 @@ msgstr ""
 msgid ""
 "- Fixed NVDA errors with the Unigram WinUI 3 beta each time you switched back to Unigram or typed with an input method (IME).\n"
 "- UnigramPlus no longer interferes with focus announcements in Telegram Desktop when the Telegram Desktop add-on is not installed.\n"
+"- Removed the notification when a voice or video message recording is canceled: Unigram 13.0 and later announce it themselves, so it is no longer heard twice.\n"
 "- Updated the Polish and Vietnamese translations."
 msgstr ""
 "- Naprawiono błędy NVDA w wersji beta Unigrama opartej na WinUI 3, pojawiające się przy każdym powrocie do Unigrama lub pisaniu za pomocą edytora metody wprowadzania (IME).\n"
 "- UnigramPlus nie zakłóca już odczytywania fokusu w Telegram Desktop, gdy dodatek Telegram Desktop nie jest zainstalowany.\n"
+"- Usunięto powiadomienie o anulowaniu nagrywania wiadomości głosowej lub wideo: Unigram 13.0 i nowsze samodzielnie je ogłaszają, więc nie jest już słyszane dwukrotnie.\n"
 "- Zaktualizowano tłumaczenia polskie i wietnamskie."
 
 msgid ""

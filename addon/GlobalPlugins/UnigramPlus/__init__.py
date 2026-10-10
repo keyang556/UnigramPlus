@@ -306,8 +306,9 @@ class UnigramPlusSettings(SettingsPanel):
 		# Show confirmation window when deleting
 		self.confirmation_at_deletion = settingsSizerHelper.addItem(wx.CheckBox(self, label=_("Display confirmation dialog when deleting messages and chats")))
 		self.confirmation_at_deletion.SetValue(conf.get("confirmation_at_deletion"))
-		# Type of notification when recording voice messages
-		self.voiceMessageRecordingIndicator = settingsSizerHelper.addLabeledControl(_("Set voice message recording notification method as:"), wx.Choice, choices=[self.listVoiceMessageRecordingIndicator[item] for item in self.listVoiceMessageRecordingIndicator])
+		# Type of notification when a voice message recording starts or is sent.
+		# Unigram 13.0 announces a canceled recording itself.
+		self.voiceMessageRecordingIndicator = settingsSizerHelper.addLabeledControl(_("Notification when a voice message recording starts or is sent:"), wx.Choice, choices=[self.listVoiceMessageRecordingIndicator[item] for item in self.listVoiceMessageRecordingIndicator])
 		self.voiceMessageRecordingIndicator.SetStringSelection(self.listVoiceMessageRecordingIndicator[conf.get("voiceMessageRecordingIndicator")])
 		# Progress bar announce
 		self.voicingPerformanceIndicators = settingsSizerHelper.addLabeledControl(_("Select the progress bar notification level:"), wx.Choice, choices=[self.listVoicingPerformanceIndicators[item] for item in self.listVoicingPerformanceIndicators])

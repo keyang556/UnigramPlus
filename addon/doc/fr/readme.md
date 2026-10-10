@@ -14,7 +14,7 @@ Utilisez Unigram de manière plus confortable et plus productive. Cet extension 
 * Lorsque le focus est placé sur un message vocal en cours de lecture, vous entendez d'abord la durée de lecture écoulée, puis toutes les autres informations.
 * Lorsque vous déplacez le focus sur un message au sein d'un échange, vous entendez d'abord l'information selon laquelle il est sélectionné, puis le contenu du message.
 * Désormais, lorsque vous vous déplacez dans un échange, le mot "vu" ne sera pas prononcé du tout et "non vu" sera énoncé avant le contenu du message.
-* Amélioration significative de la fonction d'enregistrement des messages vocaux. L'enregistrement, l'envoi et l'annulation de l'enregistrement d'un message vocal sont accompagnés de sons caractéristiques. De plus, lors de l'exécution de ces fonctions, le focus reste à sa position et ne saute ni sur le bouton d'enregistrement ni sur le champ de saisie du message.
+* Amélioration significative de la fonction d'enregistrement des messages vocaux. Le début et l'envoi de l'enregistrement d'un message vocal sont accompagnés de sons caractéristiques, tandis qu'Unigram 13.0 et versions ultérieures annoncent eux-mêmes l'annulation d'un enregistrement. De plus, lors de l'exécution de ces fonctions, le focus reste à sa position et ne saute ni sur le bouton d'enregistrement ni sur le champ de saisie du message.
 * Si le média joint au message est ouvert à l'aide de la barre d'espacement, le focus revient au dernier élément sélectionné après sa fermeture.
 * L'extension vous permet de désactiver complètement l'annonce des barres de progression, ou encore de désactiver uniquement l'annonce de celle relative à la lecture des messages vocaux.
 
@@ -202,6 +202,7 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 
 * Correction des erreurs de NVDA dans la nouvelle version bêta WinUI 3 d'Unigram. Depuis la version 5.5.6, une erreur était journalisée à chaque retour dans Unigram ou à chaque saisie avec un éditeur de méthode d'entrée (IME), comme ceux du chinois, du japonais ou du coréen. La version UWP d'Unigram n'était pas concernée.
 * UnigramPlus n'interfère plus avec les annonces du focus dans Telegram Desktop lorsque l'extension Telegram Desktop n'est pas installée.
+* Suppression de la notification qu'UnigramPlus donnait lors de l'annulation de l'enregistrement d'un message vocal ou vidéo. Unigram 13.0 et versions ultérieures annoncent eux-mêmes un enregistrement annulé, que ce soit avec Ctrl+D ou le bouton d'annulation ; elle n'est donc plus entendue deux fois. Un enregistrement qui tarde à apparaître dans l'échange n'est plus non plus signalé comme annulé. Le début et l'envoi d'un enregistrement sont toujours annoncés, et l'option correspondante s'appelle désormais « Notification au début ou à l'envoi de l'enregistrement d'un message vocal ».
 * Mise à jour des traductions polonaise et vietnamienne.
 
 ### Version 5.8.1

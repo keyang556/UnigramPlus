@@ -23,10 +23,12 @@ msgstr ""
 msgid ""
 "- Fixed NVDA errors with the Unigram WinUI 3 beta each time you switched back to Unigram or typed with an input method (IME).\n"
 "- UnigramPlus no longer interferes with focus announcements in Telegram Desktop when the Telegram Desktop add-on is not installed.\n"
+"- Removed the notification when a voice or video message recording is canceled: Unigram 13.0 and later announce it themselves, so it is no longer heard twice.\n"
 "- Updated the Polish and Vietnamese translations."
 msgstr ""
 "- Ispravljene pogreške NVDA-a u beta verziji Unigrama za WinUI 3 koje su se javljale pri svakom povratku u Unigram ili pri tipkanju pomoću uređivača načina unosa (IME).\n"
 "- UnigramPlus više ne ometa najave fokusa u Telegram Desktopu kada dodatak Telegram Desktop nije instaliran.\n"
+"- Uklonjena obavijest pri otkazivanju snimanja glasovne ili video poruke: Unigram 13.0 i noviji sami je najavljuju, pa se više ne čuje dvaput.\n"
 "- Ažurirani poljski i vijetnamski prijevodi."
 
 msgid ""
@@ -472,10 +474,6 @@ msgstr "Odgovaranje otkazano"
 msgid "Edit canceled"
 msgstr "Uređivanje otkazano"
 
-#: addon\appModules\unigram.py:867
-msgid "Recording canceled"
-msgstr "Snimanje otkazano"
-
 #: addon\appModules\unigram.py:896
 msgid "Answer options"
 msgstr "Mogućnosti odgovora"
@@ -828,10 +826,11 @@ msgid "Display confirmation dialog when deleting messages and chats"
 msgstr ""
 "Prikaži dijaloški okvir za potvrdu prilikom brisanja poruka i razgovora"
 
-#. Type of notification when recording voice messages
+#. Type of notification when a voice message recording starts or is sent.
+#. Unigram 13.0 announces a canceled recording itself.
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:228
-msgid "Set voice message recording notification method as:"
-msgstr "Postavite metodu obavijesti o snimanju glasovne poruke kao:"
+msgid "Notification when a voice message recording starts or is sent:"
+msgstr "Obavijest pri početku ili slanju snimke glasovne poruke:"
 
 #. Progress bar announce
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:231

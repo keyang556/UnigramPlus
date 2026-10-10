@@ -16,7 +16,7 @@ Utiliza Unigram De forma más cómoda y productiva. Este complemento proporciona
 * Cuando estés en un mensaje de voz que se esté reproduciendo actualmente,  oirás primero su tiempo de reproducción, y luego el resto de la información relevante.
 * Cuando el foco esté en un mensaje seleccionado de un chat, primero oirás la información de si está seleccionado, y luego el contenido del mensaje.
 * Ahora mientras te mueves por la lista de mensajes de un chat, Ya no oirás la palabra visto, sino que se verbalizará "no visto" antes de leer el mensaje propiamente dicho. Actualmente esta característica solo funciona en inglés, ruso, ucraniano, español, portugués, polaco, croata, turco y Persa.
-* Se a modernizado significativamente la función de grabación de mensajes de voz. la grabación, envío y cancelación de mensajes de voz se acompañan de sonidos distintivos. además, cuando se realizan estas operaciones, el foco permanece en la misma posición y no salta al botón de grabar ni al campo de edición.
+* Se a modernizado significativamente la función de grabación de mensajes de voz. el inicio y el envío de la grabación de un mensaje de voz se acompañan de sonidos distintivos, mientras que Unigram 13.0 y posteriores anuncian por sí mismos la cancelación de una grabación. además, cuando se realizan estas operaciones, el foco permanece en la misma posición y no salta al botón de grabar ni al campo de edición.
 * si los archivos de medios adjuntos a un mensaje se abren presionando espacio, después de cerrarlos, el cursor regresa a donde estaba anteriormente.
 * El complemento ahora te permite desactivar completamente el anuncio de barras de progreso, además de desactivar únicamente el anuncio del progreso al reproducir un mensaje.
 
@@ -204,6 +204,7 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 
 * Corregidos los errores de NVDA en la nueva beta de Unigram basada en WinUI 3. Desde la versión 5.5.6, se registraba un error cada vez que se volvía a Unigram o se escribía con un editor de métodos de entrada (IME), como los de chino, japonés o coreano. La versión UWP de Unigram no se veía afectada.
 * UnigramPlus ya no interfiere con los anuncios del foco en Telegram Desktop cuando el complemento Telegram Desktop no está instalado.
+* Eliminada la notificación que UnigramPlus daba al cancelar la grabación de un mensaje de voz o de vídeo. Unigram 13.0 y posteriores anuncian por sí mismos una grabación cancelada, ya sea con Ctrl+D o con el botón de cancelar, por lo que ya no se escucha dos veces. Además, una grabación que tarda en aparecer en el chat ya no se anuncia como cancelada. El inicio y el envío de una grabación se siguen anunciando, y su opción ahora se llama "Notificación al iniciar o enviar la grabación de un mensaje de voz".
 * Actualizadas las traducciones al polaco y al vietnamita.
 
 ### Versión 5.8.1

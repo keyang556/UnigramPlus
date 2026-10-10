@@ -12,7 +12,7 @@ Use o Unigram de uma forma mais confortável e produtiva. Este extra fornece mui
 * Quando estiver numa mensagem de voz que está a ser reproduzida, ouvirá primeiro o tempo de reprodução e, em seguida, o restante das informações relevantes.
 * Quando o foco está numa mensagem seleccionada de Conversas, primeiro ouvirá a informação se ela foi seleccionada e, em seguida, o conteúdo da mensagem.
 * Agora, ao rolar por uma lista de mensagens ou Conversas, não ouvirá a palavra "lida", mas "não lida" será falada antes de ler a mensagem em si. atualmente, esse recurso funciona apenas em inglês, russo e ucraniano.
-* A função de gravação de mensagem de voz foi significativamente modernizada. gravar, enviar e cancelar mensagens de voz são acompanhados por sons distintos. além disso, quando essas operações são realizadas, o foco permanece na mesma posição e não salta para o botão de gravação ou o campo de edição.
+* A função de gravação de mensagem de voz foi significativamente modernizada. iniciar e enviar a gravação de uma mensagem de voz são acompanhados por sons distintos, enquanto o Unigram 13.0 e posteriores anunciam por si próprios uma gravação cancelada. além disso, quando essas operações são realizadas, o foco permanece na mesma posição e não salta para o botão de gravação ou o campo de edição.
 * Adicionada a capacidade de rastrear a actividade de Conversas. Esta função é activada pressionando a combinação "ALT + T" duas vezes.
 * Se os ficheiros de mídia anexados a uma mensagem forem abertos pressionando espaço, após fechá-los, o cursor retorna ao local onde estava anteriormente.
 * Todos os sons de prompt de função ou apenas os prompts de reprodução de mensagem de voz podem ser desactivados.
@@ -202,6 +202,7 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 
 * Corrigidos erros do NVDA na nova versão beta do Unigram em WinUI 3. Desde a versão 5.5.6, era registado um erro sempre que se regressava ao Unigram ou se escrevia com um editor de método de introdução (IME), como os de chinês, japonês ou coreano. A versão UWP do Unigram não era afetada.
 * O UnigramPlus já não interfere com os anúncios de foco do Telegram Desktop quando o complemento Telegram Desktop não está instalado.
+* Removida a notificação que o UnigramPlus dava ao cancelar a gravação de uma mensagem de voz ou de vídeo. O Unigram 13.0 e posteriores anunciam por si próprios uma gravação cancelada, seja com Ctrl+D ou com o botão de cancelar, pelo que deixa de ser ouvida duas vezes. Uma gravação que demora a aparecer na conversa também já não é anunciada como cancelada. O início e o envio de uma gravação continuam a ser anunciados, e a opção correspondente chama-se agora "Notificação ao iniciar ou enviar a gravação de uma mensagem de voz".
 * Atualizadas as traduções polaca e vietnamita.
 
 ### Versão 5.8.1

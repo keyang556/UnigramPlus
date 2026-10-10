@@ -92,7 +92,11 @@ def is_recorded_message(obj, video=False, max_elements=64):
 
 
 class VoiceRecordingOutcome:
-	"""Resolve a stopped recording as sent or canceled without observing keys."""
+	"""Tell when a stopped recording has been sent, without observing keys.
+
+	A recording that produces no new message before the window closes simply
+	stops being watched. Unigram 13.0 announces a canceled recording itself.
+	"""
 
 	_UNRECOGNIZED_MESSAGE_POLLS = 2
 
@@ -126,7 +130,7 @@ class VoiceRecordingOutcome:
 			# During encoding/upload Unigram can append the outgoing item before
 			# its Recognize/Subtitle controls enter the UIA tree. A persistent new
 			# last item is therefore sufficient evidence of sending; requiring the
-			# finished voice-note template produced false cancellation reports.
+			# finished voice-note template missed sends.
 			self._changedMessagePolls += 1
 			if self._changedMessagePolls >= self._UNRECOGNIZED_MESSAGE_POLLS:
 				return self._finish("sent")
@@ -134,7 +138,7 @@ class VoiceRecordingOutcome:
 			self._changedMessagePolls = 0
 		self._pollsRemaining -= 1
 		if self._pollsRemaining <= 0:
-			return self._finish("canceled")
+			return self._finish(None)
 		return None
 
 	def _finish(self, transition):

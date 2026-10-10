@@ -498,10 +498,6 @@ msgstr "Mở hồ sơ của cuộc trò chuyện hiện tại"
 msgid "Record sent"
 msgstr "Đã gửi bản ghi âm"
 
-#: addon\appModules\unigram.py:2859
-msgid "Recording canceled"
-msgstr "Đã hủy ghi âm"
-
 #: addon\appModules\unigram.py:2876
 msgid "Audio"
 msgstr "Âm thanh"
@@ -969,10 +965,11 @@ msgstr "Thông báo bằng âm thanh khi xóa tin nhắn và cuộc trò chuyệ
 msgid "Display confirmation dialog when deleting messages and chats"
 msgstr "Hiển thị hộp thoại xác nhận khi xóa tin nhắn và cuộc trò chuyện"
 
-#. Type of notification when recording voice messages
+#. Type of notification when a voice message recording starts or is sent.
+#. Unigram 13.0 announces a canceled recording itself.
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:314
-msgid "Set voice message recording notification method as:"
-msgstr "Đặt phương thức thông báo ghi âm tin nhắn thoại là:"
+msgid "Notification when a voice message recording starts or is sent:"
+msgstr "Thông báo khi bắt đầu hoặc gửi bản ghi âm tin nhắn thoại:"
 
 #. Progress bar announce
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:317
@@ -1126,10 +1123,12 @@ msgstr ""
 msgid ""
 "- Fixed NVDA errors with the Unigram WinUI 3 beta each time you switched back to Unigram or typed with an input method (IME).\n"
 "- UnigramPlus no longer interferes with focus announcements in Telegram Desktop when the Telegram Desktop add-on is not installed.\n"
+"- Removed the notification when a voice or video message recording is canceled: Unigram 13.0 and later announce it themselves, so it is no longer heard twice.\n"
 "- Updated the Polish and Vietnamese translations."
 msgstr ""
 "- Đã sửa lỗi NVDA trong bản beta WinUI 3 của Unigram, xảy ra mỗi khi quay lại Unigram hoặc gõ bằng bộ gõ (IME).\n"
 "- UnigramPlus không còn can thiệp vào việc đọc tiêu điểm trong Telegram Desktop khi chưa cài tiện ích Telegram Desktop.\n"
+"- Đã gỡ bỏ thông báo khi hủy ghi âm tin nhắn thoại hoặc tin nhắn video: Unigram 13.0 trở lên tự thông báo việc này, nên nó không còn được thông báo hai lần nữa.\n"
 "- Đã cập nhật bản dịch tiếng Ba Lan và tiếng Việt."
 
 msgid ""

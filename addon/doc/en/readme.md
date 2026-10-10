@@ -16,7 +16,7 @@ Use Unigram in a more comfortable and productive way. This addon provides many h
 * When focus is placed on a voice message that is currently being played, first information about the time of its playback is announced, and then all other information.
 * When focusing on a selected message in a chat, you will first hear the information that it is selected, and then the content of the message.
 * Now, when moving in the chat, the phrase "Seen" will not be pronounced at all, and the phrase "Not seen" will be pronounced before the content of the message. This feature currently only works in English, Russian, Ukrainian, Spanish, Portuguese, Polish, Croatian, Turkish, and Persian.
-* Significantly improved the function of recording voice messages. Recording, sending and canceling the recording of a voice message are accompanied by characteristic sounds. Also, when performing these functions, the focus remains in its position and does not jump to either the record button or the message input field.
+* Significantly improved the function of recording voice messages. Starting and sending a voice message recording are accompanied by characteristic sounds, while Unigram 13.0 and later announce a canceled recording themselves. Also, when performing these functions, the focus remains in its position and does not jump to either the record button or the message input field.
 * If the media attached to the message is opened using the spacebar, then after closing it, the focus will return to the last element that was in focus.
 * The add-on allows you to completely disable the announcement of progress bars, as well as disable only the announcement of the progress bar for playing voice messages.
 
@@ -204,6 +204,7 @@ And remember that everyone who read this line thought that someone will definite
 
 * Fixed NVDA errors with the new WinUI 3 beta of Unigram. Since version 5.5.6, an error was logged every time you switched back to Unigram or typed with an input method (IME), such as one for Chinese, Japanese or Korean. The UWP version of Unigram was not affected.
 * UnigramPlus no longer interferes with focus announcements in Telegram Desktop when the Telegram Desktop add-on is not installed.
+* Removed the notification UnigramPlus gave when a voice or video message recording was canceled. Unigram 13.0 and later announce a canceled recording themselves, whether it is canceled with Ctrl+D or the cancel button, so it is no longer heard twice. A recording that is slow to appear in the chat is no longer reported as canceled either. Starting and sending a recording are still announced, and the setting for them is now called "Notification when a voice message recording starts or is sent".
 * Updated the Polish and Vietnamese translations.
 
 ### Version 5.8.1

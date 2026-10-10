@@ -21,10 +21,12 @@ msgstr ""
 msgid ""
 "- Fixed NVDA errors with the Unigram WinUI 3 beta each time you switched back to Unigram or typed with an input method (IME).\n"
 "- UnigramPlus no longer interferes with focus announcements in Telegram Desktop when the Telegram Desktop add-on is not installed.\n"
+"- Removed the notification when a voice or video message recording is canceled: Unigram 13.0 and later announce it themselves, so it is no longer heard twice.\n"
 "- Updated the Polish and Vietnamese translations."
 msgstr ""
 "- Виправлено помилки NVDA в бета-версії Unigram на WinUI 3, що виникали щоразу під час повернення до Unigram або введення тексту через метод введення (IME).\n"
 "- UnigramPlus більше не втручається в озвучення фокуса в Telegram Desktop, якщо доповнення Telegram Desktop не встановлено.\n"
+"- Вилучено оповіщення про скасування запису голосового повідомлення або відеоповідомлення: Unigram 13.0 і новіші самі про це повідомляють, тож воно більше не звучить двічі.\n"
 "- Оновлено польський і в'єтнамський переклади."
 
 msgid ""
@@ -193,9 +195,11 @@ msgid "Display confirmation dialog when deleting messages and chats"
 msgstr ""
 "Відображати діалогове вікно підтвердження при видаленні повідомлень і чатів"
 
+#. Type of notification when a voice message recording starts or is sent.
+#. Unigram 13.0 announces a canceled recording itself.
 #: GlobalPlugins/UnigramPlus/__init__.py:228
-msgid "Set voice message recording notification method as:"
-msgstr "Встановити тип оповіщення при записі голосових повідомлень як:"
+msgid "Notification when a voice message recording starts or is sent:"
+msgstr "Оповіщення про початок і надсилання запису голосового повідомлення:"
 
 #: GlobalPlugins/UnigramPlus/__init__.py:231
 msgid "Select the progress bar notification level:"
@@ -637,10 +641,6 @@ msgstr "Відповідь скасовано"
 #: appModules/unigram.py:864
 msgid "Edit canceled"
 msgstr "Редагування скасовано"
-
-#: appModules/unigram.py:867
-msgid "Recording canceled"
-msgstr "Запис скасовано"
 
 #: appModules/unigram.py:896
 msgid "Answer options"

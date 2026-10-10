@@ -10,8 +10,32 @@ VERSION_WINDOW_DESCRIPTION = "Open Unigram and UnigramPlus version information i
 RELEASE_CHANGELOG = (
 	"""- Fixed NVDA errors with the Unigram WinUI 3 beta each time you switched back to Unigram or typed with an input method (IME).
 - UnigramPlus no longer interferes with focus announcements in Telegram Desktop when the Telegram Desktop add-on is not installed.
+- Removed the notification when a voice or video message recording is canceled: Unigram 13.0 and later announce it themselves, so it is no longer heard twice.
 - Updated the Polish and Vietnamese translations."""
 )
+RECORDING_NOTIFICATION_LABEL = "Notification when a voice message recording starts or is sent:"
+
+# The voice recording feature bullet said canceling was accompanied by a sound
+# until Unigram 13.0 started announcing a canceled recording itself. Keyed by
+# manual language; the root readme.md mirrors the English one.
+RECORDING_CANCELED_FEATURE = {
+	"en": "Recording, sending and canceling",
+	"NE": "रेकर्ड गर्ने, पठाउने र रद्दगर्दा",
+	"ar": "وإلغاء تسجيلها",
+	"es": "envío y cancelación de mensajes de voz",
+	"fa": "ضبط، ارسال و لغو ضبط",
+	"fr": "l'envoi et l'annulation de l'enregistrement",
+	"hr": "Snimanje, slanje i otkazivanje",
+	"pt_BR": "gravar, enviar e cancelar",
+	"pt_PT": "gravar, enviar e cancelar",
+	"ro": "trimiterea și anularea înregistrării",
+	"ru": "Запись, отправка и отмена записи",
+	"sr": "i otkazivanje snimanja popraćeni",
+	"tr": "kayıt iptaline farklı sesler",
+	"uk": "Запис, надсилання та скасування запису",
+	"zh_CN": "录制、发送和取消语音消息",
+	"zh_TW": "錄製、傳送與取消語音訊息",
+}
 
 # The call duration feature bullet each manual carried before Unigram 12.10
 # started announcing it natively. Keyed by manual language; the root readme.md
@@ -43,7 +67,7 @@ REQUIRED_TRANSLATIONS = {
 	"Speak the type of chat in the chat list:",
 	"Automatically move focus to the chat list when Unigram starts",
 	"Say the sender's name in:",
-	"Set voice message recording notification method as:",
+	RECORDING_NOTIFICATION_LABEL,
 	"Select the progress bar notification level:",
 	"File transfer progress announcement interval (percent):",
 	"Rich message",
@@ -136,6 +160,7 @@ def test_current_release_changelog_comes_from_the_changelog_source():
 
 	assert "WinUI 3" in changelog
 	assert "Telegram Desktop add-on" in changelog
+	assert "Unigram 13.0" in changelog
 
 
 def test_every_catalog_translates_the_current_release_changelog():
@@ -150,10 +175,12 @@ def test_the_english_manual_carries_the_current_release():
 		version_582 = text.index("5.8.2")
 		version_581 = text.index("5.8.1", version_582)
 		section_582 = text[version_582:version_581]
-		assert section_582.count("\n* ") == 3, manual
+		assert section_582.count("\n* ") == 4, manual
 		assert "WinUI 3" in section_582, manual
 		assert "Since version 5.5.6" in section_582, manual
 		assert "Telegram Desktop add-on" in section_582, manual
+		assert "Unigram 13.0" in section_582, manual
+		assert RECORDING_NOTIFICATION_LABEL.rstrip(":") in section_582, manual
 		assert "Polish and Vietnamese" in section_582, manual
 		version_581 = text.index("5.8.1")
 		version_580 = text.index("5.8.0", version_581)
@@ -174,8 +201,8 @@ def test_every_localized_manual_has_582_581_and_580_changelogs():
 		text = manual.read_text(encoding="utf-8")
 		version_582 = text.index("5.8.2")
 		section_582 = text[version_582:text.index("5.8.1", version_582)]
-		assert section_582.count("\n* ") == 3, manual
-		for marker in ("WinUI 3", "5.5.6", "IME", "UWP", "Telegram Desktop"):
+		assert section_582.count("\n* ") == 4, manual
+		for marker in ("WinUI 3", "5.5.6", "IME", "UWP", "Telegram Desktop", "13.0", "Ctrl+D"):
 			assert marker in section_582, (manual, marker)
 		version_581 = text.index("5.8.1")
 		version_580 = text.index("5.8.0", version_581)
@@ -200,6 +227,18 @@ def test_the_call_duration_workaround_is_gone_everywhere():
 		# The 5.8.1 notes themselves do describe the removal, in Chinese using
 		# the same words, which is why they are excluded.
 		assert CALL_DURATION_FEATURE[language] not in text[:text.index("5.8.1")], manual
+
+
+def test_feature_lists_leave_canceled_recordings_to_unigram():
+	"""Unigram 13.0 announces a canceled recording, so the add-on no longer claims to."""
+	for manual in [ROOT / "readme.md", *sorted(DOC_DIR.glob("*/readme.md"))]:
+		language = "en" if manual.parent == ROOT else manual.parent.name
+		text = manual.read_text(encoding="utf-8")
+		# The feature list ends at the first ### heading. Older release notes,
+		# which some manuals keep above 5.8.2, still describe the sound.
+		features = text[:text.index("###")]
+		assert RECORDING_CANCELED_FEATURE[language] not in features, manual
+		assert "Unigram 13.0" in features, manual
 
 
 def test_every_localized_manual_has_573_through_559_and_updated_558_changelogs():

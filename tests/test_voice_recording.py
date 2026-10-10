@@ -81,7 +81,7 @@ def test_name_changes_work_when_uia_show_event_is_missing():
 	assert state.elapsedChanged("0:00.00") == "stopped"
 
 
-def test_hiding_timer_defers_the_send_or_cancel_outcome():
+def test_hiding_timer_defers_the_send_outcome():
 	state = VoiceRecordingState()
 
 	assert state.shown() == "start"
@@ -147,24 +147,26 @@ def test_transient_message_list_read_failure_is_not_treated_as_sent():
 
 	assert outcome.observe(None, is_recorded=False) is None
 	assert outcome.observe(("position", 8, 8), is_recorded=False) is None
-	assert outcome.observe(("position", 8, 8), is_recorded=False) == "canceled"
+	assert outcome.observe(("position", 8, 8), is_recorded=False) is None
+	assert not outcome.pending
 
 
-def test_stopped_recording_without_a_new_recorded_message_is_canceled():
+def test_stopped_recording_without_a_new_message_ends_silently():
+	"""Unigram 13.0 announces "Recording canceled" itself, so the add-on does not."""
 	outcome = VoiceRecordingOutcome(poll_limit=2)
 	outcome.started(("position", 8))
 	outcome.stopped()
 
 	assert outcome.observe(("position", 8), is_recorded=False) is None
-	assert outcome.observe(("position", 8), is_recorded=False) == "canceled"
+	assert outcome.observe(("position", 8), is_recorded=False) is None
 	assert not outcome.pending
+	assert outcome.observe(("position", 9), is_recorded=True) is None
 
 
-def test_the_shipped_cancellation_window_is_short_enough_to_be_useful():
-	"""A cancellation announced five seconds late is announced after the fact.
-
-	Telegram inserts the outgoing message optimistically, so the window only
-	has to cover that insertion, not the upload.
+def test_the_shipped_send_window_stays_short():
+	"""Telegram inserts the outgoing message optimistically, so the window only
+	has to cover that insertion, not the upload. A longer one would give an
+	incoming message more time to be taken for a canceled recording being sent.
 	"""
 	source = (ROOT / "addon" / "appModules" / "unigram.py").read_text(encoding="utf-8")
 	module = ast.parse(source)
@@ -181,7 +183,7 @@ def test_the_shipped_cancellation_window_is_short_enough_to_be_useful():
 		and any(getattr(t, "id", "") == "_VOICE_RECORDING_POLL_INTERVAL" for t in node.targets)
 	)
 	seconds = limit * interval
-	assert 0.8 <= seconds <= 2.0, "cancellation is announced after %.1f s" % seconds
+	assert 0.8 <= seconds <= 2.0, "a send is watched for %.1f s" % seconds
 
 
 def test_a_sent_recording_is_still_reported_before_the_window_closes():
@@ -193,14 +195,14 @@ def test_a_sent_recording_is_still_reported_before_the_window_closes():
 	assert not outcome.pending
 
 
-def test_cancellation_is_reported_once_the_window_closes():
+def test_nothing_is_reported_when_the_window_closes():
 	outcome = VoiceRecordingOutcome(poll_limit=7)
 	outcome.started(("position", 8))
 	outcome.stopped()
 
-	for _ in range(6):
+	for _ in range(7):
 		assert outcome.observe(("position", 8), is_recorded=False) is None
-	assert outcome.observe(("position", 8), is_recorded=False) == "canceled"
+	assert not outcome.pending
 
 
 def test_recording_state_uses_the_same_elapsed_sibling_as_the_button_label():
@@ -419,7 +421,7 @@ def test_recording_monitor_does_not_probe_uia_ancestors_on_each_poll():
 	assert scheduled == [True]
 
 
-def test_recording_transitions_keep_text_and_audio_notifications():
+def test_recording_start_and_send_keep_text_and_audio_notifications():
 	announcements = []
 	sounds = []
 	button = SimpleNamespace(
@@ -455,16 +457,50 @@ def test_recording_transitions_keep_text_and_audio_notifications():
 
 	method(instance, "start")
 	method(instance, "sent")
-	method(instance, "canceled")
 	settings["indicator"] = "audio"
 	method(instance, "start")
 	method(instance, "sent")
-	method(instance, "canceled")
 
-	assert announcements == ["Audio", "Record sent", "Recording canceled"]
-	assert sounds[0][0].endswith("start_recording_voice_message.wav")
-	assert sounds[1][0].endswith("send_voice_message.wav")
-	assert sounds[2][0].endswith("cancel_voice_message_recording.wav")
+	assert announcements == ["Audio", "Record sent"]
+	assert [path for path, flags in sounds] == [
+		"media/start_recording_voice_message.wav",
+		"media/send_voice_message.wav",
+	]
+
+
+def test_a_canceled_recording_is_left_to_unigram():
+	"""Unigram 13.0 raises its own "Recording canceled" UIA notification.
+
+	ChatRecordButton.Cancel raises it for Ctrl+D, the cancel button and sliding
+	away, so the add-on announcing the same thing would be heard twice.
+	"""
+	announcements = []
+	sounds = []
+	namespace = {
+		"winsound": SimpleNamespace(
+			SND_ASYNC=1,
+			SND_NOSTOP=2,
+			PlaySound=lambda path, flags: sounds.append(path),
+		),
+		"baseDir": "media/",
+		"message": announcements.append,
+		"State": SimpleNamespace(PRESSED="pressed"),
+		"log": SimpleNamespace(debug=lambda text: None),
+		"_": lambda text: text,
+	}
+	do_announce = _load_method("_doAnnounceVoiceRecordingTransition", namespace)
+	instance = SimpleNamespace(_voiceRecordingButton=None)
+
+	for indicator in ("text", "audio"):
+		namespace["conf"] = SimpleNamespace(get=lambda key, value=indicator: value)
+		do_announce(instance, "canceled")
+
+	assert announcements == []
+	assert sounds == []
+	source = (ROOT / "addon" / "appModules" / "unigram.py").read_text(encoding="utf-8")
+	assert "Recording canceled\")" not in source
+	assert "cancel_voice_message_recording" not in source
+	assert not (ROOT / "addon" / "appModules" / "media" / "cancel_voice_message_recording.wav").exists()
 
 
 def _record_button(location_width=40):
