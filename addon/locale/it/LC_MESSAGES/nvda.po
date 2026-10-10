@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.1\n"
+"Project-Id-Version: UnigramPlus 5.8.2\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-14 22:27+0100\n"
@@ -19,6 +19,15 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: changelog.py:5
+msgid ""
+"- Fixed NVDA errors with the Unigram WinUI 3 beta each time you switched back to Unigram or typed with an input method (IME).\n"
+"- UnigramPlus no longer interferes with focus announcements in Telegram Desktop when the Telegram Desktop add-on is not installed.\n"
+"- Updated the Polish and Vietnamese translations."
+msgstr ""
+"- Corretti gli errori di NVDA nella beta di Unigram basata su WinUI 3, che si verificavano ogni volta che si tornava a Unigram o si scriveva con un editor di metodi di input (IME).\n"
+"- UnigramPlus non interferisce più con gli annunci del focus in Telegram Desktop quando il componente aggiuntivo Telegram Desktop non è installato.\n"
+"- Aggiornate le traduzioni polacca e vietnamita."
+
 msgid ""
 "- Removed the call duration workaround: Unigram 12.10 and later announce a call message's duration themselves, so it is no longer announced twice.\n"
 "- Fixed the add-on failing to start on older NVDA versions that do not provide the utils.security module.\n"

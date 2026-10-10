@@ -2,7 +2,7 @@
 def _(t): return t
 
 value = _(
-	"""- Removed the call duration workaround: Unigram 12.10 and later announce a call message's duration themselves, so it is no longer announced twice.
-- Fixed the add-on failing to start on older NVDA versions that do not provide the utils.security module.
-- Updated the Vietnamese translation."""
+	"""- Fixed NVDA errors with the Unigram WinUI 3 beta each time you switched back to Unigram or typed with an input method (IME).
+- UnigramPlus no longer interferes with focus announcements in Telegram Desktop when the Telegram Desktop add-on is not installed.
+- Updated the Polish and Vietnamese translations."""
 )

@@ -3136,7 +3136,7 @@ class AppModule(appModuleHandler.AppModule):
 				if is_recording_button(obj):
 					self._voiceRecordingButton = obj
 					self._voiceRecordingDiscoveryFocus = None
-				elif obj.UIAAutomationId == "ElapsedLabel":
+				elif getattr(obj, "UIAAutomationId", "") == "ElapsedLabel":
 					transition = self._voiceRecordingState.elapsedChanged(obj.name)
 					self._handleVoiceRecordingTransition(transition)
 		finally:
@@ -3144,7 +3144,7 @@ class AppModule(appModuleHandler.AppModule):
 
 	def event_nameChange(self, obj, nextHandler):
 		try:
-			if getattr(self, "isUnigramWindow", False) and obj.UIAAutomationId == "ElapsedLabel":
+			if getattr(self, "isUnigramWindow", False) and getattr(obj, "UIAAutomationId", "") == "ElapsedLabel":
 				transition = self._voiceRecordingState.elapsedChanged(obj.name)
 				self._handleVoiceRecordingTransition(transition)
 		finally:
@@ -3159,7 +3159,7 @@ class AppModule(appModuleHandler.AppModule):
 			):
 				self._voiceRecordingButton = None
 				self._voiceRecordingDiscoveryFocus = None
-			elif getattr(self, "isUnigramWindow", False) and obj.UIAAutomationId == "ElapsedLabel":
+			elif getattr(self, "isUnigramWindow", False) and getattr(obj, "UIAAutomationId", "") == "ElapsedLabel":
 				self._handleVoiceRecordingTransition(self._voiceRecordingState.hidden())
 		finally:
 			nextHandler()
@@ -3236,8 +3236,16 @@ class AppModule(appModuleHandler.AppModule):
 					return
 				except Exception:
 					pass
-				nextHandler()
-				return
+			nextHandler()
+			return
+		# The WinUI 3 Unigram also focuses objects that are not UIA: its window
+		# (IAccessible) when switching back to it, and NVDA's input composition and
+		# candidate objects while an IME is in use. Everything below identifies
+		# Unigram's controls by their UIA automation id, which these objects do not
+		# have, so leave them to NVDA.
+		if not isinstance(obj, UIA):
+			nextHandler()
+			return
 		if self._restore_focus_after_record_button(obj):
 			return True
 		if obj.role == Role.EDITABLETEXT and obj.UIAAutomationId == "TextField":

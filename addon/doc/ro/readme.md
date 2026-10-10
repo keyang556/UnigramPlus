@@ -199,6 +199,12 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 ##Lista de modificări:
 
+### Versiunea 5.8.2
+
+* Au fost remediate erorile NVDA din noua versiune beta WinUI 3 a Unigram. Începând cu versiunea 5.5.6, o eroare era înregistrată de fiecare dată când reveneați în Unigram sau tastați cu un editor de metode de introducere (IME), cum ar fi cele pentru chineză, japoneză sau coreeană. Versiunea UWP a Unigram nu era afectată.
+* UnigramPlus nu mai interferează cu anunțarea focalizării în Telegram Desktop atunci când add-on-ul Telegram Desktop nu este instalat.
+* Au fost actualizate traducerile în poloneză și vietnameză.
+
 ### Versiunea 5.8.1
 
 * A fost eliminată soluția temporară pentru durata apelurilor. Unigram 12.10 și versiunile ulterioare anunță singure durata unui mesaj de apel, așa că UnigramPlus nu o mai adaugă și nu se mai aude de două ori.

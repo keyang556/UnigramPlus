@@ -473,6 +473,12 @@ Added Turkish localization
 
 
 
+###Verzija 5.8.2
+
+* Ispravljene greške NVDA u novoj beta verziji Unigrama za WinUI 3. Od verzije 5.5.6 greška se beležila pri svakom povratku u Unigram ili pri kucanju pomoću uređivača metoda unosa (IME), na primer za kineski, japanski ili korejski. UWP verzija Unigrama nije bila pogođena.
+* UnigramPlus više ne ometa objavljivanje fokusa u Telegram Desktopu kada dodatak Telegram Desktop nije instaliran.
+* Ažurirani poljski i vijetnamski prevodi.
+
 ###Verzija 5.8.1
 
 * Uklonjeno zaobilazno rešenje za trajanje poziva. Unigram 12.10 i noviji sami objavljuju trajanje u poruci o pozivu, pa ga UnigramPlus više ne dodaje i ne čuje se dva puta.

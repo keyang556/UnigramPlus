@@ -199,6 +199,12 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 
 ## 版本變更
 
+### 版本 5.8.2
+
+* 修正新版 Unigram WinUI 3 測試版的 NVDA 錯誤。自 5.5.6 版起，每次切回 Unigram 或使用中文、日文、韓文等輸入法（IME）輸入文字時，NVDA 都會記錄一筆錯誤。Unigram 的 UWP 版本不受影響。
+* 未安裝 Telegram Desktop 附加元件時，UnigramPlus 不再干擾 Telegram Desktop 的焦點朗讀。
+* 更新波蘭文與越南文翻譯。
+
 ### 版本 5.8.1
 
 * 移除通話長度的暫時處理。Unigram 12.10 及更新版本會自行讀出通話訊息的長度，因此 UnigramPlus 不再補上，也不會重複讀出。
