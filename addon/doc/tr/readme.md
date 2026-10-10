@@ -14,7 +14,7 @@ Unigram'da işinizi daha rahat hale getirin. Bu eklenti, Unigram'da hızlı ve k
 * Şu anda çalınmakta olan bir sesli mesaja odaklanırsanız, önce çalınan zaman hakkındaki bilgiler ve daha sonra geri kalan tüm bilgiler seslendirilir.
 * Sohbette bir Seçili   mesaja odaklanırsanız, önce Seçildiğine  dair bilgiler ve ardından mesajın içeriği duyulur.
 * Şimdi sohbette gezinirken, "okunan" ifadesi hiç duyulmayacak ve "okunmamış" ifadesi mesajın içeriğinden önce seslendirilecektir. Şimdilik, bu özellik yalnızca İngilizce, Rusça, Ukraynaca, İspanyolca, Portekizce, Hırvatça, Türkçe ve Farsça ile çalışır.
-* sesli mesaj kaydet, gönderme ve kayıt iptaline farklı sesler eşlik eder. Ayrıca, bu işlevler gerçekleştirilirken odak aynı konumda kalır ve Kayıt düğmesine veya düzenleme alanına atlamaz.
+* sesli mesaj kaydını başlatmaya ve göndermeye farklı sesler eşlik eder; iptal edilen bir kaydı ise Unigram 13.0 ve sonrası kendisi duyurur. Ayrıca, bu işlevler gerçekleştirilirken odak aynı konumda kalır ve Kayıt düğmesine veya düzenleme alanına atlamaz.
 * Bir mesaja eklenmiş medya dosyalarını boşluk tuşu ile açarsanız, onları kapattıktan sonra odak, odaktaki son öğeye geri dönecektir.
 * Eklenti sayesinde  Aşama çubuklarının sesini tamamen kapata bilirsiniz  veya sadece    sesli mesaj Aşama  çubuklarının sesini kapata  bilirsiniz.
 
@@ -201,6 +201,7 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 
 * Unigram'ın yeni WinUI 3 beta sürümündeki NVDA hataları giderildi. 5.5.6 sürümünden beri, Unigram'a her geri dönüşte veya Çince, Japonca ya da Korece gibi diller için bir giriş yöntemi düzenleyicisiyle (IME) her yazışta bir hata günlüğe kaydediliyordu. Unigram'ın UWP sürümü bundan etkilenmiyordu.
 * Telegram Desktop eklentisi yüklü değilken UnigramPlus artık Telegram Desktop'taki odak duyurularına müdahale etmiyor.
+* Sesli veya görüntülü mesaj kaydı iptal edildiğinde UnigramPlus'ın verdiği bildirim kaldırıldı. Unigram 13.0 ve sonrası, kayıt Ctrl+D ile veya iptal düğmesiyle iptal edildiğinde bunu kendisi duyurduğundan bildirim artık iki kez duyulmuyor. Sohbette geç görünen bir kayıt da artık iptal edilmiş olarak bildirilmiyor. Kaydın başlatılması ve gönderilmesi hâlâ duyuruluyor; ilgili ayarın adı artık "Sesli mesaj kaydı başladığında veya gönderildiğinde bildirim".
 * Lehçe ve Vietnamca çeviriler güncellendi.
 
 ### Sürüm 5.8.1

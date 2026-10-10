@@ -22,10 +22,12 @@ msgstr ""
 msgid ""
 "- Fixed NVDA errors with the Unigram WinUI 3 beta each time you switched back to Unigram or typed with an input method (IME).\n"
 "- UnigramPlus no longer interferes with focus announcements in Telegram Desktop when the Telegram Desktop add-on is not installed.\n"
+"- Removed the notification when a voice or video message recording is canceled: Unigram 13.0 and later announce it themselves, so it is no longer heard twice.\n"
 "- Updated the Polish and Vietnamese translations."
 msgstr ""
 "- خطاهای NVDA در نسخهٔ آزمایشی WinUI 3 برنامهٔ Unigram که هر بار هنگام بازگشت به Unigram یا تایپ با ویرایشگر روش ورودی (IME) رخ می‌داد برطرف شد.\n"
 "- اگر افزونهٔ Telegram Desktop نصب نباشد، UnigramPlus دیگر در اعلام فوکوس در Telegram Desktop دخالت نمی‌کند.\n"
+"- اعلان لغو ضبط پیام صوتی یا ویدیویی حذف شد: Unigram 13.0 و بالاتر خودشان آن را اعلام می‌کنند، بنابراین دیگر دو بار شنیده نمی‌شود.\n"
 "- ترجمه‌های لهستانی و ویتنامی به‌روزرسانی شد."
 
 msgid ""
@@ -465,10 +467,6 @@ msgstr "پاسخ دادن لغو شد"
 msgid "Edit canceled"
 msgstr "ویرایش لغو شد"
 
-#: addon\appModules\unigram.py:605
-msgid "Recording canceled"
-msgstr "ضبط پیام صوتی لغو شد."
-
 #: addon\appModules\unigram.py:635
 msgid "Answer options"
 msgstr "گزینه‌های جواب."
@@ -746,10 +744,11 @@ msgstr "اعلام کن پاک شدن پیام و گفتوگو را با است�
 msgid "Display confirmation dialog when deleting messages and chats"
 msgstr "نشان دادن پنجره ی تعیید وقتی که پیامی را پاک میکنید."
 
-#. Тип оповіщення при записі голосових повідомлень
+#. Type of notification when a voice message recording starts or is sent.
+#. Unigram 13.0 announces a canceled recording itself.
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:177
-msgid "Set voice message recording notification method as:"
-msgstr "تنظیم کردن اعلانها هنگام ضبط پیام صوتی روی:"
+msgid "Notification when a voice message recording starts or is sent:"
+msgstr "اعلان هنگام شروع یا ارسال ضبط پیام صوتی:"
 
 #. ОЗвучення індикаторів виконання
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:180

@@ -22,10 +22,12 @@ msgstr ""
 msgid ""
 "- Fixed NVDA errors with the Unigram WinUI 3 beta each time you switched back to Unigram or typed with an input method (IME).\n"
 "- UnigramPlus no longer interferes with focus announcements in Telegram Desktop when the Telegram Desktop add-on is not installed.\n"
+"- Removed the notification when a voice or video message recording is canceled: Unigram 13.0 and later announce it themselves, so it is no longer heard twice.\n"
 "- Updated the Polish and Vietnamese translations."
 msgstr ""
 "- Correction des erreurs de NVDA dans la version bêta WinUI 3 d'Unigram, qui survenaient à chaque retour dans Unigram ou à chaque saisie avec un éditeur de méthode d'entrée (IME).\n"
 "- UnigramPlus n'interfère plus avec les annonces du focus dans Telegram Desktop lorsque l'extension Telegram Desktop n'est pas installée.\n"
+"- Suppression de la notification lors de l'annulation de l'enregistrement d'un message vocal ou vidéo : Unigram 13.0 et versions ultérieures l'annoncent eux-mêmes, elle n'est donc plus entendue deux fois.\n"
 "- Mise à jour des traductions polonaise et vietnamienne."
 
 msgid ""
@@ -479,10 +481,6 @@ msgstr "Réponse annulée"
 msgid "Edit canceled"
 msgstr "Edition annulée"
 
-#: addon\appModules\unigram.py:751
-msgid "Recording canceled"
-msgstr "Enregistrement annulé"
-
 #: addon\appModules\unigram.py:779
 msgid "Answer options"
 msgstr "Options de réponse"
@@ -814,11 +812,11 @@ msgstr ""
 "Demander une confirmation lors de la suppression d'un message et d'un "
 "échange"
 
-#. Type of notification when recording voice messages
+#. Type of notification when a voice message recording starts or is sent.
+#. Unigram 13.0 announces a canceled recording itself.
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:217
-msgid "Set voice message recording notification method as:"
-msgstr ""
-"Définir la méthode de notification d'enregistrement d'un message vocal à:"
+msgid "Notification when a voice message recording starts or is sent:"
+msgstr "Notification au début ou à l'envoi de l'enregistrement d'un message vocal :"
 
 #. Progress bar announce
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:220

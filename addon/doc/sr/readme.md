@@ -15,7 +15,7 @@ Koristite Unigram na ugodniji i produktivniji način. Ovaj dodatak nudi mnoge ta
 * Kad se fokusirate na glasovnu poruku koja se trenutno reprodukuje, prvo ćete čuti vreme reprodukcije, a zatim ostatak relevantnih informacija.
 * Kad se fokusirate na odabranu poruku u ćaskanju, prvo ćete čuti informacije da je odabrana, a zatim i sadržaj poruke.
 * Dok se krećete kroz listu poruka u ćaskanju, uopšte nećete čuti reč "Viđeno", ali reč "Nije viđeno" biće izgovorena pre čitanja same poruke. Trenutno ova funkcija radi samo na engleskom, ruskom, ukrajinskom, španskom, portugalskom, hrvatskom, turskom i persijskom jeziku.
-* funkcija snimanja glasovnih poruka značajno je modernizovana. Snimanje, slanje glasovne poruke i otkazivanje snimanja popraćeni su karakterističnim zvukovima. Nadalje, dok se ove funkcije izvode, fokus ostaje u istom položaju i ne skače na dugme Snimanje niti u polje za uređivanje.
+* funkcija snimanja glasovnih poruka značajno je modernizovana. Početak snimanja i slanje glasovne poruke popraćeni su karakterističnim zvukovima, a otkazano snimanje Unigram 13.0 i noviji objavljuju sami. Nadalje, dok se ove funkcije izvode, fokus ostaje u istom položaju i ne skače na dugme Snimanje niti u polje za uređivanje.
 * Dodata je mogućnost praćenja aktivnosti ćaskanja. Ova funkcija se aktivira dvostrukim pritiskom na kombinaciju "ALT+T".
 * Ako se medijske datoteke priložene uz poruku otvore pritiskom na razmak nakon zatvaranja, kursor se vraća na mesto na kojem je bio pre.
 * Moguće je onemogućiti zvuk svih indikatora performansi ili samo indikatora toka reprodukcije glasovnih poruka.
@@ -477,6 +477,7 @@ Added Turkish localization
 
 * Ispravljene greške NVDA u novoj beta verziji Unigrama za WinUI 3. Od verzije 5.5.6 greška se beležila pri svakom povratku u Unigram ili pri kucanju pomoću uređivača metoda unosa (IME), na primer za kineski, japanski ili korejski. UWP verzija Unigrama nije bila pogođena.
 * UnigramPlus više ne ometa objavljivanje fokusa u Telegram Desktopu kada dodatak Telegram Desktop nije instaliran.
+* Uklonjeno obaveštenje koje je UnigramPlus davao pri otkazivanju snimanja glasovne ili video poruke. Unigram 13.0 i noviji sami objavljuju otkazano snimanje, bilo da je otkazano pomoću Ctrl+D ili dugmeta za otkazivanje, pa se više ne čuje dva puta. Takođe se snimak koji se sporo pojavljuje u ćaskanju više ne prijavljuje kao otkazan. Početak i slanje snimka i dalje se objavljuju, a podešavanje za to sada se zove "Obaveštenje pri početku ili slanju snimka glasovne poruke".
 * Ažurirani poljski i vijetnamski prevodi.
 
 ###Verzija 5.8.1

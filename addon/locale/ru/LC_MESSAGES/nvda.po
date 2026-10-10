@@ -22,10 +22,12 @@ msgstr ""
 msgid ""
 "- Fixed NVDA errors with the Unigram WinUI 3 beta each time you switched back to Unigram or typed with an input method (IME).\n"
 "- UnigramPlus no longer interferes with focus announcements in Telegram Desktop when the Telegram Desktop add-on is not installed.\n"
+"- Removed the notification when a voice or video message recording is canceled: Unigram 13.0 and later announce it themselves, so it is no longer heard twice.\n"
 "- Updated the Polish and Vietnamese translations."
 msgstr ""
 "- Исправлены ошибки NVDA в бета-версии Unigram на WinUI 3, возникавшие при каждом возвращении в Unigram или вводе текста через метод ввода (IME).\n"
 "- UnigramPlus больше не вмешивается в озвучивание фокуса в Telegram Desktop, если дополнение Telegram Desktop не установлено.\n"
+"- Удалено оповещение об отмене записи голосового сообщения или видеосообщения: Unigram 13.0 и новее сами объявляют об этом, поэтому оно больше не звучит дважды.\n"
 "- Обновлены польский и вьетнамский переводы."
 
 msgid ""
@@ -472,10 +474,6 @@ msgstr "Ответ отменён"
 msgid "Edit canceled"
 msgstr "Редактирование отменено"
 
-#: addon\appModules\unigram.py:887
-msgid "Recording canceled"
-msgstr "Запись отменена"
-
 #: addon\appModules\unigram.py:911
 msgid "Answer options"
 msgstr "Параметры ответа"
@@ -834,10 +832,11 @@ msgstr "Оповещать звуком об удалении сообщения
 msgid "Display confirmation dialog when deleting messages and chats"
 msgstr "Показывать диалог подтверждения при удалении сообщений и чатов"
 
-#. Type of notification when recording voice messages
+#. Type of notification when a voice message recording starts or is sent.
+#. Unigram 13.0 announces a canceled recording itself.
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:229
-msgid "Set voice message recording notification method as:"
-msgstr "Метод оповещения о записи голосовых сообщений:"
+msgid "Notification when a voice message recording starts or is sent:"
+msgstr "Оповещение о начале и отправке записи голосового сообщения:"
 
 #. Progress bar announce
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:232

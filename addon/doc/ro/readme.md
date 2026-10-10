@@ -16,7 +16,7 @@ Utilizează Unigram într-un mod mai confortabil și mai productiv. Acest addon 
 * Atunci când focalizarea este pusă pe un mesaj vocal care este în curs de redare, se anunță mai întâi informațiile despre ora de redare a acestuia, apoi toate celelalte informații.
 * Atunci când te focalizezi pe un mesaj selectat într-un chat, vei auzi mai întâi informația că este selectat și apoi conținutul mesajului.
 * Acum, atunci când te deplasezi în chat, fraza "Seen" nu va fi pronunțată deloc, iar fraza "Not seen" va fi pronunțată înainte de conținutul mesajului. Această caracteristică funcționează în prezent doar în limbile engleză, rusă, ucraineană, spaniolă, portugheză, poloneză, croată, turcă și persană.
-* Îmbunătățirea semnificativă a funcției de înregistrare a mesajelor vocale. Înregistrarea, trimiterea și anularea înregistrării unui mesaj vocal sunt însoțite de sunete caracteristice. De asemenea, atunci când se execută aceste funcții, focalizarea rămâne în poziția sa și nu sare nici la butonul de înregistrare, nici la câmpul de introducere a mesajului.
+* Îmbunătățirea semnificativă a funcției de înregistrare a mesajelor vocale. Începerea înregistrării și trimiterea unui mesaj vocal sunt însoțite de sunete caracteristice, iar anularea unei înregistrări este anunțată de Unigram 13.0 și versiunile ulterioare. De asemenea, atunci când se execută aceste funcții, focalizarea rămâne în poziția sa și nu sare nici la butonul de înregistrare, nici la câmpul de introducere a mesajului.
 * Dacă mediile atașate mesajului sunt deschise cu ajutorul barei de spațiu, atunci, după închiderea lor, focalizarea se va întoarce la ultimul element care a fost în centrul atenției.
 * Acest add-on îți permite să dezactivezi complet anunțarea barelor de progres, precum și să dezactivați doar anunțarea barei de progres pentru redarea mesajelor vocale.
 
@@ -203,6 +203,7 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 * Au fost remediate erorile NVDA din noua versiune beta WinUI 3 a Unigram. Începând cu versiunea 5.5.6, o eroare era înregistrată de fiecare dată când reveneați în Unigram sau tastați cu un editor de metode de introducere (IME), cum ar fi cele pentru chineză, japoneză sau coreeană. Versiunea UWP a Unigram nu era afectată.
 * UnigramPlus nu mai interferează cu anunțarea focalizării în Telegram Desktop atunci când add-on-ul Telegram Desktop nu este instalat.
+* A fost eliminată notificarea pe care UnigramPlus o dădea la anularea înregistrării unui mesaj vocal sau video. Unigram 13.0 și versiunile ulterioare anunță singure o înregistrare anulată, fie cu Ctrl+D, fie cu butonul de anulare, așa că nu se mai aude de două ori. De asemenea, o înregistrare care apare cu întârziere în chat nu mai este raportată ca anulată. Începerea și trimiterea unei înregistrări sunt anunțate în continuare, iar setarea corespunzătoare se numește acum „Notificare la începerea sau trimiterea înregistrării unui mesaj vocal”.
 * Au fost actualizate traducerile în poloneză și vietnameză.
 
 ### Versiunea 5.8.1

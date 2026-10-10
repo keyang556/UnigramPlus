@@ -471,10 +471,6 @@ msgstr "လက်ရှိ ချတ်ပရိုဖိုင်ကို ဖ�
 msgid "Record sent"
 msgstr "မှတ်တမ်းပေးပို့ခဲ့သည်။"
 
-#: addon\appModules\unigram.py:2508
-msgid "Recording canceled"
-msgstr "အသံသွင်းခြင်းကို ပယ်ဖျက်လိုက်ပါပြီ။"
-
 #: addon\appModules\unigram.py:2525
 msgid "Audio"
 msgstr "အသံ"
@@ -882,10 +878,11 @@ msgstr "မက်ဆေ့ချ်ကို ဖျက်ခြင်းနှ�
 msgid "Display confirmation dialog when deleting messages and chats"
 msgstr "မက်ဆေ့ချ်များနှင့် ချတ်များကိုဖျက်သည့်အခါ အတည်ပြုချက်ဒိုင်ယာလော့ခ်ကို ပြသပါ။"
 
-#. Type of notification when recording voice messages
+#. Type of notification when a voice message recording starts or is sent.
+#. Unigram 13.0 announces a canceled recording itself.
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:310
-msgid "Set voice message recording notification method as:"
-msgstr "အသံစာတိုကို အသံသွင်းခြင်း အသိပေးချက်နည်းလမ်းအဖြစ် သတ်မှတ်ပါ။"
+msgid "Notification when a voice message recording starts or is sent:"
+msgstr "အသံမက်ဆေ့ချ် အသံသွင်းခြင်း စတင်သည့်အခါ သို့မဟုတ် ပေးပို့သည့်အခါ အသိပေးချက်:"
 
 #. Progress bar announce
 #: addon\GlobalPlugins\UnigramPlus\__init__.py:313
@@ -970,10 +967,12 @@ msgstr ""
 msgid ""
 "- Fixed NVDA errors with the Unigram WinUI 3 beta each time you switched back to Unigram or typed with an input method (IME).\n"
 "- UnigramPlus no longer interferes with focus announcements in Telegram Desktop when the Telegram Desktop add-on is not installed.\n"
+"- Removed the notification when a voice or video message recording is canceled: Unigram 13.0 and later announce it themselves, so it is no longer heard twice.\n"
 "- Updated the Polish and Vietnamese translations."
 msgstr ""
 "- Unigram ၏ WinUI 3 စမ်းသပ်ဗားရှင်းတွင် Unigram သို့ ပြန်ပြောင်းတိုင်း သို့မဟုတ် ထည့်သွင်းနည်းစနစ် (IME) ဖြင့် စာရိုက်တိုင်း ဖြစ်ပေါ်သော NVDA အမှားများကို ပြင်ဆင်ပြီးပါပြီ။\n"
 "- Telegram Desktop အက်ဒွန်ကို ထည့်သွင်းမထားသည့်အခါ UnigramPlus သည် Telegram Desktop ရှိ focus ကြေညာချက်များကို နှောင့်ယှက်တော့မည် မဟုတ်ပါ။\n"
+"- အသံ သို့မဟုတ် ဗီဒီယို မက်ဆေ့ချ် အသံသွင်းခြင်းကို ပယ်ဖျက်သည့်အခါ ပေးသော အသိပေးချက်ကို ဖယ်ရှားလိုက်ပါပြီ။ Unigram 13.0 နှင့် နောက်ပိုင်းဗားရှင်းများသည် ၎င်းကို ကိုယ်တိုင်ဖတ်ပြသောကြောင့် နှစ်ကြိမ်ထပ်မကြားရတော့ပါ။\n"
 "- ပိုလန်နှင့် ဗီယက်နမ်ဘာသာပြန်များကို မွမ်းမံပြီးပါပြီ။"
 
 msgid ""

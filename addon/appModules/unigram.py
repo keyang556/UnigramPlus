@@ -60,9 +60,10 @@ _telegramDesktopFallbackLoadAttempted = False
 _APP_MODULE_NAME_IGNORED_CHARS = str.maketrans("", "", "\u200e\u200f\u2066\u2067\u2068\u2069")
 _VOICE_RECORDING_POLL_INTERVAL = .2
 # Allow Unigram time to insert its outgoing message before a stopped recording
-# is called off. Telegram adds that message optimistically, well before the
-# upload finishes, so this only has to cover the insertion itself. Five seconds
-# made every cancellation land long after the user had moved on.
+# stops being watched for a send. Telegram adds that message optimistically,
+# well before the upload finishes, so this only has to cover the insertion
+# itself. A longer window would only give an incoming message more time to be
+# mistaken for the recording that was just canceled.
 _VOICE_RECORDING_OUTCOME_POLL_LIMIT = 7  # 1.4 seconds at the interval above.
 # How long a focus change still counts as Unigram's own move on a recording
 # transition, rather than the user navigating to the button.
@@ -2847,15 +2848,9 @@ class AppModule(appModuleHandler.AppModule):
 			else:
 				message(_("Record sent"))
 			return
-		if transition == "canceled":
-			if indicator == "audio":
-				winsound.PlaySound(
-					baseDir+"cancel_voice_message_recording.wav",
-					winsound.SND_ASYNC | winsound.SND_NOSTOP,
-				)
-			else:
-				message(_("Recording canceled"))
-			return
+		# A canceled recording is not announced here: Unigram 13.0 raises its own
+		# "Recording canceled" notification from ChatRecordButton.Cancel, which
+		# Ctrl+D, the cancel button and sliding away all go through.
 		if transition != "start":
 			return
 
