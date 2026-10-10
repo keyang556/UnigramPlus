@@ -197,6 +197,12 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 
 ##Değişiklik listesi:
 
+### Sürüm 5.8.2
+
+* Unigram'ın yeni WinUI 3 beta sürümündeki NVDA hataları giderildi. 5.5.6 sürümünden beri, Unigram'a her geri dönüşte veya Çince, Japonca ya da Korece gibi diller için bir giriş yöntemi düzenleyicisiyle (IME) her yazışta bir hata günlüğe kaydediliyordu. Unigram'ın UWP sürümü bundan etkilenmiyordu.
+* Telegram Desktop eklentisi yüklü değilken UnigramPlus artık Telegram Desktop'taki odak duyurularına müdahale etmiyor.
+* Lehçe ve Vietnamca çeviriler güncellendi.
+
 ### Sürüm 5.8.1
 
 * Çağrı süresi için kullanılan geçici çözüm kaldırıldı. Unigram 12.10 ve sonrası çağrı mesajının süresini kendisi duyurduğundan UnigramPlus artık onu eklemiyor ve süre iki kez duyulmuyor.

@@ -199,6 +199,12 @@ UnigramPlus 的声音文件位于插件的 `appModules\media` 文件夹。请打
 
 ## 版本变更
 
+### 版本 5.8.2
+
+* 修正新版 Unigram WinUI 3 测试版的 NVDA 错误。自 5.5.6 版起，每次切回 Unigram 或使用中文、日文、韩文等输入法（IME）输入文字时，NVDA 都会记录一条错误。Unigram 的 UWP 版本不受影响。
+* 未安装 Telegram Desktop 插件时，UnigramPlus 不再干扰 Telegram Desktop 的焦点朗读。
+* 更新波兰语和越南语翻译。
+
 ### 版本 5.8.1
 
 * 移除通话时长的临时处理。Unigram 12.10 及更高版本会自行读出通话消息的时长，因此 UnigramPlus 不再补充，也不会重复读出。

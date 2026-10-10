@@ -198,6 +198,12 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 
 ##Liste des changements :
 
+### Version 5.8.2
+
+* Correction des erreurs de NVDA dans la nouvelle version bêta WinUI 3 d'Unigram. Depuis la version 5.5.6, une erreur était journalisée à chaque retour dans Unigram ou à chaque saisie avec un éditeur de méthode d'entrée (IME), comme ceux du chinois, du japonais ou du coréen. La version UWP d'Unigram n'était pas concernée.
+* UnigramPlus n'interfère plus avec les annonces du focus dans Telegram Desktop lorsque l'extension Telegram Desktop n'est pas installée.
+* Mise à jour des traductions polonaise et vietnamienne.
+
 ### Version 5.8.1
 
 * Suppression du contournement relatif à la durée des appels. Unigram 12.10 et versions ultérieures annoncent eux-mêmes la durée d'un message d'appel ; UnigramPlus ne l'ajoute donc plus et elle n'est plus entendue deux fois.

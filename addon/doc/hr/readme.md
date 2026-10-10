@@ -201,6 +201,12 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 
 ##Popis promjena:
 
+### Verzija 5.8.2
+
+* Ispravljene pogreške NVDA-a u novoj beta verziji Unigrama za WinUI 3. Od verzije 5.5.6 pogreška se bilježila pri svakom povratku u Unigram ili pri tipkanju pomoću uređivača načina unosa (IME), primjerice za kineski, japanski ili korejski. UWP verzija Unigrama nije bila zahvaćena.
+* UnigramPlus više ne ometa najave fokusa u Telegram Desktopu kada dodatak Telegram Desktop nije instaliran.
+* Ažurirani poljski i vijetnamski prijevodi.
+
 ### Verzija 5.8.1
 
 * Uklonjeno zaobilazno rješenje za trajanje poziva. Unigram 12.10 i noviji sami najavljuju trajanje u poruci o pozivu, pa ga UnigramPlus više ne dodaje i ne čuje se dvaput.

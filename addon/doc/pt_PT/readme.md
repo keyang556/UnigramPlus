@@ -198,6 +198,12 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 
 ## Lista de alterações:
 
+### Versão 5.8.2
+
+* Corrigidos erros do NVDA na nova versão beta do Unigram em WinUI 3. Desde a versão 5.5.6, era registado um erro sempre que se regressava ao Unigram ou se escrevia com um editor de método de introdução (IME), como os de chinês, japonês ou coreano. A versão UWP do Unigram não era afetada.
+* O UnigramPlus já não interfere com os anúncios de foco do Telegram Desktop quando o complemento Telegram Desktop não está instalado.
+* Atualizadas as traduções polaca e vietnamita.
+
 ### Versão 5.8.1
 
 * Removida a solução alternativa para a duração das chamadas. O Unigram 12.10 e posteriores anunciam por si próprios a duração de uma mensagem de chamada, pelo que o UnigramPlus já não a acrescenta e deixa de ser ouvida duas vezes.

@@ -8,9 +8,9 @@ DOC_DIR = ROOT / "addon" / "doc"
 VERSION_REPORT = "Unigram version: {unigramVersion}.\nUnigramPlus version: {addonVersion}."
 VERSION_WINDOW_DESCRIPTION = "Open Unigram and UnigramPlus version information in a read-only window"
 RELEASE_CHANGELOG = (
-	"""- Removed the call duration workaround: Unigram 12.10 and later announce a call message's duration themselves, so it is no longer announced twice.
-- Fixed the add-on failing to start on older NVDA versions that do not provide the utils.security module.
-- Updated the Vietnamese translation."""
+	"""- Fixed NVDA errors with the Unigram WinUI 3 beta each time you switched back to Unigram or typed with an input method (IME).
+- UnigramPlus no longer interferes with focus announcements in Telegram Desktop when the Telegram Desktop add-on is not installed.
+- Updated the Polish and Vietnamese translations."""
 )
 
 # The call duration feature bullet each manual carried before Unigram 12.10
@@ -109,14 +109,14 @@ def test_required_strings_are_translated_in_every_locale():
 		)
 
 
-def test_release_version_is_581():
+def test_release_version_is_582():
 	build_vars = (ROOT / "buildVars.py").read_text(encoding="utf-8")
 	pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
 	lockfile = (ROOT / "uv.lock").read_text(encoding="utf-8")
 
-	assert 'addon_version="5.8.1"' in build_vars
-	assert 'version = "5.8.1"' in pyproject
-	assert 'name = "unigramplus"\nversion = "5.8.1"' in lockfile
+	assert 'addon_version="5.8.2"' in build_vars
+	assert 'version = "5.8.2"' in pyproject
+	assert 'name = "unigramplus"\nversion = "5.8.2"' in lockfile
 
 	# addon/manifest.ini is a gitignored build artifact and may be stale, so the
 	# template is what gets checked: it is what carries addon_version into the build.
@@ -124,18 +124,18 @@ def test_release_version_is_581():
 	assert "version = {addon_version}" in template
 
 
-def test_catalogs_keep_the_581_translation_metadata():
+def test_catalogs_keep_the_582_translation_metadata():
 	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
 		catalog_path = locale_dir / "LC_MESSAGES" / "nvda.po"
 		catalog = catalog_path.read_text(encoding="utf-8")
-		assert '"Project-Id-Version: UnigramPlus 5.8.1\\n"' in catalog
+		assert '"Project-Id-Version: UnigramPlus 5.8.2\\n"' in catalog
 
 
 def test_current_release_changelog_comes_from_the_changelog_source():
 	changelog = (ROOT / "changelog.py").read_text(encoding="utf-8")
 
-	assert "call duration workaround" in changelog
-	assert "utils.security" in changelog
+	assert "WinUI 3" in changelog
+	assert "Telegram Desktop add-on" in changelog
 
 
 def test_every_catalog_translates_the_current_release_changelog():
@@ -147,6 +147,14 @@ def test_every_catalog_translates_the_current_release_changelog():
 def test_the_english_manual_carries_the_current_release():
 	for manual in (ROOT / "readme.md", DOC_DIR / "en" / "readme.md"):
 		text = manual.read_text(encoding="utf-8")
+		version_582 = text.index("5.8.2")
+		version_581 = text.index("5.8.1", version_582)
+		section_582 = text[version_582:version_581]
+		assert section_582.count("\n* ") == 3, manual
+		assert "WinUI 3" in section_582, manual
+		assert "Since version 5.5.6" in section_582, manual
+		assert "Telegram Desktop add-on" in section_582, manual
+		assert "Polish and Vietnamese" in section_582, manual
 		version_581 = text.index("5.8.1")
 		version_580 = text.index("5.8.0", version_581)
 		section_581 = text[version_581:version_580]
@@ -159,11 +167,16 @@ def test_the_english_manual_carries_the_current_release():
 		assert "version 5.4" in section_580, manual
 
 
-def test_every_localized_manual_has_581_and_580_changelogs():
+def test_every_localized_manual_has_582_581_and_580_changelogs():
 	manuals = [ROOT / "readme.md", *sorted(DOC_DIR.glob("*/readme.md"))]
 	assert len(manuals) == 17
 	for manual in manuals:
 		text = manual.read_text(encoding="utf-8")
+		version_582 = text.index("5.8.2")
+		section_582 = text[version_582:text.index("5.8.1", version_582)]
+		assert section_582.count("\n* ") == 3, manual
+		for marker in ("WinUI 3", "5.5.6", "IME", "UWP", "Telegram Desktop"):
+			assert marker in section_582, (manual, marker)
 		version_581 = text.index("5.8.1")
 		version_580 = text.index("5.8.0", version_581)
 		version_573 = text.index("5.7.3", version_580)

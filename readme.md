@@ -200,6 +200,12 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
+### Version 5.8.2
+
+* Fixed NVDA errors with the new WinUI 3 beta of Unigram. Since version 5.5.6, an error was logged every time you switched back to Unigram or typed with an input method (IME), such as one for Chinese, Japanese or Korean. The UWP version of Unigram was not affected.
+* UnigramPlus no longer interferes with focus announcements in Telegram Desktop when the Telegram Desktop add-on is not installed.
+* Updated the Polish and Vietnamese translations.
+
 ### Version 5.8.1
 
 * Removed the call duration workaround. Unigram 12.10 and later announce the duration of a call message themselves, so UnigramPlus no longer adds it and it is no longer heard twice.
