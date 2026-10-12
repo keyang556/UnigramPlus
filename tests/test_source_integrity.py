@@ -26,6 +26,24 @@ def test_update_api_url_uses_the_defined_repository_constant():
 	)
 
 
+def test_code_unreachable_on_current_unigram_is_gone():
+	"""Unigram 9.5 (March 2023) renamed its namespace from Unigram to Telegram.
+
+	Before that, list items without an automation name were announced by their
+	class name, which the add-on replaced: "Unigram.ViewModels.MessageViewModel",
+	"Unigram.Entities.StoragePhoto" and "Unigram.ViewModels.Folders.FilterFlag".
+	No name can start with "Unigram." any more. The quiz explanation overlay has
+	not been applied to anything since 5.2.0 disabled it.
+	"""
+	source = (ROOT / "addon" / "appModules" / "unigram.py").read_text(encoding="utf-8-sig")
+	for removed in (
+		"Unigram.ViewModels.",
+		"Unigram.Entities.",
+		"ExplanationCorrectAnswerInQuiz",
+	):
+		assert removed not in source, removed
+
+
 def test_python_sources_compile_without_syntax_warnings():
 	paths = (
 		ROOT / "addon" / "GlobalPlugins" / "UnigramPlus" / "__init__.py",

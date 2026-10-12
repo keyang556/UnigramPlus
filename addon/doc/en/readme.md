@@ -200,6 +200,13 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
+### Version 5.8.3
+
+* Removed the Enter and Space handling that UnigramPlus added to the list of Unigram settings categories in version 4.8.0. In Unigram 13.0 and later, each settings category is a button that opens with Enter or Space by itself, and the focus lands on that button rather than on the list item the add-on handled, so the handling no longer applied there. When you open a category, the focus now stays on it, as in Unigram itself, instead of moving into the category. The handling had also caught other tab lists, such as the Emoji, GIFs and Stickers tabs, and intercepted Enter and Space there; these keys now reach Unigram there as well.
+* In Unigram settings, Alt+1 now moves the focus to the open settings category, or to the first category if none is open. It used to look for the category list at a fixed position on the settings page and then tried to focus an element that cannot receive the focus in Unigram 13.0.
+* Removed code that could no longer run, with no change in use. Before Unigram 9.5, some list items were announced by an internal class name, which UnigramPlus replaced with a readable one; Unigram 9.5 renamed those classes, so the replacements never matched again. The handler that opened a quiz explanation in a separate window, disabled since version 5.2.0, was removed as well.
+* Updated the Polish and Vietnamese translations.
+
 ### Version 5.8.2
 
 * Fixed NVDA errors with the new WinUI 3 beta of Unigram. Since version 5.5.6, an error was logged every time you switched back to Unigram or typed with an input method (IME), such as one for Chinese, Japanese or Korean. The UWP version of Unigram was not affected.

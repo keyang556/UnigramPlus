@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.2\n"
+"Project-Id-Version: UnigramPlus 5.8.3\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2026-09-03 03:10+0630\n"
 "PO-Revision-Date: 2026-09-03 03:13+0630\n"
@@ -964,6 +964,17 @@ msgstr ""
 "ကီးများစွာကို ပေါင်းထည့်ကာ Unigram တွင် အလုပ်လုပ်ရန် ပိုမိုလွယ်ကူစေမည့် သေးငယ်သော တိုးတက်မှုများစွာကိုလည်း ပေါင်းထည့်ထားသည်။"
 
 #: changelog.py:5
+msgid ""
+"- Removed UnigramPlus's own Enter and Space handling in the list of Unigram settings categories: in Unigram 13.0 and later, the categories are buttons that open with these keys themselves. Enter and Space are also no longer intercepted on other tabs, such as the Emoji, GIFs and Stickers tabs.\n"
+"- In Unigram settings, Alt+1 now moves the focus to the open settings category.\n"
+"- Removed code that could no longer run: name replacements for list items from Unigram versions before 9.5, and the quiz explanation window disabled since version 5.2.0.\n"
+"- Updated the Polish and Vietnamese translations."
+msgstr ""
+"- Unigram ဆက်တင်အမျိုးအစားစာရင်းတွင် UnigramPlus က Enter နှင့် Space ကီးများအတွက် သီးသန့်ကိုင်တွယ်ပေးခဲ့ခြင်းကို ဖယ်ရှားလိုက်ပါပြီ။ Unigram 13.0 နှင့် နောက်ပိုင်းဗားရှင်းများတွင် အမျိုးအစားများသည် ဤကီးများဖြင့် ကိုယ်တိုင်ပွင့်သော ခလုတ်များ ဖြစ်ပါသည်။ Emoji၊ GIF နှင့် Sticker တဘ်များကဲ့သို့ အခြားတဘ်များတွင်လည်း Enter နှင့် Space ကို ကြားဖြတ်မယူတော့ပါ။\n"
+"- Unigram ဆက်တင်များတွင် Alt+1 သည် ယခု focus ကို ဖွင့်ထားသော ဆက်တင်အမျိုးအစားသို့ ရွှေ့ပေးပါသည်။\n"
+"- မလည်ပတ်နိုင်တော့သော ကုဒ်များကို ဖယ်ရှားလိုက်ပါပြီ။ ၎င်းတို့မှာ Unigram 9.5 မတိုင်မီ ဗားရှင်းများအတွက် စာရင်းအကြောင်းအရာ အမည်အစားထိုးခြင်းများနှင့် ဗားရှင်း 5.2.0 ကတည်းက ပိတ်ထားသော quiz ရှင်းလင်းချက် ဝင်းဒိုး ဖြစ်ပါသည်။\n"
+"- ပိုလန်နှင့် ဗီယက်နမ်ဘာသာပြန်များကို မွမ်းမံပြီးပါပြီ။"
+
 msgid ""
 "- Fixed NVDA errors with the Unigram WinUI 3 beta each time you switched back to Unigram or typed with an input method (IME).\n"
 "- UnigramPlus no longer interferes with focus announcements in Telegram Desktop when the Telegram Desktop add-on is not installed.\n"

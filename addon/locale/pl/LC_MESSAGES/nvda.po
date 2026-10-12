@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.2\n"
+"Project-Id-Version: UnigramPlus 5.8.3\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2026-10-10 15:55+0000\n"
 "PO-Revision-Date: 2026-10-10 19:41+0200\n"
@@ -1125,6 +1125,17 @@ msgstr ""
 "ułatwiają korzystanie z Unigrama."
 
 #: changelog.py:5
+msgid ""
+"- Removed UnigramPlus's own Enter and Space handling in the list of Unigram settings categories: in Unigram 13.0 and later, the categories are buttons that open with these keys themselves. Enter and Space are also no longer intercepted on other tabs, such as the Emoji, GIFs and Stickers tabs.\n"
+"- In Unigram settings, Alt+1 now moves the focus to the open settings category.\n"
+"- Removed code that could no longer run: name replacements for list items from Unigram versions before 9.5, and the quiz explanation window disabled since version 5.2.0.\n"
+"- Updated the Polish and Vietnamese translations."
+msgstr ""
+"- Usunięto własną obsługę klawiszy Enter i spacja przez UnigramPlus na liście kategorii ustawień Unigrama: w Unigramie 13.0 i nowszych kategorie są przyciskami, które same otwierają się tymi klawiszami. Enter i spacja nie są już też przechwytywane na innych kartach, takich jak karty Emoji, GIF-y i Naklejki.\n"
+"- W ustawieniach Unigrama Alt+1 przenosi teraz fokus na otwartą kategorię ustawień.\n"
+"- Usunięto kod, który nie mógł się już wykonać: zamiany nazw elementów list z wersji Unigrama starszych niż 9.5 oraz okno z wyjaśnieniem quizu, wyłączone od wersji 5.2.0.\n"
+"- Zaktualizowano tłumaczenia na język polski i wietnamski."
+
 msgid ""
 "- Fixed NVDA errors with the Unigram WinUI 3 beta each time you switched "
 "back to Unigram or typed with an input method (IME).\n"

@@ -199,6 +199,13 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 ##Lista de modificări:
 
+### Versiunea 5.8.3
+
+* A fost eliminată gestionarea tastelor Enter și Spațiu pe care UnigramPlus a adăugat-o listei de categorii de setări din Unigram în versiunea 4.8.0. În Unigram 13.0 și versiunile ulterioare, fiecare categorie de setări este un buton care se deschide singur cu Enter sau Spațiu, iar focalizarea ajunge pe acest buton, nu pe elementul de listă gestionat de add-on, așa că gestionarea nu se mai aplica acolo. Acum, când deschizi o categorie, focalizarea rămâne pe ea, ca în Unigram însuși, în loc să fie mutată în interiorul categoriei. Această gestionare afecta și alte liste de file, cum ar fi filele Emoji, GIF-uri și Stickere, unde intercepta Enter și Spațiu; acum aceste taste ajung și acolo la Unigram.
+* În setările Unigram, Alt+1 mută acum focalizarea pe categoria de setări deschisă sau pe prima categorie dacă niciuna nu este deschisă. Anterior, căuta lista categoriilor într-o poziție fixă a paginii de setări și apoi încerca să mute focalizarea pe un element care nu poate primi focalizarea în Unigram 13.0.
+* A fost eliminat codul care nu mai putea rula, fără nicio schimbare în utilizare. Înainte de Unigram 9.5, unele elemente de listă erau anunțate printr-un nume intern de clasă, pe care UnigramPlus îl înlocuia cu unul ușor de înțeles; Unigram 9.5 a redenumit acele clase, așa că înlocuirile nu s-au mai aplicat niciodată. A fost eliminată și gestionarea care deschidea explicația unui test într-o fereastră separată, dezactivată din versiunea 5.2.0.
+* Au fost actualizate traducerile în poloneză și vietnameză.
+
 ### Versiunea 5.8.2
 
 * Au fost remediate erorile NVDA din noua versiune beta WinUI 3 a Unigram. Începând cu versiunea 5.5.6, o eroare era înregistrată de fiecare dată când reveneați în Unigram sau tastați cu un editor de metode de introducere (IME), cum ar fi cele pentru chineză, japoneză sau coreeană. Versiunea UWP a Unigram nu era afectată.

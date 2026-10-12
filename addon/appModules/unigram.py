@@ -1223,35 +1223,6 @@ class Message_list_item(ListItem):
 	}
 
 
-class SettingsPanelListItem:
-
-	def script_activate_element(self, gesture):
-		if self.firstChild:
-			self.firstChild.doAction()
-		self.appModule.script_toLastMessage(gesture)
-
-	__gestures = {
-		"kb:enter": "activate_element",
-		"kb:space": "activate_element",
-	}
-
-
-class ExplanationCorrectAnswerInQuiz:
-	def script_activate_element(self, gesture):
-		gesture.send()
-		elements = self.appModule.getElements()
-		try: obj = elements[1].firstChild.firstChild.firstChild
-		except: obj = None
-		if not obj: return False
-		# message(obj.name)
-		TextWindow(obj.name, _("Explanation"), readOnly=False)
-
-	__gestures = {
-		"kb:enter": "activate_element",
-		"kb:space": "activate_element",
-	}
-
-
 class Saved_items:
 	# store frequently used window elements in cache for faster access
 	_items = {}
@@ -1905,7 +1876,13 @@ class AppModule(appModuleHandler.AppModule):
 			return False
 
 	def get_settings_list(self):
-		a = next(
+		"""Return the settings category button that Alt+1 focuses.
+
+		Unigram 13.0 puts the focus on the button inside each item of the
+		Navigation list, not on the item, so return the button of the open
+		category, or of the first one.
+		"""
+		settings_page = next(
 			(
 				item for item in self.getElements()
 				if item.role == Role.PANE
@@ -1915,12 +1892,16 @@ class AppModule(appModuleHandler.AppModule):
 			),
 			None,
 		)
-		if not a:
+		if not settings_page:
 			return False
-		try: b = a.firstChild.next.next.next.next.firstChild
-		except: b = False
-		if b: return b
-		else: return False
+		try:
+			categories = next((item for item in settings_page.children if item.UIAAutomationId == "Navigation"), None)
+			items = categories.children if categories else []
+			category = next((item for item in items if State.SELECTED in item.states), items[0] if items else None)
+		except Exception:
+			# Unigram can rebuild the list while it is read; let Alt+1 report it.
+			return False
+		return _relative(category, "firstChild") or False
 
 
 	def is_message_object(self, obj):
@@ -3309,10 +3290,7 @@ class AppModule(appModuleHandler.AppModule):
 					# Processing inline results
 					name = [item.name for item in obj.children if item.name != ""]
 					obj.name = ". ".join(name)
-			elif obj.name == "Unigram.ViewModels.MessageViewModel": obj.name = obj.firstChild.name
 			elif obj.name.startswith("EETypeRva"): obj.name = ", ".join([item.name for item in obj.children[1:]])
-			elif obj.name == "Unigram.Entities.StoragePhoto": obj.name = _("Image")
-			elif obj.name == "Unigram.ViewModels.Folders.FilterFlag": obj.name = obj.children[1].name
 			elif obj.name.startswith("chatTheme {"): obj.name = obj.firstChild.name
 			elif obj.name.startswith("forumTopic {\n  info = forumTopicInfo {"):
 				obj.name = self._format_forum_topic_name(obj)
@@ -3436,9 +3414,6 @@ class AppModule(appModuleHandler.AppModule):
 					self.tabs_folder_element = parent
 					if conf.get("voiceFolderNames") and State.SELECTED in obj.states: self.change_chats_folder(obj, parent.UIAAutomationId)
 					return True
-				elif parent.UIAAutomationId == "Navigation":
-					clsList.insert(0, SettingsPanelListItem)
-					return True
 				elif _is_chat_list_item(obj):
 					clsList.insert(0, ChatListItem)
 					return
@@ -3466,8 +3441,6 @@ class AppModule(appModuleHandler.AppModule):
 				# and sibling enumeration can recursively re-enter object creation.
 				if _find_ancestor_by_automation_id(obj, ("ActiveButtons",), max_depth=4):
 					clsList.insert(0, Audio_and_video_button)
-			# elif obj.role == Role.BUTTON and obj.UIAAutomationId == "Explanation":
-				# clsList.insert(0, ExplanationCorrectAnswerInQuiz)
 			elif obj.UIAAutomationId == "Slider" and (obj.name == "Seek" or obj.role == Role.SLIDER):
 				self.saved_items.save("slider", obj)
 			elif (

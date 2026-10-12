@@ -473,6 +473,13 @@ Added Turkish localization
 
 
 
+###Verzija 5.8.3
+
+* Uklonjeno je rukovanje tasterima Enter i razmak koje je UnigramPlus u verziji 4.8.0 dodao listi kategorija podešavanja Unigrama. U Unigramu 13.0 i novijim verzijama svaka kategorija podešavanja je dugme koje se samo otvara tasterom Enter ili razmakom, a fokus dolazi na to dugme, a ne na stavku liste kojom je dodatak rukovao, pa se to rukovanje tu više nije primenjivalo. Pri otvaranju kategorije fokus sada ostaje na njoj, kao i u samom Unigramu, umesto da se pomeri u kategoriju. To rukovanje je obuhvatalo i druge liste kartica, na primer kartice Emoji, GIF-ovi i Nalepnice, gde je presretalo Enter i razmak; sada ti tasteri i tamo stižu do Unigrama.
+* U podešavanjima Unigrama Alt+1 sada pomera fokus na otvorenu kategoriju podešavanja ili na prvu kategoriju ako nijedna nije otvorena. Ranije je listu kategorija tražio na fiksnom mestu stranice podešavanja, a zatim pokušavao da pomeri fokus na element koji u Unigramu 13.0 ne može da dobije fokus.
+* Uklonjen je kod koji više nije mogao da se izvrši, bez ikakve promene u korišćenju. Pre Unigrama 9.5 neke stavke liste su se objavljivale internim nazivom klase, koji je UnigramPlus zamenjivao čitljivim nazivom; Unigram 9.5 je preimenovao te klase, pa se te zamene više nikad nisu primenjivale. Uklonjen je i rukovalac koji je objašnjenje kviza otvarao u posebnom prozoru, a bio je isključen od verzije 5.2.0.
+* Ažurirani poljski i vijetnamski prevodi.
+
 ###Verzija 5.8.2
 
 * Ispravljene greške NVDA u novoj beta verziji Unigrama za WinUI 3. Od verzije 5.5.6 greška se beležila pri svakom povratku u Unigram ili pri kucanju pomoću uređivača metoda unosa (IME), na primer za kineski, japanski ili korejski. UWP verzija Unigrama nije bila pogođena.

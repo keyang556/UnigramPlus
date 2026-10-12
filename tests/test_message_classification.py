@@ -78,7 +78,7 @@ def _chat_predicate():
 	return namespace["_is_chat_list_item"]
 
 
-def _overlay_classes_for(obj):
+def _overlay_classes_for(obj, **extra_namespace):
 	message_overlay = type("Message_list_item", (), {})
 	chat_overlay = type("ChatListItem", (), {})
 	namespace = {
@@ -86,7 +86,6 @@ def _overlay_classes_for(obj):
 		"State": SimpleNamespace(SELECTED="selected"),
 		"Message_list_item": message_overlay,
 		"ChatListItem": chat_overlay,
-		"SettingsPanelListItem": type("SettingsPanelListItem", (), {}),
 		"EditableText": type("EditableText", (), {}),
 		"Audio_and_video_button": type("Audio_and_video_button", (), {}),
 		"keywordsInMessages": {"en": ("seen", "not seen", "Sent at", "Received at")},
@@ -96,6 +95,7 @@ def _overlay_classes_for(obj):
 		"_is_message_list_item": _message_predicate(),
 		"is_recording_button": lambda candidate: False,
 	}
+	namespace.update(extra_namespace)
 	chooser = _load_overlay_chooser(namespace)
 	app = SimpleNamespace(
 		isUnigramWindow=True,
@@ -237,6 +237,25 @@ def test_chat_rows_with_message_like_summaries_keep_the_chat_overlay():
 	classes, _app, message_overlay, chat_overlay = _overlay_classes_for(chat)
 	assert message_overlay not in classes
 	assert chat_overlay in classes
+
+
+def test_navigation_tabs_keep_their_native_enter_and_space():
+	"""Unigram names several tab lists "Navigation", not only the settings one.
+
+	The sticker panel's Emoji, GIFs and Stickers tabs are focusable rows of
+	such a list. The settings-category overlay removed in 5.8.3 matched them
+	too and took over Enter and Space there.
+	"""
+	tabs = Node(automation_id="Navigation", role="list")
+	for name in ("Emoji", "GIFs", "Stickers"):
+		tab = Node(parent=tabs, class_name="TopNavViewItem", name=name)
+
+		# Defined so that a chooser still naming the old overlay would add it,
+		# rather than fail on the name inside its catch-all.
+		classes, _app, _message_overlay, _chat_overlay = _overlay_classes_for(
+			tab, SettingsPanelListItem=type("SettingsPanelListItem", (), {})
+		)
+		assert classes == [], name
 
 
 def test_message_overlay_does_not_override_the_provider_automation_id():
