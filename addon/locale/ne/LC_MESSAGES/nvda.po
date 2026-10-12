@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.2\n"
+"Project-Id-Version: UnigramPlus 5.8.3\n"
 "POT-Creation-Date: 2022-10-07 22:33+0300\n"
 "PO-Revision-Date: 2022-10-20 12:30+0300\n"
 "Last-Translator: samrat kc <samrat.kc7@gmail.com>\n"
@@ -18,6 +18,17 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: changelog.py:5
+msgid ""
+"- Removed UnigramPlus's own Enter and Space handling in the list of Unigram settings categories: in Unigram 13.0 and later, the categories are buttons that open with these keys themselves. Enter and Space are also no longer intercepted on other tabs, such as the Emoji, GIFs and Stickers tabs.\n"
+"- In Unigram settings, Alt+1 now moves the focus to the open settings category.\n"
+"- Removed code that could no longer run: name replacements for list items from Unigram versions before 9.5, and the quiz explanation window disabled since version 5.2.0.\n"
+"- Updated the Polish and Vietnamese translations."
+msgstr ""
+"- Unigram को सेटिङ श्रेणी सूचीमा UnigramPlus ले Enter र स्पेसका लागि गर्ने आफ्नै व्यवस्थापन हटाइयो: Unigram 13.0 र पछिका संस्करणहरूमा श्रेणीहरू यी कुञ्जीहरूले आफैँ खुल्ने बटनहरू हुन्। इमोजी, GIF र स्टिकर ट्याबहरू जस्ता अन्य ट्याबहरूमा पनि अब Enter र स्पेस रोकिँदैनन्।\n"
+"- Unigram सेटिङमा Alt+1 ले अब फोकसलाई खुला सेटिङ श्रेणीमा लैजान्छ।\n"
+"- अब चल्न नसक्ने कोड हटाइयो: Unigram 9.5 भन्दा पहिलेका संस्करणहरूका लागि सूची वस्तुहरूको नाम प्रतिस्थापन, र संस्करण 5.2.0 देखि निष्क्रिय क्विज व्याख्या सञ्झ्याल।\n"
+"- पोलिस र भियतनामी अनुवादहरू अद्यावधिक गरियो।"
+
 msgid ""
 "- Fixed NVDA errors with the Unigram WinUI 3 beta each time you switched back to Unigram or typed with an input method (IME).\n"
 "- UnigramPlus no longer interferes with focus announcements in Telegram Desktop when the Telegram Desktop add-on is not installed.\n"

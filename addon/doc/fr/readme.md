@@ -198,6 +198,13 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 
 ##Liste des changements :
 
+### Version 5.8.3
+
+* Suppression de la gestion des touches Entrée et Espace qu'UnigramPlus ajoutait depuis la version 4.8.0 à la liste des catégories de paramètres d'Unigram. Dans Unigram 13.0 et versions ultérieures, chaque catégorie de paramètres est un bouton qui s'ouvre de lui-même avec Entrée ou Espace, et le focus arrive sur ce bouton plutôt que sur l'élément de liste que gérait l'extension ; cette gestion ne s'y appliquait donc plus. À l'ouverture d'une catégorie, le focus reste désormais sur celle-ci, comme dans Unigram lui-même, au lieu d'être déplacé dans la catégorie. Cette gestion s'appliquait aussi à d'autres listes d'onglets, comme les onglets Emoji, GIF et Stickers, où elle interceptait Entrée et Espace ; ces touches parviennent désormais aussi à Unigram à ces endroits.
+* Dans les paramètres d'Unigram, Alt+1 place désormais le focus sur la catégorie de paramètres ouverte, ou sur la première catégorie si aucune n'est ouverte. Auparavant, il cherchait la liste des catégories à une position fixe de la page des paramètres, puis tentait de placer le focus sur un élément qui ne peut pas recevoir le focus dans Unigram 13.0.
+* Suppression de code qui ne pouvait plus s'exécuter, sans aucun changement à l'usage. Avant Unigram 9.5, certains éléments de liste étaient annoncés par un nom de classe interne, qu'UnigramPlus remplaçait par un nom lisible ; Unigram 9.5 a renommé ces classes, si bien que ces remplacements ne s'appliquaient plus jamais. Le gestionnaire qui ouvrait l'explication d'un quiz dans une fenêtre séparée, désactivé depuis la version 5.2.0, a également été supprimé.
+* Mise à jour des traductions polonaise et vietnamienne.
+
 ### Version 5.8.2
 
 * Correction des erreurs de NVDA dans la nouvelle version bêta WinUI 3 d'Unigram. Depuis la version 5.5.6, une erreur était journalisée à chaque retour dans Unigram ou à chaque saisie avec un éditeur de méthode d'entrée (IME), comme ceux du chinois, du japonais ou du coréen. La version UWP d'Unigram n'était pas concernée.

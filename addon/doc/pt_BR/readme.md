@@ -198,6 +198,13 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 
 ## Lista de alterações:
 
+### Versão 5.8.3
+
+* Removido o tratamento de Enter e espaço que o UnigramPlus adicionou à lista de categorias de configurações do Unigram na versão 4.8.0. No Unigram 13.0 e posteriores, cada categoria de configurações é um botão que se abre sozinho com Enter ou espaço, e o foco vai para esse botão, e não para o item de lista que o complemento tratava, por isso esse tratamento não tinha mais efeito ali. Agora, ao abrir uma categoria, o foco permanece nela, como no próprio Unigram, em vez de ser movido para dentro da categoria. Esse tratamento também afetava outras listas de abas, como as abas Emoji, GIFs e Figurinhas, onde interceptava Enter e espaço; agora essas teclas também chegam ao Unigram nesses locais.
+* Nas configurações do Unigram, Alt+1 agora move o foco para a categoria de configurações aberta, ou para a primeira categoria se nenhuma estiver aberta. Antes, ele procurava a lista de categorias em uma posição fixa da página de configurações e depois tentava mover o foco para um elemento que não pode receber o foco no Unigram 13.0.
+* Removido código que não podia mais ser executado, sem nenhuma mudança no uso. Antes do Unigram 9.5, alguns itens de lista eram anunciados por um nome de classe interno, que o UnigramPlus substituía por um nome legível; o Unigram 9.5 renomeou essas classes, então essas substituições nunca mais se aplicaram. Também foi removido o tratamento que abria a explicação de um quiz em uma janela separada, desativado desde a versão 5.2.0.
+* Atualizadas as traduções polonesa e vietnamita.
+
 ### Versão 5.8.2
 
 * Corrigidos erros do NVDA na nova versão beta do Unigram em WinUI 3. Desde a versão 5.5.6, um erro era registrado sempre que se voltava ao Unigram ou se digitava com um editor de método de entrada (IME), como os de chinês, japonês ou coreano. A versão UWP do Unigram não era afetada.

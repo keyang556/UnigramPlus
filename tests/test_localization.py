@@ -8,6 +8,12 @@ DOC_DIR = ROOT / "addon" / "doc"
 VERSION_REPORT = "Unigram version: {unigramVersion}.\nUnigramPlus version: {addonVersion}."
 VERSION_WINDOW_DESCRIPTION = "Open Unigram and UnigramPlus version information in a read-only window"
 RELEASE_CHANGELOG = (
+	"""- Removed UnigramPlus's own Enter and Space handling in the list of Unigram settings categories: in Unigram 13.0 and later, the categories are buttons that open with these keys themselves. Enter and Space are also no longer intercepted on other tabs, such as the Emoji, GIFs and Stickers tabs.
+- In Unigram settings, Alt+1 now moves the focus to the open settings category.
+- Removed code that could no longer run: name replacements for list items from Unigram versions before 9.5, and the quiz explanation window disabled since version 5.2.0.
+- Updated the Polish and Vietnamese translations."""
+)
+PREVIOUS_RELEASE_CHANGELOG = (
 	"""- Fixed NVDA errors with the Unigram WinUI 3 beta each time you switched back to Unigram or typed with an input method (IME).
 - UnigramPlus no longer interferes with focus announcements in Telegram Desktop when the Telegram Desktop add-on is not installed.
 - Removed the notification when a voice or video message recording is canceled: Unigram 13.0 and later announce it themselves, so it is no longer heard twice.
@@ -133,14 +139,14 @@ def test_required_strings_are_translated_in_every_locale():
 		)
 
 
-def test_release_version_is_582():
+def test_release_version_is_583():
 	build_vars = (ROOT / "buildVars.py").read_text(encoding="utf-8")
 	pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
 	lockfile = (ROOT / "uv.lock").read_text(encoding="utf-8")
 
-	assert 'addon_version="5.8.2"' in build_vars
-	assert 'version = "5.8.2"' in pyproject
-	assert 'name = "unigramplus"\nversion = "5.8.2"' in lockfile
+	assert 'addon_version="5.8.3"' in build_vars
+	assert 'version = "5.8.3"' in pyproject
+	assert 'name = "unigramplus"\nversion = "5.8.3"' in lockfile
 
 	# addon/manifest.ini is a gitignored build artifact and may be stale, so the
 	# template is what gets checked: it is what carries addon_version into the build.
@@ -148,18 +154,18 @@ def test_release_version_is_582():
 	assert "version = {addon_version}" in template
 
 
-def test_catalogs_keep_the_582_translation_metadata():
+def test_catalogs_keep_the_583_translation_metadata():
 	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
 		catalog_path = locale_dir / "LC_MESSAGES" / "nvda.po"
 		catalog = catalog_path.read_text(encoding="utf-8")
-		assert '"Project-Id-Version: UnigramPlus 5.8.2\\n"' in catalog
+		assert '"Project-Id-Version: UnigramPlus 5.8.3\\n"' in catalog
 
 
 def test_current_release_changelog_comes_from_the_changelog_source():
 	changelog = (ROOT / "changelog.py").read_text(encoding="utf-8")
 
-	assert "WinUI 3" in changelog
-	assert "Telegram Desktop add-on" in changelog
+	assert "settings categories" in changelog
+	assert "Alt+1" in changelog
 	assert "Unigram 13.0" in changelog
 
 
@@ -167,11 +173,26 @@ def test_every_catalog_translates_the_current_release_changelog():
 	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
 		entries = _parse_po(locale_dir / "LC_MESSAGES" / "nvda.po")
 		assert entries.get(RELEASE_CHANGELOG), locale_dir.name
+		assert entries[RELEASE_CHANGELOG].count("\n") == 3, locale_dir.name
+		for marker in ("Alt+1", "13.0", "9.5", "5.2.0"):
+			assert marker in entries[RELEASE_CHANGELOG], (locale_dir.name, marker)
+		# The 5.8.2 notes stay translated in each catalog's history.
+		assert entries.get(PREVIOUS_RELEASE_CHANGELOG), locale_dir.name
 
 
 def test_the_english_manual_carries_the_current_release():
 	for manual in (ROOT / "readme.md", DOC_DIR / "en" / "readme.md"):
 		text = manual.read_text(encoding="utf-8")
+		version_583 = text.index("5.8.3")
+		section_583 = text[version_583:text.index("5.8.2", version_583)]
+		assert section_583.count("\n* ") == 4, manual
+		assert "version 4.8.0" in section_583, manual
+		assert "Unigram 13.0" in section_583, manual
+		assert "Emoji, GIFs and Stickers" in section_583, manual
+		assert "Alt+1" in section_583, manual
+		assert "Unigram 9.5" in section_583, manual
+		assert "version 5.2.0" in section_583, manual
+		assert "Polish and Vietnamese" in section_583, manual
 		version_582 = text.index("5.8.2")
 		version_581 = text.index("5.8.1", version_582)
 		section_582 = text[version_582:version_581]
@@ -194,11 +215,17 @@ def test_the_english_manual_carries_the_current_release():
 		assert "version 5.4" in section_580, manual
 
 
-def test_every_localized_manual_has_582_581_and_580_changelogs():
+def test_every_localized_manual_has_583_582_581_and_580_changelogs():
 	manuals = [ROOT / "readme.md", *sorted(DOC_DIR.glob("*/readme.md"))]
 	assert len(manuals) == 17
 	for manual in manuals:
 		text = manual.read_text(encoding="utf-8")
+		version_583 = text.index("5.8.3")
+		section_583 = text[version_583:text.index("5.8.2", version_583)]
+		assert section_583.count("\n* ") == 4, manual
+		for marker in ("4.8.0", "13.0", "Alt+1", "GIF", "9.5", "5.2.0"):
+			assert marker in section_583, (manual, marker)
+		assert "Enter" in section_583 or "Entrée" in section_583, manual
 		version_582 = text.index("5.8.2")
 		section_582 = text[version_582:text.index("5.8.1", version_582)]
 		assert section_582.count("\n* ") == 4, manual

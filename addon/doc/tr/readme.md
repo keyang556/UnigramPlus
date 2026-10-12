@@ -197,6 +197,13 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 
 ##Değişiklik listesi:
 
+### Sürüm 5.8.3
+
+* UnigramPlus'ın 4.8.0 sürümünde Unigram ayar kategorileri listesine eklediği Enter ve Boşluk tuşu işlemesi kaldırıldı. Unigram 13.0 ve sonrasında her ayar kategorisi, Enter veya Boşluk tuşuyla kendiliğinden açılan bir düğmedir ve odak, eklentinin işlediği liste öğesine değil bu düğmeye gelir; bu nedenle söz konusu işlem orada artık uygulanmıyordu. Artık bir kategori açıldığında odak, Unigram'ın kendisinde olduğu gibi o kategoride kalıyor ve kategorinin içine taşınmıyor. Bu işlem Emoji, GIF'ler ve Çıkartmalar sekmeleri gibi başka sekme listelerini de etkiliyor ve oralarda Enter ile Boşluk tuşlarını engelliyordu; artık bu tuşlar oralarda da Unigram'a ulaşıyor.
+* Unigram ayarlarında Alt+1 artık odağı açık olan ayar kategorisine, hiçbiri açık değilse ilk kategoriye taşıyor. Önceden kategori listesini ayarlar sayfasında sabit bir konumda arıyor ve ardından odağı Unigram 13.0'da odak alamayan bir öğeye taşımaya çalışıyordu.
+* Artık çalışamayan kod kaldırıldı; kullanımda hiçbir şey değişmiyor. Unigram 9.5'ten önce bazı liste öğeleri dahili bir sınıf adıyla okunuyordu ve UnigramPlus bunu anlaşılır bir adla değiştiriyordu; Unigram 9.5 bu sınıfların adını değiştirdiğinden bu değiştirmeler bir daha hiç eşleşmedi. 5.2.0 sürümünden beri devre dışı olan ve test açıklamasını ayrı bir pencerede açan işleyici de kaldırıldı.
+* Lehçe ve Vietnamca çeviriler güncellendi.
+
 ### Sürüm 5.8.2
 
 * Unigram'ın yeni WinUI 3 beta sürümündeki NVDA hataları giderildi. 5.5.6 sürümünden beri, Unigram'a her geri dönüşte veya Çince, Japonca ya da Korece gibi diller için bir giriş yöntemi düzenleyicisiyle (IME) her yazışta bir hata günlüğe kaydediliyordu. Unigram'ın UWP sürümü bundan etkilenmiyordu.
