@@ -1894,9 +1894,13 @@ class AppModule(appModuleHandler.AppModule):
 		)
 		if not settings_page:
 			return False
-		categories = next((item for item in settings_page.children if item.UIAAutomationId == "Navigation"), None)
-		items = categories.children if categories else []
-		category = next((item for item in items if State.SELECTED in item.states), items[0] if items else None)
+		try:
+			categories = next((item for item in settings_page.children if item.UIAAutomationId == "Navigation"), None)
+			items = categories.children if categories else []
+			category = next((item for item in items if State.SELECTED in item.states), items[0] if items else None)
+		except Exception:
+			# Unigram can rebuild the list while it is read; let Alt+1 report it.
+			return False
 		return _relative(category, "firstChild") or False
 
 

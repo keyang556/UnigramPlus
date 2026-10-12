@@ -116,6 +116,24 @@ def test_alt_1_settings_fallback_gives_up_without_a_category_list():
 	assert finder(_app()) is False
 
 
+def test_alt_1_settings_fallback_survives_a_list_rebuilt_while_it_is_read():
+	"""A failed UIA read returns False, so Alt+1 still speaks its fallback."""
+
+	class Replaced(Element):
+		@property
+		def states(self):
+			raise OSError("element is no longer available")
+
+		@states.setter
+		def states(self, value):
+			pass
+
+	profile_row, _profile = _category("Profile")
+	page = _settings_page([Replaced(role="listItem", name="Profile"), profile_row])
+
+	assert _load_settings_list_finder()(_app(page)) is False
+
+
 def test_settings_categories_have_no_enter_or_space_override():
 	"""Enter and Space on the category buttons are Unigram's own since 13.0."""
 	module = _module()
