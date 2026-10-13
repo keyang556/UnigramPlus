@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: UnigramPlus 5.8.3\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
-"POT-Creation-Date: 2026-10-13 13:35+0700\n"
-"PO-Revision-Date: 2026-10-13 13:40+0700\n"
+"POT-Creation-Date: 2026-10-13 13:50+0700\n"
+"PO-Revision-Date: 2026-10-13 13:54+0700\n"
 "Last-Translator: nguyenninhhoang <nguyenninhhoang2005@gmail.com>\n"
 "Language-Team: \n"
 "Language: vi\n"
@@ -91,22 +91,26 @@ msgid "Ukrainian"
 msgstr "Tiếng Ukraina"
 
 #: addon\appModules\cnf.py:28
+msgid "Vietnamese"
+msgstr "tiếng việt"
+
+#: addon\appModules\cnf.py:29
 msgid "Croatian"
 msgstr "Tiếng Croatia"
 
-#: addon\appModules\cnf.py:29
+#: addon\appModules\cnf.py:30
 msgid "Serbian"
 msgstr "Tiếng Serbia"
 
-#: addon\appModules\cnf.py:30
+#: addon\appModules\cnf.py:31
 msgid "Chinese (Traditional)"
 msgstr "Tiếng Trung (Phồn thể)"
 
-#: addon\appModules\cnf.py:31
+#: addon\appModules\cnf.py:32
 msgid "Chinese (Simplified)"
 msgstr "Tiếng Trung(giản Thể)"
 
-#: addon\appModules\cnf.py:32
+#: addon\appModules\cnf.py:33
 msgid "Romanian"
 msgstr "Tiếng Rumani"
 

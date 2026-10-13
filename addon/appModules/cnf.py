@@ -25,6 +25,7 @@ listLanguages = {
 	"es": _("Spanish"),
 	"tr": _("Turkish"),
 	"uk": _("Ukrainian"),
+	"vi": _("Vietnamese"),
 	"hr": _("Croatian"),
 	"sr": _("Serbian"),
 	"zh_TW": _("Chinese (Traditional)"),
