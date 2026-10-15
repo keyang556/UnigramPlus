@@ -473,6 +473,11 @@ Added Turkish localization
 
 
 
+###Verzija 5.8.4
+
+* Kada je uključena opcija „Automatski premesti fokus na listu ćaskanja pri pokretanju Unigrama”, fokus sada ostaje u iskačućem prozoru koji Unigram prikaže pri pokretanju, poput zahteva za pridruživanje grupi otvorenog preko pozivnog linka. Od verzije 5.6.1 UnigramPlus je premeštao fokus iz iskačućeg prozora na listu ćaskanja iza njega, pa je iskačući prozor bio preskočen.
+* Ažuriran vijetnamski prevod.
+
 ###Verzija 5.8.3
 
 * Uklonjeno je rukovanje tasterima Enter i razmak koje je UnigramPlus u verziji 4.8.0 dodao listi kategorija podešavanja Unigrama. U Unigramu 13.0 i novijim verzijama svaka kategorija podešavanja je dugme koje se samo otvara tasterom Enter ili razmakom, a fokus dolazi na to dugme, a ne na stavku liste kojom je dodatak rukovao, pa se to rukovanje tu više nije primenjivalo. Pri otvaranju kategorije fokus sada ostaje na njoj, kao i u samom Unigramu, umesto da se pomeri u kategoriju. To rukovanje je obuhvatalo i druge liste kartica, na primer kartice Emoji, GIF-ovi i Nalepnice, gde je presretalo Enter i razmak; sada ti tasteri i tamo stižu do Unigrama.

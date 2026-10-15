@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.3\n"
+"Project-Id-Version: UnigramPlus 5.8.4\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2026-09-03 03:10+0630\n"
 "PO-Revision-Date: 2026-09-03 03:13+0630\n"
@@ -964,6 +964,13 @@ msgstr ""
 "ကီးများစွာကို ပေါင်းထည့်ကာ Unigram တွင် အလုပ်လုပ်ရန် ပိုမိုလွယ်ကူစေမည့် သေးငယ်သော တိုးတက်မှုများစွာကိုလည်း ပေါင်းထည့်ထားသည်။"
 
 #: changelog.py:5
+msgid ""
+"- When \"Automatically move focus to the chat list when Unigram starts\" is on, the focus now stays in a popup that Unigram shows as it starts, such as a request to join a group, instead of moving to the chat list behind it.\n"
+"- Updated the Vietnamese translation."
+msgstr ""
+"- \"Unigram စတင်သည့်အခါ focus ကို ချတ်စာရင်းသို့ အလိုအလျောက် ရွှေ့ပါ\" ကို ဖွင့်ထားသည့်အခါ Unigram စတင်စဉ် ပြသသည့် ပေါ့ပ်အပ်ဝင်းဒိုး (ဥပမာ အုပ်စုသို့ ဝင်ရောက်ရန် တောင်းဆိုချက်) တွင် focus သည် ယခု ဆက်ရှိနေပြီး ၎င်း၏နောက်ရှိ ချတ်စာရင်းသို့ မရွှေ့တော့ပါ။\n"
+"- ဗီယက်နမ်ဘာသာပြန်ကို မွမ်းမံပြီးပါပြီ။"
+
 msgid ""
 "- Removed UnigramPlus's own Enter and Space handling in the list of Unigram settings categories: in Unigram 13.0 and later, the categories are buttons that open with these keys themselves. Enter and Space are also no longer intercepted on other tabs, such as the Emoji, GIFs and Stickers tabs.\n"
 "- In Unigram settings, Alt+1 now moves the focus to the open settings category.\n"

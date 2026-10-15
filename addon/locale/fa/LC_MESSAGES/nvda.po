@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.3\n"
+"Project-Id-Version: UnigramPlus 5.8.4\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2022-08-13 21:15+0300\n"
 "PO-Revision-Date: 2022-08-14 23:15+0430\n"
@@ -19,6 +19,13 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: changelog.py:5
+msgid ""
+"- When \"Automatically move focus to the chat list when Unigram starts\" is on, the focus now stays in a popup that Unigram shows as it starts, such as a request to join a group, instead of moving to the chat list behind it.\n"
+"- Updated the Vietnamese translation."
+msgstr ""
+"- وقتی گزینه «انتقال خودکار مکان‌نما به فهرست گفت‌وگوها هنگام شروع Unigram» فعال است، اکنون مکان‌نما در پنجره بازشویی که Unigram هنگام شروع نشان می‌دهد، مانند درخواست پیوستن به یک گروه، باقی می‌ماند و به فهرست گفت‌وگوهای پشت آن منتقل نمی‌شود.\n"
+"- ترجمه ویتنامی به‌روزرسانی شد."
+
 msgid ""
 "- Removed UnigramPlus's own Enter and Space handling in the list of Unigram settings categories: in Unigram 13.0 and later, the categories are buttons that open with these keys themselves. Enter and Space are also no longer intercepted on other tabs, such as the Emoji, GIFs and Stickers tabs.\n"
 "- In Unigram settings, Alt+1 now moves the focus to the open settings category.\n"

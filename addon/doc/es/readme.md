@@ -200,6 +200,11 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 
 ##Lista de cambios:
 
+### Versión 5.8.4
+
+* Con la opción «Mover automáticamente el foco a la lista de chats al iniciar Unigram» activada, el foco ahora permanece en la ventana emergente que Unigram muestra al iniciarse, como la solicitud para unirse a un grupo abierta desde un enlace de invitación. Desde la versión 5.6.1, UnigramPlus movía el foco de la ventana emergente a la lista de chats que hay detrás, por lo que la ventana emergente se pasaba por alto.
+* Actualizada la traducción al vietnamita.
+
 ### Versión 5.8.3
 
 * Eliminado el manejo de Enter y espacio que UnigramPlus añadió a la lista de categorías de configuración de Unigram en la versión 4.8.0. En Unigram 13.0 y posteriores, cada categoría de configuración es un botón que se abre por sí mismo con Enter o espacio, y el foco se sitúa en ese botón y no en el elemento de lista que manejaba el complemento, por lo que ese manejo ya no tenía efecto allí. Ahora, al abrir una categoría, el foco permanece en ella, igual que en el propio Unigram, en lugar de desplazarse al interior de la categoría. Ese manejo también afectaba a otras listas de pestañas, como las pestañas Emoji, GIF y Stickers, donde interceptaba Enter y espacio; ahora estas teclas también llegan allí a Unigram.

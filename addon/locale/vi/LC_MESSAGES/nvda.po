@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.3\n"
+"Project-Id-Version: UnigramPlus 5.8.4\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2026-10-13 13:50+0700\n"
 "PO-Revision-Date: 2026-10-13 13:54+0700\n"
@@ -1119,6 +1119,13 @@ msgstr ""
 "dàng hơn nhiều"
 
 #: changelog.py:5
+msgid ""
+"- When \"Automatically move focus to the chat list when Unigram starts\" is on, the focus now stays in a popup that Unigram shows as it starts, such as a request to join a group, instead of moving to the chat list behind it.\n"
+"- Updated the Vietnamese translation."
+msgstr ""
+"- Khi bật tùy chọn \"Tự động di chuyển tiêu điểm đến danh sách cuộc trò chuyện khi Unigram khởi động\", tiêu điểm giờ sẽ ở lại trong cửa sổ bật lên mà Unigram hiển thị khi khởi động, chẳng hạn như yêu cầu tham gia một nhóm, thay vì chuyển đến danh sách cuộc trò chuyện phía sau.\n"
+"- Đã cập nhật bản dịch tiếng Việt."
+
 msgid ""
 "- Removed UnigramPlus's own Enter and Space handling in the list of Unigram "
 "settings categories: in Unigram 13.0 and later, the categories are buttons "

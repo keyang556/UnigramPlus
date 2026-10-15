@@ -198,6 +198,11 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 
 ##Liste des changements :
 
+### Version 5.8.4
+
+* Lorsque l’option « Placer automatiquement le focus dans la liste des échanges au démarrage d’Unigram » est activée, le focus reste désormais dans la fenêtre contextuelle qu’Unigram affiche au démarrage, comme la demande pour rejoindre un groupe ouverte depuis un lien d’invitation. Depuis la version 5.6.1, UnigramPlus déplaçait le focus de cette fenêtre vers la liste des échanges située derrière, si bien que la fenêtre était ignorée.
+* Mise à jour de la traduction vietnamienne.
+
 ### Version 5.8.3
 
 * Suppression de la gestion des touches Entrée et Espace qu'UnigramPlus ajoutait depuis la version 4.8.0 à la liste des catégories de paramètres d'Unigram. Dans Unigram 13.0 et versions ultérieures, chaque catégorie de paramètres est un bouton qui s'ouvre de lui-même avec Entrée ou Espace, et le focus arrive sur ce bouton plutôt que sur l'élément de liste que gérait l'extension ; cette gestion ne s'y appliquait donc plus. À l'ouverture d'une catégorie, le focus reste désormais sur celle-ci, comme dans Unigram lui-même, au lieu d'être déplacé dans la catégorie. Cette gestion s'appliquait aussi à d'autres listes d'onglets, comme les onglets Emoji, GIF et Stickers, où elle interceptait Entrée et Espace ; ces touches parviennent désormais aussi à Unigram à ces endroits.

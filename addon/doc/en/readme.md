@@ -200,6 +200,11 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
+### Version 5.8.4
+
+* When "Automatically move focus to the chat list when Unigram starts" is on, the focus now stays in a popup that Unigram shows as it starts, such as the request to join a group opened from an invite link. Since version 5.6.1, UnigramPlus moved the focus from the popup to the chat list behind it, so the popup was skipped.
+* Updated the Vietnamese translation.
+
 ### Version 5.8.3
 
 * Removed the Enter and Space handling that UnigramPlus added to the list of Unigram settings categories in version 4.8.0. In Unigram 13.0 and later, each settings category is a button that opens with Enter or Space by itself, and the focus lands on that button rather than on the list item the add-on handled, so the handling no longer applied there. When you open a category, the focus now stays on it, as in Unigram itself, instead of moving into the category. The handling had also caught other tab lists, such as the Emoji, GIFs and Stickers tabs, and intercepted Enter and Space there; these keys now reach Unigram there as well.

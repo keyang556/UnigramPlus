@@ -199,6 +199,11 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 ##Lista de modificări:
 
+### Versiunea 5.8.4
+
+* Când opțiunea „Mută automat focalizarea pe lista de chat-uri la pornirea Unigram” este activată, focalizarea rămâne acum în fereastra pop-up pe care Unigram o afișează la pornire, cum ar fi cererea de aderare la un grup deschisă dintr-un link de invitație. Începând cu versiunea 5.6.1, UnigramPlus muta focalizarea din fereastra pop-up pe lista de chat-uri din spatele ei, astfel că fereastra pop-up era sărită.
+* A fost actualizată traducerea în vietnameză.
+
 ### Versiunea 5.8.3
 
 * A fost eliminată gestionarea tastelor Enter și Spațiu pe care UnigramPlus a adăugat-o listei de categorii de setări din Unigram în versiunea 4.8.0. În Unigram 13.0 și versiunile ulterioare, fiecare categorie de setări este un buton care se deschide singur cu Enter sau Spațiu, iar focalizarea ajunge pe acest buton, nu pe elementul de listă gestionat de add-on, așa că gestionarea nu se mai aplica acolo. Acum, când deschizi o categorie, focalizarea rămâne pe ea, ca în Unigram însuși, în loc să fie mutată în interiorul categoriei. Această gestionare afecta și alte liste de file, cum ar fi filele Emoji, GIF-uri și Stickere, unde intercepta Enter și Spațiu; acum aceste taste ajung și acolo la Unigram.
