@@ -197,6 +197,11 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 
 ##Değişiklik listesi:
 
+### Sürüm 5.8.4
+
+* "Unigram başladığında odağı otomatik olarak sohbet listesine taşı" seçeneği açıkken, odak artık Unigram'ın başlarken gösterdiği açılır pencerede, örneğin bir davet bağlantısından açılan gruba katılma isteğinde kalıyor. 5.6.1 sürümünden beri UnigramPlus odağı açılır pencereden arkasındaki sohbet listesine taşıyordu, bu yüzden açılır pencere atlanıyordu.
+* Vietnamca çeviri güncellendi.
+
 ### Sürüm 5.8.3
 
 * UnigramPlus'ın 4.8.0 sürümünde Unigram ayar kategorileri listesine eklediği Enter ve Boşluk tuşu işlemesi kaldırıldı. Unigram 13.0 ve sonrasında her ayar kategorisi, Enter veya Boşluk tuşuyla kendiliğinden açılan bir düğmedir ve odak, eklentinin işlediği liste öğesine değil bu düğmeye gelir; bu nedenle söz konusu işlem orada artık uygulanmıyordu. Artık bir kategori açıldığında odak, Unigram'ın kendisinde olduğu gibi o kategoride kalıyor ve kategorinin içine taşınmıyor. Bu işlem Emoji, GIF'ler ve Çıkartmalar sekmeleri gibi başka sekme listelerini de etkiliyor ve oralarda Enter ile Boşluk tuşlarını engelliyordu; artık bu tuşlar oralarda da Unigram'a ulaşıyor.

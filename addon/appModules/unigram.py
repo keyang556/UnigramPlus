@@ -1688,6 +1688,12 @@ class AppModule(appModuleHandler.AppModule):
 			if surface == "call":
 				self._autoFocusChatListDone = True
 				return
+			# Unigram can open a popup as it starts or comes to the foreground, such
+			# as the request to join a group opened from an invite link. Leave the
+			# focus in it: focusing the chat list behind it skipped the popup.
+			if focus is not None and self._is_focus_in_popup(focus):
+				self._autoFocusChatListDone = True
+				return
 			if focus is not None and (
 				focus.role == Role.LISTITEM
 				and getattr(getattr(focus, "parent", None), "UIAAutomationId", "") == "ChatsList"
@@ -1773,6 +1779,25 @@ class AppModule(appModuleHandler.AppModule):
 			return bool(self._mainWindowHandle and obj.windowHandle == self._mainWindowHandle)
 		except Exception:
 			return False
+
+	def _is_focus_in_popup(self, focus):
+		"""Return True when the focus is in one of Unigram's popups.
+
+		Unigram's popups are ContentDialogs, which UIA marks with IsDialog, so
+		NVDA gives them the dialog role. NVDA already holds the ancestors of the
+		focus, so checking them makes no UIA call.
+		"""
+		try:
+			ancestors = api.getFocusAncestors()
+		except Exception:
+			ancestors = []
+		for obj in (focus, *ancestors):
+			try:
+				if obj.role == Role.DIALOG:
+					return True
+			except Exception:
+				pass
+		return False
 
 	scriptCategory = "UnigramPlus"
 	profile_panel_element = False

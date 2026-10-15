@@ -201,6 +201,11 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 
 ##Popis promjena:
 
+### Verzija 5.8.4
+
+* Kada je uključena opcija „Automatski premjesti fokus na popis razgovora pri pokretanju Unigrama”, fokus sada ostaje u skočnom prozoru koji Unigram prikaže pri pokretanju, poput zahtjeva za pridruživanje grupi otvorenog iz pozivne poveznice. Od verzije 5.6.1 UnigramPlus je premještao fokus iz skočnog prozora na popis razgovora iza njega, pa je skočni prozor bio preskočen.
+* Ažuriran vijetnamski prijevod.
+
 ### Verzija 5.8.3
 
 * Uklonjeno je rukovanje tipkama Enter i razmaknica koje je UnigramPlus u verziji 4.8.0 dodao popisu kategorija postavki Unigrama. U Unigramu 13.0 i novijima svaka je kategorija postavki gumb koji se sam otvara tipkom Enter ili razmaknicom, a fokus dolazi na taj gumb, a ne na stavku popisa kojom je dodatak rukovao, pa se to rukovanje ondje više nije primjenjivalo. Pri otvaranju kategorije fokus sada ostaje na njoj, kao i u samom Unigramu, umjesto da se premjesti u kategoriju. To je rukovanje obuhvaćalo i druge popise kartica, primjerice kartice Emoji, GIF-ovi i Naljepnice, gdje je presretalo Enter i razmaknicu; sada te tipke i ondje dolaze do Unigrama.

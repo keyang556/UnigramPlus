@@ -454,6 +454,7 @@ def test_auto_focus_waits_for_the_chat_list_then_completes():
 		script_toChatList=lambda gesture, arg=False: focus_calls.append(arg) or True,
 		_scheduleAutoFocusChatList=lambda: retries.append(True),
 		_classify_window_surface=lambda obj: "main",
+		_is_focus_in_popup=lambda focus: False,
 	)
 	focus = SimpleNamespace(
 		appModule=instance,
@@ -488,6 +489,7 @@ def test_auto_focus_does_not_repeat_when_focus_is_already_in_chat_list():
 		script_toChatList=lambda gesture, arg=False: focus_calls.append(True),
 		_scheduleAutoFocusChatList=lambda: None,
 		_classify_window_surface=lambda obj: "main",
+		_is_focus_in_popup=lambda focus: False,
 	)
 	parent = SimpleNamespace(UIAAutomationId="ChatsList")
 	focus = SimpleNamespace(
@@ -556,6 +558,7 @@ def test_auto_focus_does_not_mistake_an_unidentified_or_second_chat_window_for_a
 		script_toChatList=lambda gesture, arg=False: focus_calls.append(arg) or True,
 		_scheduleAutoFocusChatList=lambda: None,
 		_classify_window_surface=lambda obj: None,
+		_is_focus_in_popup=lambda focus: False,
 	)
 	focus = SimpleNamespace(
 		appModule=instance,
@@ -576,6 +579,68 @@ def test_auto_focus_does_not_mistake_an_unidentified_or_second_chat_window_for_a
 
 	assert instance._autoFocusChatListDone
 	assert focus_calls == [True]
+
+
+def test_auto_focus_leaves_the_focus_in_a_popup():
+	# Opening a group invite link shows Unigram's request to join popup as the
+	# app starts or comes to the foreground.
+	focus_calls = []
+	retries = []
+	instance = SimpleNamespace(
+		_autoFocusChatListDone=False,
+		_autoFocusChatListScheduled=True,
+		_autoFocusChatListAttempts=0,
+		_autoFocusChatListGeneration=1,
+		script_toChatList=lambda gesture, arg=False: focus_calls.append(arg) or True,
+		_scheduleAutoFocusChatList=lambda: retries.append(True),
+		_classify_window_surface=lambda obj: "main",
+		_is_focus_in_popup=lambda focus: True,
+	)
+	focus = SimpleNamespace(
+		appModule=instance,
+		isInForeground=True,
+		role="button",
+		parent=None,
+	)
+	namespace = {
+		"api": SimpleNamespace(getFocusObject=lambda: focus),
+		"conf": SimpleNamespace(get=lambda key: True),
+		"Role": SimpleNamespace(LISTITEM="listItem"),
+		"log": SimpleNamespace(debug=lambda *args: None),
+		"_AUTO_FOCUS_CHAT_LIST_RETRY_LIMIT": 10,
+	}
+	method = _load_app_method("_autoFocusChatListTick", namespace)
+
+	method(instance, 1)
+
+	assert instance._autoFocusChatListDone
+	assert focus_calls == []
+	assert retries == []
+
+
+def test_popup_is_recognized_from_the_dialog_role_of_the_focus_or_an_ancestor():
+	class Gone:
+		@property
+		def role(self):
+			raise RuntimeError("the UIA element is gone")
+
+	window = SimpleNamespace(role="window")
+	pane = SimpleNamespace(role="pane")
+	popup = SimpleNamespace(role="dialog")
+	join_button = SimpleNamespace(role="button")
+	ancestors = []
+	namespace = {
+		"api": SimpleNamespace(getFocusAncestors=lambda: ancestors),
+		"Role": SimpleNamespace(DIALOG="dialog"),
+	}
+	is_in_popup = _load_app_method("_is_focus_in_popup", namespace)
+
+	ancestors[:] = [window, Gone(), popup, pane]
+	assert is_in_popup(None, join_button)
+	ancestors[:] = [window, pane]
+	assert not is_in_popup(None, join_button)
+	# A popup without focusable content keeps the focus itself.
+	assert is_in_popup(None, popup)
 
 
 def test_auto_focus_retries_when_the_initial_focus_object_is_not_ready():
@@ -739,6 +804,7 @@ def test_auto_focus_stops_retrying_at_the_limit():
 		script_toChatList=lambda gesture, arg=False: False,
 		_scheduleAutoFocusChatList=lambda: retries.append(True),
 		_classify_window_surface=lambda obj: "main",
+		_is_focus_in_popup=lambda focus: False,
 	)
 	focus = SimpleNamespace(
 		appModule=instance,

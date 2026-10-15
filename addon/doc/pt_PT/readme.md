@@ -198,6 +198,11 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 
 ## Lista de alterações:
 
+### Versão 5.8.4
+
+* Com a opção "Mover automaticamente o foco para a lista de conversas ao iniciar o Unigram" ativada, o foco permanece agora na janela pop-up que o Unigram mostra ao iniciar, como o pedido para aderir a um grupo aberto a partir de uma ligação de convite. Desde a versão 5.6.1, o UnigramPlus movia o foco da janela pop-up para a lista de conversas por trás dela, pelo que a janela pop-up era ignorada.
+* Atualizada a tradução vietnamita.
+
 ### Versão 5.8.3
 
 * Removido o tratamento de Enter e espaço que o UnigramPlus acrescentou à lista de categorias de definições do Unigram na versão 4.8.0. No Unigram 13.0 e posteriores, cada categoria de definições é um botão que se abre por si próprio com Enter ou espaço, e o foco vai para esse botão e não para o item de lista que o complemento tratava, pelo que esse tratamento já não tinha efeito aí. Agora, ao abrir uma categoria, o foco permanece nela, tal como no próprio Unigram, em vez de ser movido para dentro da categoria. Esse tratamento também afetava outras listas de separadores, como os separadores Emoji, GIF e Autocolantes, onde intercetava Enter e espaço; agora estas teclas também chegam ao Unigram nesses locais.

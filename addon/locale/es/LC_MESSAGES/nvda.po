@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.3\n"
+"Project-Id-Version: UnigramPlus 5.8.4\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 03:31-0500\n"
@@ -18,6 +18,13 @@ msgstr ""
 "X-Generator: Poedit 3.4.1\n"
 
 #: changelog.py:5
+msgid ""
+"- When \"Automatically move focus to the chat list when Unigram starts\" is on, the focus now stays in a popup that Unigram shows as it starts, such as a request to join a group, instead of moving to the chat list behind it.\n"
+"- Updated the Vietnamese translation."
+msgstr ""
+"- Con la opción «Mover automáticamente el foco a la lista de chats al iniciar Unigram» activada, el foco ahora permanece en la ventana emergente que Unigram muestra al iniciarse, como una solicitud para unirse a un grupo, en lugar de pasar a la lista de chats que hay detrás.\n"
+"- Actualizada la traducción al vietnamita."
+
 msgid ""
 "- Removed UnigramPlus's own Enter and Space handling in the list of Unigram settings categories: in Unigram 13.0 and later, the categories are buttons that open with these keys themselves. Enter and Space are also no longer intercepted on other tabs, such as the Emoji, GIFs and Stickers tabs.\n"
 "- In Unigram settings, Alt+1 now moves the focus to the open settings category.\n"
