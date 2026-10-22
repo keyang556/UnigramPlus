@@ -24,14 +24,18 @@ UPDATE_REPO = "keyang556/UnigramPlus"
 UPDATE_API_URL = "https://api.github.com/repos/%s/releases/latest" % UPDATE_REPO
 
 def _alert_dialog(text, caption, icon=wx.ICON_INFORMATION):
-	# NVDA 2025.1 deprecated gui.messageBox in favour of MessageDialog.alert.
+	# NVDA 2025.1 deprecated gui.messageBox in favour of MessageDialog.
 	# Older NVDA versions have no MessageDialog, so they keep the message box.
 	try:
-		from gui.message import MessageDialog
+		from gui.message import DialogType, MessageDialog
+		from gui.guiHelper import wxCallOnMain
 	except ImportError:
 		gui.messageBox(text, caption, wx.OK | icon)
 		return
-	MessageDialog.alert(text, caption)
+	# MessageDialog.alert always shows a standard dialog. Build the same OK-only
+	# dialog here so that a warning keeps its icon and sound.
+	dialogType = DialogType.WARNING if icon == wx.ICON_WARNING else DialogType.STANDARD
+	wxCallOnMain(lambda: MessageDialog(None, text, caption, dialogType).ShowModal())
 
 def no_updates_dialog():
 	_alert_dialog(_("No updates available"), _("UnigramPlus update"))

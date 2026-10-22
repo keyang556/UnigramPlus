@@ -48,11 +48,35 @@ def _namespace(message_box_calls):
 	}
 
 
-def _install_modern_gui(monkeypatch, alert):
+DIALOG_TYPE = SimpleNamespace(STANDARD="standard", WARNING="warning")
+
+
+def _install_modern_gui(monkeypatch, shown, show_modal=None):
+	"""Stub NVDA 2025.1+ gui.message and gui.guiHelper, recording each dialog shown."""
+	main_thread_calls = []
+
+	class MessageDialog:
+		def __init__(self, parent, message, title, dialogType=DIALOG_TYPE.STANDARD, **kwargs):
+			self.args = (parent, message, title, dialogType, kwargs)
+
+		def ShowModal(self):
+			if show_modal:
+				show_modal()
+			shown.append(self.args)
+
+	def wx_call_on_main(function):
+		main_thread_calls.append(function)
+		return function()
+
 	monkeypatch.setitem(sys.modules, "gui", types.ModuleType("gui"))
 	message_module = types.ModuleType("gui.message")
-	message_module.MessageDialog = SimpleNamespace(alert=alert)
+	message_module.MessageDialog = MessageDialog
+	message_module.DialogType = DIALOG_TYPE
 	monkeypatch.setitem(sys.modules, "gui.message", message_module)
+	gui_helper = types.ModuleType("gui.guiHelper")
+	gui_helper.wxCallOnMain = wx_call_on_main
+	monkeypatch.setitem(sys.modules, "gui.guiHelper", gui_helper)
+	return main_thread_calls
 
 
 def _install_legacy_gui(monkeypatch):
@@ -62,16 +86,29 @@ def _install_legacy_gui(monkeypatch):
 
 
 def test_alert_dialog_uses_message_dialog_on_current_nvda(monkeypatch):
-	alerts = []
+	shown = []
 	message_box_calls = []
-	_install_modern_gui(monkeypatch, lambda *args, **kwargs: alerts.append((args, kwargs)))
+	main_thread_calls = _install_modern_gui(monkeypatch, shown)
 	namespace = _load_plugin_functions({"_alert_dialog", "no_updates_dialog"}, _namespace(message_box_calls))
 
 	namespace["no_updates_dialog"]()
 
-	assert alerts == [(("No updates available", "UnigramPlus update"), {})]
+	assert shown == [(None, "No updates available", "UnigramPlus update", DIALOG_TYPE.STANDARD, {})]
+	# Like MessageDialog.alert, the dialog is built on NVDA's main thread.
+	assert len(main_thread_calls) == 1
 	# The deprecated call must not also run, or the user sees two dialogs.
 	assert message_box_calls == []
+
+
+def test_alert_dialog_keeps_the_warning_style_on_current_nvda(monkeypatch):
+	"""MessageDialog.alert has no dialog type, so a warning must not go through it."""
+	shown = []
+	_install_modern_gui(monkeypatch, shown)
+	namespace = _load_plugin_functions({"_alert_dialog"}, _namespace([]))
+
+	namespace["_alert_dialog"]("Incompatible", "UnigramPlus update", WX_ICON_WARNING)
+
+	assert shown == [(None, "Incompatible", "UnigramPlus update", DIALOG_TYPE.WARNING, {})]
 
 
 def test_alert_dialog_falls_back_to_message_box_on_older_nvda(monkeypatch):
@@ -92,10 +129,10 @@ def test_alert_dialog_does_not_retry_a_failing_message_dialog(monkeypatch):
 	"""Only a missing MessageDialog may select the fallback."""
 	message_box_calls = []
 
-	def fail(*args, **kwargs):
+	def fail():
 		raise RuntimeError("wx failed")
 
-	_install_modern_gui(monkeypatch, fail)
+	_install_modern_gui(monkeypatch, [], show_modal=fail)
 	namespace = _load_plugin_functions({"_alert_dialog"}, _namespace(message_box_calls))
 
 	try:
