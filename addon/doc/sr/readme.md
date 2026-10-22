@@ -473,6 +473,12 @@ Added Turkish localization
 
 
 
+###Verzija 5.8.5
+
+* Alt+M ponovo otvara meni za navigaciju u Unigramu 13.1 i novijim verzijama. Unigram 13.1 je zamenio bočni panel menijem koji se otvara istim dugmetom, a to dugme više nije preklopno dugme, pa ga UnigramPlus nije pronalazio i javljao je „Meni za navigaciju nedostupno”.
+* Ažurirana je kompatibilnost sa NVDA 2026.3. UnigramPlus više ne koristi zastarele delove NVDA API-ja, koje NVDA još podržava, ali ih može ukloniti u nekoj od narednih verzija: okvire sa porukama provere ažuriranja, stari način otvaranja podešavanja UnigramPlusa i konstantu tastera koja se koristi pri premotavanju glasovnih poruka.
+* Ažurirani poljski i vijetnamski prevodi.
+
 ###Verzija 5.8.4
 
 * Kada je uključena opcija „Automatski premesti fokus na listu ćaskanja pri pokretanju Unigrama”, fokus sada ostaje u iskačućem prozoru koji Unigram prikaže pri pokretanju, poput zahteva za pridruživanje grupi otvorenog preko pozivnog linka. Od verzije 5.6.1 UnigramPlus je premeštao fokus iz iskačućeg prozora na listu ćaskanja iza njega, pa je iskačući prozor bio preskočen.

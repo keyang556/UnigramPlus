@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.4\n"
+"Project-Id-Version: UnigramPlus 5.8.5\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2026-05-24 00:00+0800\n"
 "PO-Revision-Date: 2026-06-14 20:36+0800\n"
@@ -15,6 +15,15 @@ msgstr ""
 "X-Generator: Poedit 3.9\n"
 
 #: changelog.py:5
+msgid ""
+"- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the menu button opens a menu instead of the side pane.\n"
+"- Updated compatibility for NVDA 2026.3.\n"
+"- Updated the Polish and Vietnamese translations."
+msgstr ""
+"- 在 Unigram 13.1 以上版本中，Alt+M 又能開啟導覽功能表了，這些版本的功能表按鈕會開啟功能表，而非側邊窗格。\n"
+"- 更新了與 NVDA 2026.3 的相容性。\n"
+"- 更新波蘭文與越南文翻譯。"
+
 msgid ""
 "- When \"Automatically move focus to the chat list when Unigram starts\" is on, the focus now stays in a popup that Unigram shows as it starts, such as a request to join a group, instead of moving to the chat list behind it.\n"
 "- Updated the Vietnamese translation."

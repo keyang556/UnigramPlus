@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.4\n"
+"Project-Id-Version: UnigramPlus 5.8.5\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2026-10-21 16:15+0200\n"
 "PO-Revision-Date: 2026-10-21 16:19+0200\n"
@@ -1125,6 +1125,15 @@ msgstr ""
 "ułatwiają korzystanie z Unigrama."
 
 #: changelog.py:5
+msgid ""
+"- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the menu button opens a menu instead of the side pane.\n"
+"- Updated compatibility for NVDA 2026.3.\n"
+"- Updated the Polish and Vietnamese translations."
+msgstr ""
+"- Alt+M ponownie otwiera menu nawigacyjne w Unigramie 13.1 i nowszych, w których przycisk menu otwiera menu zamiast panelu bocznego.\n"
+"- Zaktualizowano zgodność z NVDA 2026.3.\n"
+"- Zaktualizowano tłumaczenia na język polski i wietnamski."
+
 msgid ""
 "- When \"Automatically move focus to the chat list when Unigram starts\" is "
 "on, the focus now stays in a popup that Unigram shows as it starts, such as "
