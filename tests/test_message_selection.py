@@ -321,6 +321,7 @@ def _message_item_class(app):
 
 def _app(selection_mode):
 	app = SimpleNamespace(calls=[], reported=[], _message_selection_toggle=None)
+	app._same_uia_element = lambda first, second: first is second
 	app._is_message_selection_mode = lambda obj: selection_mode
 	app._toggle_message_selection = lambda obj: app.calls.append(("toggle", obj))
 	app.activate_option_for_menu = lambda icons, list_name: app.calls.append(("menu", icons))
@@ -362,3 +363,14 @@ def test_nvda_does_not_repeat_a_selection_the_add_on_announces():
 	app._message_selection_toggle = None
 	item.event_stateChange()
 	assert app.reported == [item]
+
+
+def test_other_messages_keep_their_state_announcements_during_a_toggle():
+	app = _app(selection_mode=True)
+	toggled = _message_item_class(app)
+	other = _message_item_class(app)
+
+	app._message_selection_toggle = {"object": toggled}
+	other.event_stateChange()
+
+	assert app.reported == [other]

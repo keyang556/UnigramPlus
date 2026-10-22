@@ -1198,7 +1198,9 @@ class Message_list_item(ListItem):
 
 	def event_stateChange(self):
 		# A selection the add-on toggled is announced once Unigram has applied it.
-		if self.appModule._message_selection_toggle:
+		# NVDA can build a new object for the event, so compare the UIA elements.
+		pending = self.appModule._message_selection_toggle
+		if pending and self.appModule._same_uia_element(self, pending["object"]):
 			return
 		super().event_stateChange()
 
