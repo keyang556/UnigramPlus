@@ -476,6 +476,8 @@ Added Turkish localization
 ###Verzija 5.8.5
 
 * Alt+M ponovo otvara meni za navigaciju u Unigramu 13.1 i novijim verzijama. Unigram 13.1 je zamenio bočni panel menijem koji se otvara istim dugmetom, a to dugme više nije preklopno dugme, pa ga UnigramPlus nije pronalazio i javljao je „Meni za navigaciju nedostupno”.
+* Ispravljen je Ctrl+Space u Unigramovom režimu izbora. U tom režimu kontekstni meni izabrane poruke nema komandu Izaberi, pa je UnigramPlus prolazio kroz meni ne pronalazeći je, a poruka je ostajala izabrana. Ctrl+Space sada radi kao u Unigramu 13.1.1: prvi pritisak i dalje uključuje režim izbora iz kontekstnog menija, a zatim svaki pritisak izabira poruku u fokusu ili poništava njen izbor, kao što to radi razmaknica u Unigramu. UnigramPlus zatim javlja da li je poruka izabrana. Poništavanje izbora poslednje izabrane poruke završava režim izbora.
+* U režimu izbora razmaknica i Enter na poruci sada je izabiraju ili poništavaju njen izbor, kao u Unigramu, umesto da reprodukuju njene medije ili traže Odgovori u kontekstnom meniju, a Backspace tamo više ne traži Izmeni.
 * Ažurirana je kompatibilnost sa NVDA 2026.3. UnigramPlus više ne koristi zastarele delove NVDA API-ja, koje NVDA još podržava, ali ih može ukloniti u nekoj od narednih verzija: okvire sa porukama provere ažuriranja, stari način otvaranja podešavanja UnigramPlusa i konstantu tastera koja se koristi pri premotavanju glasovnih poruka.
 * Ažurirani poljski i vijetnamski prevodi.
 

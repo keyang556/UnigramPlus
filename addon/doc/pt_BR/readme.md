@@ -201,6 +201,8 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 ### Versão 5.8.5
 
 * Alt+M volta a abrir o menu de navegação no Unigram 13.1 e versões posteriores. O Unigram 13.1 substituiu o painel lateral por um menu que abre a partir do mesmo botão, e esse botão não é mais um botão de alternância, por isso o UnigramPlus não o encontrava e anunciava "Menu de navegação indisponível".
+* Corrigido o Ctrl+Space no modo de seleção do Unigram. Nesse modo, o menu de contexto de uma mensagem selecionada não tem o comando Selecionar, por isso o UnigramPlus percorria o menu sem encontrá-lo e a mensagem continuava selecionada. Agora o Ctrl+Space funciona como no Unigram 13.1.1: a primeira vez que é pressionado ainda ativa o modo de seleção pelo menu de contexto e, depois disso, cada pressionamento seleciona ou desmarca a mensagem em foco, como a barra de espaço faz no Unigram. Em seguida, o UnigramPlus anuncia se a mensagem está selecionada. Desmarcar a última mensagem selecionada encerra o modo de seleção.
+* No modo de seleção, a barra de espaço e Enter em uma mensagem agora a selecionam ou desmarcam, como no Unigram, em vez de reproduzir sua mídia ou procurar Responder no menu de contexto, e o Backspace não procura mais Editar lá.
 * Atualizada a compatibilidade com o NVDA 2026.3. O UnigramPlus não usa mais partes obsoletas da API do NVDA, que o NVDA ainda suporta, mas pode remover em uma versão futura: as caixas de mensagem da verificação de atualizações, a forma antiga de abrir as configurações do UnigramPlus e uma constante de tecla usada ao avançar ou retroceder em mensagens de voz.
 * Atualizadas as traduções polonesa e vietnamita.
 

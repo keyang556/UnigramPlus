@@ -21,10 +21,12 @@ msgstr ""
 #: changelog.py:5
 msgid ""
 "- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the menu button opens a menu instead of the side pane.\n"
+"- Ctrl+Space selects and unselects messages again in Unigram's selection mode, the way Space does in Unigram 13.1.1. In selection mode, Space and Enter on a message also select or unselect it instead of playing its media or replying to it.\n"
 "- Updated compatibility for NVDA 2026.3.\n"
 "- Updated the Polish and Vietnamese translations."
 msgstr ""
 "- Alt+M در Unigram 13.1 و نسخه‌های بعدی، که در آن‌ها دکمه فهرست به‌جای پنل کناری یک فهرست باز می‌کند، دوباره فهرست مسیریابی را باز می‌کند.\n"
+"- Ctrl+Space دوباره در حالت انتخاب Unigram پیام‌ها را انتخاب یا از انتخاب خارج می‌کند، همان‌طور که کلید فاصله در Unigram 13.1.1 این کار را می‌کند. در حالت انتخاب، کلیدهای فاصله و Enter روی یک پیام نیز به‌جای پخش رسانه آن یا پاسخ به آن، آن را انتخاب یا از انتخاب خارج می‌کنند.\n"
 "- سازگاری با NVDA 2026.3 به‌روزرسانی شد.\n"
 "- ترجمه‌های لهستانی و ویتنامی به‌روزرسانی شد."
 
