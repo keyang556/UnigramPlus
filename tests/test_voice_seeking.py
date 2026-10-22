@@ -260,7 +260,6 @@ def test_voice_seek_lifts_the_modifiers_the_user_is_holding():
 		VK_SHIFT=codes["shift"],
 		VK_LWIN=codes["lwin"],
 		VK_RWIN=codes["rwin"],
-		KEYEVENTF_KEYUP=2,
 		# getKeyState answers from this thread's queue, which never saw these
 		# keystrokes; reading it instead of the async state finds nothing held.
 		getKeyState=lambda code: 0,
@@ -277,6 +276,7 @@ def test_voice_seek_lifts_the_modifiers_the_user_is_holding():
 		["_send_key_without_held_modifiers"],
 		{
 			"winUser": win_user,
+			"_KEYEVENTF_KEYUP": 2,
 			"KeyboardInputGesture": SimpleNamespace(fromName=lambda name: Gesture()),
 		},
 	)
@@ -470,7 +470,6 @@ def test_the_seek_shortcut_still_works_while_the_modifiers_stay_held():
 		VK_SHIFT=codes["shift"],
 		VK_LWIN=codes["lwin"],
 		VK_RWIN=codes["rwin"],
-		KEYEVENTF_KEYUP=2,
 		getKeyState=lambda code: 0,
 		getAsyncKeyState=lambda code: 32768 if physical.get(code) else 0,
 		keybd_event=keybd_event,
@@ -484,6 +483,7 @@ def test_the_seek_shortcut_still_works_while_the_modifiers_stay_held():
 		["_send_key_without_held_modifiers"],
 		{
 			"winUser": win_user,
+			"_KEYEVENTF_KEYUP": 2,
 			"KeyboardInputGesture": SimpleNamespace(fromName=lambda name: Gesture()),
 		},
 	)

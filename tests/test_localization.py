@@ -8,15 +8,15 @@ DOC_DIR = ROOT / "addon" / "doc"
 VERSION_REPORT = "Unigram version: {unigramVersion}.\nUnigramPlus version: {addonVersion}."
 VERSION_WINDOW_DESCRIPTION = "Open Unigram and UnigramPlus version information in a read-only window"
 AUTO_FOCUS_LABEL = "Automatically move focus to the chat list when Unigram starts"
+NAVIGATION_MENU_UNAVAILABLE = "Navigation menu not available"
 RELEASE_CHANGELOG = (
-	"""- When "Automatically move focus to the chat list when Unigram starts" is on, the focus now stays in a popup that Unigram shows as it starts, such as a request to join a group, instead of moving to the chat list behind it.
-- Updated the Vietnamese translation."""
+	"""- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the menu button opens a menu instead of the side pane.
+- Updated compatibility for NVDA 2026.3.
+- Updated the Polish and Vietnamese translations."""
 )
 PREVIOUS_RELEASE_CHANGELOG = (
-	"""- Removed UnigramPlus's own Enter and Space handling in the list of Unigram settings categories: in Unigram 13.0 and later, the categories are buttons that open with these keys themselves. Enter and Space are also no longer intercepted on other tabs, such as the Emoji, GIFs and Stickers tabs.
-- In Unigram settings, Alt+1 now moves the focus to the open settings category.
-- Removed code that could no longer run: name replacements for list items from Unigram versions before 9.5, and the quiz explanation window disabled since version 5.2.0.
-- Updated the Polish and Vietnamese translations."""
+	"""- When "Automatically move focus to the chat list when Unigram starts" is on, the focus now stays in a popup that Unigram shows as it starts, such as a request to join a group, instead of moving to the chat list behind it.
+- Updated the Vietnamese translation."""
 )
 RECORDING_NOTIFICATION_LABEL = "Notification when a voice message recording starts or is sent:"
 
@@ -71,6 +71,7 @@ REQUIRED_TRANSLATIONS = {
 	"Interface language in Unigram:",
 	"Speak the type of chat in the chat list:",
 	AUTO_FOCUS_LABEL,
+	NAVIGATION_MENU_UNAVAILABLE,
 	"Say the sender's name in:",
 	RECORDING_NOTIFICATION_LABEL,
 	"Select the progress bar notification level:",
@@ -138,14 +139,15 @@ def test_required_strings_are_translated_in_every_locale():
 		)
 
 
-def test_release_version_is_584():
+def test_release_version_is_585():
 	build_vars = (ROOT / "buildVars.py").read_text(encoding="utf-8")
 	pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
 	lockfile = (ROOT / "uv.lock").read_text(encoding="utf-8")
 
-	assert 'addon_version="5.8.4"' in build_vars
-	assert 'version = "5.8.4"' in pyproject
-	assert 'name = "unigramplus"\nversion = "5.8.4"' in lockfile
+	assert 'addon_version="5.8.5"' in build_vars
+	assert 'addon_lastTestedNVDAVersion="2026.3.0"' in build_vars
+	assert 'version = "5.8.5"' in pyproject
+	assert 'name = "unigramplus"\nversion = "5.8.5"' in lockfile
 
 	# addon/manifest.ini is a gitignored build artifact and may be stale, so the
 	# template is what gets checked: it is what carries addon_version into the build.
@@ -153,11 +155,11 @@ def test_release_version_is_584():
 	assert "version = {addon_version}" in template
 
 
-def test_catalogs_keep_the_584_translation_metadata():
+def test_catalogs_keep_the_585_translation_metadata():
 	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
 		catalog_path = locale_dir / "LC_MESSAGES" / "nvda.po"
 		catalog = catalog_path.read_text(encoding="utf-8")
-		assert '"Project-Id-Version: UnigramPlus 5.8.4\\n"' in catalog
+		assert '"Project-Id-Version: UnigramPlus 5.8.5\\n"' in catalog
 
 
 def test_current_release_changelog_comes_from_the_changelog_source():
@@ -166,24 +168,33 @@ def test_current_release_changelog_comes_from_the_changelog_source():
 	exec(compile(changelog, "changelog.py", "exec"), namespace)
 
 	assert namespace["value"] == RELEASE_CHANGELOG
-	assert f'"{AUTO_FOCUS_LABEL}"' in changelog
-	assert "popup" in changelog
+	for marker in ("Alt+M", "Unigram 13.1", "NVDA 2026.3", "Polish and Vietnamese"):
+		assert marker in changelog, marker
 
 
 def test_every_catalog_translates_the_current_release_changelog():
 	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
 		entries = _parse_po(locale_dir / "LC_MESSAGES" / "nvda.po")
 		assert entries.get(RELEASE_CHANGELOG), locale_dir.name
-		assert entries[RELEASE_CHANGELOG].count("\n") == 1, locale_dir.name
-		# The notes name the setting as the user sees it in this language.
-		assert entries[AUTO_FOCUS_LABEL] in entries[RELEASE_CHANGELOG], locale_dir.name
-		# The 5.8.3 notes stay translated in each catalog's history.
+		assert entries[RELEASE_CHANGELOG].count("\n") == 2, locale_dir.name
+		for marker in ("Alt+M", "13.1", "2026.3"):
+			assert marker in entries[RELEASE_CHANGELOG], (locale_dir.name, marker)
+		# The 5.8.4 notes stay translated in each catalog's history.
 		assert entries.get(PREVIOUS_RELEASE_CHANGELOG), locale_dir.name
 
 
 def test_the_english_manual_carries_the_current_release():
 	for manual in (ROOT / "readme.md", DOC_DIR / "en" / "readme.md"):
 		text = manual.read_text(encoding="utf-8")
+		version_585 = text.index("5.8.5")
+		section_585 = text[version_585:text.index("5.8.4", version_585)]
+		assert section_585.count("\n* ") == 3, manual
+		assert "Alt+M" in section_585, manual
+		assert "Unigram 13.1" in section_585, manual
+		assert "toggle button" in section_585, manual
+		assert f'"{NAVIGATION_MENU_UNAVAILABLE}"' in section_585, manual
+		assert "NVDA 2026.3" in section_585, manual
+		assert "Polish and Vietnamese" in section_585, manual
 		version_584 = text.index("5.8.4")
 		section_584 = text[version_584:text.index("5.8.3", version_584)]
 		assert section_584.count("\n* ") == 2, manual
@@ -223,24 +234,31 @@ def test_the_english_manual_carries_the_current_release():
 		assert "version 5.4" in section_580, manual
 
 
-def test_every_localized_manual_has_584_583_582_581_and_580_changelogs():
+def test_every_localized_manual_has_585_584_583_582_581_and_580_changelogs():
 	manuals = [ROOT / "readme.md", *sorted(DOC_DIR.glob("*/readme.md"))]
 	assert len(manuals) == 17
 	for manual in manuals:
 		text = manual.read_text(encoding="utf-8")
+		language = manual.parent.name
+		if manual == ROOT / "readme.md" or language == "en":
+			entries = {AUTO_FOCUS_LABEL: AUTO_FOCUS_LABEL, NAVIGATION_MENU_UNAVAILABLE: NAVIGATION_MENU_UNAVAILABLE}
+		else:
+			# Only the Nepali manual folder is named differently from its catalog.
+			catalog = LOCALE_DIR / {"NE": "ne"}.get(language, language) / "LC_MESSAGES" / "nvda.po"
+			entries = _parse_po(catalog)
+		version_585 = text.index("5.8.5")
+		section_585 = text[version_585:text.index("5.8.4", version_585)]
+		assert section_585.count("\n* ") == 3, manual
+		for marker in ("Alt+M", "13.1", "2026.3"):
+			assert marker in section_585, (manual, marker)
+		# Each manual quotes the message Alt+M spoke, as its catalog translates it.
+		assert entries[NAVIGATION_MENU_UNAVAILABLE].rstrip(".") in section_585, manual
 		version_584 = text.index("5.8.4")
 		section_584 = text[version_584:text.index("5.8.3", version_584)]
 		assert section_584.count("\n* ") == 2, manual
 		assert "5.6.1" in section_584, manual
 		# Each manual names the setting as its language's catalog translates it.
-		language = manual.parent.name
-		if manual == ROOT / "readme.md" or language == "en":
-			label = AUTO_FOCUS_LABEL
-		else:
-			# Only the Nepali manual folder is named differently from its catalog.
-			catalog = LOCALE_DIR / {"NE": "ne"}.get(language, language) / "LC_MESSAGES" / "nvda.po"
-			label = _parse_po(catalog)[AUTO_FOCUS_LABEL]
-		assert label in section_584, manual
+		assert entries[AUTO_FOCUS_LABEL] in section_584, manual
 		version_583 = text.index("5.8.3")
 		section_583 = text[version_583:text.index("5.8.2", version_583)]
 		assert section_583.count("\n* ") == 4, manual

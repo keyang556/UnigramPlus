@@ -197,6 +197,12 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 
 ##Değişiklik listesi:
 
+### Sürüm 5.8.5
+
+* Alt+M, Unigram 13.1 ve sonraki sürümlerde gezinti menüsünü yeniden açıyor. Unigram 13.1, yan bölmeyi aynı düğmeden açılan bir menüyle değiştirdi ve bu düğme artık bir açma/kapama düğmesi değil; bu yüzden UnigramPlus onu bulamıyor ve "Gezinti menüsü mevcut değil" bildiriyordu.
+* NVDA 2026.3 uyumluluğu güncellendi. UnigramPlus artık NVDA API'sinin kullanımdan kaldırılmış bölümlerini kullanmıyor; NVDA bunları hâlâ destekliyor ancak sonraki bir sürümde kaldırabilir: güncelleme denetiminin mesaj kutuları, UnigramPlus ayarlarını açmanın eski yolu ve sesli mesajlarda ileri veya geri sararken kullanılan bir tuş sabiti.
+* Lehçe ve Vietnamca çeviriler güncellendi.
+
 ### Sürüm 5.8.4
 
 * "Unigram başladığında odağı otomatik olarak sohbet listesine taşı" seçeneği açıkken, odak artık Unigram'ın başlarken gösterdiği açılır pencerede, örneğin bir davet bağlantısından açılan gruba katılma isteğinde kalıyor. 5.6.1 sürümünden beri UnigramPlus odağı açılır pencereden arkasındaki sohbet listesine taşıyordu, bu yüzden açılır pencere atlanıyordu.

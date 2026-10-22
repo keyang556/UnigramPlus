@@ -90,6 +90,9 @@ _CONTEXT_MENU_RAW_TEXT_LIMIT = 64
 _MAIN_WINDOW_AUTOMATION_IDS = frozenset(("ChatsList", "Messages", "TextField", "Navigation"))
 _CALL_WINDOW_AUTOMATION_IDS = frozenset(("ActiveButtons", "BottomRoot"))
 _WINDOW_SURFACE_AUTOMATION_IDS = _MAIN_WINDOW_AUTOMATION_IDS | _CALL_WINDOW_AUTOMATION_IDS
+# NVDA 2026.1 moved winUser.KEYEVENTF_KEYUP to winBindings.user32 and logs a
+# deprecation warning on every read of the old name. The Win32 value never changes.
+_KEYEVENTF_KEYUP = 0x0002
 
 
 class _BackgroundPoller:
@@ -2809,7 +2812,9 @@ class AppModule(appModuleHandler.AppModule):
 	@script(description=_("Open navigation menu"), gesture="kb:ALT+M")
 	def script_showMenu(self, gesture):
 		try:
-			targetButton = next((item for item in self.getElements() if item.UIAAutomationId == "Photo" and item.role == Role.TOGGLEBUTTON), False)
+			# Unigram 13.1 turned the menu button from a toggle button, which opened the
+			# side pane, into a plain button that opens a menu. Accept both.
+			targetButton = next((item for item in self.getElements() if item.UIAAutomationId == "Photo" and item.role in (Role.BUTTON, Role.TOGGLEBUTTON)), False)
 		except: targetButton = False
 		if targetButton: targetButton.doAction()
 		else: message(_("Navigation menu not available"))
@@ -4043,7 +4048,7 @@ class AppModule(appModuleHandler.AppModule):
 			except Exception:
 				pass
 		for code in held:
-			try: winUser.keybd_event(code, 0, winUser.KEYEVENTF_KEYUP, 0)
+			try: winUser.keybd_event(code, 0, _KEYEVENTF_KEYUP, 0)
 			except Exception: pass
 		try:
 			KeyboardInputGesture.fromName(key_name).send()

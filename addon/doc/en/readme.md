@@ -200,6 +200,12 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
+### Version 5.8.5
+
+* Alt+M opens the navigation menu again in Unigram 13.1 and later. Unigram 13.1 replaced the side pane with a menu that opens from the same button, and that button is no longer a toggle button, so UnigramPlus did not find it and reported "Navigation menu not available".
+* Updated compatibility for NVDA 2026.3. UnigramPlus no longer uses deprecated parts of the NVDA API, which NVDA still supports but may remove in a later version: the message boxes of the update check, the old way of opening the UnigramPlus settings, and a key constant used when seeking in voice messages.
+* Updated the Polish and Vietnamese translations.
+
 ### Version 5.8.4
 
 * When "Automatically move focus to the chat list when Unigram starts" is on, the focus now stays in a popup that Unigram shows as it starts, such as the request to join a group opened from an invite link. Since version 5.6.1, UnigramPlus moved the focus from the popup to the chat list behind it, so the popup was skipped.

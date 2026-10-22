@@ -199,6 +199,12 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 ##Lista de modificări:
 
+### Versiunea 5.8.5
+
+* Alt+M deschide din nou meniul de navigare în Unigram 13.1 și versiunile ulterioare. Unigram 13.1 a înlocuit panoul lateral cu un meniu care se deschide din același buton, iar acest buton nu mai este un buton comutator, așa că UnigramPlus nu îl găsea și anunța „Meniu de navigare indisponibil”.
+* A fost actualizată compatibilitatea cu NVDA 2026.3. UnigramPlus nu mai folosește părți învechite ale API-ului NVDA, pe care NVDA încă le acceptă, dar le-ar putea elimina într-o versiune ulterioară: casetele de mesaj ale verificării actualizărilor, vechiul mod de a deschide setările UnigramPlus și o constantă de tastă folosită la derularea înainte sau înapoi a mesajelor vocale.
+* Au fost actualizate traducerile în poloneză și vietnameză.
+
 ### Versiunea 5.8.4
 
 * Când opțiunea „Mută automat focalizarea pe lista de chat-uri la pornirea Unigram” este activată, focalizarea rămâne acum în fereastra pop-up pe care Unigram o afișează la pornire, cum ar fi cererea de aderare la un grup deschisă dintr-un link de invitație. Începând cu versiunea 5.6.1, UnigramPlus muta focalizarea din fereastra pop-up pe lista de chat-uri din spatele ei, astfel că fereastra pop-up era sărită.

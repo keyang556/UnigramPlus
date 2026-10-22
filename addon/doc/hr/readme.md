@@ -201,6 +201,12 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 
 ##Popis promjena:
 
+### Verzija 5.8.5
+
+* Alt+M ponovno otvara navigacijski izbornik u Unigramu 13.1 i novijim verzijama. Unigram 13.1 zamijenio je bočno okno izbornikom koji se otvara istim gumbom, a taj gumb više nije preklopni gumb, pa ga UnigramPlus nije pronalazio i javljao je „Navigacijski izbornik je nedostupan”.
+* Ažurirana je kompatibilnost s NVDA 2026.3. UnigramPlus više ne koristi zastarjele dijelove NVDA API-ja, koje NVDA još podržava, ali ih može ukloniti u nekoj od sljedećih verzija: okvire s porukama provjere ažuriranja, stari način otvaranja postavki UnigramPlusa i konstantu tipke koja se koristi pri premotavanju glasovnih poruka.
+* Ažurirani poljski i vijetnamski prijevodi.
+
 ### Verzija 5.8.4
 
 * Kada je uključena opcija „Automatski premjesti fokus na popis razgovora pri pokretanju Unigrama”, fokus sada ostaje u skočnom prozoru koji Unigram prikaže pri pokretanju, poput zahtjeva za pridruživanje grupi otvorenog iz pozivne poveznice. Od verzije 5.6.1 UnigramPlus je premještao fokus iz skočnog prozora na popis razgovora iza njega, pa je skočni prozor bio preskočen.

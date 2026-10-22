@@ -23,11 +23,22 @@ from ui import message
 UPDATE_REPO = "keyang556/UnigramPlus"
 UPDATE_API_URL = "https://api.github.com/repos/%s/releases/latest" % UPDATE_REPO
 
+def _alert_dialog(text, caption, icon=wx.ICON_INFORMATION):
+	# NVDA 2025.1 deprecated gui.messageBox in favour of MessageDialog.
+	# Older NVDA versions have no MessageDialog, so they keep the message box.
+	try:
+		from gui.message import DialogType, MessageDialog
+		from gui.guiHelper import wxCallOnMain
+	except ImportError:
+		gui.messageBox(text, caption, wx.OK | icon)
+		return
+	# MessageDialog.alert always shows a standard dialog. Build the same OK-only
+	# dialog here so that a warning keeps its icon and sound.
+	dialogType = DialogType.WARNING if icon == wx.ICON_WARNING else DialogType.STANDARD
+	wxCallOnMain(lambda: MessageDialog(None, text, caption, dialogType).ShowModal())
+
 def no_updates_dialog():
-	res = gui.messageBox(
-		_("No updates available"),
-		_("UnigramPlus update"),
-		wx.OK | wx.ICON_INFORMATION)
+	_alert_dialog(_("No updates available"), _("UnigramPlus update"))
 
 def _http_get(url, timeout=30):
 	request = urllib.request.Request(url, headers={
@@ -161,10 +172,10 @@ class window_for_update(wx.Frame):
 			except ImportError:
 				compatible = True
 			if not compatible:
-				gui.messageBox(
+				_alert_dialog(
 					_("The new version of UnigramPlus is not compatible with this version of NVDA. Please update NVDA first."),
 					_("UnigramPlus update"),
-					wx.OK | wx.ICON_WARNING)
+					wx.ICON_WARNING)
 				self.Close()
 				return
 		except Exception:
@@ -194,7 +205,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	@script(description=_("Open UnigramPlus settings window"), gesture="kb:NVDA+ALT+U")
 	def script_open_settings_dialog(self, gesture, arg = False):
-		wx.CallAfter(gui.mainFrame._popupSettingsDialog, gui.settingsDialogs.NVDASettingsDialog, UnigramPlusSettings)
+		# popupSettingsDialog is public since NVDA 2023.2; the underscore name is
+		# deprecated, so it is only the fallback for older versions.
+		popup = getattr(gui.mainFrame, "popupSettingsDialog", None) or gui.mainFrame._popupSettingsDialog
+		wx.CallAfter(popup, gui.settingsDialogs.NVDASettingsDialog, UnigramPlusSettings)
 
 	# Call answer
 	@script(description=_("Accept call"), gesture="kb:ALT+Y")

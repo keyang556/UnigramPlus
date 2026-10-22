@@ -198,6 +198,12 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 
 ##Liste des changements :
 
+### Version 5.8.5
+
+* Alt+M ouvre de nouveau le menu de navigation dans Unigram 13.1 et versions ultérieures. Unigram 13.1 a remplacé le volet latéral par un menu qui s’ouvre à partir du même bouton, et ce bouton n’est plus un bouton bascule ; UnigramPlus ne le trouvait donc pas et annonçait « Menu de navigation non disponible ».
+* Mise à jour de la compatibilité avec NVDA 2026.3. UnigramPlus n’utilise plus des parties obsolètes de l’API de NVDA, que NVDA prend encore en charge mais pourrait supprimer dans une version ultérieure : les boîtes de message de la recherche de mises à jour, l’ancienne manière d’ouvrir les paramètres d’UnigramPlus et une constante de touche utilisée pour avancer ou reculer dans les messages vocaux.
+* Mise à jour des traductions polonaise et vietnamienne.
+
 ### Version 5.8.4
 
 * Lorsque l’option « Placer automatiquement le focus dans la liste des échanges au démarrage d’Unigram » est activée, le focus reste désormais dans la fenêtre contextuelle qu’Unigram affiche au démarrage, comme la demande pour rejoindre un groupe ouverte depuis un lien d’invitation. Depuis la version 5.6.1, UnigramPlus déplaçait le focus de cette fenêtre vers la liste des échanges située derrière, si bien que la fenêtre était ignorée.

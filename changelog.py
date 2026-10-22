@@ -2,6 +2,7 @@
 def _(t): return t
 
 value = _(
-	"""- When "Automatically move focus to the chat list when Unigram starts" is on, the focus now stays in a popup that Unigram shows as it starts, such as a request to join a group, instead of moving to the chat list behind it.
-- Updated the Vietnamese translation."""
+	"""- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the menu button opens a menu instead of the side pane.
+- Updated compatibility for NVDA 2026.3.
+- Updated the Polish and Vietnamese translations."""
 )
