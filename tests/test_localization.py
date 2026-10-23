@@ -12,7 +12,8 @@ NAVIGATION_MENU_UNAVAILABLE = "Navigation menu not available"
 RELEASE_CHANGELOG = (
 	"""- Space plays, opens and downloads the media of a message again in Unigram 13.0 and later, including voice messages.
 - Space no longer opens stickers or link previews in Unigram 13.0.1 and later.
-- Right and Left Arrow on a message with several attachments announce each photo, video, file or song again in Unigram 13.0 and later."""
+- Right and Left Arrow on a message with several attachments announce each photo, video, file or song again in Unigram 13.0 and later.
+- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat."""
 )
 PREVIOUS_RELEASE_CHANGELOG = (
 	"""- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the menu button opens a menu instead of the side pane.
@@ -175,7 +176,7 @@ def test_current_release_changelog_comes_from_the_changelog_source():
 	exec(compile(changelog, "changelog.py", "exec"), namespace)
 
 	assert namespace["value"] == RELEASE_CHANGELOG
-	for marker in ("Space", "Unigram 13.0", "voice messages", "stickers or link previews", "Unigram 13.0.1", "Right and Left Arrow"):
+	for marker in ("Space", "Unigram 13.0", "voice messages", "stickers or link previews", "Unigram 13.0.1", "Right and Left Arrow", "Ctrl+Space", "chat list"):
 		assert marker in changelog, marker
 
 
@@ -183,17 +184,26 @@ def test_every_catalog_translates_the_current_release_changelog():
 	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
 		entries = _parse_po(locale_dir / "LC_MESSAGES" / "nvda.po")
 		assert entries.get(RELEASE_CHANGELOG), locale_dir.name
-		assert entries[RELEASE_CHANGELOG].count("\n") == 2, locale_dir.name
-		first, second, third = entries[RELEASE_CHANGELOG].split("\n")
+		assert entries[RELEASE_CHANGELOG].count("\n") == 3, locale_dir.name
+		first, second, third, fourth = entries[RELEASE_CHANGELOG].split("\n")
 		# Voice messages, the rest and album names work again from 13.0;
 		# stickers and link previews were named like media buttons in 13.0.1.
 		assert "13.0" in first and "13.0.1" not in first, locale_dir.name
-		assert "13.0.1" in second, locale_dir.name
 		assert "13.0" in third and "13.0.1" not in third, locale_dir.name
+		assert "13.0.1" in second, locale_dir.name
+		# Ctrl+Space in the chat list is new, not a fix for a Unigram version.
+		assert "Ctrl+Space" in fourth and "13." not in fourth, locale_dir.name
 		# The 5.8.5 notes stay translated in each catalog's history. Poedit keeps
 		# them as an obsolete entry once changelog.py moves on.
 		history = _parse_po(locale_dir / "LC_MESSAGES" / "nvda.po", obsolete=True)
 		assert history.get(PREVIOUS_RELEASE_CHANGELOG), locale_dir.name
+
+
+def test_the_italian_selected_state_is_italian_only():
+	"""It is said before selected messages and chats; it used to end in "Виділено"."""
+	entries = _parse_po(LOCALE_DIR / "it" / "LC_MESSAGES" / "nvda.po")
+
+	assert entries["Selected"] == "Selezionato"
 
 
 def test_the_english_manual_carries_the_current_release():
@@ -201,7 +211,7 @@ def test_the_english_manual_carries_the_current_release():
 		text = manual.read_text(encoding="utf-8")
 		version_586 = text.index("5.8.6")
 		section_586 = text[version_586:text.index("5.8.5", version_586)]
-		assert section_586.count("\n* ") == 4, manual
+		assert section_586.count("\n* ") == 5, manual
 		assert "Unigram 13.0.1" in section_586, manual
 		assert "voice-to-text button" in section_586, manual
 		assert "Unigram 13.1.1" in section_586, manual
@@ -209,6 +219,8 @@ def test_the_english_manual_carries_the_current_release():
 		assert "stickers or link previews" in section_586, manual
 		assert "Right and Left Arrow" in section_586, manual
 		assert '"Медіа"' in section_586, manual
+		assert "Ctrl+Space now also works in the chat list" in section_586, manual
+		assert '"Selected"' in section_586, manual
 		version_585 = text.index("5.8.5")
 		section_585 = text[version_585:text.index("5.8.4", version_585)]
 		assert section_585.count("\n* ") == 5, manual
@@ -269,18 +281,27 @@ def test_every_localized_manual_has_586_585_584_583_582_581_and_580_changelogs()
 		text = manual.read_text(encoding="utf-8")
 		language = manual.parent.name
 		if manual == ROOT / "readme.md" or language == "en":
-			entries = {AUTO_FOCUS_LABEL: AUTO_FOCUS_LABEL, NAVIGATION_MENU_UNAVAILABLE: NAVIGATION_MENU_UNAVAILABLE}
+			entries = {
+				AUTO_FOCUS_LABEL: AUTO_FOCUS_LABEL,
+				NAVIGATION_MENU_UNAVAILABLE: NAVIGATION_MENU_UNAVAILABLE,
+				"Selected": "Selected",
+			}
 		else:
 			# Only the Nepali manual folder is named differently from its catalog.
 			catalog = LOCALE_DIR / {"NE": "ne"}.get(language, language) / "LC_MESSAGES" / "nvda.po"
 			entries = _parse_po(catalog)
 		version_586 = text.index("5.8.6")
 		section_586 = text[version_586:text.index("5.8.5", version_586)]
-		assert section_586.count("\n* ") == 4, manual
+		assert section_586.count("\n* ") == 5, manual
 		# Space, Escape and the arrows are named in each language's own words.
 		# The album note quotes the placeholder word the add-on used to say.
-		for marker in ("13.0", "13.0.1", "13.1.1", "GIF", "UnigramPlus", "Медіа"):
+		for marker in ("13.0", "13.0.1", "13.1.1", "GIF", "UnigramPlus", "Медіа", "Ctrl+Space"):
 			assert marker in section_586, (manual, marker)
+		# The chat-list note quotes what is said before a selected chat, as the
+		# catalog translates it.
+		chat_list_note = section_586.split("\n* ")[5]
+		assert "Ctrl+Space" in chat_list_note, manual
+		assert entries["Selected"].rstrip(".") in chat_list_note, manual
 		version_585 = text.index("5.8.5")
 		section_585 = text[version_585:text.index("5.8.4", version_585)]
 		assert section_585.count("\n* ") == 5, manual

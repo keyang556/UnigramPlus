@@ -90,10 +90,13 @@ _CONTEXT_MENU_RAW_TEXT_LIMIT = 64
 # The focus-event path runs on NVDA's main thread and the raw probe on the UIA MTA
 # thread. This lock lets only one of them invoke the command of a request.
 _CONTEXT_MENU_CLAIM_LOCK = threading.Lock()
-# Unigram applies a toggled message selection on its UI thread right after the
-# key, so a short poll is enough to announce the state it actually set.
-_MESSAGE_SELECTION_POLL_DELAY_MS = 50
-_MESSAGE_SELECTION_POLL_LIMIT = 10
+# Unigram applies a toggled message or chat selection on its UI thread right
+# after the key, so a short poll is enough to announce the state it actually set.
+_SELECTION_POLL_DELAY_MS = 50
+_SELECTION_POLL_LIMIT = 10
+# Chat rows are almost always direct children of ChatsList. This bounds the walk
+# up to it, as _is_chat_list_item does.
+_CHAT_LIST_ANCESTOR_DEPTH = 8
 # The bar ChatView shows below a chat in selection mode (ManagePanel). Its
 # ButtonManage is not listed: the chat list's selection bar uses that name too.
 _MESSAGE_SELECTION_BAR_AUTOMATION_IDS = ("ButtonForward", "ButtonReport")
@@ -829,6 +832,46 @@ def _is_message_selection_bar_shown(messages):
 		return False
 
 
+def _is_chat_list_selection_mode(chat):
+	"""Tell whether the chat list that holds this chat is in selection mode.
+
+	Select in a chat's context menu (ChatListViewModel.SelectChat) switches
+	ChatsList to ListViewSelectionMode.Multiple, and WinUI's list then reports
+	CanSelectMultiple through its UIA Selection pattern. Outside selection mode
+	the list is Single, or None in a narrow window, and the open chat is the
+	selected one, so the chat's own state cannot tell.
+	"""
+	try:
+		import UIAHandler
+		element = chat.UIAElement
+		walker = UIAHandler.handler.baseTreeWalker
+		for _ in range(_CHAT_LIST_ANCESTOR_DEPTH):
+			element = walker.GetParentElement(element)
+			if not element:
+				return False
+			if element.CurrentAutomationId == "ChatsList":
+				can_select_multiple = element.GetCurrentPropertyValue(
+					UIAHandler.UIA.UIA_SelectionCanSelectMultiplePropertyId
+				)
+				return can_select_multiple is True
+	except Exception:
+		pass
+	return False
+
+
+def _is_chat_selected(chat):
+	"""Tell whether a chat is picked in the chat list's selection mode.
+
+	Unselecting the last chat ends selection mode, and WinUI then keeps that
+	chat as the list's single selection, so its own state still says selected.
+	Returns None when the state is unreadable, as _is_selected does.
+	"""
+	selected = _is_selected(chat)
+	if not selected:
+		return selected
+	return _is_chat_list_selection_mode(chat)
+
+
 def _announce_call_state_later(text, delay_ms=150):
 	"""Announce a call-control state from NVDA's main event loop.
 
@@ -1237,14 +1280,14 @@ class Message_list_item(ListItem):
 	@script(description=_("Reply to message"), gesture="kb:enter")
 	def script_reply_to_message(self, gesture):
 		if self.appModule._is_message_selection_mode(self):
-			self.appModule._toggle_message_selection(self)
+			self.appModule._toggle_selection(self)
 			return
 		self.appModule.activate_option_for_menu((icons_from_context_menu["reply"]), "Messages")
 
 	def event_stateChange(self):
 		# A selection the add-on toggled is announced once Unigram has applied it.
 		# NVDA can build a new object for the event, so compare the UIA elements.
-		pending = self.appModule._message_selection_toggle
+		pending = self.appModule._selection_toggle
 		if pending and self.appModule._same_uia_element(self, pending["object"]):
 			return
 		super().event_stateChange()
@@ -1700,6 +1743,14 @@ class ChatListItem(ListItem):
 		except Exception: identifier = ""
 		self._move_to_chat_with_unread_mentions("downarrow" in identifier)
 
+	def event_stateChange(self):
+		# A selection the add-on toggled is announced once Unigram has applied it.
+		# NVDA can build a new object for the event, so compare the UIA elements.
+		pending = self.appModule._selection_toggle
+		if pending and self.appModule._same_uia_element(self, pending["object"]):
+			return
+		super().event_stateChange()
+
 
 class AppModule(appModuleHandler.AppModule):
 	
@@ -1932,7 +1983,7 @@ class AppModule(appModuleHandler.AppModule):
 	isRecord = False
 	execute_context_menu_option = False
 	is_exit_from_media = False
-	_message_selection_toggle = None
+	_selection_toggle = None
 	keys = {
 		"upArrow": KeyboardInputGesture.fromName("upArrow"),
 		"downArrow": KeyboardInputGesture.fromName("downArrow"),
@@ -2112,37 +2163,40 @@ class AppModule(appModuleHandler.AppModule):
 		found = self._get_current_message_row_and_list(obj)
 		return bool(found) and _is_message_selection_bar_shown(found[1])
 
-	def _toggle_message_selection(self, obj):
-		"""Select or unselect a message the way Unigram does in selection mode.
+	def _toggle_selection(self, obj, is_selected=None):
+		"""Select or unselect a message or chat the way Unigram does in selection mode.
 
 		There a message is a toggle button: Space selects or unselects it, and
 		unselecting the last one ends selection mode. Its context menu has no
 		Select command for a message that is already selected, which is where
-		the menu-based shortcut used to get lost.
+		the menu-based shortcut used to get lost. On a chat Space is a click,
+		which Unigram turns into the same toggle (MainPage.ListView_ItemClick).
+		``is_selected`` reads the state to announce; it defaults to the item's own.
 		"""
-		pending = {"object": obj, "selected": _is_selected(obj), "polls": 0}
-		self._message_selection_toggle = pending
+		is_selected = is_selected or _is_selected
+		pending = {"object": obj, "isSelected": is_selected, "selected": is_selected(obj), "polls": 0}
+		self._selection_toggle = pending
 		self.keys["space"].send()
-		core.callLater(_MESSAGE_SELECTION_POLL_DELAY_MS, self._report_message_selection, pending)
+		core.callLater(_SELECTION_POLL_DELAY_MS, self._report_selection, pending)
 
-	def _report_message_selection(self, pending):
+	def _report_selection(self, pending):
 		"""Announce the selection Unigram set, in NVDA's own words for it."""
-		if self._message_selection_toggle is not pending:
+		if self._selection_toggle is not pending:
 			return
 		obj = pending["object"]
 		if not self._same_uia_element(api.getFocusObject(), obj):
-			self._message_selection_toggle = None
+			self._selection_toggle = None
 			return
-		selected = _is_selected(obj)
+		selected = pending["isSelected"](obj)
 		if selected is not None and selected != pending["selected"]:
-			self._message_selection_toggle = None
+			self._selection_toggle = None
 			message(State.SELECTED.displayString if selected else State.SELECTED.negativeDisplayString)
 			return
 		pending["polls"] += 1
-		if pending["polls"] < _MESSAGE_SELECTION_POLL_LIMIT:
-			core.callLater(_MESSAGE_SELECTION_POLL_DELAY_MS, self._report_message_selection, pending)
+		if pending["polls"] < _SELECTION_POLL_LIMIT:
+			core.callLater(_SELECTION_POLL_DELAY_MS, self._report_selection, pending)
 		else:
-			self._message_selection_toggle = None
+			self._selection_toggle = None
 
 	def _remember_messages_button(self, obj):
 		"""Cache MessagesButton when NVDA has already materialized it.
@@ -2465,7 +2519,7 @@ class AppModule(appModuleHandler.AppModule):
 		if self._is_message_selection_mode(obj):
 			# Space selects or unselects the message in selection mode, as in
 			# Unigram, even when it has media.
-			self._toggle_message_selection(obj)
+			self._toggle_selection(obj)
 			return
 		targetButton, is_save_focus = self._find_media_button_in_message(obj)
 		if not targetButton:
@@ -3524,6 +3578,10 @@ class AppModule(appModuleHandler.AppModule):
 			elif _is_chat_list_item(obj):
 				self.saved_items.save("last focused chat", obj)
 				obj.name = self.actionChatElementInFocus(obj)
+				# Say which chats are picked, as for messages. Outside selection
+				# mode the open chat is the selected one, so it is not marked.
+				selected_prefix = _("Selected")+". "
+				if _is_chat_selected(obj) and not obj.name.startswith(selected_prefix): obj.name = selected_prefix+obj.name
 			elif obj.parent.UIAAutomationId == "ScrollingHost":
 				if conf.get("messageHeaderAtTheEnd"):
 					content_anchor = self._profile_media_content_anchor(obj)
@@ -3785,11 +3843,21 @@ class AppModule(appModuleHandler.AppModule):
 	@script(description=_("Switch to selection mode"), gesture="kb:control+space")
 	def script_selectMessage(self, gesture):
 		obj = api.getFocusObject()
-		if self.is_message_object(obj) and self._is_message_selection_mode(obj):
-			self._toggle_message_selection(obj)
+		if self.is_message_object(obj):
+			if self._is_message_selection_mode(obj):
+				self._toggle_selection(obj)
+				return
+			list_name = "Messages"
+		elif _is_chat_list_item(obj):
+			if _is_chat_list_selection_mode(obj):
+				self._toggle_selection(obj, _is_chat_selected)
+				return
+			list_name = "ChatsList"
+		else:
 			return
-		# Outside selection mode, Select in the context menu starts it with this message.
-		self.activate_option_for_menu((icons_from_context_menu["select"]), "Messages")
+		# Outside selection mode, Select in the context menu starts it with this
+		# message or chat.
+		self.activate_option_for_menu((icons_from_context_menu["select"]), list_name)
 	@script(description=_("Forward message"), gesture="kb:ALT+F")
 	def script_forwardMessage(self, gesture):
 		self.activate_option_for_menu((icons_from_context_menu["forward"]), "Messages")

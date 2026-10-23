@@ -97,7 +97,7 @@ def _press_space(message_item, selection_mode=False, unigram_version="13.1.1.0")
 		productVersion=unigram_version,
 		is_message_object=lambda obj: True,
 		_is_message_selection_mode=lambda obj: selection_mode,
-		_toggle_message_selection=lambda obj: sent.append("toggle"),
+		_toggle_selection=lambda obj: sent.append("toggle"),
 		_MEDIA_BUTTON_AUTOMATION_IDS=("Button", "Download"),
 		is_exit_from_media=False,
 	)
