@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: UnigramPlus 5.8.5\n"
 "Report-Msgid-Bugs-To: nvda-translations@groups.io\n"
 "POT-Creation-Date: 2026-05-24 00:00+0800\n"
-"PO-Revision-Date: 2026-06-14 20:36+0800\n"
+"PO-Revision-Date: 2026-10-23 11:58+0800\n"
 "Last-Translator: Ken Chang <lindsay714322@gmail.com>\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.9\n"
+"X-Generator: Poedit 3.10\n"
 
 #: changelog.py:5
 msgid ""
@@ -473,11 +473,11 @@ msgstr "按下「新增對話」按鈕"
 #. Open navigation menu
 #: addon\appModules\unigram.py:1303
 msgid "Open navigation menu"
-msgstr "開啟導覽功能表"
+msgstr "開啟主選單"
 
 #: addon\appModules\unigram.py:1309
 msgid "Navigation menu not available"
-msgstr "導覽功能表無法使用"
+msgstr "主選單無法使用"
 
 #. Function to open the profile of the current chat
 #: addon\appModules\unigram.py:1312
@@ -973,7 +973,6 @@ msgstr "錄製視訊訊息"
 msgid "When recording a voice or video message, NVDA now announces \"Recording a voice message\" or \"Recording a video message\" along with the elapsed time, instead of \"Tn voice message\"."
 msgstr "錄製語音或視訊訊息時，NVDA 現在會朗讀「正在錄製語音訊息」或「正在錄製視訊訊息」並念出經過時間，而不再是「Tn voice message」。"
 
-
 msgid "Microphone on"
 msgstr "麥克風開啟"
 
@@ -1073,8 +1072,12 @@ msgstr ""
 msgid "Open Unigram and UnigramPlus version information in a read-only window"
 msgstr "在唯讀視窗中開啟 Unigram 與 UnigramPlus 的版本資訊"
 
-msgid "Unigram version: {unigramVersion}.\nUnigramPlus version: {addonVersion}."
-msgstr "Unigram 版本：{unigramVersion}。\nUnigramPlus 版本：{addonVersion}。"
+msgid ""
+"Unigram version: {unigramVersion}.\n"
+"UnigramPlus version: {addonVersion}."
+msgstr ""
+"Unigram 版本：{unigramVersion}。\n"
+"UnigramPlus 版本：{addonVersion}。"
 
 msgid ""
 "- Added NVDA+Shift+V to announce the installed Unigram and UnigramPlus versions.\n"
