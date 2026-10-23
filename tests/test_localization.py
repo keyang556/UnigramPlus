@@ -91,8 +91,11 @@ REQUIRED_TRANSLATIONS = {
 }
 
 
-def _parse_po(path: Path) -> dict[str, str]:
-	"""Return singular, non-obsolete gettext entries without external dependencies."""
+def _parse_po(path: Path, obsolete: bool = False) -> dict[str, str]:
+	"""Return singular gettext entries without external dependencies.
+
+	Obsolete (#~) entries are left out unless ``obsolete`` asks for them.
+	"""
 	entries: dict[str, str] = {}
 	msgid_parts: list[str] = []
 	msgstr_parts: list[str] = []
@@ -110,7 +113,9 @@ def _parse_po(path: Path) -> dict[str, str]:
 			state = None
 			continue
 		if line.startswith("#~"):
-			continue
+			if not obsolete:
+				continue
+			line = line[2:].lstrip()
 		if line.startswith("msgid "):
 			msgid_parts.append(ast.literal_eval(line[6:]))
 			state = "msgid"
@@ -182,8 +187,10 @@ def test_every_catalog_translates_the_current_release_changelog():
 			assert marker in entries[RELEASE_CHANGELOG], (locale_dir.name, marker)
 		# The selection-mode fix is the second line, as in changelog.py.
 		assert "Ctrl+Space" in entries[RELEASE_CHANGELOG].split("\n")[1], locale_dir.name
-		# The 5.8.4 notes stay translated in each catalog's history.
-		assert entries.get(PREVIOUS_RELEASE_CHANGELOG), locale_dir.name
+		# The 5.8.4 notes stay translated in each catalog's history. Poedit keeps
+		# them as an obsolete entry once changelog.py moves on, as vi now does.
+		history = _parse_po(locale_dir / "LC_MESSAGES" / "nvda.po", obsolete=True)
+		assert history.get(PREVIOUS_RELEASE_CHANGELOG), locale_dir.name
 
 
 def test_the_english_manual_carries_the_current_release():
