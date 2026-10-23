@@ -2141,20 +2141,17 @@ class AppModule(appModuleHandler.AppModule):
 
 		That is the first of the other accounts Unigram 13.1 lists at the top of
 		the settings, else its Add account button, which Unigram hides once the
-		account limit is reached, else the open settings category.
+		account limit is reached, else the open settings category. A UIA read
+		fails when Unigram rebuilds the page while it is read; the caller retries.
 		"""
 		settings_page = self._get_settings_page()
 		if not settings_page:
 			return None
-		try:
-			for item in settings_page.children:
-				if item.UIAAutomationId == "Accounts" and item.firstChild:
-					return item.firstChild
-				if item.UIAAutomationId == "AddAccount":
-					return item
-		except Exception:
-			# Unigram can rebuild the page while it is read; try again on the next poll.
-			return None
+		for item in settings_page.children:
+			if item.UIAAutomationId == "Accounts" and item.firstChild:
+				return item.firstChild
+			if item.UIAAutomationId == "AddAccount":
+				return item
 		return self.get_settings_list() or None
 
 
@@ -3167,11 +3164,15 @@ class AppModule(appModuleHandler.AppModule):
 	def _focus_settings_start(self, request):
 		if self._settings_focus_request is not request:
 			return
-		target = self._get_settings_start()
-		if target:
-			self._settings_focus_request = None
-			target.setFocus()
-			return
+		try:
+			target = self._get_settings_start()
+			if target:
+				target.setFocus()
+				self._settings_focus_request = None
+				return
+		except Exception:
+			# Unigram can rebuild the page while it is read or focused; try again on the next poll.
+			log.debug("Could not move the focus to the Unigram settings yet", exc_info=True)
 		request["polls"] += 1
 		if request["polls"] < _SETTINGS_FOCUS_POLL_LIMIT:
 			core.callLater(_SETTINGS_FOCUS_POLL_DELAY_MS, self._focus_settings_start, request)

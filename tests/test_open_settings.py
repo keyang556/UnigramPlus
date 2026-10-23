@@ -84,6 +84,7 @@ class Unigram:
 			"Role": ROLE,
 			"State": SimpleNamespace(SELECTED="selected"),
 			"message": self.messages.append,
+			"log": SimpleNamespace(debug=lambda *args, **kwargs: None),
 			"_": lambda text: text,
 			"core": SimpleNamespace(callLater=lambda delay, function, *args: self.pending.append((delay, function, args))),
 		}
@@ -242,6 +243,68 @@ def test_shift_alt_m_stops_waiting_for_a_settings_page_that_never_appears():
 	assert log == [("select", "Settings")]
 	assert app._settings_focus_request is None
 	assert app.messages == []
+
+
+def test_shift_alt_m_retries_when_the_page_is_rebuilt_while_it_is_read():
+	log = []
+	app = Unigram([_bar(log)])
+	app.script_openSettings(None)
+
+	def rebuilt():
+		raise OSError("element is no longer available")
+
+	app.getElements = rebuilt
+	app.run_pending()
+	assert app._settings_focus_request is not None
+	assert len(app.pending) == 1
+
+	del app.getElements
+	app.elements = [_settings_page(log=log), _bar(log)]
+	app.run_pending()
+
+	assert log == [("select", "Settings"), ("focus", "Add account")]
+	assert app._settings_focus_request is None
+	assert app.pending == []
+
+
+def test_shift_alt_m_keeps_waiting_when_the_focus_cannot_move_yet():
+	log = []
+	page = _settings_page(log=log)
+	add_account = next(item for item in page.children if item.UIAAutomationId == "AddAccount")
+	app = Unigram([page, _bar(log)])
+	app.script_openSettings(None)
+
+	def fail():
+		raise OSError("element is no longer available")
+
+	add_account.setFocus = fail
+	app.run_pending()
+	assert app._settings_focus_request is not None
+	assert len(app.pending) == 1
+
+	del add_account.setFocus
+	app.run_pending()
+
+	assert log == [("select", "Settings"), ("focus", "Add account")]
+	assert app._settings_focus_request is None
+	assert app.pending == []
+
+
+def test_shift_alt_m_stops_retrying_errors_at_the_poll_limit():
+	app = Unigram([_bar([])])
+	app.script_openSettings(None)
+
+	def rebuilt():
+		raise OSError("element is no longer available")
+
+	app.getElements = rebuilt
+	polls = 0
+	while app.pending:
+		app.run_pending()
+		polls += 1
+
+	assert polls == app.namespace["_SETTINGS_FOCUS_POLL_LIMIT"]
+	assert app._settings_focus_request is None
 
 
 def test_a_second_shift_alt_m_replaces_the_first_wait():
