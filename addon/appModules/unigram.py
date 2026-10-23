@@ -90,8 +90,6 @@ _CONTEXT_MENU_RAW_TEXT_LIMIT = 64
 # The focus-event path runs on NVDA's main thread and the raw probe on the UIA MTA
 # thread. This lock lets only one of them invoke the command of a request.
 _CONTEXT_MENU_CLAIM_LOCK = threading.Lock()
-# How many step delays the focus path waits on a raw Invoke that is still running.
-_CONTEXT_MENU_CLAIM_WAIT_LIMIT = _CONTEXT_MENU_ACTIVITY_TIMEOUT_MS // _CONTEXT_MENU_STEP_DELAY_MS
 # Unigram applies a toggled message selection on its UI thread right after the
 # key, so a short poll is enough to announce the state it actually set.
 _MESSAGE_SELECTION_POLL_DELAY_MS = 50
@@ -536,8 +534,8 @@ def _invoke_raw_context_menu_option(root, icons, process_id=0, diagnose=False, p
 	try:
 		pattern.QueryInterface(UIAHandler.IUIAutomationInvokePattern).Invoke()
 	except Exception:
-		# The popup can close while it is inspected. A later probe, or a focus
-		# path waiting on this claim, may still invoke.
+		# The popup can close while it is inspected. A later probe or focus event
+		# may still invoke.
 		if pending is not None:
 			pending["claimed"] = False
 		raise
@@ -3760,20 +3758,22 @@ class AppModule(appModuleHandler.AppModule):
 		# Try the direct path first. The fallbacks below only exist for the
 		# Unigram versions where the flyout does not realize its commands yet.
 		target = self._find_context_menu_command(obj, pending["icons"])
-		if target is not None:
-			self.execute_context_menu_option = False
-			core.callLater(_CONTEXT_MENU_STEP_DELAY_MS, self._invoke_context_menu_item, target, pending)
-			return True
 		try:
 			obj_role = obj.role
 		except Exception:
 			obj_role = None
-		if obj_role == Role.MENUITEM:
-			if _menu_item_has_icon(obj, pending["icons"]):
-				self.execute_context_menu_option = False
-				core.callLater(_CONTEXT_MENU_STEP_DELAY_MS, self._invoke_context_menu_item, obj, pending)
+		if target is None and obj_role == Role.MENUITEM and _menu_item_has_icon(obj, pending["icons"]):
+			target = obj
+		if target is not None:
+			if not _claim_context_menu_option(pending):
+				# The raw probe claimed the command while it was looked up here. Keep
+				# the request current, so the next probe can retry a failed Invoke.
+				nextHandler()
 				return True
-		elif obj_role not in (Role.LINK, Role.BUTTON):
+			self.execute_context_menu_option = False
+			core.callLater(_CONTEXT_MENU_STEP_DELAY_MS, self._invoke_context_menu_item, target)
+			return True
+		if obj_role not in (Role.MENUITEM, Role.LINK, Role.BUTTON):
 			# Unigram 12.9 can keep focus on transient popup windows and never expose
 			# a focused MenuFlyoutItem. Probe those popup roots through raw UIA on
 			# NVDA's MTA thread before calling the rest of the focus-event chain.
@@ -3951,20 +3951,7 @@ class AppModule(appModuleHandler.AppModule):
 					pending["icons"],
 					pending["rawProbeAttempts"],
 				)
-	def _invoke_context_menu_item(self, item, pending, waits=0):
-		if not _claim_context_menu_option(pending):
-			# The raw probe claimed the command first. Its Invoke may still fail
-			# and give the claim back, and this focus path has already ended the
-			# request that would retry the probe, so wait to take over from it.
-			if not pending.get("rawInvoked") and waits < _CONTEXT_MENU_CLAIM_WAIT_LIMIT:
-				core.callLater(
-					_CONTEXT_MENU_STEP_DELAY_MS,
-					self._invoke_context_menu_item,
-					item,
-					pending,
-					waits + 1,
-				)
-			return
+	def _invoke_context_menu_item(self, item):
 		try:
 			item.doAction()
 		except Exception:

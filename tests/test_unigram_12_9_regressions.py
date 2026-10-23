@@ -758,7 +758,7 @@ def test_context_menu_popup_focus_schedules_raw_probe_without_walking_nvda_objec
 	instance = SimpleNamespace(
 		execute_context_menu_option=pending,
 		keys={},
-		_invoke_context_menu_item=lambda item, pending: None,
+		_invoke_context_menu_item=lambda item: None,
 		_arm_context_menu_timeout=lambda pending, delay: None,
 		_find_context_menu_command=lambda obj, icons: None,
 		_schedule_context_menu_raw_probe=lambda obj, request: probes.append((obj, request)),
@@ -837,6 +837,7 @@ def test_context_menu_focused_item_is_invoked_by_unigrams_icon_not_its_translati
 	)
 	namespace.update(
 		{
+			"_claim_context_menu_option": _load_context_menu_claim(),
 			"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args)),
 			"_CONTEXT_MENU_STEP_DELAY_MS": 20,
 			"_CONTEXT_MENU_NAVIGATION_DELAY_MS": 250,
@@ -853,14 +854,14 @@ def test_context_menu_focused_item_is_invoked_by_unigrams_icon_not_its_translati
 	instance = SimpleNamespace(
 		execute_context_menu_option=pending,
 		keys={},
-		_invoke_context_menu_item=lambda item, pending: None,
+		_invoke_context_menu_item=lambda item: None,
 		_arm_context_menu_timeout=lambda pending, delay: None,
 		_find_context_menu_command=lambda obj, icons: None,
 	)
 
 	assert method(instance, item, lambda: None)
 	assert instance.execute_context_menu_option is False
-	assert scheduled == [(20, instance._invoke_context_menu_item, item, pending)]
+	assert scheduled == [(20, instance._invoke_context_menu_item, item)]
 
 
 def test_context_menu_moves_one_item_at_a_time_until_read_icon_is_focused():
@@ -887,7 +888,7 @@ def test_context_menu_moves_one_item_at_a_time_until_read_icon_is_focused():
 			"downArrow": SimpleNamespace(send=lambda: sent.append("down")),
 			"escape": SimpleNamespace(send=lambda: sent.append("escape")),
 		},
-		_invoke_context_menu_item=lambda item, pending: None,
+		_invoke_context_menu_item=lambda item: None,
 		_find_context_menu_command=lambda obj, icons: None,
 		_arm_context_menu_timeout=lambda pending, delay: armed.append((pending, delay)),
 		_send_pending_context_menu_navigation_key=lambda request: sent.append("down"),
@@ -927,7 +928,7 @@ def test_context_menu_moves_from_unigrams_reaction_link_to_the_first_command():
 			"downArrow": SimpleNamespace(send=lambda: sent.append("down")),
 			"escape": SimpleNamespace(send=lambda: sent.append("escape")),
 		},
-		_invoke_context_menu_item=lambda item, pending: None,
+		_invoke_context_menu_item=lambda item: None,
 		_find_context_menu_command=lambda obj, icons: None,
 		_arm_context_menu_timeout=lambda pending, delay: armed.append((pending, delay)),
 		_send_pending_context_menu_navigation_key=lambda request: sent.append("down"),
@@ -1304,93 +1305,56 @@ def _load_context_menu_claim():
 	)["_claim_context_menu_option"]
 
 
-def test_focused_command_is_not_invoked_or_escaped_after_the_raw_probe_ran_it():
+def test_focused_command_is_left_to_a_raw_invoke_that_claimed_it_first():
 	"""Ctrl+Space left selection mode at once in Unigram 13.1.
 
 	The raw probe invoked Select, which closed the flyout. The focus path then
 	called doAction on the closed item, got NotImplementedError and sent Escape,
 	and Escape ended the selection mode that Select had just started.
+
+	The focus path must also keep the request current while that Invoke runs, so
+	the next probe or focus event can still run the command if Invoke fails.
 	"""
-	sent = []
-	method = _load_app_method(
-		"_invoke_context_menu_item",
-		{
-			"_claim_context_menu_option": _load_context_menu_claim(),
-			"log": SimpleNamespace(debug=lambda *args, **kwargs: None),
-		},
-	)
-	instance = SimpleNamespace(keys={"escape": SimpleNamespace(send=lambda: sent.append("escape"))})
-
-	class ClosedItem:
-		def doAction(self):
-			raise NotImplementedError
-
-	method(instance, ClosedItem(), {"claimed": True, "rawInvoked": True})
-	assert sent == []
-
-	item = Node()
-	pending = {}
-	method(instance, item, pending)
-	assert item.actions == 1
-	assert pending["claimed"] is True
-	assert sent == []
-
-	method(instance, ClosedItem(), {})
-	assert sent == ["escape"]
-
-
-def test_focused_command_takes_over_when_a_running_raw_invoke_fails():
-	"""The focus path ends the request, so a failed raw Invoke cannot retry it.
-
-	The focus callback finds the raw probe's claim while its Invoke is still
-	running. It must wait for that outcome and run the command itself when
-	Invoke raises and gives the claim back.
-	"""
+	role = SimpleNamespace(MENUITEM="menuItem", LINK="link", BUTTON="button")
 	scheduled = []
-	sent = []
+	next_calls = []
 	method = _load_app_method(
-		"_invoke_context_menu_item",
+		"_handle_pending_context_menu_focus",
 		{
+			"Role": role,
 			"_claim_context_menu_option": _load_context_menu_claim(),
-			"_CONTEXT_MENU_STEP_DELAY_MS": 20,
-			"_CONTEXT_MENU_CLAIM_WAIT_LIMIT": 2,
+			"_menu_item_has_icon": lambda obj, icons: True,
 			"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args)),
-			"log": SimpleNamespace(debug=lambda *args, **kwargs: None),
+			"_CONTEXT_MENU_STEP_DELAY_MS": 20,
 		},
 	)
-	instance = SimpleNamespace(keys={"escape": SimpleNamespace(send=lambda: sent.append("escape"))})
-	instance._invoke_context_menu_item = lambda *args: method(instance, *args)
-	item = Node()
-	pending = {"claimed": True, "rawInvoked": False}
+	item = Node(role=role.MENUITEM)
+	pending = {"icons": "\ue97e", "moves": 0}
 
-	method(instance, item, pending)
-	assert item.actions == 0
-	assert scheduled == [(20, instance._invoke_context_menu_item, item, pending, 1)]
+	def find_command_while_the_raw_probe_claims_it(obj, icons):
+		# The raw probe's claim lands while this lookup crosses into Unigram.
+		pending["claimed"] = True
+		return item
 
-	# Invoke raised on the MTA thread and released the claim.
+	instance = SimpleNamespace(
+		execute_context_menu_option=pending,
+		_invoke_context_menu_item=lambda item: None,
+		_find_context_menu_command=find_command_while_the_raw_probe_claims_it,
+	)
+
+	assert method(instance, item, lambda: next_calls.append(True))
+	assert scheduled == []
+	assert instance.execute_context_menu_option is pending
+	assert next_calls == [True]
+
+	# Invoke raised on the MTA thread and gave the claim back.
 	pending["claimed"] = False
-	_delay, callback, *args = scheduled.pop()
-	callback(*args)
-	assert item.actions == 1
+	instance._find_context_menu_command = lambda obj, icons: item
+	assert method(instance, item, lambda: next_calls.append(True))
+	assert scheduled == [(20, instance._invoke_context_menu_item, item)]
+	assert instance.execute_context_menu_option is False
 	assert pending["claimed"] is True
-	assert scheduled == []
-	assert sent == []
-
-	# A raw Invoke that succeeds stops the wait without a second invoke.
-	pending = {"claimed": True, "rawInvoked": False}
-	method(instance, item, pending)
-	pending["rawInvoked"] = True
-	_delay, callback, *args = scheduled.pop()
-	callback(*args)
-	assert item.actions == 1
-	assert scheduled == []
-
-	# A raw Invoke that never returns does not keep the callback alive forever.
-	pending = {"claimed": True, "rawInvoked": False}
-	method(instance, item, pending, 2)
-	assert scheduled == []
-	assert item.actions == 1
-	assert sent == []
+	assert next_calls == [True]
 
 
 def test_raw_probe_does_not_invoke_a_command_the_focus_path_claimed(monkeypatch):
@@ -1490,6 +1454,7 @@ def test_enter_invokes_reply_directly_like_version_54():
 	)
 	namespace.update(
 		{
+			"_claim_context_menu_option": _load_context_menu_claim(),
 			"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args)),
 			"_CONTEXT_MENU_STEP_DELAY_MS": 20,
 			"_CONTEXT_MENU_NAVIGATION_DELAY_MS": 250,
@@ -1515,7 +1480,7 @@ def test_enter_invokes_reply_directly_like_version_54():
 	instance = SimpleNamespace(
 		execute_context_menu_option=pending,
 		keys={"downArrow": SimpleNamespace(send=lambda: sent.append("down"))},
-		_invoke_context_menu_item=lambda item, pending: None,
+		_invoke_context_menu_item=lambda item: None,
 		_arm_context_menu_timeout=lambda pending, delay: None,
 	)
 	instance._find_context_menu_command = lambda obj, icons: find_command(instance, obj, icons)
@@ -1523,7 +1488,7 @@ def test_enter_invokes_reply_directly_like_version_54():
 	assert method(instance, focused, lambda: None)
 
 	assert instance.execute_context_menu_option is False
-	assert scheduled == [(20, instance._invoke_context_menu_item, reply, pending)]
+	assert scheduled == [(20, instance._invoke_context_menu_item, reply)]
 	assert sent == [], "Reply must be invoked directly, not reached with arrow keys"
 
 
