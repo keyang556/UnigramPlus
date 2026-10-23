@@ -90,6 +90,8 @@ _CONTEXT_MENU_RAW_TEXT_LIMIT = 64
 # The focus-event path runs on NVDA's main thread and the raw probe on the UIA MTA
 # thread. This lock lets only one of them invoke the command of a request.
 _CONTEXT_MENU_CLAIM_LOCK = threading.Lock()
+# How many step delays the focus path waits on a raw Invoke that is still running.
+_CONTEXT_MENU_CLAIM_WAIT_LIMIT = _CONTEXT_MENU_ACTIVITY_TIMEOUT_MS // _CONTEXT_MENU_STEP_DELAY_MS
 # Unigram applies a toggled message selection on its UI thread right after the
 # key, so a short poll is enough to announce the state it actually set.
 _MESSAGE_SELECTION_POLL_DELAY_MS = 50
@@ -534,7 +536,8 @@ def _invoke_raw_context_menu_option(root, icons, process_id=0, diagnose=False, p
 	try:
 		pattern.QueryInterface(UIAHandler.IUIAutomationInvokePattern).Invoke()
 	except Exception:
-		# The popup can close while it is inspected. A later probe may still invoke.
+		# The popup can close while it is inspected. A later probe, or a focus
+		# path waiting on this claim, may still invoke.
 		if pending is not None:
 			pending["claimed"] = False
 		raise
@@ -3948,9 +3951,19 @@ class AppModule(appModuleHandler.AppModule):
 					pending["icons"],
 					pending["rawProbeAttempts"],
 				)
-	def _invoke_context_menu_item(self, item, pending):
+	def _invoke_context_menu_item(self, item, pending, waits=0):
 		if not _claim_context_menu_option(pending):
-			# The raw probe invoked the command first and closed this item's flyout.
+			# The raw probe claimed the command first. Its Invoke may still fail
+			# and give the claim back, and this focus path has already ended the
+			# request that would retry the probe, so wait to take over from it.
+			if not pending.get("rawInvoked") and waits < _CONTEXT_MENU_CLAIM_WAIT_LIMIT:
+				core.callLater(
+					_CONTEXT_MENU_STEP_DELAY_MS,
+					self._invoke_context_menu_item,
+					item,
+					pending,
+					waits + 1,
+				)
 			return
 		try:
 			item.doAction()

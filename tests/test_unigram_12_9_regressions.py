@@ -1325,7 +1325,7 @@ def test_focused_command_is_not_invoked_or_escaped_after_the_raw_probe_ran_it():
 		def doAction(self):
 			raise NotImplementedError
 
-	method(instance, ClosedItem(), {"claimed": True})
+	method(instance, ClosedItem(), {"claimed": True, "rawInvoked": True})
 	assert sent == []
 
 	item = Node()
@@ -1337,6 +1337,60 @@ def test_focused_command_is_not_invoked_or_escaped_after_the_raw_probe_ran_it():
 
 	method(instance, ClosedItem(), {})
 	assert sent == ["escape"]
+
+
+def test_focused_command_takes_over_when_a_running_raw_invoke_fails():
+	"""The focus path ends the request, so a failed raw Invoke cannot retry it.
+
+	The focus callback finds the raw probe's claim while its Invoke is still
+	running. It must wait for that outcome and run the command itself when
+	Invoke raises and gives the claim back.
+	"""
+	scheduled = []
+	sent = []
+	method = _load_app_method(
+		"_invoke_context_menu_item",
+		{
+			"_claim_context_menu_option": _load_context_menu_claim(),
+			"_CONTEXT_MENU_STEP_DELAY_MS": 20,
+			"_CONTEXT_MENU_CLAIM_WAIT_LIMIT": 2,
+			"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args)),
+			"log": SimpleNamespace(debug=lambda *args, **kwargs: None),
+		},
+	)
+	instance = SimpleNamespace(keys={"escape": SimpleNamespace(send=lambda: sent.append("escape"))})
+	instance._invoke_context_menu_item = lambda *args: method(instance, *args)
+	item = Node()
+	pending = {"claimed": True, "rawInvoked": False}
+
+	method(instance, item, pending)
+	assert item.actions == 0
+	assert scheduled == [(20, instance._invoke_context_menu_item, item, pending, 1)]
+
+	# Invoke raised on the MTA thread and released the claim.
+	pending["claimed"] = False
+	_delay, callback, *args = scheduled.pop()
+	callback(*args)
+	assert item.actions == 1
+	assert pending["claimed"] is True
+	assert scheduled == []
+	assert sent == []
+
+	# A raw Invoke that succeeds stops the wait without a second invoke.
+	pending = {"claimed": True, "rawInvoked": False}
+	method(instance, item, pending)
+	pending["rawInvoked"] = True
+	_delay, callback, *args = scheduled.pop()
+	callback(*args)
+	assert item.actions == 1
+	assert scheduled == []
+
+	# A raw Invoke that never returns does not keep the callback alive forever.
+	pending = {"claimed": True, "rawInvoked": False}
+	method(instance, item, pending, 2)
+	assert scheduled == []
+	assert item.actions == 1
+	assert sent == []
 
 
 def test_raw_probe_does_not_invoke_a_command_the_focus_path_claimed(monkeypatch):
