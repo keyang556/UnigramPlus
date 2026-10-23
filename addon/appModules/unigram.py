@@ -87,6 +87,9 @@ _CONTEXT_MENU_RAW_PROBE_LIMIT = (_CONTEXT_MENU_OPEN_TIMEOUT_MS // _CONTEXT_MENU_
 _CONTEXT_MENU_RAW_SCOPE_LIMIT = 6
 _CONTEXT_MENU_RAW_ITEM_DEPTH_LIMIT = 10
 _CONTEXT_MENU_RAW_TEXT_LIMIT = 64
+# The focus-event path runs on NVDA's main thread and the raw probe on the UIA MTA
+# thread. This lock lets only one of them invoke the command of a request.
+_CONTEXT_MENU_CLAIM_LOCK = threading.Lock()
 # Unigram applies a toggled message selection on its UI thread right after the
 # key, so a short poll is enough to announce the state it actually set.
 _MESSAGE_SELECTION_POLL_DELAY_MS = 50
@@ -501,7 +504,22 @@ def _find_raw_context_menu_item_by_icon(root, icons, process_id=0, diagnose=Fals
 	return None
 
 
-def _invoke_raw_context_menu_option(root, icons, process_id=0, diagnose=False):
+def _claim_context_menu_option(pending):
+	"""Return True for the first caller only, so a command runs once per request.
+
+	A focus event can find the command on the main thread while the raw probe has
+	already found it on the MTA thread. Whichever invokes second acts on an item
+	the first invoke closed; it fails and its Escape then undoes the command, such
+	as the selection mode that Select just started.
+	"""
+	with _CONTEXT_MENU_CLAIM_LOCK:
+		if pending.get("claimed"):
+			return False
+		pending["claimed"] = True
+		return True
+
+
+def _invoke_raw_context_menu_option(root, icons, process_id=0, diagnose=False, pending=None):
 	"""Invoke a raw UIA context-menu command identified by its Unigram icon."""
 	import UIAHandler
 
@@ -511,7 +529,15 @@ def _invoke_raw_context_menu_option(root, icons, process_id=0, diagnose=False):
 	pattern = item.GetCurrentPattern(UIAHandler.UIA_InvokePatternId)
 	if not pattern:
 		return False
-	pattern.QueryInterface(UIAHandler.IUIAutomationInvokePattern).Invoke()
+	if pending is not None and not _claim_context_menu_option(pending):
+		return False
+	try:
+		pattern.QueryInterface(UIAHandler.IUIAutomationInvokePattern).Invoke()
+	except Exception:
+		# The popup can close while it is inspected. A later probe may still invoke.
+		if pending is not None:
+			pending["claimed"] = False
+		raise
 	return True
 
 
@@ -3724,7 +3750,8 @@ class AppModule(appModuleHandler.AppModule):
 		pending = self.execute_context_menu_option
 		if not pending:
 			return False
-		if pending.get("rawInvoked"):
+		# While the request is current, only the raw probe can have claimed it.
+		if pending.get("rawInvoked") or pending.get("claimed"):
 			nextHandler()
 			return True
 		# Try the direct path first. The fallbacks below only exist for the
@@ -3732,7 +3759,7 @@ class AppModule(appModuleHandler.AppModule):
 		target = self._find_context_menu_command(obj, pending["icons"])
 		if target is not None:
 			self.execute_context_menu_option = False
-			core.callLater(_CONTEXT_MENU_STEP_DELAY_MS, self._invoke_context_menu_item, target)
+			core.callLater(_CONTEXT_MENU_STEP_DELAY_MS, self._invoke_context_menu_item, target, pending)
 			return True
 		try:
 			obj_role = obj.role
@@ -3741,7 +3768,7 @@ class AppModule(appModuleHandler.AppModule):
 		if obj_role == Role.MENUITEM:
 			if _menu_item_has_icon(obj, pending["icons"]):
 				self.execute_context_menu_option = False
-				core.callLater(_CONTEXT_MENU_STEP_DELAY_MS, self._invoke_context_menu_item, obj)
+				core.callLater(_CONTEXT_MENU_STEP_DELAY_MS, self._invoke_context_menu_item, obj, pending)
 				return True
 		elif obj_role not in (Role.LINK, Role.BUTTON):
 			# Unigram 12.9 can keep focus on transient popup windows and never expose
@@ -3865,6 +3892,7 @@ class AppModule(appModuleHandler.AppModule):
 						pending["icons"],
 						pending["processID"],
 						diagnose=diagnose,
+						pending=pending,
 					)
 				except Exception:
 					log.debug("Could not inspect an Unigram context-menu root", exc_info=True)
@@ -3920,7 +3948,10 @@ class AppModule(appModuleHandler.AppModule):
 					pending["icons"],
 					pending["rawProbeAttempts"],
 				)
-	def _invoke_context_menu_item(self, item):
+	def _invoke_context_menu_item(self, item, pending):
+		if not _claim_context_menu_option(pending):
+			# The raw probe invoked the command first and closed this item's flyout.
+			return
 		try:
 			item.doAction()
 		except Exception:
