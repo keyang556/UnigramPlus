@@ -394,10 +394,11 @@ def _load_space_handler(namespace_extra=None):
 	return namespace, (is_media_button, find_button), handler
 
 
-def _space_instance(namespace, methods, is_message=True):
+def _space_instance(namespace, methods, is_message=True, selection_mode=False):
 	is_media_button, find_button = methods
 	instance = SimpleNamespace(
 		is_message_object=lambda obj: is_message,
+		_is_message_selection_mode=lambda obj: selection_mode,
 		_MEDIA_BUTTON_AUTOMATION_IDS=("Button", "Download"),
 	)
 	instance._is_media_button = lambda obj: is_media_button(instance, obj)
@@ -425,6 +426,24 @@ def test_space_plays_media_without_toggling_the_message():
 
 	assert invoked == ["play"], "the play button must be pressed"
 	assert sent == [], "Space must not reach Unigram and select the message"
+
+
+def test_space_selects_a_media_message_in_selection_mode_instead_of_playing_it():
+	"""In Unigram's selection mode Space selects or unselects the message."""
+	invoked = []
+	toggled = []
+	button = _media_child(automation_id="Button")
+	button.doAction = lambda: invoked.append("play")
+	message_item = _message([button])
+	namespace, methods, handler = _load_space_handler()
+	namespace["_focus"] = message_item
+	instance = _space_instance(namespace, methods, selection_mode=True)
+	instance._toggle_message_selection = toggled.append
+
+	handler(instance, SimpleNamespace(send=lambda: invoked.append("space")))
+
+	assert toggled == [message_item]
+	assert invoked == []
 
 
 def test_space_is_passed_through_when_the_message_has_nothing_to_play():

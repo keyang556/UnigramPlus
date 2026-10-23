@@ -202,6 +202,8 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 ### Versiunea 5.8.5
 
 * Alt+M deschide din nou meniul de navigare în Unigram 13.1 și versiunile ulterioare. Unigram 13.1 a înlocuit panoul lateral cu un meniu care se deschide din același buton, iar acest buton nu mai este un buton comutator, așa că UnigramPlus nu îl găsea și anunța „Meniu de navigare indisponibil”.
+* A fost corectată combinația Ctrl+Space în modul de selectare din Unigram. În acest mod, meniul contextual al unui mesaj selectat nu are comanda Selectează, așa că UnigramPlus parcurgea meniul fără să o găsească, iar mesajul rămânea selectat. Acum Ctrl+Space funcționează ca în Unigram 13.1.1: prima apăsare pornește în continuare modul de selectare din meniul contextual, iar apoi fiecare apăsare selectează sau deselectează mesajul aflat în focus, așa cum face tasta Spațiu în Unigram. Apoi UnigramPlus anunță dacă mesajul este selectat. Deselectarea ultimului mesaj selectat încheie modul de selectare.
+* În modul de selectare, tastele Spațiu și Enter pe un mesaj îl selectează sau îl deselectează acum, ca în Unigram, în loc să îi redea conținutul media sau să caute Răspunde în meniul contextual, iar Backspace nu mai caută Editează acolo.
 * A fost actualizată compatibilitatea cu NVDA 2026.3. UnigramPlus nu mai folosește părți învechite ale API-ului NVDA, pe care NVDA încă le acceptă, dar le-ar putea elimina într-o versiune ulterioară: casetele de mesaj ale verificării actualizărilor, vechiul mod de a deschide setările UnigramPlus și o constantă de tastă folosită la derularea înainte sau înapoi a mesajelor vocale.
 * Au fost actualizate traducerile în poloneză și vietnameză.
 

@@ -201,6 +201,8 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 ### Version 5.8.5
 
 * Alt+M ouvre de nouveau le menu de navigation dans Unigram 13.1 et versions ultérieures. Unigram 13.1 a remplacé le volet latéral par un menu qui s’ouvre à partir du même bouton, et ce bouton n’est plus un bouton bascule ; UnigramPlus ne le trouvait donc pas et annonçait « Menu de navigation non disponible ».
+* Correction de Ctrl+Space dans le mode sélection d’Unigram. Dans ce mode, le menu contextuel d’un message sélectionné n’a pas de commande Sélectionner ; UnigramPlus parcourait donc le menu sans la trouver, et le message restait sélectionné. Ctrl+Space fonctionne désormais comme dans Unigram 13.1.1 : le premier appui active toujours le mode sélection depuis le menu contextuel, puis chaque appui sélectionne ou désélectionne le message qui a le focus, comme le fait Espace dans Unigram. UnigramPlus annonce ensuite si le message est sélectionné. Désélectionner le dernier message sélectionné quitte le mode sélection.
+* En mode sélection, Espace et Entrée sur un message le sélectionnent ou le désélectionnent désormais, comme dans Unigram, au lieu de lire son média ou de chercher Répondre dans le menu contextuel, et Retour arrière ne cherche plus Modifier dans ce menu.
 * Mise à jour de la compatibilité avec NVDA 2026.3. UnigramPlus n’utilise plus des parties obsolètes de l’API de NVDA, que NVDA prend encore en charge mais pourrait supprimer dans une version ultérieure : les boîtes de message de la recherche de mises à jour, l’ancienne manière d’ouvrir les paramètres d’UnigramPlus et une constante de touche utilisée pour avancer ou reculer dans les messages vocaux.
 * Mise à jour des traductions polonaise et vietnamienne.
 

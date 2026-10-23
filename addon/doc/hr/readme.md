@@ -204,6 +204,8 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 ### Verzija 5.8.5
 
 * Alt+M ponovno otvara navigacijski izbornik u Unigramu 13.1 i novijim verzijama. Unigram 13.1 zamijenio je bočno okno izbornikom koji se otvara istim gumbom, a taj gumb više nije preklopni gumb, pa ga UnigramPlus nije pronalazio i javljao je „Navigacijski izbornik je nedostupan”.
+* Ispravljen je Ctrl+Space u Unigramovu načinu odabira. U tom načinu kontekstni izbornik odabrane poruke nema naredbu Odaberi, pa je UnigramPlus prolazio kroz izbornik ne pronalazeći je, a poruka je ostajala odabrana. Ctrl+Space sada radi kao u Unigramu 13.1.1: prvi pritisak i dalje uključuje način odabira iz kontekstnog izbornika, a zatim svaki pritisak odabire poruku u fokusu ili poništava njezin odabir, kao što to čini razmaknica u Unigramu. UnigramPlus zatim javlja je li poruka odabrana. Poništavanje odabira posljednje odabrane poruke završava način odabira.
+* U načinu odabira razmaknica i Enter na poruci sada je odabiru ili poništavaju njezin odabir, kao u Unigramu, umjesto da reproduciraju njezine medije ili traže Odgovori u kontekstnom izborniku, a Backspace ondje više ne traži Uredi.
 * Ažurirana je kompatibilnost s NVDA 2026.3. UnigramPlus više ne koristi zastarjele dijelove NVDA API-ja, koje NVDA još podržava, ali ih može ukloniti u nekoj od sljedećih verzija: okvire s porukama provjere ažuriranja, stari način otvaranja postavki UnigramPlusa i konstantu tipke koja se koristi pri premotavanju glasovnih poruka.
 * Ažurirani poljski i vijetnamski prijevodi.
 

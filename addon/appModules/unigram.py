@@ -87,6 +87,13 @@ _CONTEXT_MENU_RAW_PROBE_LIMIT = (_CONTEXT_MENU_OPEN_TIMEOUT_MS // _CONTEXT_MENU_
 _CONTEXT_MENU_RAW_SCOPE_LIMIT = 6
 _CONTEXT_MENU_RAW_ITEM_DEPTH_LIMIT = 10
 _CONTEXT_MENU_RAW_TEXT_LIMIT = 64
+# Unigram applies a toggled message selection on its UI thread right after the
+# key, so a short poll is enough to announce the state it actually set.
+_MESSAGE_SELECTION_POLL_DELAY_MS = 50
+_MESSAGE_SELECTION_POLL_LIMIT = 10
+# The bar ChatView shows below a chat in selection mode (ManagePanel). Its
+# ButtonManage is not listed: the chat list's selection bar uses that name too.
+_MESSAGE_SELECTION_BAR_AUTOMATION_IDS = ("ButtonForward", "ButtonReport")
 _MAIN_WINDOW_AUTOMATION_IDS = frozenset(("ChatsList", "Messages", "TextField", "Navigation"))
 _CALL_WINDOW_AUTOMATION_IDS = frozenset(("ActiveButtons", "BottomRoot"))
 _WINDOW_SURFACE_AUTOMATION_IDS = _MAIN_WINDOW_AUTOMATION_IDS | _CALL_WINDOW_AUTOMATION_IDS
@@ -745,6 +752,38 @@ def _is_chat_list_item(obj):
 	return result
 
 
+def _is_selected(obj):
+	"""Return whether UIA reports the object as selected, or None if unreadable."""
+	try:
+		return State.SELECTED in obj.states
+	except Exception:
+		return None
+
+
+def _is_message_selection_bar_shown(messages):
+	"""Tell whether Unigram shows its selection bar below this message list.
+
+	ChatView collapses the bar outside selection mode, and a collapsed element
+	has no UIA element, so finding one of its buttons is the evidence. The bar
+	and the list share a parent in the UIA tree, which keeps this to a single
+	query over that parent's children instead of a walk through its siblings.
+	"""
+	try:
+		import UIAHandler
+		handler = UIAHandler.handler
+		client = handler.clientObject
+		parent = handler.baseTreeWalker.getParentElement(messages.UIAElement)
+		if not parent:
+			return False
+		condition = None
+		for automation_id in _MESSAGE_SELECTION_BAR_AUTOMATION_IDS:
+			button = client.CreatePropertyCondition(UIAHandler.UIA.UIA_AutomationIdPropertyId, automation_id)
+			condition = button if condition is None else client.CreateOrCondition(condition, button)
+		return bool(parent.findFirst(UIAHandler.TreeScope_Children, condition))
+	except Exception:
+		return False
+
+
 def _announce_call_state_later(text, delay_ms=150):
 	"""Announce a call-control state from NVDA's main event loop.
 
@@ -1141,13 +1180,29 @@ class Message_list_item(ListItem):
 			targetButton.doAction()
 		else: message(_("Button to open comments not found"))
 
+	# In selection mode Unigram's context menu offers neither Edit nor Reply, so
+	# these keys do what they do in Unigram there instead of opening it.
 	@script(description=_("Edit message"), gesture="kb:backspace")
 	def script_edit_message(self, gesture):
+		if self.appModule._is_message_selection_mode(self):
+			gesture.send()
+			return
 		self.appModule.activate_option_for_menu((icons_from_context_menu["edit"]), "Messages")
-	
+
 	@script(description=_("Reply to message"), gesture="kb:enter")
 	def script_reply_to_message(self, gesture):
+		if self.appModule._is_message_selection_mode(self):
+			self.appModule._toggle_message_selection(self)
+			return
 		self.appModule.activate_option_for_menu((icons_from_context_menu["reply"]), "Messages")
+
+	def event_stateChange(self):
+		# A selection the add-on toggled is announced once Unigram has applied it.
+		# NVDA can build a new object for the event, so compare the UIA elements.
+		pending = self.appModule._message_selection_toggle
+		if pending and self.appModule._same_uia_element(self, pending["object"]):
+			return
+		super().event_stateChange()
 
 	def script_next_message(self, gesture):
 		# Deliver Down immediately. UIA tree walks here can stall the NVDA main
@@ -1810,6 +1865,7 @@ class AppModule(appModuleHandler.AppModule):
 	isRecord = False
 	execute_context_menu_option = False
 	is_exit_from_media = False
+	_message_selection_toggle = None
 	keys = {
 		"upArrow": KeyboardInputGesture.fromName("upArrow"),
 		"downArrow": KeyboardInputGesture.fromName("downArrow"),
@@ -1976,6 +2032,50 @@ class AppModule(appModuleHandler.AppModule):
 				pass
 			candidate = parent
 		return None
+
+	def _is_message_selection_mode(self, obj):
+		"""Tell whether the chat of a focused message is in selection mode.
+
+		Unigram clears every selection when selection mode ends, so a selected
+		message settles it without a query. An unselected one can still be in
+		selection mode, and then only the selection bar below the chat tells.
+		"""
+		if _is_selected(obj):
+			return True
+		found = self._get_current_message_row_and_list(obj)
+		return bool(found) and _is_message_selection_bar_shown(found[1])
+
+	def _toggle_message_selection(self, obj):
+		"""Select or unselect a message the way Unigram does in selection mode.
+
+		There a message is a toggle button: Space selects or unselects it, and
+		unselecting the last one ends selection mode. Its context menu has no
+		Select command for a message that is already selected, which is where
+		the menu-based shortcut used to get lost.
+		"""
+		pending = {"object": obj, "selected": _is_selected(obj), "polls": 0}
+		self._message_selection_toggle = pending
+		self.keys["space"].send()
+		core.callLater(_MESSAGE_SELECTION_POLL_DELAY_MS, self._report_message_selection, pending)
+
+	def _report_message_selection(self, pending):
+		"""Announce the selection Unigram set, in NVDA's own words for it."""
+		if self._message_selection_toggle is not pending:
+			return
+		obj = pending["object"]
+		if not self._same_uia_element(api.getFocusObject(), obj):
+			self._message_selection_toggle = None
+			return
+		selected = _is_selected(obj)
+		if selected is not None and selected != pending["selected"]:
+			self._message_selection_toggle = None
+			message(State.SELECTED.displayString if selected else State.SELECTED.negativeDisplayString)
+			return
+		pending["polls"] += 1
+		if pending["polls"] < _MESSAGE_SELECTION_POLL_LIMIT:
+			core.callLater(_MESSAGE_SELECTION_POLL_DELAY_MS, self._report_message_selection, pending)
+		else:
+			self._message_selection_toggle = None
 
 	def _remember_messages_button(self, obj):
 		"""Cache MessagesButton when NVDA has already materialized it.
@@ -2249,6 +2349,11 @@ class AppModule(appModuleHandler.AppModule):
 		obj = api.getFocusObject()
 		if not self.is_message_object(obj):
 			gesture.send()
+			return
+		if self._is_message_selection_mode(obj):
+			# Space selects or unselects the message in selection mode, as in
+			# Unigram, even when it has media.
+			self._toggle_message_selection(obj)
 			return
 		targetButton, is_save_focus = self._find_media_button_in_message(obj)
 		if not targetButton:
@@ -3567,6 +3672,11 @@ class AppModule(appModuleHandler.AppModule):
 		if not self.isDelete and not self.startDeleteMessage(True, useNativeDelete=True): gesture.send()
 	@script(description=_("Switch to selection mode"), gesture="kb:control+space")
 	def script_selectMessage(self, gesture):
+		obj = api.getFocusObject()
+		if self.is_message_object(obj) and self._is_message_selection_mode(obj):
+			self._toggle_message_selection(obj)
+			return
+		# Outside selection mode, Select in the context menu starts it with this message.
 		self.activate_option_for_menu((icons_from_context_menu["select"]), "Messages")
 	@script(description=_("Forward message"), gesture="kb:ALT+F")
 	def script_forwardMessage(self, gesture):

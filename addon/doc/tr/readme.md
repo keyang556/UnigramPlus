@@ -200,6 +200,8 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 ### Sürüm 5.8.5
 
 * Alt+M, Unigram 13.1 ve sonraki sürümlerde gezinti menüsünü yeniden açıyor. Unigram 13.1, yan bölmeyi aynı düğmeden açılan bir menüyle değiştirdi ve bu düğme artık bir açma/kapama düğmesi değil; bu yüzden UnigramPlus onu bulamıyor ve "Gezinti menüsü mevcut değil" bildiriyordu.
+* Unigram'ın seçim modunda Ctrl+Space düzeltildi. Bu modda seçili bir mesajın bağlam menüsünde Seç komutu yoktur; bu yüzden UnigramPlus menüde onu bulamadan ilerliyordu ve mesaj seçili kalıyordu. Ctrl+Space artık Unigram 13.1.1'deki gibi çalışıyor: ilk basış seçim modunu yine bağlam menüsünden başlatır, ardından her basış odaktaki mesajı, Unigram'da Boşluk tuşunun yaptığı gibi seçer veya seçimini kaldırır. Ardından UnigramPlus mesajın seçili olup olmadığını bildirir. Seçili son mesajın seçimini kaldırmak seçim modunu sonlandırır.
+* Seçim modunda bir mesajın üzerindeyken Boşluk ve Enter artık mesajın medyasını oynatmak veya bağlam menüsünde Yanıtla komutunu aramak yerine, Unigram'da olduğu gibi mesajı seçer veya seçimini kaldırır; Backspace de artık orada Düzenle komutunu aramaz.
 * NVDA 2026.3 uyumluluğu güncellendi. UnigramPlus artık NVDA API'sinin kullanımdan kaldırılmış bölümlerini kullanmıyor; NVDA bunları hâlâ destekliyor ancak sonraki bir sürümde kaldırabilir: güncelleme denetiminin mesaj kutuları, UnigramPlus ayarlarını açmanın eski yolu ve sesli mesajlarda ileri veya geri sararken kullanılan bir tuş sabiti.
 * Lehçe ve Vietnamca çeviriler güncellendi.
 

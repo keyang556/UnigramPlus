@@ -11,6 +11,7 @@ AUTO_FOCUS_LABEL = "Automatically move focus to the chat list when Unigram start
 NAVIGATION_MENU_UNAVAILABLE = "Navigation menu not available"
 RELEASE_CHANGELOG = (
 	"""- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the menu button opens a menu instead of the side pane.
+- Ctrl+Space selects and unselects messages again in Unigram's selection mode, the way Space does in Unigram 13.1.1. In selection mode, Space and Enter on a message also select or unselect it instead of playing its media or replying to it.
 - Updated compatibility for NVDA 2026.3.
 - Updated the Polish and Vietnamese translations."""
 )
@@ -90,8 +91,11 @@ REQUIRED_TRANSLATIONS = {
 }
 
 
-def _parse_po(path: Path) -> dict[str, str]:
-	"""Return singular, non-obsolete gettext entries without external dependencies."""
+def _parse_po(path: Path, obsolete: bool = False) -> dict[str, str]:
+	"""Return singular gettext entries without external dependencies.
+
+	Obsolete (#~) entries are left out unless ``obsolete`` asks for them.
+	"""
 	entries: dict[str, str] = {}
 	msgid_parts: list[str] = []
 	msgstr_parts: list[str] = []
@@ -109,7 +113,9 @@ def _parse_po(path: Path) -> dict[str, str]:
 			state = None
 			continue
 		if line.startswith("#~"):
-			continue
+			if not obsolete:
+				continue
+			line = line[2:].lstrip()
 		if line.startswith("msgid "):
 			msgid_parts.append(ast.literal_eval(line[6:]))
 			state = "msgid"
@@ -168,7 +174,7 @@ def test_current_release_changelog_comes_from_the_changelog_source():
 	exec(compile(changelog, "changelog.py", "exec"), namespace)
 
 	assert namespace["value"] == RELEASE_CHANGELOG
-	for marker in ("Alt+M", "Unigram 13.1", "NVDA 2026.3", "Polish and Vietnamese"):
+	for marker in ("Alt+M", "Unigram 13.1", "Ctrl+Space", "Unigram 13.1.1", "NVDA 2026.3", "Polish and Vietnamese"):
 		assert marker in changelog, marker
 
 
@@ -176,11 +182,15 @@ def test_every_catalog_translates_the_current_release_changelog():
 	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
 		entries = _parse_po(locale_dir / "LC_MESSAGES" / "nvda.po")
 		assert entries.get(RELEASE_CHANGELOG), locale_dir.name
-		assert entries[RELEASE_CHANGELOG].count("\n") == 2, locale_dir.name
-		for marker in ("Alt+M", "13.1", "2026.3"):
+		assert entries[RELEASE_CHANGELOG].count("\n") == 3, locale_dir.name
+		for marker in ("Alt+M", "13.1", "Ctrl+Space", "13.1.1", "2026.3"):
 			assert marker in entries[RELEASE_CHANGELOG], (locale_dir.name, marker)
-		# The 5.8.4 notes stay translated in each catalog's history.
-		assert entries.get(PREVIOUS_RELEASE_CHANGELOG), locale_dir.name
+		# The selection-mode fix is the second line, as in changelog.py.
+		assert "Ctrl+Space" in entries[RELEASE_CHANGELOG].split("\n")[1], locale_dir.name
+		# The 5.8.4 notes stay translated in each catalog's history. Poedit keeps
+		# them as an obsolete entry once changelog.py moves on, as vi now does.
+		history = _parse_po(locale_dir / "LC_MESSAGES" / "nvda.po", obsolete=True)
+		assert history.get(PREVIOUS_RELEASE_CHANGELOG), locale_dir.name
 
 
 def test_the_english_manual_carries_the_current_release():
@@ -188,10 +198,15 @@ def test_the_english_manual_carries_the_current_release():
 		text = manual.read_text(encoding="utf-8")
 		version_585 = text.index("5.8.5")
 		section_585 = text[version_585:text.index("5.8.4", version_585)]
-		assert section_585.count("\n* ") == 3, manual
+		assert section_585.count("\n* ") == 5, manual
 		assert "Alt+M" in section_585, manual
 		assert "Unigram 13.1" in section_585, manual
 		assert "toggle button" in section_585, manual
+		assert "Ctrl+Space" in section_585, manual
+		assert "Unigram 13.1.1" in section_585, manual
+		assert "no Select command" in section_585, manual
+		assert "Space and Enter on a message" in section_585, manual
+		assert "Backspace" in section_585, manual
 		assert f'"{NAVIGATION_MENU_UNAVAILABLE}"' in section_585, manual
 		assert "NVDA 2026.3" in section_585, manual
 		assert "Polish and Vietnamese" in section_585, manual
@@ -248,8 +263,9 @@ def test_every_localized_manual_has_585_584_583_582_581_and_580_changelogs():
 			entries = _parse_po(catalog)
 		version_585 = text.index("5.8.5")
 		section_585 = text[version_585:text.index("5.8.4", version_585)]
-		assert section_585.count("\n* ") == 3, manual
-		for marker in ("Alt+M", "13.1", "2026.3"):
+		assert section_585.count("\n* ") == 5, manual
+		# Single keys such as Backspace are named in each language's own words.
+		for marker in ("Alt+M", "13.1", "Ctrl+Space", "13.1.1", "2026.3"):
 			assert marker in section_585, (manual, marker)
 		# Each manual quotes the message Alt+M spoke, as its catalog translates it.
 		assert entries[NAVIGATION_MENU_UNAVAILABLE].rstrip(".") in section_585, manual
