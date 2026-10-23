@@ -2364,38 +2364,55 @@ class AppModule(appModuleHandler.AppModule):
 	# and a round video message keeps its "Button" inside the video. A voice
 	# message's own FileButton has no AutomationId: the "Button" inside it is the
 	# voice-to-text toggle. Stickers and link previews are named "Button" too,
-	# but they are hyperlinks, so Space leaves them to Unigram.
+	# but they are hyperlinks, so Space leaves them to Unigram. Before Unigram
+	# 11.5.3 every FileButton was a hyperlink, and nothing else in a message
+	# was named like one, so links count there.
 	_MEDIA_BUTTON_AUTOMATION_IDS = ("Button", "Download")
+
+	def _media_buttons_are_links(self):
+		"""Tell whether this Unigram predates FileButton's UIA Button role (11.5.3)."""
+		try:
+			return is_version_greater("11.5.3.0", self.productVersion)
+		except Exception:
+			return False
 
 	def _is_media_button(self, obj):
 		try:
-			if obj.role != Role.BUTTON:
-				return False
+			role = obj.role
 			automation_id = obj.UIAAutomationId or ""
 		except Exception:
+			return False
+		if role == Role.LINK:
+			return automation_id in self._MEDIA_BUTTON_AUTOMATION_IDS and self._media_buttons_are_links()
+		if role != Role.BUTTON:
 			return False
 		if automation_id in self._MEDIA_BUTTON_AUTOMATION_IDS:
 			return True
 		return not automation_id and _is_file_button(obj)
 
-	def _media_button_opens_viewer(self, button, in_album=False):
+	def _media_button_opens_viewer(self, button, album_item=None):
 		"""Tell whether pressing a media button opens Unigram's media viewer.
 
 		A photo, video or GIF is pressed as the picture itself and opens the
 		viewer. A file or a song shows its title, and a voice message (the
 		FileButton without an AutomationId) plays where it is, as do small
 		buttons such as a call's or the play button of older Unigram versions.
+		In an album the items can be narrow, and older versions put a file's
+		title beside its button in the item rather than inside the button.
 		"""
 		try:
 			if not button.UIAAutomationId:
 				return False
-			if not in_album:
+			if album_item is None:
 				location = button.location
 				if not (location and location.width > 150):
 					return False
-			children = tuple(button.children or ())
+			children = list(button.children or ())
 		except Exception:
 			return False
+		if album_item is not None:
+			try: children.extend(album_item.children or ())
+			except Exception: pass
 		for child in children:
 			try:
 				if child.UIAAutomationId == "Title":
@@ -2417,7 +2434,7 @@ class AppModule(appModuleHandler.AppModule):
 			targetButton = next((item for item in children if self._is_media_button(item)), None)
 			if not targetButton:
 				return None, True
-			return targetButton, not self._media_button_opens_viewer(targetButton, in_album=True)
+			return targetButton, not self._media_button_opens_viewer(targetButton, media)
 		# Direct children first, which is where Unigram puts a message's content.
 		item = obj.firstChild
 		while item:
@@ -2433,9 +2450,9 @@ class AppModule(appModuleHandler.AppModule):
 			except Exception: children = ()
 			for child in children:
 				if self._is_media_button(child):
-					try: in_album = item.role == Role.LISTITEM
-					except Exception: in_album = False
-					return child, not self._media_button_opens_viewer(child, in_album)
+					try: album_item = item if item.role == Role.LISTITEM else None
+					except Exception: album_item = None
+					return child, not self._media_button_opens_viewer(child, album_item)
 			try: item = item.next
 			except Exception: break
 		return None, True

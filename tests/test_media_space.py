@@ -81,7 +81,7 @@ def _message(*children):
 	return obj
 
 
-def _press_space(message_item, selection_mode=False):
+def _press_space(message_item, selection_mode=False, unigram_version="13.1.1.0"):
 	sent = []
 	namespace = {
 		"Role": SimpleNamespace(LINK="link", BUTTON="button", LISTITEM="listitem"),
@@ -89,16 +89,21 @@ def _press_space(message_item, selection_mode=False):
 		"log": SimpleNamespace(debug=lambda *args, **kwargs: None),
 		"_is_file_button": lambda obj: obj.is_file_button,
 	}
-	is_media_button, opens_viewer, find_button, handler = _load_app_methods(SPACE_METHODS, namespace)
+	_load_functions(["is_version_greater"], namespace)
+	are_links, is_media_button, opens_viewer, find_button, handler = _load_app_methods(
+		["_media_buttons_are_links", *SPACE_METHODS], namespace
+	)
 	instance = SimpleNamespace(
+		productVersion=unigram_version,
 		is_message_object=lambda obj: True,
 		_is_message_selection_mode=lambda obj: selection_mode,
 		_toggle_message_selection=lambda obj: sent.append("toggle"),
 		_MEDIA_BUTTON_AUTOMATION_IDS=("Button", "Download"),
 		is_exit_from_media=False,
 	)
+	instance._media_buttons_are_links = lambda: are_links(instance)
 	instance._is_media_button = lambda obj: is_media_button(instance, obj)
-	instance._media_button_opens_viewer = lambda button, in_album=False: opens_viewer(instance, button, in_album)
+	instance._media_button_opens_viewer = lambda button, album_item=None: opens_viewer(instance, button, album_item)
 	instance._find_media_button_in_message = lambda obj: find_button(instance, obj)
 	handler(instance, SimpleNamespace(send=lambda: sent.append("space")))
 	return instance, sent
@@ -201,6 +206,52 @@ def test_space_leaves_stickers_to_unigram():
 
 	assert sticker.pressed == 0
 	assert sent == ["space"]
+
+
+def test_space_presses_hyperlink_media_buttons_of_unigram_before_11_5_3():
+	# FileButton became a UIA Button in 11.5.3; before, every media button was a
+	# hyperlink, and stickers and link previews were not named "Button".
+	button = _node("Button", role="link", width=48)
+	message_item = _message(_node("Message", role="text"), button)
+
+	_, sent = _press_space(message_item, unigram_version="11.5.2.0")
+
+	assert button.pressed == 1
+	assert sent == []
+
+
+def test_an_unreadable_unigram_version_counts_as_a_current_one():
+	sticker = _node("Button", role="link", width=180)
+
+	_, sent = _press_space(_message(sticker), unigram_version="")
+
+	assert sticker.pressed == 0
+	assert sent == ["space"]
+
+
+def test_space_keeps_the_focus_on_an_older_album_file_whose_title_is_beside_its_button():
+	# Before Unigram 13.0 a file's title sat in the album item next to the button.
+	button = _node("Button", width=48, file_button=True)
+	album_item = _node("", role="listitem", children=[button, _node("Title", role="text", name="report.pdf")])
+	message_item = _message(album_item)
+
+	instance, _ = _press_space(message_item, unigram_version="12.10.7.0")
+
+	assert button.pressed == 1
+	assert message_item.focused == 1
+	assert instance.is_exit_from_media is False
+
+
+def test_space_keeps_the_focus_on_an_older_album_file_chosen_with_the_arrows():
+	button = _node("Button", width=48, file_button=True)
+	album_item = _node("", role="listitem", children=[button, _node("Title", role="text", name="report.pdf")])
+	message_item = _message(album_item)
+	message_item.media = album_item
+
+	instance, _ = _press_space(message_item, unigram_version="12.10.7.0")
+
+	assert button.pressed == 1
+	assert instance.is_exit_from_media is False
 
 
 def test_space_opens_the_photo_of_a_link_preview_but_not_the_link():
