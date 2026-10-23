@@ -382,26 +382,34 @@ def _media_child(automation_id="", role="button", width=48):
 
 def _load_space_handler(namespace_extra=None):
 	namespace = {
-		"Role": SimpleNamespace(LINK="link", BUTTON="button"),
+		"Role": SimpleNamespace(LINK="link", BUTTON="button", LISTITEM="listitem"),
 		"api": SimpleNamespace(getFocusObject=lambda: namespace["_focus"]),
 		"log": SimpleNamespace(debug=lambda *args, **kwargs: None),
+		"_is_file_button": lambda obj: getattr(obj, "is_file_button", False),
 	}
 	namespace.update(namespace_extra or {})
-	is_media_button, find_button, handler = _load_methods(
-		["_is_media_button", "_find_media_button_in_message", "script_actionMediaInMessage"],
+	is_media_button, opens_viewer, find_button, handler = _load_methods(
+		[
+			"_is_media_button",
+			"_media_button_opens_viewer",
+			"_find_media_button_in_message",
+			"script_actionMediaInMessage",
+		],
 		namespace,
 	)
-	return namespace, (is_media_button, find_button), handler
+	return namespace, (is_media_button, opens_viewer, find_button), handler
 
 
 def _space_instance(namespace, methods, is_message=True, selection_mode=False):
-	is_media_button, find_button = methods
+	is_media_button, opens_viewer, find_button = methods
 	instance = SimpleNamespace(
 		is_message_object=lambda obj: is_message,
 		_is_message_selection_mode=lambda obj: selection_mode,
 		_MEDIA_BUTTON_AUTOMATION_IDS=("Button", "Download"),
+		is_exit_from_media=False,
 	)
 	instance._is_media_button = lambda obj: is_media_button(instance, obj)
+	instance._media_button_opens_viewer = lambda button, in_album=False: opens_viewer(instance, button, in_album)
 	instance._find_media_button_in_message = lambda obj: find_button(instance, obj)
 	return instance
 
@@ -521,7 +529,7 @@ def test_the_seek_shortcut_still_works_while_the_modifiers_stay_held():
 def test_space_plays_a_music_or_file_message_whose_button_is_named_download():
 	invoked = []
 	sent = []
-	button = _media_child(automation_id="Download", role="link")
+	button = _media_child(automation_id="Download")
 	button.doAction = lambda: invoked.append("play")
 	message_item = _message([_media_child(automation_id="PhotoRoot", role="link"), button])
 	namespace, methods, handler = _load_space_handler()

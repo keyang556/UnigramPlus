@@ -197,6 +197,13 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 
 ##Değişiklik listesi:
 
+### Sürüm 5.8.6
+
+* Boşluk tuşu, Unigram 13.0 ve sonraki sürümlerde bir mesajın medyasını yeniden oynatıyor, açıyor ve indiriyor. Unigram 13.0'dan beri fotoğraf, video, GIF, dosya, şarkı veya sesli mesajın içeriği bu işi yapan düğmenin kendisidir. Unigram 13.0.1 bu düğmeye UnigramPlus'ın aradığı tanımlayıcıyı geri verdi; ancak sesli mesajlarda tanımlayıcı sesi metne dönüştürme düğmesine gitti, bu yüzden Boşluk tuşu sesli mesajda hiçbir şey yapmıyordu. UnigramPlus artık sesli mesajın kendi düğmesini, bildirdiği indirme ilerlemesinden tanıyor. Unigram 13.1.1'de seçim modu dışında bir mesajda Boşluk tuşunun hâlâ bir işlevi yok, bu yüzden UnigramPlus o düğmeye basar: Boşluk tuşu sesli mesajı veya şarkıyı oynatır ya da duraklatır, fotoğrafı, videoyu veya GIF'i görüntüleyicide açar, dosyayı indirir veya açar.
+* Boşluk tuşu bir sesli mesajı veya şarkıyı oynattıktan ya da bir dosyayı indirdikten sonra odak mesajda kalır ve sonraki Escape artık odağı oraya geri taşımaz. Buna yalnızca görüntüleyici ihtiyaç duyar; ancak Unigram 13.0 ve sonraki sürümlerde bir dosya veya şarkı bir fotoğraf kadar geniştir, bu yüzden UnigramPlus onu fotoğraf sanıyordu.
+* Boşluk tuşu artık çıkartmaları veya bağlantı önizlemelerini açmıyor. Unigram 13.0.1 onlara medya düğmeleriyle aynı tanımlayıcıyı verdi, ancak bunlar bağlantıdır. Fotoğraf veya video gösteren bir bağlantı önizlemesinde Boşluk tuşu fotoğrafı veya videoyu açmaya devam eder.
+* Albüm gibi birden çok medya eki olan bir mesajda Sağ ve Sol Ok, Unigram 13.0 ve sonraki sürümlerde her fotoğrafı, videoyu, dosyayı veya şarkıyı yeniden bildiriyor. Unigram 13.0'dan beri her ek yalnızca kendi içeriğinin düğmesini barındırıyor; bu yüzden UnigramPlus fotoğrafı videodan ayıran şeyi artık bulamıyor ve her ek için "Медіа" yer tutucu sözcüğünü bildiriyordu. Artık o düğmenin içine bakıyor: videonun orada kendi indirme düğmesi, dosyanın veya şarkının başlığı vardır, fotoğrafta ise ikisi de yoktur.
+
 ### Sürüm 5.8.5
 
 * Alt+M, Unigram 13.1 ve sonraki sürümlerde gezinti menüsünü yeniden açıyor. Unigram 13.1, yan bölmeyi aynı düğmeden açılan bir menüyle değiştirdi ve bu düğme artık bir açma/kapama düğmesi değil; bu yüzden UnigramPlus onu bulamıyor ve "Gezinti menüsü mevcut değil" bildiriyordu.

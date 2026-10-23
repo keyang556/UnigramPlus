@@ -473,6 +473,13 @@ Added Turkish localization
 
 
 
+###Verzija 5.8.6
+
+* Razmaknica ponovo reprodukuje, otvara i preuzima medije poruke u Unigramu 13.0 i novijim verzijama. Od Unigrama 13.0 sadržaj poruke sa fotografijom, videom, GIF-om, datotekom, pesmom ili glasovne poruke sam je dugme koje to radi. Unigram 13.0.1 je tom dugmetu vratio identifikator koji UnigramPlus traži, osim na glasovnim porukama, gde je identifikator dobilo dugme za pretvaranje govora u tekst, pa razmaknica na glasovnoj poruci nije ništa radila. UnigramPlus sada prepoznaje dugme same glasovne poruke po napretku preuzimanja koji ono javlja. Unigram 13.1.1 i dalje nema radnju za razmaknicu na poruci van režima izbora, pa UnigramPlus pritiska to dugme: razmaknica reprodukuje ili pauzira glasovnu poruku ili pesmu, otvara fotografiju, video ili GIF u pregledaču i preuzima ili otvara datoteku.
+* Nakon što razmaknica reprodukuje glasovnu poruku ili pesmu ili preuzme datoteku, fokus ostaje na poruci, a sledeći pritisak tastera Escape ga više ne vraća tamo. To je potrebno samo pregledaču, ali u Unigramu 13.0 i novijim verzijama datoteka ili pesma je široka kao fotografija, pa ju je UnigramPlus smatrao fotografijom.
+* Razmaknica više ne otvara nalepnice ni preglede linkova. Unigram 13.0.1 im je dao isti identifikator kao dugmadima za medije, ali oni su linkovi. U pregledu linka koji prikazuje fotografiju ili video razmaknica i dalje otvara fotografiju ili video.
+* Strelice desno i levo na poruci sa više medijskih priloga, poput albuma, ponovo najavljuju svaku fotografiju, video, datoteku ili pesmu u Unigramu 13.0 i novijim verzijama. Od Unigrama 13.0 svaki prilog sadrži samo sopstveno dugme svog sadržaja, pa UnigramPlus više nije pronalazio ono po čemu se fotografija razlikuje od videa i za svaki prilog je najavljivao zamensku reč „Медіа”. Sada gleda unutar tog dugmeta: video tamo ima sopstveno dugme za preuzimanje, datoteka ili pesma svoj naslov, a fotografija ni jedno ni drugo.
+
 ###Verzija 5.8.5
 
 * Alt+M ponovo otvara meni za navigaciju u Unigramu 13.1 i novijim verzijama. Unigram 13.1 je zamenio bočni panel menijem koji se otvara istim dugmetom, a to dugme više nije preklopno dugme, pa ga UnigramPlus nije pronalazio i javljao je „Meni za navigaciju nedostupno”.

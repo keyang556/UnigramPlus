@@ -787,6 +787,24 @@ def _is_selected(obj):
 		return None
 
 
+def _is_file_button(obj):
+	"""Tell whether a button is Unigram's FileButton.
+
+	In a message it is the only button with a UIA Value, the file's download or
+	upload progress, so the Value pattern tells it apart when it has no
+	AutomationId.
+	"""
+	try:
+		import UIAHandler
+		available = _raw_uia_property(
+			obj.UIAElement,
+			UIAHandler.UIA.UIA_IsValuePatternAvailablePropertyId,
+		)
+	except Exception:
+		return False
+	return available is True
+
+
 def _is_message_selection_bar_shown(messages):
 	"""Tell whether Unigram shows its selection bar below this message list.
 
@@ -1242,6 +1260,33 @@ class Message_list_item(ListItem):
 			# makes the source/focus comparison fail before endpoint work begins.
 			app._schedule_end_of_chat_confirmation(self, move_focus_to_text)
 
+	@staticmethod
+	def _album_item_name(obj):
+		"""Name an album item: a photo, a video, or a file's or song's title.
+
+		Since Unigram 13.0 the item's only child is its content's own button,
+		named "Button", and what tells the kind apart is inside it: a video
+		holds its "Overlay" download button, a file or song its "Title", and a
+		photo neither. Older versions put those parts in the item itself.
+		"""
+		try: first_child = obj.firstChild
+		except Exception: first_child = None
+		first_child_id = _relative(first_child, "UIAAutomationId")
+		if first_child_id == "Subtitle": return _("Photo")
+		if first_child_id == "Texture": return _("Video")
+		parts = []
+		for node in (obj, first_child) if first_child_id == "Button" else (obj,):
+			try: parts.extend(node.children or ())
+			except Exception: pass
+		for item in parts:
+			try:
+				if item.UIAAutomationId == "Title" and item.name: return item.name
+			except Exception: pass
+		if first_child_id == "Button":
+			ids = {_relative(item, "UIAAutomationId") for item in parts}
+			return _("Video") if "Overlay" in ids else _("Photo")
+		return "Медіа"
+
 	def script_next_media(self, gesture, revers=False):
 		self.list_media = self.list_media or [item for item in self.children if item.role == Role.LISTITEM]
 		obj = None
@@ -1253,12 +1298,7 @@ class Message_list_item(ListItem):
 			obj = self.list_media[self.selected_media]
 		if not obj: return
 		self.media = obj
-		first_child_id = _relative(obj, "firstChild", "UIAAutomationId")
-		if first_child_id == "Subtitle": name = _("Photo")
-		elif first_child_id == "Texture": name = _("Video")
-		else:
-			name = next((item.name for item in obj.children if item.UIAAutomationId in ("Title",)) , "Медіа")
-		message(name)
+		message(self._album_item_name(obj))
 		api.setNavigatorObject(obj.simpleFirstChild)
 
 	@script(description=_("Announces the time a message was sent or received, as well as a list of reactions. Double-clicking toggles the announcement mode for this information."), gesture="kb:ALT+W")
@@ -2318,18 +2358,51 @@ class AppModule(appModuleHandler.AppModule):
 		else: message(_("Nothing is playing right now"))
 
 	# Playing and opening media with the space bar
-	# A voice message exposes its play control as "Button"; audio files and other
-	# attachments use "Download". The focus handler already knows both.
+	# Since Unigram 13.0 the content of a photo, video, GIF, file or music message
+	# is itself the FileButton that opens, plays or downloads it, and 13.0.1 named
+	# it "Button" again. Music keeps a separate "Download" FileButton inside it,
+	# and a round video message keeps its "Button" inside the video. A voice
+	# message's own FileButton has no AutomationId: the "Button" inside it is the
+	# voice-to-text toggle. Stickers and link previews are named "Button" too,
+	# but they are hyperlinks, so Space leaves them to Unigram.
 	_MEDIA_BUTTON_AUTOMATION_IDS = ("Button", "Download")
 
 	def _is_media_button(self, obj):
 		try:
-			return (
-				obj.role in (Role.LINK, Role.BUTTON)
-				and obj.UIAAutomationId in self._MEDIA_BUTTON_AUTOMATION_IDS
-			)
+			if obj.role != Role.BUTTON:
+				return False
+			automation_id = obj.UIAAutomationId or ""
 		except Exception:
 			return False
+		if automation_id in self._MEDIA_BUTTON_AUTOMATION_IDS:
+			return True
+		return not automation_id and _is_file_button(obj)
+
+	def _media_button_opens_viewer(self, button, in_album=False):
+		"""Tell whether pressing a media button opens Unigram's media viewer.
+
+		A photo, video or GIF is pressed as the picture itself and opens the
+		viewer. A file or a song shows its title, and a voice message (the
+		FileButton without an AutomationId) plays where it is, as do small
+		buttons such as a call's or the play button of older Unigram versions.
+		"""
+		try:
+			if not button.UIAAutomationId:
+				return False
+			if not in_album:
+				location = button.location
+				if not (location and location.width > 150):
+					return False
+			children = tuple(button.children or ())
+		except Exception:
+			return False
+		for child in children:
+			try:
+				if child.UIAAutomationId == "Title":
+					return False
+			except Exception:
+				pass
+		return True
 
 	def _find_media_button_in_message(self, obj):
 		"""Return the play or download button of a message, and whether to keep focus."""
@@ -2338,36 +2411,31 @@ class AppModule(appModuleHandler.AppModule):
 		except Exception:
 			media = None
 		if media:
-			targetButton = next(
-				(item for item in media.children if self._is_media_button(item)),
-				None,
-			)
-			is_save_focus = True
-			try:
-				if targetButton and targetButton.previous and targetButton.previous.UIAAutomationId != "Button":
-					is_save_focus = False
-			except Exception:
-				pass
-			return targetButton, is_save_focus
-		# Direct children first, which is where every current template puts it.
+			# An album item chosen with the arrows holds its content's button.
+			try: children = tuple(media.children or ())
+			except Exception: children = ()
+			targetButton = next((item for item in children if self._is_media_button(item)), None)
+			if not targetButton:
+				return None, True
+			return targetButton, not self._media_button_opens_viewer(targetButton, in_album=True)
+		# Direct children first, which is where Unigram puts a message's content.
 		item = obj.firstChild
 		while item:
 			if self._is_media_button(item):
-				try: location = item.location
-				except Exception: location = None
-				return item, not (location and location.width > 150)
+				return item, not self._media_button_opens_viewer(item)
 			try: item = item.next
 			except Exception: break
-		# Some templates wrap the control one level deeper.
+		# An album item, a link preview or a round video message holds it one
+		# level deeper. Album items are list items and can be narrow.
 		item = obj.firstChild
 		while item:
 			try: children = tuple(item.children or ())
 			except Exception: children = ()
 			for child in children:
 				if self._is_media_button(child):
-					try: location = child.location
-					except Exception: location = None
-					return child, not (location and location.width > 150)
+					try: in_album = item.role == Role.LISTITEM
+					except Exception: in_album = False
+					return child, not self._media_button_opens_viewer(child, in_album)
 			try: item = item.next
 			except Exception: break
 		return None, True

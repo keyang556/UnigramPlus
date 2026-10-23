@@ -198,6 +198,13 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 
 ##Liste des changements :
 
+### Version 5.8.6
+
+* Espace lit, ouvre et télécharge de nouveau le média d’un message dans Unigram 13.0 et versions ultérieures. Depuis Unigram 13.0, le contenu d’un message photo, vidéo, GIF, fichier, musique ou vocal est lui-même le bouton qui le fait. Unigram 13.0.1 a rendu à ce bouton l’identifiant que cherche UnigramPlus, sauf pour les messages vocaux, où l’identifiant est allé au bouton de transcription, si bien qu’Espace ne faisait rien sur un message vocal. UnigramPlus reconnaît désormais le bouton propre d’un message vocal à la progression du téléchargement qu’il indique. Unigram 13.1.1 n’associe toujours aucune action à Espace sur un message en dehors du mode sélection ; UnigramPlus appuie donc sur ce bouton : Espace lit ou met en pause un message vocal ou une musique, ouvre une photo, une vidéo ou un GIF dans la visionneuse, et télécharge ou ouvre un fichier.
+* Après qu’Espace a lu un message vocal ou une musique ou téléchargé un fichier, le focus reste sur le message, et l’appui suivant sur Échap ne l’y ramène plus. Seule la visionneuse en a besoin, mais dans Unigram 13.0 et versions ultérieures un fichier ou une musique est aussi large qu’une photo, et UnigramPlus le prenait pour une photo.
+* Espace n’ouvre plus les autocollants ni les aperçus de liens. Unigram 13.0.1 leur a donné le même identifiant qu’aux boutons de média, mais ce sont des liens. Dans un aperçu de lien qui affiche une photo ou une vidéo, Espace ouvre toujours la photo ou la vidéo.
+* Flèche droite et Flèche gauche sur un message à plusieurs pièces jointes multimédias, comme un album, annoncent de nouveau chaque photo, vidéo, fichier ou musique dans Unigram 13.0 et versions ultérieures. Depuis Unigram 13.0, chaque pièce jointe ne contient que le bouton propre à son contenu ; UnigramPlus ne trouvait donc plus ce qui distingue une photo d’une vidéo et annonçait le mot provisoire « Медіа » pour chaque pièce jointe. Il regarde désormais à l’intérieur de ce bouton : une vidéo y a son propre bouton de téléchargement, un fichier ou une musique son titre, et une photo ni l’un ni l’autre.
+
 ### Version 5.8.5
 
 * Alt+M ouvre de nouveau le menu de navigation dans Unigram 13.1 et versions ultérieures. Unigram 13.1 a remplacé le volet latéral par un menu qui s’ouvre à partir du même bouton, et ce bouton n’est plus un bouton bascule ; UnigramPlus ne le trouvait donc pas et annonçait « Menu de navigation non disponible ».
