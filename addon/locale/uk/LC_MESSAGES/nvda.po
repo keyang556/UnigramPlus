@@ -22,12 +22,14 @@ msgid ""
 "- Space plays, opens and downloads the media of a message again in Unigram 13.0 and later, including voice messages.\n"
 "- Space no longer opens stickers or link previews in Unigram 13.0.1 and later.\n"
 "- Right and Left Arrow on a message with several attachments announce each photo, video, file or song again in Unigram 13.0 and later.\n"
-"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat."
+"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat.\n"
+"- Alt+Shift+M is a new shortcut that opens Unigram's settings in Unigram 13.1 and later and moves the focus to the top of the settings."
 msgstr ""
 "- Пробіл знову відтворює, відкриває та завантажує медіа повідомлення в Unigram 13.0 і новіших версіях, зокрема голосові повідомлення.\n"
 "- Пробіл більше не відкриває стікери та попередній перегляд посилань в Unigram 13.0.1 і новіших версіях.\n"
 "- Стрілки вправо і вліво на повідомленні з кількома вкладеннями знову називають кожне фото, відео, файл або музику в Unigram 13.0 і новіших версіях.\n"
-"- Ctrl+Space тепер позначає й чати у списку чатів: перше натискання вмикає режим вибору через контекстне меню чату, а далі кожне натискання позначає чат у фокусі або знімає з нього позначку."
+"- Ctrl+Space тепер позначає й чати у списку чатів: перше натискання вмикає режим вибору через контекстне меню чату, а далі кожне натискання позначає чат у фокусі або знімає з нього позначку.\n"
+"- Нове сполучення Alt+Shift+M відкриває налаштування Unigram в Unigram 13.1 і новіших версіях і переносить фокус на початок налаштувань."
 
 msgid ""
 "- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the menu button opens a menu instead of the side pane.\n"
@@ -638,6 +640,15 @@ msgstr "Відкрити меню навігації"
 #: appModules/unigram.py:784
 msgid "Navigation menu not available"
 msgstr "Меню навігації недоступне"
+
+#. Open Unigram settings
+#: addon\appModules\unigram.py:3146
+msgid "Open Unigram settings"
+msgstr "Відкрити налаштування Unigram"
+
+#: addon\appModules\unigram.py:3161
+msgid "Settings not available"
+msgstr "Налаштування недоступні"
 
 #: appModules/unigram.py:787
 msgid "Open current chat profile"

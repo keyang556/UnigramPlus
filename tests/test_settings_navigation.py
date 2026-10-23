@@ -45,17 +45,22 @@ def _load_settings_list_finder():
 	app_module = next(
 		node for node in module.body if isinstance(node, ast.ClassDef) and node.name == "AppModule"
 	)
-	method = next(
+	methods = [
 		node
 		for node in app_module.body
-		if isinstance(node, ast.FunctionDef) and node.name == "get_settings_list"
-	)
+		if isinstance(node, ast.FunctionDef) and node.name in ("_get_settings_page", "get_settings_list")
+	]
 	namespace = {
 		"Role": SimpleNamespace(PANE="pane"),
 		"State": SimpleNamespace(SELECTED="selected"),
 	}
-	exec(compile(ast.Module(body=[relative, method], type_ignores=[]), str(SOURCE_PATH), "exec"), namespace)
-	return namespace["get_settings_list"]
+	exec(compile(ast.Module(body=[relative, *methods], type_ignores=[]), str(SOURCE_PATH), "exec"), namespace)
+
+	def get_settings_list(app):
+		app._get_settings_page = lambda: namespace["_get_settings_page"](app)
+		return namespace["get_settings_list"](app)
+
+	return get_settings_list
 
 
 def _category(name, selected=False):

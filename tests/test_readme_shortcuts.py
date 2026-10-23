@@ -98,7 +98,8 @@ def test_all_readmes_have_complete_integrated_shortcut_tables():
 		assert text.count("<!-- shortcut-table-end -->") == 1, readme
 		assert text.count("|---|---|---|") == 9, readme
 		assert text.count("| Unigram |") == 44, readme
-		assert text.count("| UnigramPlus |") == 53, readme
+		assert text.count("| UnigramPlus |") == 54, readme
+		assert "| **ALT+Shift+M** | UnigramPlus |" in shortcut_table, readme
 		undocumented_shortcuts = [
 			line
 			for line in shortcut_table.splitlines()

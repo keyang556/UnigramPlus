@@ -188,6 +188,7 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 | **ALT+T** | UnigramPlus | Anunciar o nome e o status de uma conversa aberta |
 | **NVDA+Alt+V** | UnigramPlus | Abrir informações de versão do Unigram e do UnigramPlus numa janela só de leitura |
 | **ALT+M** | UnigramPlus | Abrir menu de navegação |
+| **ALT+Shift+M** | UnigramPlus | Abrir as definições do Unigram |
 | **ALT+Shift+P** | UnigramPlus | Abrir o perfil da conversa atual |
 | **ALT+L** | UnigramPlus | Enable automatic reading of new messages in the current chat |
 | **ALT+H** | UnigramPlus | Show a list of all UnigramPlus shortcuts |
@@ -205,6 +206,7 @@ E lembre-se que todos que leram este post pensaram que alguém definitivamente a
 * A barra de espaços já não abre autocolantes nem pré-visualizações de ligações. O Unigram 13.0.1 deu-lhes o mesmo identificador dos botões multimédia, mas são ligações. Numa pré-visualização de ligação que mostra uma fotografia ou um vídeo, a barra de espaços continua a abrir a fotografia ou o vídeo.
 * As setas para a direita e para a esquerda numa mensagem com vários anexos multimédia, como um álbum, voltam a anunciar cada fotografia, vídeo, ficheiro ou música no Unigram 13.0 e versões posteriores. Desde o Unigram 13.0, cada anexo contém apenas o botão próprio do seu conteúdo, pelo que o UnigramPlus deixou de encontrar o que distingue uma fotografia de um vídeo e anunciava a palavra provisória "Медіа" para cada anexo. Agora procura dentro desse botão: um vídeo tem aí o seu próprio botão de transferência, um ficheiro ou uma música o seu título, e uma fotografia nenhum dos dois.
 * O Ctrl+Space agora também funciona na lista de conversas, onde antes não fazia nada. Tal como nas mensagens, a primeira vez que é premido ativa o modo de seleção com a conversa em foco a partir do menu de contexto da conversa e, a partir daí, cada vez que é premido seleciona ou desmarca a conversa em foco, tal como a barra de espaços faz no Unigram. Em seguida, o UnigramPlus anuncia se a conversa está selecionada. Desmarcar a última conversa selecionada termina o modo de seleção. Enquanto a lista de conversas está no modo de seleção, o UnigramPlus também diz "Seleccionado" antes do nome de uma conversa selecionada quando o foco chega a ela, tal como faz com as mensagens.
+* Foi adicionado o Alt+Shift+M, que abre as definições do Unigram no Unigram 13.1 e versões posteriores, tal como faz o UnigramPlusRussianMod. O Unigram 13.1 moveu as definições do painel lateral para um separador abaixo da lista de conversas. O Alt+Shift+M seleciona esse separador e depois move o foco para o início das definições: para a primeira das suas outras contas ou, se tiver sessão iniciada em apenas uma conta, para "Adicionar conta". Nas versões do Unigram anteriores à 13.1, e numa janela estreita que mostra apenas a conversa aberta, o UnigramPlus anuncia "Definições indisponíveis".
 
 ### Versão 5.8.5
 

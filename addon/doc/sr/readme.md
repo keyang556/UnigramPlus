@@ -193,6 +193,7 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će neko sigurno po
 | **ALT+T** | UnigramPlus | Najavi ime i status otvorenog ćaskanja |
 | **NVDA+Alt+V** | UnigramPlus | Otvori informacije o verzijama programa Unigram i dodatka UnigramPlus u prozoru samo za čitanje |
 | **ALT+M** | UnigramPlus | Otvori meni za navigaciju |
+| **ALT+Shift+M** | UnigramPlus | Otvori podešavanja Unigrama |
 | **ALT+Shift+P** | UnigramPlus | Otvori trenutni profil za ćaskanje |
 | **ALT+L** | UnigramPlus | Omogući automatsko čitanje novih poruka u trenutnom ćaskanju |
 | **ALT+H** | UnigramPlus | Prikaži listu svih UnigramPlus prečica |
@@ -480,6 +481,7 @@ Added Turkish localization
 * Razmaknica više ne otvara nalepnice ni preglede linkova. Unigram 13.0.1 im je dao isti identifikator kao dugmadima za medije, ali oni su linkovi. U pregledu linka koji prikazuje fotografiju ili video razmaknica i dalje otvara fotografiju ili video.
 * Strelice desno i levo na poruci sa više medijskih priloga, poput albuma, ponovo najavljuju svaku fotografiju, video, datoteku ili pesmu u Unigramu 13.0 i novijim verzijama. Od Unigrama 13.0 svaki prilog sadrži samo sopstveno dugme svog sadržaja, pa UnigramPlus više nije pronalazio ono po čemu se fotografija razlikuje od videa i za svaki prilog je najavljivao zamensku reč „Медіа”. Sada gleda unutar tog dugmeta: video tamo ima sopstveno dugme za preuzimanje, datoteka ili pesma svoj naslov, a fotografija ni jedno ni drugo.
 * Ctrl+Space sada radi i u listi ćaskanja, gde ranije nije radio ništa. Kao i kod poruka, prvi pritisak uključuje režim izbora sa ćaskanjem u fokusu iz kontekstnog menija ćaskanja, a zatim svaki pritisak izabira ćaskanje u fokusu ili poništava njegov izbor, kao što to radi razmaknica u Unigramu. UnigramPlus zatim javlja da li je ćaskanje izabrano. Poništavanje izbora poslednjeg izabranog ćaskanja završava režim izbora. Dok je lista ćaskanja u režimu izbora, UnigramPlus kaže i „Izabrano” pre naziva izabranog ćaskanja kada fokus dođe na njega, kao što to radi kod poruka.
+* Dodata je prečica Alt+Shift+M koja otvara podešavanja Unigrama u Unigramu 13.1 i novijim verzijama, kao što to radi UnigramPlusRussianMod. Unigram 13.1 je premestio podešavanja iz bočnog panela u karticu ispod liste ćaskanja. Alt+Shift+M izabira tu karticu, a zatim premešta fokus na vrh podešavanja: na prvi od vaših ostalih naloga ili, ako ste prijavljeni samo na jedan nalog, na „Dodaj nalog”. U verzijama Unigrama starijim od 13.1, kao i u uskom prozoru koji prikazuje samo otvoreno ćaskanje, UnigramPlus javlja „Podešavanja nedostupna”.
 
 ###Verzija 5.8.5
 

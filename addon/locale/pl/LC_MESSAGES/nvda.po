@@ -489,6 +489,15 @@ msgstr "Otwiera menu nawigacyjne"
 msgid "Navigation menu not available"
 msgstr "Menu nawigacyjne niedostępne"
 
+#. Open Unigram settings
+#: addon\appModules\unigram.py:3146
+msgid "Open Unigram settings"
+msgstr "Otwiera ustawienia Unigrama"
+
+#: addon\appModules\unigram.py:3161
+msgid "Settings not available"
+msgstr "Ustawienia niedostępne"
+
 #. Function to open the profile of the current chat
 #: addon\appModules\unigram.py:2818
 msgid "Open current chat profile"
@@ -1129,12 +1138,14 @@ msgid ""
 "- Space plays, opens and downloads the media of a message again in Unigram 13.0 and later, including voice messages.\n"
 "- Space no longer opens stickers or link previews in Unigram 13.0.1 and later.\n"
 "- Right and Left Arrow on a message with several attachments announce each photo, video, file or song again in Unigram 13.0 and later.\n"
-"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat."
+"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat.\n"
+"- Alt+Shift+M is a new shortcut that opens Unigram's settings in Unigram 13.1 and later and moves the focus to the top of the settings."
 msgstr ""
 "- Spacja ponownie odtwarza, otwiera i pobiera multimedia wiadomości w Unigramie 13.0 i nowszych, w tym wiadomości głosowe.\n"
 "- Spacja nie otwiera już naklejek ani podglądów linków w Unigramie 13.0.1 i nowszych.\n"
 "- Strzałki w prawo i w lewo na wiadomości z kilkoma załącznikami ponownie odczytują każde zdjęcie, wideo, plik lub utwór w Unigramie 13.0 i nowszych.\n"
-"- Ctrl+Space zaznacza teraz także czaty na liście czatów: pierwsze naciśnięcie włącza tryb zaznaczania z menu kontekstowego czatu, a każde kolejne zaznacza lub odznacza czat z fokusem."
+"- Ctrl+Space zaznacza teraz także czaty na liście czatów: pierwsze naciśnięcie włącza tryb zaznaczania z menu kontekstowego czatu, a każde kolejne zaznacza lub odznacza czat z fokusem.\n"
+"- Nowy skrót Alt+Shift+M otwiera ustawienia Unigrama w Unigramie 13.1 i nowszych oraz przenosi fokus na początek ustawień."
 
 msgid ""
 "- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the menu button opens a menu instead of the side pane.\n"

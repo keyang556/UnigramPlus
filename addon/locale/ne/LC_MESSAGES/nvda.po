@@ -22,12 +22,14 @@ msgid ""
 "- Space plays, opens and downloads the media of a message again in Unigram 13.0 and later, including voice messages.\n"
 "- Space no longer opens stickers or link previews in Unigram 13.0.1 and later.\n"
 "- Right and Left Arrow on a message with several attachments announce each photo, video, file or song again in Unigram 13.0 and later.\n"
-"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat."
+"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat.\n"
+"- Alt+Shift+M is a new shortcut that opens Unigram's settings in Unigram 13.1 and later and moves the focus to the top of the settings."
 msgstr ""
 "- Unigram 13.0 र त्यसपछिका संस्करणहरूमा Space ले फेरि भ्वाइस सन्देशसहित सन्देशको मिडिया बजाउँछ, खोल्छ र डाउनलोड गर्छ।\n"
 "- Unigram 13.0.1 र त्यसपछिका संस्करणहरूमा Space ले अब स्टिकर वा लिङ्क पूर्वावलोकन खोल्दैन।\n"
 "- Unigram 13.0 र त्यसपछिका संस्करणहरूमा धेरै संलग्नक भएको सन्देशमा दायाँ र बायाँ एरोले फेरि प्रत्येक फोटो, भिडियो, फाइल वा गीत घोषणा गर्छन्।\n"
-"- च्याट सूचीमा पनि Ctrl+Space ले अब च्याटहरू चयन गर्छ: पहिलो पटक थिच्दा च्याटको सन्दर्भ मेनुबाट चयन मोड सुरु हुन्छ, र त्यसपछि हरेक पटक थिच्दा फोकसमा रहेको च्याट चयन हुन्छ वा त्यसको चयन हट्छ।"
+"- च्याट सूचीमा पनि Ctrl+Space ले अब च्याटहरू चयन गर्छ: पहिलो पटक थिच्दा च्याटको सन्दर्भ मेनुबाट चयन मोड सुरु हुन्छ, र त्यसपछि हरेक पटक थिच्दा फोकसमा रहेको च्याट चयन हुन्छ वा त्यसको चयन हट्छ।\n"
+"- Unigram 13.1 र त्यसपछिका संस्करणहरूमा नयाँ सर्टकट Alt+Shift+M ले Unigram को सेटिङ खोल्छ र फोकसलाई सेटिङको सुरुमा सार्छ।"
 
 msgid ""
 "- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the menu button opens a menu instead of the side pane.\n"
@@ -604,6 +606,15 @@ msgstr "नेभिगेसन मेनु खोल्नुहोस्"
 #: appModules/unigram.py:602
 msgid "Navigation menu not available"
 msgstr "नेभिगेसन मेनु उपलब्ध छैन"
+
+#. Open Unigram settings
+#: addon\appModules\unigram.py:3146
+msgid "Open Unigram settings"
+msgstr "Unigram को सेटिङ खोल्नुहोस्"
+
+#: addon\appModules\unigram.py:3161
+msgid "Settings not available"
+msgstr "सेटिङ उपलब्ध छैन"
 
 #: appModules/unigram.py:605
 msgid "Open comments"

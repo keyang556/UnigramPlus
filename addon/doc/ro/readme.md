@@ -189,6 +189,7 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 | **ALT+T** | UnigramPlus | Anunță numele și starea unui chat deschis |
 | **NVDA+Alt+V** | UnigramPlus | Deschide informațiile despre versiunile Unigram și UnigramPlus într-o fereastră doar în citire |
 | **ALT+M** | UnigramPlus | Deschide meniul de navigare |
+| **ALT+Shift+M** | UnigramPlus | Deschide setările Unigram |
 | **ALT+Shift+P** | UnigramPlus | Deschide profilul de chat curent |
 | **ALT+L** | UnigramPlus | Activează citirea automată a mesajelor într-un chat |
 | **ALT+H** | UnigramPlus | Afișează o listă cu toate comenzile rapide UnigramPlus |
@@ -206,6 +207,7 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 * Tasta Spațiu nu mai deschide autocolante sau previzualizări de linkuri. Unigram 13.0.1 le-a dat același identificator ca butoanelor media, dar ele sunt linkuri. Într-o previzualizare de link care afișează o fotografie sau un videoclip, tasta Spațiu deschide în continuare fotografia sau videoclipul.
 * Săgețile dreapta și stânga pe un mesaj cu mai multe atașamente media, cum ar fi un album, anunță din nou fiecare fotografie, videoclip, fișier sau melodie în Unigram 13.0 și versiunile ulterioare. Începând cu Unigram 13.0, fiecare atașament conține doar butonul propriu al conținutului său, așa că UnigramPlus nu mai găsea ce deosebește o fotografie de un videoclip și anunța cuvântul provizoriu „Медіа” pentru fiecare atașament. Acum caută în interiorul acelui buton: un videoclip are acolo propriul buton de descărcare, un fișier sau o melodie titlul său, iar o fotografie niciunul dintre ele.
 * Ctrl+Space funcționează acum și în lista de chat-uri, unde înainte nu făcea nimic. Ca la mesaje, prima apăsare pornește modul de selectare cu chat-ul aflat în focus din meniul contextual al chat-ului, iar apoi fiecare apăsare selectează sau deselectează chat-ul aflat în focus, așa cum face tasta Spațiu în Unigram. Apoi UnigramPlus anunță dacă chat-ul este selectat. Deselectarea ultimului chat selectat încheie modul de selectare. Cât timp lista de chat-uri este în modul de selectare, UnigramPlus spune și „Selectat” înaintea numelui unui chat selectat când focusul ajunge la el, așa cum face la mesaje.
+* A fost adăugată comanda rapidă Alt+Shift+M, care deschide setările Unigram în Unigram 13.1 și versiunile ulterioare, așa cum face UnigramPlusRussianMod. Unigram 13.1 a mutat setările din panoul lateral într-o filă de sub lista de chat-uri. Alt+Shift+M selectează această filă și apoi mută focusul la începutul setărilor: pe primul dintre celelalte conturi ale tale sau, dacă ești conectat la un singur cont, pe „Adaugă cont”. În versiunile Unigram anterioare versiunii 13.1 și într-o fereastră îngustă care afișează doar chat-ul deschis, UnigramPlus anunță „Setări indisponibile”.
 
 ### Versiunea 5.8.5
 

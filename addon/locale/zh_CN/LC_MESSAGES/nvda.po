@@ -19,12 +19,14 @@ msgid ""
 "- Space plays, opens and downloads the media of a message again in Unigram 13.0 and later, including voice messages.\n"
 "- Space no longer opens stickers or link previews in Unigram 13.0.1 and later.\n"
 "- Right and Left Arrow on a message with several attachments announce each photo, video, file or song again in Unigram 13.0 and later.\n"
-"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat."
+"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat.\n"
+"- Alt+Shift+M is a new shortcut that opens Unigram's settings in Unigram 13.1 and later and moves the focus to the top of the settings."
 msgstr ""
 "- 在 Unigram 13.0 及更高版本中，空格键又能播放、打开和下载消息中的媒体了，语音消息也包括在内。\n"
 "- 在 Unigram 13.0.1 及更高版本中，空格键不会再打开贴纸或链接预览。\n"
 "- 在 Unigram 13.0 及更高版本中，在含有多个附件的消息上按右、左方向键，又能读出每张照片、每个视频、文件或音乐了。\n"
-"- 在聊天列表中，Ctrl+Space 现在也能选中聊天了：第一次按下会从该聊天的上下文菜单进入选择模式，之后每按一次就会选中或取消选中当前焦点所在的聊天。"
+"- 在聊天列表中，Ctrl+Space 现在也能选中聊天了：第一次按下会从该聊天的上下文菜单进入选择模式，之后每按一次就会选中或取消选中当前焦点所在的聊天。\n"
+"- 新增快捷键 Alt+Shift+M：在 Unigram 13.1 及更高版本中打开 Unigram 设置，并把焦点移到设置的最上方。"
 
 msgid ""
 "- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the menu button opens a menu instead of the side pane.\n"
@@ -489,6 +491,15 @@ msgstr "打开导航菜单"
 #: addon\appModules\unigram.py:1309
 msgid "Navigation menu not available"
 msgstr "导航菜单不可用"
+
+#. Open Unigram settings
+#: addon\appModules\unigram.py:3146
+msgid "Open Unigram settings"
+msgstr "打开 Unigram 设置"
+
+#: addon\appModules\unigram.py:3161
+msgid "Settings not available"
+msgstr "设置不可用"
 
 #. Function to open the profile of the current chat
 #: addon\appModules\unigram.py:1312

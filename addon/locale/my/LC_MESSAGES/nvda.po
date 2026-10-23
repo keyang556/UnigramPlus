@@ -462,6 +462,15 @@ msgstr "လမ်းညွှန်မီနူးကိုဖွင့်ပါ
 msgid "Navigation menu not available"
 msgstr "လမ်းညွှန်မီနူးကို မရရှိနိုင်ပါ။"
 
+#. Open Unigram settings
+#: addon\appModules\unigram.py:3146
+msgid "Open Unigram settings"
+msgstr "Unigram ဆက်တင်များကို ဖွင့်ပါ။"
+
+#: addon\appModules\unigram.py:3161
+msgid "Settings not available"
+msgstr "ဆက်တင်များကို မရရှိနိုင်ပါ။"
+
 #. Function to open the profile of the current chat
 #: addon\appModules\unigram.py:2476
 msgid "Open current chat profile"
@@ -968,12 +977,14 @@ msgid ""
 "- Space plays, opens and downloads the media of a message again in Unigram 13.0 and later, including voice messages.\n"
 "- Space no longer opens stickers or link previews in Unigram 13.0.1 and later.\n"
 "- Right and Left Arrow on a message with several attachments announce each photo, video, file or song again in Unigram 13.0 and later.\n"
-"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat."
+"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat.\n"
+"- Alt+Shift+M is a new shortcut that opens Unigram's settings in Unigram 13.1 and later and moves the focus to the top of the settings."
 msgstr ""
 "- Unigram 13.0 နှင့် နောက်ပိုင်းဗားရှင်းများတွင် Space ဖြင့် အသံမက်ဆေ့ချ်များအပါအဝင် မက်ဆေ့ချ်ရှိ မီဒီယာကို ထပ်မံ ဖွင့်ပြခြင်း၊ ဖွင့်ကြည့်ခြင်းနှင့် ဒေါင်းလုဒ်လုပ်ခြင်းတို့ ပြုလုပ်နိုင်ပါပြီ။\n"
 "- Unigram 13.0.1 နှင့် နောက်ပိုင်းဗားရှင်းများတွင် Space သည် စတစ်ကာများ သို့မဟုတ် လင့်ခ်အစမ်းကြည့်ရှုမှုများကို မဖွင့်တော့ပါ။\n"
 "- Unigram 13.0 နှင့် နောက်ပိုင်းဗားရှင်းများတွင် ပူးတွဲဖိုင်များစွာပါသော မက်ဆေ့ချ်ပေါ်ရှိ ညာနှင့် ဘယ်မြှားခလုတ်များက ဓာတ်ပုံ၊ ဗီဒီယို၊ ဖိုင် သို့မဟုတ် သီချင်းတစ်ခုစီကို ထပ်မံ ကြေညာပေးပါပြီ။\n"
-"- Ctrl+Space ဖြင့် ချတ်စာရင်းရှိ ချတ်များကိုလည်း ရွေးချယ်နိုင်ပါပြီ။ ပထမအကြိမ် နှိပ်လျှင် ချတ်၏ ဆက်စပ်မီနူးမှ ရွေးချယ်မှုမုဒ်ကို စတင်ပြီး ထို့နောက် နှိပ်တိုင်း focus ရှိသော ချတ်ကို ရွေးချယ်ခြင်း သို့မဟုတ် ရွေးချယ်မှု ပယ်ဖျက်ခြင်း ပြုလုပ်ပါသည်။"
+"- Ctrl+Space ဖြင့် ချတ်စာရင်းရှိ ချတ်များကိုလည်း ရွေးချယ်နိုင်ပါပြီ။ ပထမအကြိမ် နှိပ်လျှင် ချတ်၏ ဆက်စပ်မီနူးမှ ရွေးချယ်မှုမုဒ်ကို စတင်ပြီး ထို့နောက် နှိပ်တိုင်း focus ရှိသော ချတ်ကို ရွေးချယ်ခြင်း သို့မဟုတ် ရွေးချယ်မှု ပယ်ဖျက်ခြင်း ပြုလုပ်ပါသည်။\n"
+"- Unigram 13.1 နှင့် နောက်ပိုင်းဗားရှင်းများတွင် Alt+Shift+M ကီးတွဲအသစ်ဖြင့် Unigram ဆက်တင်များကို ဖွင့်ပြီး focus ကို ဆက်တင်များ၏ ထိပ်ဆုံးသို့ ရွှေ့ပေးပါသည်။"
 
 msgid ""
 "- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the menu button opens a menu instead of the side pane.\n"

@@ -94,6 +94,10 @@ _CONTEXT_MENU_CLAIM_LOCK = threading.Lock()
 # after the key, so a short poll is enough to announce the state it actually set.
 _SELECTION_POLL_DELAY_MS = 50
 _SELECTION_POLL_LIMIT = 10
+# Unigram builds the settings page the first time its tab is selected, so
+# Alt+Shift+M waits up to a second for the page before moving the focus there.
+_SETTINGS_FOCUS_POLL_DELAY_MS = 100
+_SETTINGS_FOCUS_POLL_LIMIT = 10
 # Chat rows are almost always direct children of ChatsList. This bounds the walk
 # up to it, as _is_chat_list_item does.
 _CHAT_LIST_ANCESTOR_DEPTH = 8
@@ -1984,6 +1988,7 @@ class AppModule(appModuleHandler.AppModule):
 	execute_context_menu_option = False
 	is_exit_from_media = False
 	_selection_toggle = None
+	_settings_focus_request = None
 	keys = {
 		"upArrow": KeyboardInputGesture.fromName("upArrow"),
 		"downArrow": KeyboardInputGesture.fromName("downArrow"),
@@ -2077,14 +2082,9 @@ class AppModule(appModuleHandler.AppModule):
 			log.debug("Could not find the Unigram contacts list: %r" % error)
 			return False
 
-	def get_settings_list(self):
-		"""Return the settings category button that Alt+1 focuses.
-
-		Unigram 13.0 puts the focus on the button inside each item of the
-		Navigation list, not on the item, so return the button of the open
-		category, or of the first one.
-		"""
-		settings_page = next(
+	def _get_settings_page(self):
+		"""Return the scrolling pane of Unigram's settings page, which starts with the profile header."""
+		return next(
 			(
 				item for item in self.getElements()
 				if item.role == Role.PANE
@@ -2094,6 +2094,15 @@ class AppModule(appModuleHandler.AppModule):
 			),
 			None,
 		)
+
+	def get_settings_list(self):
+		"""Return the settings category button that Alt+1 focuses.
+
+		Unigram 13.0 puts the focus on the button inside each item of the
+		Navigation list, not on the item, so return the button of the open
+		category, or of the first one.
+		"""
+		settings_page = self._get_settings_page()
 		if not settings_page:
 			return False
 		try:
@@ -2104,6 +2113,46 @@ class AppModule(appModuleHandler.AppModule):
 			# Unigram can rebuild the list while it is read; let Alt+1 report it.
 			return False
 		return _relative(category, "firstChild") or False
+
+	def _get_settings_tab(self):
+		"""Return the Settings tab of the bar below the chat list, or None.
+
+		Unigram 13.1 (commit 8db8d29de, "Add bottom navigation bar") moved
+		Settings from the side pane to a "Navigation" list below the chat list,
+		with Chats as its first item and Settings as its last. The open chat
+		comes before that bar in UIA order, so search from the end. The settings
+		page's own "Navigation" list of categories sits inside its pane and is
+		not among these elements.
+		"""
+		try:
+			bar = next(
+				(
+					item for item in reversed(self.getElements())
+					if item.role == Role.LIST and item.UIAAutomationId == "Navigation"
+				),
+				None,
+			)
+		except Exception:
+			return None
+		return _relative(bar, "lastChild")
+
+	def _get_settings_start(self):
+		"""Return where Alt+Shift+M puts the focus on the settings page, or None.
+
+		That is the first of the other accounts Unigram 13.1 lists at the top of
+		the settings, else its Add account button, which Unigram hides once the
+		account limit is reached, else the open settings category. A UIA read
+		fails when Unigram rebuilds the page while it is read; the caller retries.
+		"""
+		settings_page = self._get_settings_page()
+		if not settings_page:
+			return None
+		for item in settings_page.children:
+			if item.UIAAutomationId == "Accounts" and item.firstChild:
+				return item.firstChild
+			if item.UIAAutomationId == "AddAccount":
+				return item
+		return self.get_settings_list() or None
 
 
 	def is_message_object(self, obj):
@@ -3089,6 +3138,46 @@ class AppModule(appModuleHandler.AppModule):
 		except: targetButton = False
 		if targetButton: targetButton.doAction()
 		else: message(_("Navigation menu not available"))
+
+	# Open Unigram settings
+	@script(description=_("Open Unigram settings"), gesture="kb:shift+alt+M")
+	def script_openSettings(self, gesture):
+		"""Select the Settings tab below the chat list and move the focus into the settings.
+
+		Doing the default action of the tab selects it, which is how Unigram
+		switches the list above it to the settings. The focus stays where it was,
+		so once the page is there, move it to the top of the settings, as
+		UnigramPlusRussianMod does.
+		"""
+		# There is no such bar before Unigram 13.1, nor while a narrow window shows only the chat.
+		settings_tab = self._get_settings_tab()
+		if settings_tab:
+			try: settings_tab.doAction()
+			except Exception: settings_tab = None
+		if not settings_tab:
+			message(_("Settings not available"))
+			return
+		request = {"polls": 0}
+		self._settings_focus_request = request
+		core.callLater(_SETTINGS_FOCUS_POLL_DELAY_MS, self._focus_settings_start, request)
+
+	def _focus_settings_start(self, request):
+		if self._settings_focus_request is not request:
+			return
+		try:
+			target = self._get_settings_start()
+			if target:
+				target.setFocus()
+				self._settings_focus_request = None
+				return
+		except Exception:
+			# Unigram can rebuild the page while it is read or focused; try again on the next poll.
+			log.debug("Could not move the focus to the Unigram settings yet", exc_info=True)
+		request["polls"] += 1
+		if request["polls"] < _SETTINGS_FOCUS_POLL_LIMIT:
+			core.callLater(_SETTINGS_FOCUS_POLL_DELAY_MS, self._focus_settings_start, request)
+		else:
+			self._settings_focus_request = None
 
 	# Function to open the profile of the current chat
 	@script(description=_("Open current chat profile"), gesture="kb:alt+shift+P")

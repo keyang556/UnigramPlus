@@ -23,12 +23,14 @@ msgid ""
 "- Space plays, opens and downloads the media of a message again in Unigram 13.0 and later, including voice messages.\n"
 "- Space no longer opens stickers or link previews in Unigram 13.0.1 and later.\n"
 "- Right and Left Arrow on a message with several attachments announce each photo, video, file or song again in Unigram 13.0 and later.\n"
-"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat."
+"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat.\n"
+"- Alt+Shift+M is a new shortcut that opens Unigram's settings in Unigram 13.1 and later and moves the focus to the top of the settings."
 msgstr ""
 "- أصبح مفتاح المسافة يشغّل وسائط الرسالة ويفتحها وينزّلها مجددًا في Unigram 13.0 والإصدارات الأحدث، بما في ذلك الرسائل الصوتية.\n"
 "- لم يعد مفتاح المسافة يفتح الملصقات أو معاينات الروابط في Unigram 13.0.1 والإصدارات الأحدث.\n"
 "- أصبح السهمان الأيمن والأيسر على رسالة بها عدة مرفقات يعلنان كل صورة أو فيديو أو ملف أو مقطع صوتي مجددًا في Unigram 13.0 والإصدارات الأحدث.\n"
-"- أصبح Ctrl+Space يحدد الدردشات في قائمة الدردشات أيضًا: يبدأ الضغط الأول وضع التحديد من قائمة السياق للدردشة، ثم يحدد كل ضغط بعد ذلك الدردشة التي عليها التركيز أو يلغي تحديدها."
+"- أصبح Ctrl+Space يحدد الدردشات في قائمة الدردشات أيضًا: يبدأ الضغط الأول وضع التحديد من قائمة السياق للدردشة، ثم يحدد كل ضغط بعد ذلك الدردشة التي عليها التركيز أو يلغي تحديدها.\n"
+"- Alt+Shift+M اختصار جديد يفتح إعدادات Unigram في Unigram 13.1 والإصدارات الأحدث وينقل التركيز إلى أعلى الإعدادات."
 
 msgid ""
 "- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the menu button opens a menu instead of the side pane.\n"
@@ -462,6 +464,15 @@ msgstr "فتح قائمة التنقل"
 #: addon\appModules\unigram.py:784
 msgid "Navigation menu not available"
 msgstr "قائمة التنقل غير موجودة"
+
+#. Open Unigram settings
+#: addon\appModules\unigram.py:3146
+msgid "Open Unigram settings"
+msgstr "فتح إعدادات Unigram"
+
+#: addon\appModules\unigram.py:3161
+msgid "Settings not available"
+msgstr "الإعدادات غير متاحة"
 
 #. Function to open the profile of the current chat
 #: addon\appModules\unigram.py:787

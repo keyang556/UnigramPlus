@@ -23,12 +23,14 @@ msgid ""
 "- Space plays, opens and downloads the media of a message again in Unigram 13.0 and later, including voice messages.\n"
 "- Space no longer opens stickers or link previews in Unigram 13.0.1 and later.\n"
 "- Right and Left Arrow on a message with several attachments announce each photo, video, file or song again in Unigram 13.0 and later.\n"
-"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat."
+"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat.\n"
+"- Alt+Shift+M is a new shortcut that opens Unigram's settings in Unigram 13.1 and later and moves the focus to the top of the settings."
 msgstr ""
 "- Tasta Spațiu redă, deschide și descarcă din nou conținutul media al unui mesaj în Unigram 13.0 și versiunile ulterioare, inclusiv mesajele vocale.\n"
 "- Tasta Spațiu nu mai deschide autocolante sau previzualizări de linkuri în Unigram 13.0.1 și versiunile ulterioare.\n"
 "- Săgețile dreapta și stânga pe un mesaj cu mai multe atașamente anunță din nou fiecare fotografie, videoclip, fișier sau melodie în Unigram 13.0 și versiunile ulterioare.\n"
-"- Ctrl+Space selectează acum și chat-urile din lista de chat-uri: prima apăsare pornește modul de selectare din meniul contextual al chat-ului, iar apoi fiecare apăsare selectează sau deselectează chat-ul aflat în focus."
+"- Ctrl+Space selectează acum și chat-urile din lista de chat-uri: prima apăsare pornește modul de selectare din meniul contextual al chat-ului, iar apoi fiecare apăsare selectează sau deselectează chat-ul aflat în focus.\n"
+"- Noua comandă rapidă Alt+Shift+M deschide setările Unigram în Unigram 13.1 și versiunile ulterioare și mută focusul la începutul setărilor."
 
 msgid ""
 "- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the menu button opens a menu instead of the side pane.\n"
@@ -462,6 +464,15 @@ msgstr "Deschide meniul de navigare"
 #: addon\appModules\unigram.py:735
 msgid "Navigation menu not available"
 msgstr "Meniu de navigare indisponibil"
+
+#. Open Unigram settings
+#: addon\appModules\unigram.py:3146
+msgid "Open Unigram settings"
+msgstr "Deschide setările Unigram"
+
+#: addon\appModules\unigram.py:3161
+msgid "Settings not available"
+msgstr "Setări indisponibile"
 
 #. Function to open comments
 #: addon\appModules\unigram.py:738

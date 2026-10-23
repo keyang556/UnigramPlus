@@ -189,6 +189,7 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 | **ALT+T** | UnigramPlus | 讀出已開啟聊天的名稱與狀態 |
 | **NVDA+Alt+V** | UnigramPlus | 在唯讀視窗中開啟 Unigram 與 UnigramPlus 的版本資訊 |
 | **ALT+M** | UnigramPlus | 開啟導覽功能表 |
+| **ALT+Shift+M** | UnigramPlus | 開啟 Unigram 設定 |
 | **ALT+Shift+P** | UnigramPlus | 開啟目前聊天的個人資料 |
 | **ALT+L** | UnigramPlus | 啟用目前聊天中新訊息的自動讀出 |
 | **ALT+H** | UnigramPlus | 顯示所有 UnigramPlus 快速鍵清單 |
@@ -206,6 +207,7 @@ UnigramPlus 的音效檔案位於附加元件的 `appModules\media` 資料夾。
 * 空白鍵不會再開啟貼圖或連結預覽。Unigram 13.0.1 給了它們和媒體按鈕相同的識別碼，但它們其實是連結。在顯示相片或影片的連結預覽中，空白鍵仍會開啟該相片或影片。
 * 在 Unigram 13.0 以上版本中，在含有多個媒體附件的訊息（例如相簿）上按右、左方向鍵，又能讀出每張相片、每部影片、檔案或音樂了。從 Unigram 13.0 起，每個附件裡只有其內容本身的按鈕，因此 UnigramPlus 找不到用來區分相片和影片的部分，對每個附件都只讀出佔位字「Медіа」。現在它會查看該按鈕內部：影片在那裡有自己的下載按鈕，檔案或音樂有其標題，而相片兩者都沒有。
 * Ctrl+Space 現在在聊天清單中也能使用了，以前在這裡按下沒有任何作用。和訊息一樣，第一次按下會從該聊天的內容功能表進入選取模式，並選取目前焦點所在的聊天；之後每按一次就會選取或取消選取目前焦點所在的聊天，就像在 Unigram 中按空白鍵一樣，接著 UnigramPlus 會報告聊天是否已選取。取消選取最後一個已選取的聊天會結束選取模式。聊天清單處於選取模式時，焦點移到已選取的聊天上，UnigramPlus 也會在聊天名稱前讀出「已選取」，和訊息一樣。
+* 新增 Alt+Shift+M，可在 Unigram 13.1 以上版本中開啟 Unigram 設定，與 UnigramPlusRussianMod 相同。Unigram 13.1 把設定從側邊窗格移到了聊天清單下方的一個分頁。Alt+Shift+M 會選取這個分頁，然後把焦點移到設定的最上方：移到第一個其他帳號；如果只登入了一個帳號，就移到「新增帳號」。在 Unigram 13.1 之前的版本中，以及在只顯示目前聊天的窄視窗中，UnigramPlus 會讀出「設定無法使用」。
 
 ### 版本 5.8.5
 
