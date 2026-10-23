@@ -1,5 +1,6 @@
 import ast
 import sys
+import threading
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -836,6 +837,7 @@ def test_context_menu_focused_item_is_invoked_by_unigrams_icon_not_its_translati
 	)
 	namespace.update(
 		{
+			"_claim_context_menu_option": _load_context_menu_claim(),
 			"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args)),
 			"_CONTEXT_MENU_STEP_DELAY_MS": 20,
 			"_CONTEXT_MENU_NAVIGATION_DELAY_MS": 250,
@@ -991,7 +993,7 @@ def test_raw_context_menu_probe_runs_on_nvdas_mta_thread(monkeypatch):
 	namespace = {
 		"_CONTEXT_MENU_RAW_PROBE_LIMIT": 8,
 		"_get_raw_context_menu_focus": lambda process_id: None,
-		"_invoke_raw_context_menu_option": lambda root, icons, process_id, diagnose=False: (
+		"_invoke_raw_context_menu_option": lambda root, icons, process_id, diagnose=False, pending=None: (
 			root is latest_popup and icons == "\ue248" and process_id == 4242 and diagnose
 		),
 		"queueHandler": SimpleNamespace(
@@ -1045,7 +1047,7 @@ def test_raw_context_menu_probe_tries_latest_popup_after_current_focus_fails(mon
 		"rawProbeObject": latest_popup,
 	}
 	invocations = []
-	def invoke(root, icons, process_id, diagnose=False):
+	def invoke(root, icons, process_id, diagnose=False, pending=None):
 		invocations.append((root, diagnose))
 		if root is current_window:
 			raise RuntimeError("transient provider failure")
@@ -1100,7 +1102,7 @@ def test_raw_context_menu_probe_finds_uia_focus_without_a_popup_event(monkeypatc
 	namespace = {
 		"_CONTEXT_MENU_RAW_PROBE_LIMIT": 64,
 		"_get_raw_context_menu_focus": lambda process_id: raw_focus,
-		"_invoke_raw_context_menu_option": lambda root, icons, process_id, diagnose=False: (
+		"_invoke_raw_context_menu_option": lambda root, icons, process_id, diagnose=False, pending=None: (
 			invocations.append((root, icons, process_id, diagnose)) or True
 		),
 		"queueHandler": SimpleNamespace(
@@ -1149,7 +1151,7 @@ def test_first_real_popup_query_keeps_diagnostics_after_empty_focus_polls(monkey
 	namespace = {
 		"_CONTEXT_MENU_RAW_PROBE_LIMIT": 64,
 		"_get_raw_context_menu_focus": lambda process_id: next(focuses),
-		"_invoke_raw_context_menu_option": lambda root, icons, process_id, diagnose=False: (
+		"_invoke_raw_context_menu_option": lambda root, icons, process_id, diagnose=False, pending=None: (
 			invocations.append((root, diagnose)) or True
 		),
 		"queueHandler": SimpleNamespace(
@@ -1296,6 +1298,128 @@ def test_context_menu_timeout_does_not_escape_after_raw_invoke():
 	assert sent == []
 
 
+def _load_context_menu_claim():
+	return _load_module_members(
+		{"_claim_context_menu_option"},
+		{"_CONTEXT_MENU_CLAIM_LOCK": threading.Lock()},
+	)["_claim_context_menu_option"]
+
+
+def test_focused_command_is_left_to_a_raw_invoke_that_claimed_it_first():
+	"""Ctrl+Space left selection mode at once in Unigram 13.1.
+
+	The raw probe invoked Select, which closed the flyout. The focus path then
+	called doAction on the closed item, got NotImplementedError and sent Escape,
+	and Escape ended the selection mode that Select had just started.
+
+	The focus path must also keep the request current while that Invoke runs, so
+	the next probe or focus event can still run the command if Invoke fails.
+	"""
+	role = SimpleNamespace(MENUITEM="menuItem", LINK="link", BUTTON="button")
+	scheduled = []
+	next_calls = []
+	method = _load_app_method(
+		"_handle_pending_context_menu_focus",
+		{
+			"Role": role,
+			"_claim_context_menu_option": _load_context_menu_claim(),
+			"_menu_item_has_icon": lambda obj, icons: True,
+			"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args)),
+			"_CONTEXT_MENU_STEP_DELAY_MS": 20,
+		},
+	)
+	item = Node(role=role.MENUITEM)
+	pending = {"icons": "\ue97e", "moves": 0}
+
+	def find_command_while_the_raw_probe_claims_it(obj, icons):
+		# The raw probe's claim lands while this lookup crosses into Unigram.
+		pending["claimed"] = True
+		return item
+
+	instance = SimpleNamespace(
+		execute_context_menu_option=pending,
+		_invoke_context_menu_item=lambda item: None,
+		_find_context_menu_command=find_command_while_the_raw_probe_claims_it,
+	)
+
+	assert method(instance, item, lambda: next_calls.append(True))
+	assert scheduled == []
+	assert instance.execute_context_menu_option is pending
+	assert next_calls == [True]
+
+	# Invoke raised on the MTA thread and gave the claim back.
+	pending["claimed"] = False
+	instance._find_context_menu_command = lambda obj, icons: item
+	assert method(instance, item, lambda: next_calls.append(True))
+	assert scheduled == [(20, instance._invoke_context_menu_item, item)]
+	assert instance.execute_context_menu_option is False
+	assert pending["claimed"] is True
+	assert next_calls == [True]
+
+
+def test_raw_probe_does_not_invoke_a_command_the_focus_path_claimed(monkeypatch):
+	invocations = []
+	failures = []
+
+	class InvokePattern:
+		def QueryInterface(self, interface):
+			assert interface == "invokeInterface"
+			return self
+
+		def Invoke(self):
+			if failures:
+				raise RuntimeError("the popup closed")
+			invocations.append(True)
+
+	item = SimpleNamespace(GetCurrentPattern=lambda pattern_id: InvokePattern())
+	monkeypatch.setitem(
+		sys.modules,
+		"UIAHandler",
+		SimpleNamespace(UIA_InvokePatternId="invokePattern", IUIAutomationInvokePattern="invokeInterface"),
+	)
+	invoke = _load_module_members(
+		{"_invoke_raw_context_menu_option"},
+		{
+			"_claim_context_menu_option": _load_context_menu_claim(),
+			"_find_raw_context_menu_item_by_icon": lambda root, icons, process_id, diagnose: item,
+		},
+	)["_invoke_raw_context_menu_option"]
+
+	assert not invoke(object(), "", 4242, pending={"claimed": True})
+	assert invocations == []
+
+	pending = {}
+	assert invoke(object(), "", 4242, pending=pending)
+	assert invocations == [True]
+	assert not invoke(object(), "", 4242, pending=pending)
+	assert invocations == [True]
+
+	# A failed Invoke releases the request, so a later probe can still run it.
+	failures.append(True)
+	pending = {}
+	try:
+		invoke(object(), "", 4242, pending=pending)
+	except RuntimeError:
+		pass
+	assert pending["claimed"] is False
+
+
+def test_context_menu_focus_after_raw_claim_only_continues_the_event_chain():
+	method = _load_app_method("_handle_pending_context_menu_focus", {})
+	pending = {"rawInvoked": False, "claimed": True}
+	next_calls = []
+	instance = SimpleNamespace(
+		execute_context_menu_option=pending,
+		_find_context_menu_command=lambda obj, icons: (_ for _ in ()).throw(
+			AssertionError("the raw probe already runs this command")
+		),
+	)
+
+	assert method(instance, object(), lambda: next_calls.append(True))
+	assert instance.execute_context_menu_option is pending
+	assert next_calls == [True]
+
+
 def test_context_menu_timeout_arming_invalidates_the_previous_timer():
 	scheduled = []
 	method = _load_app_method(
@@ -1330,6 +1454,7 @@ def test_enter_invokes_reply_directly_like_version_54():
 	)
 	namespace.update(
 		{
+			"_claim_context_menu_option": _load_context_menu_claim(),
 			"core": SimpleNamespace(callLater=lambda *args: scheduled.append(args)),
 			"_CONTEXT_MENU_STEP_DELAY_MS": 20,
 			"_CONTEXT_MENU_NAVIGATION_DELAY_MS": 250,
