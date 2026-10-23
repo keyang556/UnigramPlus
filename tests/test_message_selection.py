@@ -176,17 +176,24 @@ def test_an_unselected_message_asks_for_the_selection_bar_of_its_chat():
 	assert not is_selection_mode(_message())
 
 
-def _ctrl_space(focus, selection_mode, is_message=True):
+def _is_chat_selected(chat):
+	"""Stands in for the chat list's reader of a chat's selection."""
+
+
+def _ctrl_space(focus, selection_mode, is_message=True, is_chat=False):
 	calls = []
 	namespace = {
 		"api": SimpleNamespace(getFocusObject=lambda: focus),
 		"icons_from_context_menu": {"select": ""},
+		"_is_chat_list_item": lambda obj: is_chat,
+		"_is_chat_list_selection_mode": lambda obj: selection_mode,
+		"_is_chat_selected": _is_chat_selected,
 	}
 	(method,) = _load_app_methods(["script_selectMessage"], namespace)
 	instance = SimpleNamespace(
 		is_message_object=lambda obj: is_message,
 		_is_message_selection_mode=lambda obj: selection_mode,
-		_toggle_message_selection=lambda obj: calls.append(("toggle", obj)),
+		_toggle_selection=lambda obj, *reader: calls.append(("toggle", obj, *reader)),
 		activate_option_for_menu=lambda icons, list_name: calls.append(("menu", icons, list_name)),
 	)
 	method(instance, None)
@@ -204,14 +211,28 @@ def test_ctrl_space_selects_or_unselects_a_message_in_selection_mode():
 	assert _ctrl_space(focus, selection_mode=True) == [("toggle", focus)]
 
 
-def test_ctrl_space_outside_a_message_keeps_its_previous_handling():
-	assert _ctrl_space(SimpleNamespace(), selection_mode=True, is_message=False) == [
-		("menu", "", "Messages")
+def test_ctrl_space_starts_chat_selection_from_the_chat_context_menu():
+	"""Select in a chat's menu runs ChatListViewModel.SelectChat."""
+	assert _ctrl_space(_message(), selection_mode=False, is_message=False, is_chat=True) == [
+		("menu", "", "ChatsList")
 	]
 
 
+def test_ctrl_space_selects_or_unselects_a_chat_in_selection_mode():
+	"""In selection mode a chat's menu has no Select, and a click toggles it."""
+	focus = _message(selected=True)
+
+	assert _ctrl_space(focus, selection_mode=True, is_message=False, is_chat=True) == [
+		("toggle", focus, _is_chat_selected)
+	]
+
+
+def test_ctrl_space_does_nothing_outside_messages_and_chats():
+	assert _ctrl_space(SimpleNamespace(), selection_mode=True, is_message=False) == []
+
+
 class _Toggle:
-	"""Run _toggle_message_selection with a fake Unigram and NVDA scheduler."""
+	"""Run _toggle_selection with a fake Unigram and NVDA scheduler."""
 
 	def __init__(self, focus, applies_after_polls=0, selects=None):
 		self.focus = focus
@@ -224,19 +245,19 @@ class _Toggle:
 			core=SimpleNamespace(callLater=lambda delay, function, *args: self.scheduled.append((function, args))),
 			api=SimpleNamespace(getFocusObject=lambda: self.focus),
 			message=self.spoken.append,
-			_MESSAGE_SELECTION_POLL_DELAY_MS=50,
-			_MESSAGE_SELECTION_POLL_LIMIT=10,
+			_SELECTION_POLL_DELAY_MS=50,
+			_SELECTION_POLL_LIMIT=10,
 		)
 		toggle, report = _load_app_methods(
-			["_toggle_message_selection", "_report_message_selection"],
+			["_toggle_selection", "_report_selection"],
 			namespace,
 		)
 		self.instance = SimpleNamespace(
-			_message_selection_toggle=None,
+			_selection_toggle=None,
 			keys={"space": SimpleNamespace(send=lambda: self.sent.append("space"))},
 			_same_uia_element=lambda first, second: first is second,
 		)
-		self.instance._report_message_selection = lambda pending: report(self.instance, pending)
+		self.instance._report_selection = lambda pending: report(self.instance, pending)
 		self.toggle = lambda obj: toggle(self.instance, obj)
 
 	def run(self, obj):
@@ -260,7 +281,7 @@ def test_toggling_a_message_presses_space_and_announces_the_new_state():
 	assert toggle.sent == ["space"]
 	assert toggle.spoken == ["selected"]
 	assert polls == 3
-	assert toggle.instance._message_selection_toggle is None
+	assert toggle.instance._selection_toggle is None
 
 
 def test_unselecting_a_message_is_announced_with_nvdas_negative_state():
@@ -280,7 +301,7 @@ def test_nothing_is_announced_when_unigram_does_not_change_the_message():
 
 	assert toggle.spoken == []
 	assert polls == 10
-	assert toggle.instance._message_selection_toggle is None
+	assert toggle.instance._selection_toggle is None
 
 
 def test_the_announcement_is_dropped_when_the_focus_moves_on():
@@ -295,7 +316,7 @@ def test_the_announcement_is_dropped_when_the_focus_moves_on():
 		function(*args)
 
 	assert toggle.spoken == []
-	assert toggle.instance._message_selection_toggle is None
+	assert toggle.instance._selection_toggle is None
 
 
 def _message_item_class(app):
@@ -320,10 +341,10 @@ def _message_item_class(app):
 
 
 def _app(selection_mode):
-	app = SimpleNamespace(calls=[], reported=[], _message_selection_toggle=None)
+	app = SimpleNamespace(calls=[], reported=[], _selection_toggle=None)
 	app._same_uia_element = lambda first, second: first is second
 	app._is_message_selection_mode = lambda obj: selection_mode
-	app._toggle_message_selection = lambda obj: app.calls.append(("toggle", obj))
+	app._toggle_selection = lambda obj: app.calls.append(("toggle", obj))
 	app.activate_option_for_menu = lambda icons, list_name: app.calls.append(("menu", icons))
 	return app
 
@@ -356,11 +377,11 @@ def test_nvda_does_not_repeat_a_selection_the_add_on_announces():
 	app = _app(selection_mode=True)
 	item = _message_item_class(app)
 
-	app._message_selection_toggle = {"object": item}
+	app._selection_toggle = {"object": item}
 	item.event_stateChange()
 	assert app.reported == []
 
-	app._message_selection_toggle = None
+	app._selection_toggle = None
 	item.event_stateChange()
 	assert app.reported == [item]
 
@@ -370,7 +391,7 @@ def test_other_messages_keep_their_state_announcements_during_a_toggle():
 	toggled = _message_item_class(app)
 	other = _message_item_class(app)
 
-	app._message_selection_toggle = {"object": toggled}
+	app._selection_toggle = {"object": toggled}
 	other.event_stateChange()
 
 	assert app.reported == [other]

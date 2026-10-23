@@ -448,7 +448,7 @@ def test_space_selects_a_media_message_in_selection_mode_instead_of_playing_it()
 	namespace, methods, handler = _load_space_handler()
 	namespace["_focus"] = message_item
 	instance = _space_instance(namespace, methods, selection_mode=True)
-	instance._toggle_message_selection = toggled.append
+	instance._toggle_selection = toggled.append
 
 	handler(instance, SimpleNamespace(send=lambda: invoked.append("space")))
 
