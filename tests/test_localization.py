@@ -10,14 +10,15 @@ VERSION_WINDOW_DESCRIPTION = "Open Unigram and UnigramPlus version information i
 AUTO_FOCUS_LABEL = "Automatically move focus to the chat list when Unigram starts"
 NAVIGATION_MENU_UNAVAILABLE = "Navigation menu not available"
 RELEASE_CHANGELOG = (
+	"""- Space plays, opens and downloads the media of a message again in Unigram 13.0 and later, including voice messages.
+- Space no longer opens stickers or link previews in Unigram 13.0.1 and later.
+- Right and Left Arrow on a message with several attachments announce each photo, video, file or song again in Unigram 13.0 and later."""
+)
+PREVIOUS_RELEASE_CHANGELOG = (
 	"""- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the menu button opens a menu instead of the side pane.
 - Ctrl+Space selects and unselects messages again in Unigram's selection mode, the way Space does in Unigram 13.1.1. In selection mode, Space and Enter on a message also select or unselect it instead of playing its media or replying to it.
 - Updated compatibility for NVDA 2026.3.
 - Updated the Polish and Vietnamese translations."""
-)
-PREVIOUS_RELEASE_CHANGELOG = (
-	"""- When "Automatically move focus to the chat list when Unigram starts" is on, the focus now stays in a popup that Unigram shows as it starts, such as a request to join a group, instead of moving to the chat list behind it.
-- Updated the Vietnamese translation."""
 )
 RECORDING_NOTIFICATION_LABEL = "Notification when a voice message recording starts or is sent:"
 
@@ -145,15 +146,15 @@ def test_required_strings_are_translated_in_every_locale():
 		)
 
 
-def test_release_version_is_585():
+def test_release_version_is_586():
 	build_vars = (ROOT / "buildVars.py").read_text(encoding="utf-8")
 	pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
 	lockfile = (ROOT / "uv.lock").read_text(encoding="utf-8")
 
-	assert 'addon_version="5.8.5"' in build_vars
+	assert 'addon_version="5.8.6"' in build_vars
 	assert 'addon_lastTestedNVDAVersion="2026.3.0"' in build_vars
-	assert 'version = "5.8.5"' in pyproject
-	assert 'name = "unigramplus"\nversion = "5.8.5"' in lockfile
+	assert 'version = "5.8.6"' in pyproject
+	assert 'name = "unigramplus"\nversion = "5.8.6"' in lockfile
 
 	# addon/manifest.ini is a gitignored build artifact and may be stale, so the
 	# template is what gets checked: it is what carries addon_version into the build.
@@ -161,11 +162,11 @@ def test_release_version_is_585():
 	assert "version = {addon_version}" in template
 
 
-def test_catalogs_keep_the_585_translation_metadata():
+def test_catalogs_keep_the_586_translation_metadata():
 	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
 		catalog_path = locale_dir / "LC_MESSAGES" / "nvda.po"
 		catalog = catalog_path.read_text(encoding="utf-8")
-		assert '"Project-Id-Version: UnigramPlus 5.8.5\\n"' in catalog
+		assert '"Project-Id-Version: UnigramPlus 5.8.6\\n"' in catalog
 
 
 def test_current_release_changelog_comes_from_the_changelog_source():
@@ -174,7 +175,7 @@ def test_current_release_changelog_comes_from_the_changelog_source():
 	exec(compile(changelog, "changelog.py", "exec"), namespace)
 
 	assert namespace["value"] == RELEASE_CHANGELOG
-	for marker in ("Alt+M", "Unigram 13.1", "Ctrl+Space", "Unigram 13.1.1", "NVDA 2026.3", "Polish and Vietnamese"):
+	for marker in ("Space", "Unigram 13.0", "voice messages", "stickers or link previews", "Unigram 13.0.1", "Right and Left Arrow"):
 		assert marker in changelog, marker
 
 
@@ -182,13 +183,15 @@ def test_every_catalog_translates_the_current_release_changelog():
 	for locale_dir in sorted(path for path in LOCALE_DIR.iterdir() if path.is_dir()):
 		entries = _parse_po(locale_dir / "LC_MESSAGES" / "nvda.po")
 		assert entries.get(RELEASE_CHANGELOG), locale_dir.name
-		assert entries[RELEASE_CHANGELOG].count("\n") == 3, locale_dir.name
-		for marker in ("Alt+M", "13.1", "Ctrl+Space", "13.1.1", "2026.3"):
-			assert marker in entries[RELEASE_CHANGELOG], (locale_dir.name, marker)
-		# The selection-mode fix is the second line, as in changelog.py.
-		assert "Ctrl+Space" in entries[RELEASE_CHANGELOG].split("\n")[1], locale_dir.name
-		# The 5.8.4 notes stay translated in each catalog's history. Poedit keeps
-		# them as an obsolete entry once changelog.py moves on, as vi now does.
+		assert entries[RELEASE_CHANGELOG].count("\n") == 2, locale_dir.name
+		first, second, third = entries[RELEASE_CHANGELOG].split("\n")
+		# Voice messages, the rest and album names work again from 13.0;
+		# stickers and link previews were named like media buttons in 13.0.1.
+		assert "13.0" in first and "13.0.1" not in first, locale_dir.name
+		assert "13.0.1" in second, locale_dir.name
+		assert "13.0" in third and "13.0.1" not in third, locale_dir.name
+		# The 5.8.5 notes stay translated in each catalog's history. Poedit keeps
+		# them as an obsolete entry once changelog.py moves on.
 		history = _parse_po(locale_dir / "LC_MESSAGES" / "nvda.po", obsolete=True)
 		assert history.get(PREVIOUS_RELEASE_CHANGELOG), locale_dir.name
 
@@ -196,6 +199,16 @@ def test_every_catalog_translates_the_current_release_changelog():
 def test_the_english_manual_carries_the_current_release():
 	for manual in (ROOT / "readme.md", DOC_DIR / "en" / "readme.md"):
 		text = manual.read_text(encoding="utf-8")
+		version_586 = text.index("5.8.6")
+		section_586 = text[version_586:text.index("5.8.5", version_586)]
+		assert section_586.count("\n* ") == 4, manual
+		assert "Unigram 13.0.1" in section_586, manual
+		assert "voice-to-text button" in section_586, manual
+		assert "Unigram 13.1.1" in section_586, manual
+		assert "Escape" in section_586, manual
+		assert "stickers or link previews" in section_586, manual
+		assert "Right and Left Arrow" in section_586, manual
+		assert '"Медіа"' in section_586, manual
 		version_585 = text.index("5.8.5")
 		section_585 = text[version_585:text.index("5.8.4", version_585)]
 		assert section_585.count("\n* ") == 5, manual
@@ -249,7 +262,7 @@ def test_the_english_manual_carries_the_current_release():
 		assert "version 5.4" in section_580, manual
 
 
-def test_every_localized_manual_has_585_584_583_582_581_and_580_changelogs():
+def test_every_localized_manual_has_586_585_584_583_582_581_and_580_changelogs():
 	manuals = [ROOT / "readme.md", *sorted(DOC_DIR.glob("*/readme.md"))]
 	assert len(manuals) == 17
 	for manual in manuals:
@@ -261,6 +274,13 @@ def test_every_localized_manual_has_585_584_583_582_581_and_580_changelogs():
 			# Only the Nepali manual folder is named differently from its catalog.
 			catalog = LOCALE_DIR / {"NE": "ne"}.get(language, language) / "LC_MESSAGES" / "nvda.po"
 			entries = _parse_po(catalog)
+		version_586 = text.index("5.8.6")
+		section_586 = text[version_586:text.index("5.8.5", version_586)]
+		assert section_586.count("\n* ") == 4, manual
+		# Space, Escape and the arrows are named in each language's own words.
+		# The album note quotes the placeholder word the add-on used to say.
+		for marker in ("13.0", "13.0.1", "13.1.1", "GIF", "UnigramPlus", "Медіа"):
+			assert marker in section_586, (manual, marker)
 		version_585 = text.index("5.8.5")
 		section_585 = text[version_585:text.index("5.8.4", version_585)]
 		assert section_585.count("\n* ") == 5, manual

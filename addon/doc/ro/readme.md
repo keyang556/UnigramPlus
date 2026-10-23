@@ -199,6 +199,13 @@ Dacă îți place cu adevărat acest add-on și ai dorința și, cel mai importa
 
 ##Lista de modificări:
 
+### Versiunea 5.8.6
+
+* Tasta Spațiu redă, deschide și descarcă din nou conținutul media al unui mesaj în Unigram 13.0 și versiunile ulterioare. Începând cu Unigram 13.0, conținutul unui mesaj cu fotografie, videoclip, GIF, fișier, melodie sau al unui mesaj vocal este chiar butonul care face acest lucru. Unigram 13.0.1 i-a redat acestui buton identificatorul pe care îl caută UnigramPlus, cu excepția mesajelor vocale, unde identificatorul a ajuns la butonul de transcriere, așa că tasta Spațiu nu făcea nimic pe un mesaj vocal. Acum UnigramPlus recunoaște butonul propriu al unui mesaj vocal după progresul descărcării pe care îl raportează. Unigram 13.1.1 tot nu are nicio acțiune pentru tasta Spațiu pe un mesaj în afara modului de selectare, așa că UnigramPlus apasă acel buton: tasta Spațiu redă sau întrerupe un mesaj vocal sau o melodie, deschide o fotografie, un videoclip sau un GIF în vizualizator și descarcă sau deschide un fișier.
+* După ce tasta Spațiu redă un mesaj vocal sau o melodie ori descarcă un fișier, focusul rămâne pe mesaj, iar următoarea apăsare a tastei Escape nu îl mai readuce acolo. Doar vizualizatorul are nevoie de asta, dar în Unigram 13.0 și versiunile ulterioare un fișier sau o melodie este la fel de lat ca o fotografie, așa că UnigramPlus îl confunda cu una.
+* Tasta Spațiu nu mai deschide autocolante sau previzualizări de linkuri. Unigram 13.0.1 le-a dat același identificator ca butoanelor media, dar ele sunt linkuri. Într-o previzualizare de link care afișează o fotografie sau un videoclip, tasta Spațiu deschide în continuare fotografia sau videoclipul.
+* Săgețile dreapta și stânga pe un mesaj cu mai multe atașamente media, cum ar fi un album, anunță din nou fiecare fotografie, videoclip, fișier sau melodie în Unigram 13.0 și versiunile ulterioare. Începând cu Unigram 13.0, fiecare atașament conține doar butonul propriu al conținutului său, așa că UnigramPlus nu mai găsea ce deosebește o fotografie de un videoclip și anunța cuvântul provizoriu „Медіа” pentru fiecare atașament. Acum caută în interiorul acelui buton: un videoclip are acolo propriul buton de descărcare, un fișier sau o melodie titlul său, iar o fotografie niciunul dintre ele.
+
 ### Versiunea 5.8.5
 
 * Alt+M deschide din nou meniul de navigare în Unigram 13.1 și versiunile ulterioare. Unigram 13.1 a înlocuit panoul lateral cu un meniu care se deschide din același buton, iar acest buton nu mai este un buton comutator, așa că UnigramPlus nu îl găsea și anunța „Meniu de navigare indisponibil”.

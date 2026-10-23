@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.5\n"
+"Project-Id-Version: UnigramPlus 5.8.6\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2023-12-14 22:48+0200\n"
 "PO-Revision-Date: 2023-12-15 17:29+0100\n"
@@ -20,6 +20,15 @@ msgstr ""
 "X-Poedit-Bookmarks: -1,116,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: changelog.py:5
+msgid ""
+"- Space plays, opens and downloads the media of a message again in Unigram 13.0 and later, including voice messages.\n"
+"- Space no longer opens stickers or link previews in Unigram 13.0.1 and later.\n"
+"- Right and Left Arrow on a message with several attachments announce each photo, video, file or song again in Unigram 13.0 and later."
+msgstr ""
+"- Razmaknica ponovno reproducira, otvara i preuzima medije poruke u Unigramu 13.0 i novijim verzijama, uključujući glasovne poruke.\n"
+"- Razmaknica više ne otvara naljepnice ni preglede poveznica u Unigramu 13.0.1 i novijim verzijama.\n"
+"- Strelice desno i lijevo na poruci s više privitaka ponovno najavljuju svaku fotografiju, videozapis, datoteku ili pjesmu u Unigramu 13.0 i novijim verzijama."
+
 msgid ""
 "- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the menu button opens a menu instead of the side pane.\n"
 "- Ctrl+Space selects and unselects messages again in Unigram's selection mode, the way Space does in Unigram 13.1.1. In selection mode, Space and Enter on a message also select or unselect it instead of playing its media or replying to it.\n"

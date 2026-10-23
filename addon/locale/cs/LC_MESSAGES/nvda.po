@@ -1,7 +1,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.5\n"
+"Project-Id-Version: UnigramPlus 5.8.6\n"
 "POT-Creation-Date: 2022-06-30 15:13+0300\n"
 "PO-Revision-Date: 2022-06-30 15:13+0300\n"
 "Last-Translator: Petr Řehák\n"
@@ -18,6 +18,15 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: changelog.py:5
+msgid ""
+"- Space plays, opens and downloads the media of a message again in Unigram 13.0 and later, including voice messages.\n"
+"- Space no longer opens stickers or link previews in Unigram 13.0.1 and later.\n"
+"- Right and Left Arrow on a message with several attachments announce each photo, video, file or song again in Unigram 13.0 and later."
+msgstr ""
+"- Mezerník opět přehrává, otevírá a stahuje média zprávy v Unigramu 13.0 a novějším, včetně hlasových zpráv.\n"
+"- Mezerník už v Unigramu 13.0.1 a novějším neotevírá nálepky ani náhledy odkazů.\n"
+"- Šipky vpravo a vlevo na zprávě s více přílohami opět ohlašují každou fotku, video, soubor nebo skladbu v Unigramu 13.0 a novějším."
+
 msgid ""
 "- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the menu button opens a menu instead of the side pane.\n"
 "- Ctrl+Space selects and unselects messages again in Unigram's selection mode, the way Space does in Unigram 13.1.1. In selection mode, Space and Enter on a message also select or unselect it instead of playing its media or replying to it.\n"

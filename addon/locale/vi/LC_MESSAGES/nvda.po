@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: UnigramPlus 5.8.5\n"
+"Project-Id-Version: UnigramPlus 5.8.6\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
 "POT-Creation-Date: 2026-10-23 09:08+0700\n"
 "PO-Revision-Date: 2026-10-23 09:11+0700\n"
@@ -1119,6 +1119,15 @@ msgstr ""
 "dàng hơn nhiều"
 
 #: changelog.py:5
+msgid ""
+"- Space plays, opens and downloads the media of a message again in Unigram 13.0 and later, including voice messages.\n"
+"- Space no longer opens stickers or link previews in Unigram 13.0.1 and later.\n"
+"- Right and Left Arrow on a message with several attachments announce each photo, video, file or song again in Unigram 13.0 and later."
+msgstr ""
+"- Phím Space lại phát, mở và tải xuống phương tiện của tin nhắn trong Unigram 13.0 trở lên, kể cả tin nhắn thoại.\n"
+"- Phím Space không còn mở nhãn dán hay bản xem trước liên kết trong Unigram 13.0.1 trở lên.\n"
+"- Phím mũi tên phải và trái trên tin nhắn có nhiều tệp đính kèm lại đọc từng ảnh, video, tệp hoặc bài hát trong Unigram 13.0 trở lên."
+
 msgid ""
 "- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the "
 "menu button opens a menu instead of the side pane.\n"

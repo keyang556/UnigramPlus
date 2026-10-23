@@ -200,6 +200,13 @@ And remember that everyone who read this line thought that someone will definite
 
 ## List of changes:
 
+### Version 5.8.6
+
+* Space plays, opens and downloads the media of a message again in Unigram 13.0 and later. Since Unigram 13.0 the content of a photo, video, GIF, file, song or voice message is itself the button that does this. Unigram 13.0.1 gave that button back the identifier UnigramPlus looks for, except on voice messages, where the identifier went to the voice-to-text button, so Space did nothing on a voice message. UnigramPlus now recognizes a voice message's own button by the download progress it reports. Unigram 13.1.1 still has no Space action for a message outside selection mode, so UnigramPlus presses that button: Space plays or pauses a voice message or a song, opens a photo, video or GIF in the viewer, and downloads or opens a file.
+* After Space plays a voice message or a song or downloads a file, the focus stays on the message, and the next Escape no longer moves it back there. Only the viewer needs that, but in Unigram 13.0 and later a file or a song is as wide as a photo, so UnigramPlus took it for one.
+* Space no longer opens stickers or link previews. Unigram 13.0.1 gave them the same identifier as media buttons, but they are links. In a link preview that shows a photo or video, Space still opens the photo or video.
+* Right and Left Arrow on a message with several media attachments, such as an album, announce each photo, video, file or song again in Unigram 13.0 and later. Since Unigram 13.0 each attachment holds only its content's own button, so UnigramPlus no longer found what tells a photo from a video and announced the placeholder word "Медіа" for every attachment. It now looks inside that button: a video has its own download button there, a file or song its title, and a photo neither.
+
 ### Version 5.8.5
 
 * Alt+M opens the navigation menu again in Unigram 13.1 and later. Unigram 13.1 replaced the side pane with a menu that opens from the same button, and that button is no longer a toggle button, so UnigramPlus did not find it and reported "Navigation menu not available".

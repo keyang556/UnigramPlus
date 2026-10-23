@@ -201,6 +201,13 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 
 ##Popis promjena:
 
+### Verzija 5.8.6
+
+* Razmaknica ponovno reproducira, otvara i preuzima medije poruke u Unigramu 13.0 i novijim verzijama. Od Unigrama 13.0 sadržaj poruke s fotografijom, videozapisom, GIF-om, datotekom, pjesmom ili glasovne poruke sam je gumb koji to radi. Unigram 13.0.1 vratio je tom gumbu identifikator koji UnigramPlus traži, osim na glasovnim porukama, gdje je identifikator dobio gumb za pretvaranje govora u tekst, pa razmaknica na glasovnoj poruci nije ništa radila. UnigramPlus sada prepoznaje gumb same glasovne poruke po napretku preuzimanja koji javlja. Unigram 13.1.1 i dalje nema radnju za razmaknicu na poruci izvan načina odabira, pa UnigramPlus pritišće taj gumb: razmaknica reproducira ili pauzira glasovnu poruku ili pjesmu, otvara fotografiju, videozapis ili GIF u pregledniku te preuzima ili otvara datoteku.
+* Nakon što razmaknica reproducira glasovnu poruku ili pjesmu ili preuzme datoteku, fokus ostaje na poruci, a sljedeći pritisak tipke Escape više ga ne vraća onamo. To treba samo preglednik, ali u Unigramu 13.0 i novijim verzijama datoteka ili pjesma široka je kao fotografija, pa ju je UnigramPlus smatrao fotografijom.
+* Razmaknica više ne otvara naljepnice ni preglede poveznica. Unigram 13.0.1 dao im je isti identifikator kao gumbima za medije, ali one su poveznice. U pregledu poveznice koji prikazuje fotografiju ili videozapis razmaknica i dalje otvara fotografiju ili videozapis.
+* Strelice desno i lijevo na poruci s više medijskih privitaka, poput albuma, ponovno najavljuju svaku fotografiju, videozapis, datoteku ili pjesmu u Unigramu 13.0 i novijim verzijama. Od Unigrama 13.0 svaki privitak sadrži samo vlastiti gumb svojeg sadržaja, pa UnigramPlus više nije pronalazio ono po čemu se fotografija razlikuje od videozapisa i za svaki je privitak najavljivao zamjensku riječ „Медіа”. Sada gleda unutar tog gumba: videozapis ondje ima vlastiti gumb za preuzimanje, datoteka ili pjesma svoj naslov, a fotografija ni jedno ni drugo.
+
 ### Verzija 5.8.5
 
 * Alt+M ponovno otvara navigacijski izbornik u Unigramu 13.1 i novijim verzijama. Unigram 13.1 zamijenio je bočno okno izbornikom koji se otvara istim gumbom, a taj gumb više nije preklopni gumb, pa ga UnigramPlus nije pronalazio i javljao je „Navigacijski izbornik je nedostupan”.

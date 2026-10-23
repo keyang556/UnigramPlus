@@ -200,6 +200,13 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 
 ##Lista de cambios:
 
+### Versión 5.8.6
+
+* La barra espaciadora vuelve a reproducir, abrir y descargar el contenido multimedia de un mensaje en Unigram 13.0 y versiones posteriores. Desde Unigram 13.0, el contenido de un mensaje con una foto, un vídeo, un GIF, un archivo, una canción o un mensaje de voz es en sí mismo el botón que hace esto. Unigram 13.0.1 devolvió a ese botón el identificador que busca UnigramPlus, salvo en los mensajes de voz, donde el identificador pasó al botón de voz a texto, por lo que la barra espaciadora no hacía nada en un mensaje de voz. Ahora UnigramPlus reconoce el botón propio de un mensaje de voz por el progreso de descarga que indica. Unigram 13.1.1 sigue sin tener una acción para la barra espaciadora en un mensaje fuera del modo de selección, así que UnigramPlus pulsa ese botón: la barra espaciadora reproduce o pausa un mensaje de voz o una canción, abre una foto, un vídeo o un GIF en el visor, y descarga o abre un archivo.
+* Después de que la barra espaciadora reproduzca un mensaje de voz o una canción o descargue un archivo, el foco permanece en el mensaje, y la siguiente pulsación de Escape ya no lo devuelve allí. Solo el visor lo necesita, pero en Unigram 13.0 y versiones posteriores un archivo o una canción es tan ancho como una foto, por lo que UnigramPlus lo confundía con una.
+* La barra espaciadora ya no abre stickers ni vistas previas de enlaces. Unigram 13.0.1 les dio el mismo identificador que a los botones multimedia, pero son enlaces. En una vista previa de enlace que muestra una foto o un vídeo, la barra espaciadora sigue abriendo la foto o el vídeo.
+* Las flechas derecha e izquierda en un mensaje con varios adjuntos multimedia, como un álbum, vuelven a anunciar cada foto, vídeo, archivo o canción en Unigram 13.0 y versiones posteriores. Desde Unigram 13.0, cada adjunto solo contiene el botón propio de su contenido, por lo que UnigramPlus ya no encontraba lo que distingue una foto de un vídeo y anunciaba la palabra provisional «Медіа» para cada adjunto. Ahora busca dentro de ese botón: un vídeo tiene allí su propio botón de descarga, un archivo o una canción su título, y una foto ninguno de los dos.
+
 ### Versión 5.8.5
 
 * Alt+M vuelve a abrir el menú de navegación en Unigram 13.1 y versiones posteriores. Unigram 13.1 sustituyó el panel lateral por un menú que se abre desde el mismo botón, y ese botón ya no es un botón de alternancia, por lo que UnigramPlus no lo encontraba y anunciaba «Menú de navegación no disponible».
