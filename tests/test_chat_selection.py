@@ -284,14 +284,81 @@ def test_nvda_does_not_repeat_a_chat_selection_the_add_on_announces():
 	assert app.reported == [other, toggled]
 
 
-def test_a_focused_chat_says_it_is_picked_only_in_selection_mode():
-	"""Messages already say "Selected"; chats do too, read with the list's mode."""
-	focus_handler = next(
-		node for node in _class_methods("AppModule", ["event_gainFocus"])
-	)
-	source = ast.get_source_segment(SOURCE_PATH.read_text(encoding="utf-8"), focus_handler)
-	chat_branch = source[source.index("elif _is_chat_list_item(obj):"):source.index('elif obj.parent.UIAAutomationId == "ScrollingHost":')]
+class _UIA:
+	"""Stands in for NVDAObjects.UIA.UIA."""
 
-	assert "_is_chat_selected(obj)" in chat_branch
-	assert '_("Selected")' in chat_branch
-	assert "State.SELECTED in obj.states" not in chat_branch
+
+class _FocusedChat(_UIA):
+	role = "listItem"
+	UIAAutomationId = ""
+
+	def __init__(self, name, selected):
+		self.name = name
+		self.states = {SELECTED} if selected else set()
+
+
+def _focus_chat(chat, selection_mode):
+	"""Run the real focus handler on a chat row and return its spoken name."""
+	queries = []
+	namespace = {
+		"UIA": _UIA,
+		"Role": SimpleNamespace(LISTITEM="listItem", EDITABLETEXT="editableText"),
+		"State": SimpleNamespace(SELECTED=SELECTED),
+		"conf": SimpleNamespace(get=lambda key: False),
+		"is_recording_button": lambda obj: False,
+		"File_transfer_progress_tracking": SimpleNamespace(active=True),
+		"speech": SimpleNamespace(cancelSpeech=lambda: None),
+		"_": lambda text: text,
+		"_is_chat_list_item": lambda obj: True,
+		"_is_chat_list_selection_mode": lambda obj: queries.append(obj) or selection_mode,
+	}
+	_load_functions(["_is_selected", "_is_chat_selected"], namespace)
+	_exec(_class_methods("AppModule", ["event_gainFocus"]), namespace)
+	saved = {}
+	app = SimpleNamespace(
+		isUnigramWindow=True,
+		_restore_focus_after_record_button=lambda obj: False,
+		_remember_messages_button=lambda obj: None,
+		_classify_window_surface=lambda obj: None,
+		isSkipName=0,
+		isOpenProfile=False,
+		execute_context_menu_option=False,
+		isRecord=False,
+		isDelete=False,
+		is_message_object=lambda obj: False,
+		saved_items=SimpleNamespace(save=saved.__setitem__),
+		actionChatElementInFocus=lambda obj: obj.name,
+	)
+	handled = []
+	namespace["event_gainFocus"](app, chat, lambda: handled.append(True))
+	assert handled == [True]
+	assert saved["last focused chat"] is chat
+	return chat.name, queries
+
+
+def test_a_focused_chat_is_said_to_be_selected_in_selection_mode():
+	name, _queries = _focus_chat(_FocusedChat("Alice", selected=True), selection_mode=True)
+
+	assert name == "Selected. Alice"
+
+
+def test_the_open_chat_is_not_said_to_be_selected_outside_selection_mode():
+	"""Outside selection mode the chat list's single selection is the open chat."""
+	name, queries = _focus_chat(_FocusedChat("Alice", selected=True), selection_mode=False)
+
+	assert name == "Alice"
+	assert len(queries) == 1
+
+
+def test_an_unselected_chat_keeps_its_name_without_a_query():
+	for selection_mode in (True, False):
+		name, queries = _focus_chat(_FocusedChat("Alice", selected=False), selection_mode)
+
+		assert name == "Alice", selection_mode
+		assert queries == [], selection_mode
+
+
+def test_a_selected_chat_is_not_marked_twice():
+	name, _queries = _focus_chat(_FocusedChat("Selected. Alice", selected=True), selection_mode=True)
+
+	assert name == "Selected. Alice"
