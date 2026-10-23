@@ -191,6 +191,7 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 | **ALT+T** | UnigramPlus | Najavljuje naziv i status otvorenog razgovora |
 | **NVDA+Alt+V** | UnigramPlus | Otvori podatke o verziji programa Unigram i dodatka UnigramPlus u prozoru samo za čitanje |
 | **ALT+M** | UnigramPlus | Otvara navigacijski izbornik |
+| **ALT+Shift+M** | UnigramPlus | Otvara postavke Unigrama |
 | **ALT+Shift+P** | UnigramPlus | Otvara profil trenutnog razgovora |
 | **ALT+L** | UnigramPlus | Omogućava automatsko čitanje novih poruka u trenutnom razgovoru |
 | **ALT+H** | UnigramPlus | Prikazuje popis svih UnigramPlus prečaca |
@@ -208,6 +209,7 @@ I zapamtite da su svi koji su pročitali ovaj red mislili da će netko sigurno p
 * Razmaknica više ne otvara naljepnice ni preglede poveznica. Unigram 13.0.1 dao im je isti identifikator kao gumbima za medije, ali one su poveznice. U pregledu poveznice koji prikazuje fotografiju ili videozapis razmaknica i dalje otvara fotografiju ili videozapis.
 * Strelice desno i lijevo na poruci s više medijskih privitaka, poput albuma, ponovno najavljuju svaku fotografiju, videozapis, datoteku ili pjesmu u Unigramu 13.0 i novijim verzijama. Od Unigrama 13.0 svaki privitak sadrži samo vlastiti gumb svojeg sadržaja, pa UnigramPlus više nije pronalazio ono po čemu se fotografija razlikuje od videozapisa i za svaki je privitak najavljivao zamjensku riječ „Медіа”. Sada gleda unutar tog gumba: videozapis ondje ima vlastiti gumb za preuzimanje, datoteka ili pjesma svoj naslov, a fotografija ni jedno ni drugo.
 * Ctrl+Space sada radi i na popisu razgovora, gdje prije nije činio ništa. Kao i kod poruka, prvi pritisak uključuje način odabira s razgovorom u fokusu iz kontekstnog izbornika razgovora, a zatim svaki pritisak odabire razgovor u fokusu ili poništava njegov odabir, kao što to čini razmaknica u Unigramu. UnigramPlus zatim javlja je li razgovor odabran. Poništavanje odabira posljednjeg odabranog razgovora završava način odabira. Dok je popis razgovora u načinu odabira, UnigramPlus kaže i „Odabrano” prije naziva odabranog razgovora kad fokus dođe na njega, kao što to čini kod poruka.
+* Dodan je prečac Alt+Shift+M koji otvara postavke Unigrama u Unigramu 13.1 i novijim verzijama, kao što to čini UnigramPlusRussianMod. Unigram 13.1 premjestio je postavke iz bočnog okna u karticu ispod popisa razgovora. Alt+Shift+M odabire tu karticu, a zatim premješta fokus na vrh postavki: na prvi od vaših ostalih računa ili, ako ste prijavljeni samo s jednim računom, na „Dodaj račun”. U verzijama Unigrama starijima od 13.1 te u uskom prozoru koji prikazuje samo otvoreni razgovor UnigramPlus javlja „Postavke su nedostupne”.
 
 ### Verzija 5.8.5
 

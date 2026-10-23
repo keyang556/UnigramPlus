@@ -23,12 +23,14 @@ msgid ""
 "- Space plays, opens and downloads the media of a message again in Unigram 13.0 and later, including voice messages.\n"
 "- Space no longer opens stickers or link previews in Unigram 13.0.1 and later.\n"
 "- Right and Left Arrow on a message with several attachments announce each photo, video, file or song again in Unigram 13.0 and later.\n"
-"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat."
+"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat.\n"
+"- Alt+Shift+M is a new shortcut that opens Unigram's settings in Unigram 13.1 and later and moves the focus to the top of the settings."
 msgstr ""
 "- Razmaknica ponovo reprodukuje, otvara i preuzima medije poruke u Unigramu 13.0 i novijim verzijama, uključujući glasovne poruke.\n"
 "- Razmaknica više ne otvara nalepnice ni preglede linkova u Unigramu 13.0.1 i novijim verzijama.\n"
 "- Strelice desno i levo na poruci sa više priloga ponovo najavljuju svaku fotografiju, video, datoteku ili pesmu u Unigramu 13.0 i novijim verzijama.\n"
-"- Ctrl+Space sada izabira i ćaskanja u listi ćaskanja: prvi pritisak uključuje režim izbora iz kontekstnog menija ćaskanja, a zatim svaki pritisak izabira ćaskanje u fokusu ili poništava njegov izbor."
+"- Ctrl+Space sada izabira i ćaskanja u listi ćaskanja: prvi pritisak uključuje režim izbora iz kontekstnog menija ćaskanja, a zatim svaki pritisak izabira ćaskanje u fokusu ili poništava njegov izbor.\n"
+"- Nova prečica Alt+Shift+M otvara podešavanja Unigrama u Unigramu 13.1 i novijim verzijama i premešta fokus na vrh podešavanja."
 
 msgid ""
 "- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the menu button opens a menu instead of the side pane.\n"
@@ -465,6 +467,15 @@ msgstr "Otvori meni za navigaciju"
 #: addon\appModules\unigram.py:784
 msgid "Navigation menu not available"
 msgstr "Meni za navigaciju nedostupno"
+
+#. Open Unigram settings
+#: addon\appModules\unigram.py:3146
+msgid "Open Unigram settings"
+msgstr "Otvori podešavanja Unigrama"
+
+#: addon\appModules\unigram.py:3161
+msgid "Settings not available"
+msgstr "Podešavanja nedostupna"
 
 #. Function to open the profile of the current chat
 #: addon\appModules\unigram.py:787

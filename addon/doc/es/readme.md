@@ -190,6 +190,7 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 | **ALT+T** | UnigramPlus | Anunciar nombre y estado del chat actual |
 | **NVDA+Alt+V** | UnigramPlus | Abrir la información de versión de Unigram y UnigramPlus en una ventana de solo lectura |
 | **ALT+M** | UnigramPlus | Abrir menú de navegación |
+| **ALT+Shift+M** | UnigramPlus | Abrir la configuración de Unigram |
 | **ALT+Shift+P** | UnigramPlus | Abrir el perfil del chat actual |
 | **ALT+L** | UnigramPlus | Activar lectura automática de nuevos mensajes en el chat actual |
 | **ALT+H** | UnigramPlus | Mostrar una lista de todos los atajos de UnigramPlus |
@@ -207,6 +208,7 @@ Y recuerde que todos los que leyeron esta línea pensaron alguien definitivament
 * La barra espaciadora ya no abre stickers ni vistas previas de enlaces. Unigram 13.0.1 les dio el mismo identificador que a los botones multimedia, pero son enlaces. En una vista previa de enlace que muestra una foto o un vídeo, la barra espaciadora sigue abriendo la foto o el vídeo.
 * Las flechas derecha e izquierda en un mensaje con varios adjuntos multimedia, como un álbum, vuelven a anunciar cada foto, vídeo, archivo o canción en Unigram 13.0 y versiones posteriores. Desde Unigram 13.0, cada adjunto solo contiene el botón propio de su contenido, por lo que UnigramPlus ya no encontraba lo que distingue una foto de un vídeo y anunciaba la palabra provisional «Медіа» para cada adjunto. Ahora busca dentro de ese botón: un vídeo tiene allí su propio botón de descarga, un archivo o una canción su título, y una foto ninguno de los dos.
 * Ctrl+Space ahora también funciona en la lista de chats, donde antes no hacía nada. Como en los mensajes, la primera pulsación activa el modo de selección con el chat enfocado desde el menú contextual del chat y, a partir de ahí, cada pulsación selecciona o deselecciona el chat enfocado, como lo hace la barra espaciadora en Unigram. Después, UnigramPlus anuncia si el chat está seleccionado. Al deseleccionar el último chat seleccionado, termina el modo de selección. Mientras la lista de chats está en modo de selección, UnigramPlus también dice «Seleccionado» antes del nombre de un chat seleccionado cuando el foco llega a él, como hace con los mensajes.
+* Se añadió Alt+Shift+M, que abre la configuración de Unigram en Unigram 13.1 y versiones posteriores, como hace UnigramPlusRussianMod. Unigram 13.1 trasladó la configuración del panel lateral a una pestaña situada debajo de la lista de chats. Alt+Shift+M selecciona esa pestaña y luego lleva el foco al principio de la configuración: a la primera de las demás cuentas o, si solo hay una sesión iniciada, a «Añadir cuenta». En las versiones de Unigram anteriores a la 13.1, y en una ventana estrecha que solo muestra el chat abierto, UnigramPlus anuncia «Configuración no disponible».
 
 ### Versión 5.8.5
 

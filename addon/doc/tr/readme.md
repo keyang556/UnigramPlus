@@ -187,6 +187,7 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 | **ALT+T** | UnigramPlus | Açık bir sohbetin adını ve durumunu duyur |
 | **NVDA+Alt+V** | UnigramPlus | Unigram ve UnigramPlus sürüm bilgilerini salt okunur bir pencerede aç |
 | **ALT+M** | UnigramPlus | Gezinti menüsünü aç |
+| **ALT+Shift+M** | UnigramPlus | Unigram ayarlarını aç |
 | **ALT+Shift+P** | UnigramPlus | Mevcut sohbetin profilini aç |
 | **ALT+L** | UnigramPlus | Mevcut sohbette yeni mesajların otomatik olarak okunmasını etkinleştir |
 | **ALT+H** | UnigramPlus | Tüm UnigramPlus kısayollarının listesini göster |
@@ -204,6 +205,7 @@ Bu eklentiyi çok seviyorsanız ve geliştiriciyi maddi olarak desteklemek ve b�
 * Boşluk tuşu artık çıkartmaları veya bağlantı önizlemelerini açmıyor. Unigram 13.0.1 onlara medya düğmeleriyle aynı tanımlayıcıyı verdi, ancak bunlar bağlantıdır. Fotoğraf veya video gösteren bir bağlantı önizlemesinde Boşluk tuşu fotoğrafı veya videoyu açmaya devam eder.
 * Albüm gibi birden çok medya eki olan bir mesajda Sağ ve Sol Ok, Unigram 13.0 ve sonraki sürümlerde her fotoğrafı, videoyu, dosyayı veya şarkıyı yeniden bildiriyor. Unigram 13.0'dan beri her ek yalnızca kendi içeriğinin düğmesini barındırıyor; bu yüzden UnigramPlus fotoğrafı videodan ayıran şeyi artık bulamıyor ve her ek için "Медіа" yer tutucu sözcüğünü bildiriyordu. Artık o düğmenin içine bakıyor: videonun orada kendi indirme düğmesi, dosyanın veya şarkının başlığı vardır, fotoğrafta ise ikisi de yoktur.
 * Ctrl+Space artık daha önce hiçbir şey yapmadığı sohbet listesinde de çalışıyor. Mesajlarda olduğu gibi ilk basış, sohbetin bağlam menüsünden odaktaki sohbetle seçim modunu başlatır; ardından her basış odaktaki sohbeti, Unigram'da Boşluk tuşunun yaptığı gibi seçer veya seçimini kaldırır. Ardından UnigramPlus sohbetin seçili olup olmadığını bildirir. Seçili son sohbetin seçimini kaldırmak seçim modunu sonlandırır. Sohbet listesi seçim modundayken odak seçili bir sohbete geldiğinde UnigramPlus, mesajlarda yaptığı gibi sohbetin adından önce "Seçili" de der.
+* UnigramPlusRussianMod'da olduğu gibi, Unigram 13.1 ve sonraki sürümlerde Unigram ayarlarını açan Alt+Shift+M kısayolu eklendi. Unigram 13.1, ayarları yan bölmeden sohbet listesinin altındaki bir sekmeye taşıdı. Alt+Shift+M bu sekmeyi seçer ve ardından odağı ayarların başına taşır: diğer hesaplarınızın ilkine ya da yalnızca bir hesapla oturum açtıysanız "Hesap ekle" düğmesine. Unigram'ın 13.1'den önceki sürümlerinde ve yalnızca açık sohbeti gösteren dar bir pencerede UnigramPlus "Ayarlar mevcut değil" bildirir.
 
 ### Sürüm 5.8.5
 

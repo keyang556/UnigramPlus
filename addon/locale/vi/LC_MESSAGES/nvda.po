@@ -488,6 +488,15 @@ msgstr "Mở menu điều hướng"
 msgid "Navigation menu not available"
 msgstr "Không có menu điều hướng"
 
+#. Open Unigram settings
+#: addon\appModules\unigram.py:3146
+msgid "Open Unigram settings"
+msgstr "Mở cài đặt Unigram"
+
+#: addon\appModules\unigram.py:3161
+msgid "Settings not available"
+msgstr "Không có cài đặt"
+
 #. Function to open the profile of the current chat
 #: addon\appModules\unigram.py:2823
 msgid "Open current chat profile"
@@ -1123,12 +1132,14 @@ msgid ""
 "- Space plays, opens and downloads the media of a message again in Unigram 13.0 and later, including voice messages.\n"
 "- Space no longer opens stickers or link previews in Unigram 13.0.1 and later.\n"
 "- Right and Left Arrow on a message with several attachments announce each photo, video, file or song again in Unigram 13.0 and later.\n"
-"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat."
+"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat.\n"
+"- Alt+Shift+M is a new shortcut that opens Unigram's settings in Unigram 13.1 and later and moves the focus to the top of the settings."
 msgstr ""
 "- Phím Space lại phát, mở và tải xuống phương tiện của tin nhắn trong Unigram 13.0 trở lên, kể cả tin nhắn thoại.\n"
 "- Phím Space không còn mở nhãn dán hay bản xem trước liên kết trong Unigram 13.0.1 trở lên.\n"
 "- Phím mũi tên phải và trái trên tin nhắn có nhiều tệp đính kèm lại đọc từng ảnh, video, tệp hoặc bài hát trong Unigram 13.0 trở lên.\n"
-"- Ctrl+Space giờ cũng chọn cuộc trò chuyện trong danh sách cuộc trò chuyện: lần nhấn đầu tiên bật chế độ chọn từ menu ngữ cảnh của cuộc trò chuyện, và mỗi lần nhấn sau đó sẽ chọn hoặc bỏ chọn cuộc trò chuyện đang có tiêu điểm."
+"- Ctrl+Space giờ cũng chọn cuộc trò chuyện trong danh sách cuộc trò chuyện: lần nhấn đầu tiên bật chế độ chọn từ menu ngữ cảnh của cuộc trò chuyện, và mỗi lần nhấn sau đó sẽ chọn hoặc bỏ chọn cuộc trò chuyện đang có tiêu điểm.\n"
+"- Phím tắt mới Alt+Shift+M mở cài đặt Unigram trong Unigram 13.1 trở lên và chuyển tiêu điểm lên đầu phần cài đặt."
 
 msgid ""
 "- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the "

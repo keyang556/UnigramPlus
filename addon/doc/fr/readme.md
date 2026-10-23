@@ -188,6 +188,7 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 | **ALT+T** | UnigramPlus | Annoncer le nom et l'état d'un échange ouvert |
 | **NVDA+Alt+V** | UnigramPlus | Ouvrir les informations de version d’Unigram et d’UnigramPlus dans une fenêtre en lecture seule |
 | **ALT+M** | UnigramPlus | Ouvrir le menu de navigation |
+| **ALT+Shift+M** | UnigramPlus | Ouvrir les paramètres d'Unigram |
 | **ALT+Shift+P** | UnigramPlus | Ouvrir le profil de l'échange en cours |
 | **ALT+L** | UnigramPlus | Activer la lecture automatique des nouveaux messages dans l'échange courant |
 | **ALT+H** | UnigramPlus | Show a list of all UnigramPlus shortcuts |
@@ -205,6 +206,7 @@ Les sons d'UnigramPlus se trouvent dans le dossier `appModules\media` de l'exten
 * Espace n’ouvre plus les autocollants ni les aperçus de liens. Unigram 13.0.1 leur a donné le même identifiant qu’aux boutons de média, mais ce sont des liens. Dans un aperçu de lien qui affiche une photo ou une vidéo, Espace ouvre toujours la photo ou la vidéo.
 * Flèche droite et Flèche gauche sur un message à plusieurs pièces jointes multimédias, comme un album, annoncent de nouveau chaque photo, vidéo, fichier ou musique dans Unigram 13.0 et versions ultérieures. Depuis Unigram 13.0, chaque pièce jointe ne contient que le bouton propre à son contenu ; UnigramPlus ne trouvait donc plus ce qui distingue une photo d’une vidéo et annonçait le mot provisoire « Медіа » pour chaque pièce jointe. Il regarde désormais à l’intérieur de ce bouton : une vidéo y a son propre bouton de téléchargement, un fichier ou une musique son titre, et une photo ni l’un ni l’autre.
 * Ctrl+Space fonctionne désormais aussi dans la liste des échanges, où il ne faisait rien jusqu’ici. Comme pour les messages, le premier appui active le mode sélection avec l’échange qui a le focus depuis le menu contextuel de l’échange, puis chaque appui sélectionne ou désélectionne l’échange qui a le focus, comme le fait Espace dans Unigram. UnigramPlus annonce ensuite si l’échange est sélectionné. Désélectionner le dernier échange sélectionné quitte le mode sélection. Tant que la liste des échanges est en mode sélection, UnigramPlus dit aussi « Sélectionnée » avant le nom d’un échange sélectionné quand le focus y arrive, comme il le fait pour les messages.
+* Ajout d’Alt+Shift+M, qui ouvre les paramètres d’Unigram dans Unigram 13.1 et versions ultérieures, comme le fait UnigramPlusRussianMod. Unigram 13.1 a déplacé les paramètres du volet latéral vers un onglet situé sous la liste des échanges. Alt+Shift+M sélectionne cet onglet, puis place le focus en haut des paramètres : sur le premier de vos autres comptes ou, si vous n’êtes connecté qu’à un seul compte, sur « Ajouter un compte ». Dans les versions d’Unigram antérieures à 13.1, et dans une fenêtre étroite qui n’affiche que l’échange ouvert, UnigramPlus annonce « Paramètres non disponibles ».
 
 ### Version 5.8.5
 

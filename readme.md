@@ -190,6 +190,7 @@ And remember that everyone who read this line thought that someone will definite
 | **ALT+T** | UnigramPlus | Announce the name and status of an open chat |
 | **NVDA+Alt+V** | UnigramPlus | Open Unigram and UnigramPlus version information in a read-only window |
 | **ALT+M** | UnigramPlus | Open navigation menu |
+| **ALT+Shift+M** | UnigramPlus | Open Unigram settings |
 | **ALT+Shift+P** | UnigramPlus | Open current chat profile |
 | **ALT+L** | UnigramPlus | Enable automatic reading of new messages in the current chat |
 | **ALT+H** | UnigramPlus | Show a list of all UnigramPlus shortcuts |
@@ -207,6 +208,7 @@ And remember that everyone who read this line thought that someone will definite
 * Space no longer opens stickers or link previews. Unigram 13.0.1 gave them the same identifier as media buttons, but they are links. In a link preview that shows a photo or video, Space still opens the photo or video.
 * Right and Left Arrow on a message with several media attachments, such as an album, announce each photo, video, file or song again in Unigram 13.0 and later. Since Unigram 13.0 each attachment holds only its content's own button, so UnigramPlus no longer found what tells a photo from a video and announced the placeholder word "Медіа" for every attachment. It now looks inside that button: a video has its own download button there, a file or song its title, and a photo neither.
 * Ctrl+Space now also works in the chat list, where it did nothing before. As with messages, the first press starts selection mode with the focused chat from the chat's context menu, and after that each press selects or unselects the focused chat, the way Space does in Unigram. UnigramPlus then announces whether the chat is selected. Unselecting the last selected chat ends selection mode. While the chat list is in selection mode, UnigramPlus also says "Selected" before the name of a selected chat when the focus moves to it, as it does for messages.
+* Added Alt+Shift+M, which opens Unigram's settings in Unigram 13.1 and later, as UnigramPlusRussianMod does. Unigram 13.1 moved Settings from the side pane to a tab below the chat list. Alt+Shift+M selects that tab and then moves the focus to the top of the settings: to the first of your other accounts, or to Add account if you are signed in to only one account. In Unigram versions before 13.1, and in a narrow window that shows only the open chat, UnigramPlus reports "Settings not available".
 
 ### Version 5.8.5
 

@@ -22,12 +22,14 @@ msgid ""
 "- Space plays, opens and downloads the media of a message again in Unigram 13.0 and later, including voice messages.\n"
 "- Space no longer opens stickers or link previews in Unigram 13.0.1 and later.\n"
 "- Right and Left Arrow on a message with several attachments announce each photo, video, file or song again in Unigram 13.0 and later.\n"
-"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat."
+"- Ctrl+Space now also selects chats in the chat list: the first press starts selection mode from the chat's context menu, and each press after that selects or unselects the focused chat.\n"
+"- Alt+Shift+M is a new shortcut that opens Unigram's settings in Unigram 13.1 and later and moves the focus to the top of the settings."
 msgstr ""
 "- A barra de espaços volta a reproduzir, abrir e transferir o conteúdo multimédia de uma mensagem no Unigram 13.0 e versões posteriores, incluindo mensagens de voz.\n"
 "- A barra de espaços já não abre autocolantes nem pré-visualizações de ligações no Unigram 13.0.1 e versões posteriores.\n"
 "- As setas para a direita e para a esquerda numa mensagem com vários anexos voltam a anunciar cada fotografia, vídeo, ficheiro ou música no Unigram 13.0 e versões posteriores.\n"
-"- O Ctrl+Space agora também seleciona conversas na lista de conversas: a primeira vez que é premido ativa o modo de seleção a partir do menu de contexto da conversa e, a partir daí, cada vez que é premido seleciona ou desmarca a conversa em foco."
+"- O Ctrl+Space agora também seleciona conversas na lista de conversas: a primeira vez que é premido ativa o modo de seleção a partir do menu de contexto da conversa e, a partir daí, cada vez que é premido seleciona ou desmarca a conversa em foco.\n"
+"- O novo atalho Alt+Shift+M abre as definições do Unigram no Unigram 13.1 e versões posteriores e move o foco para o início das definições."
 
 msgid ""
 "- Alt+M opens the navigation menu again in Unigram 13.1 and later, where the menu button opens a menu instead of the side pane.\n"
@@ -548,6 +550,15 @@ msgstr "Abrir menu de navegação"
 #| msgid "Navigation menu unavailable"
 msgid "Navigation menu not available"
 msgstr "Menu de navegação indisponível"
+
+#. Open Unigram settings
+#: addon\appModules\unigram.py:3146
+msgid "Open Unigram settings"
+msgstr "Abrir as definições do Unigram"
+
+#: addon\appModules\unigram.py:3161
+msgid "Settings not available"
+msgstr "Definições indisponíveis"
 
 #: appModules/unigram.py:440
 msgid "Open comments"
